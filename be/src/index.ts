@@ -68,11 +68,13 @@ import userRoutes from './routes/userRoutes';
 import orderRoutes from './routes/orderRoutes';
 import bannerRoutes from './routes/bannerRoutes';
 import uploadRoutes from './routes/uploadRoutes';
+import settingRoutes from './routes/settingRoutes';
 
 app.use('/api/users', userRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/banners', bannerRoutes);
 app.use('/api/upload', uploadRoutes);
+app.use('/api/settings', settingRoutes);
 
 app.use('/api/products', productRoutes);
 app.use('/api/categories', categoryRoutes);

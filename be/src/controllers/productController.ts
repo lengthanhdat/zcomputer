@@ -64,7 +64,7 @@ export const getProductBySlug = async (req: Request, res: Response) => {
 // Tạo sản phẩm mới
 export const createProduct = async (req: Request, res: Response) => {
   try {
-    const { name, category_id, brand, price, discountPrice, stock, sku, specs, images, gifts, description, condition } = req.body;
+    const { name, category_id, brand, price, discountPrice, stock, sku, specs, images, gifts, description, condition, isHotSale } = req.body;
     
     // Tạo slug từ name
     let slug = slugify(name, { lower: true, strict: true, locale: 'vi' });
@@ -75,7 +75,7 @@ export const createProduct = async (req: Request, res: Response) => {
     }
 
     const newProduct = new Product({
-      name, slug, category_id, brand, price, discountPrice, stock, sku, specs, images, gifts, description, condition
+      name, slug, category_id, brand, price, discountPrice, stock, sku, specs, images, gifts, description, condition, isHotSale
     });
     
     const savedProduct = await newProduct.save();
