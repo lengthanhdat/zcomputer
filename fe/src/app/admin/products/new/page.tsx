@@ -37,6 +37,7 @@ export default function NewProductPage() {
     gifts: [] as string[],
     category_id: "",
     condition: "Đã qua sử dụng (Đẹp 99%)",
+    isHotSale: false,
     specs: { cpu: "", ram: "", storage: "", vga: "", screen: "" }
   });
 
@@ -188,6 +189,7 @@ export default function NewProductPage() {
         gifts: formData.gifts.filter(g => g.trim() !== ""),
         category_id: formData.category_id,
         condition: formData.condition,
+        isHotSale: formData.isHotSale,
         specs: formData.specs
       };
 
@@ -279,14 +281,31 @@ export default function NewProductPage() {
                 </div>
                 <div>
                   <label className="block text-sm font-bold text-gray-700 mb-2">Tình trạng máy <span className="text-red-500">*</span></label>
-                  <input 
-                    type="text" 
-                    name="condition" 
-                    required
+                  <select 
+                    name="condition"
                     value={formData.condition} 
                     onChange={handleChange}
                     className="w-full px-4 py-3 bg-gray-50/50 border border-gray-200 rounded-xl outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all text-gray-800 font-medium"
-                  />
+                  >
+                    <option value="Đã qua sử dụng (Đẹp 99%)">Đã qua sử dụng (Đẹp 99%)</option>
+                    <option value="Mới 100%">Mới 100%</option>
+                    <option value="Trưng bày">Trưng bày</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="flex items-center gap-3 cursor-pointer mt-8">
+                    <div className="relative flex items-center">
+                      <input 
+                        type="checkbox" 
+                        name="isHotSale"
+                        checked={formData.isHotSale}
+                        onChange={(e) => setFormData({...formData, isHotSale: e.target.checked})}
+                        className="w-5 h-5 border-2 border-gray-300 rounded text-blue-600 focus:ring-blue-500 cursor-pointer accent-blue-600 transition-all"
+                      />
+                    </div>
+                    <span className="text-sm font-bold text-gray-700">Hiển thị trong mục HOT SALE MỖI NGÀY</span>
+                  </label>
                 </div>
               </div>
 
@@ -318,30 +337,40 @@ export default function NewProductPage() {
                 <label className="block text-sm font-bold text-gray-700 mb-2">Giá bán (VNĐ) <span className="text-red-500">*</span></label>
                 <div className="relative">
                   <input 
-                    type="text" 
+                    type="number" 
                     name="price" 
                     required 
-                    value={formData.price ? Number(formData.price).toLocaleString('vi-VN') : ""} 
-                    onChange={(e) => setFormData({...formData, price: e.target.value.replace(/\D/g, "")})}
-                    className="w-full pl-4 pr-12 py-3 bg-gray-50/50 border border-gray-200 rounded-xl outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all text-gray-800 font-bold text-lg"
+                    value={formData.price} 
+                    onChange={(e) => setFormData({...formData, price: e.target.value})}
+                    className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none w-full pl-4 pr-12 py-3 bg-gray-50/50 border border-gray-200 rounded-xl outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all text-gray-800 font-bold text-lg"
                     placeholder="0"
                   />
                   <span className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 font-bold">đ</span>
                 </div>
+                {formData.price && (
+                  <p className="text-xs text-emerald-600 font-medium mt-2 ml-1">
+                    Sẽ hiển thị: {Number(formData.price).toLocaleString('vi-VN')} đ
+                  </p>
+                )}
               </div>
               <div>
                 <label className="block text-sm font-bold text-gray-700 mb-2">Giá niêm yết (Gốc)</label>
                 <div className="relative">
                   <input 
-                    type="text" 
+                    type="number" 
                     name="discountPrice" 
-                    value={formData.discountPrice ? Number(formData.discountPrice).toLocaleString('vi-VN') : ""} 
-                    onChange={(e) => setFormData({...formData, discountPrice: e.target.value.replace(/\D/g, "")})}
-                    className="w-full pl-4 pr-12 py-3 bg-gray-50/50 border border-gray-200 rounded-xl outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all text-gray-500 font-medium line-through"
+                    value={formData.discountPrice} 
+                    onChange={(e) => setFormData({...formData, discountPrice: e.target.value})}
+                    className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none w-full pl-4 pr-12 py-3 bg-gray-50/50 border border-gray-200 rounded-xl outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all text-gray-500 font-medium"
                     placeholder="0"
                   />
                   <span className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 font-bold">đ</span>
                 </div>
+                {formData.discountPrice && (
+                  <p className="text-xs text-gray-500 font-medium mt-2 ml-1">
+                    Sẽ hiển thị: {Number(formData.discountPrice).toLocaleString('vi-VN')} đ
+                  </p>
+                )}
               </div>
               
               <div>

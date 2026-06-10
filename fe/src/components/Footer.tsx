@@ -109,8 +109,8 @@ export default function Footer() {
         <div className="container mx-auto px-4 flex flex-col md:flex-row items-center justify-between text-xs text-gray-500">
           <p>© 2024 CÔNG TY TNHH TM DV ZCOM. MST: 0317130199. Tất cả quyền được bảo lưu.</p>
           <div className="flex gap-4 mt-4 md:mt-0 font-medium">
-            <Link href="#" className="hover:text-white transition-colors">Điều khoản sử dụng</Link>
-            <Link href="#" className="hover:text-white transition-colors">Bảo mật thông tin</Link>
+            <Link href="/dieu-khoan-su-dung" className="hover:text-white transition-colors">Điều khoản sử dụng</Link>
+            <Link href="/chinh-sach-bao-mat" className="hover:text-white transition-colors">Bảo mật thông tin</Link>
           </div>
         </div>
       </div>

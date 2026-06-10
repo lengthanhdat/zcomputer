@@ -2,19 +2,27 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Package, LayoutDashboard, Settings, LogOut, Users, Warehouse, ClipboardList } from "lucide-react";
+import { Package, LayoutDashboard, Settings, LogOut, Users, Warehouse, ClipboardList, Menu, X, Tags } from "lucide-react";
+import { useState, useEffect } from "react";
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  // Đóng menu khi chuyển trang trên mobile
+  useEffect(() => {
+    setIsMobileMenuOpen(false);
+  }, [pathname]);
 
   const menuItems = [
     { href: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true },
     { href: "/admin/products", label: "Sản phẩm", icon: Package },
     { href: "/admin/inventory", label: "Quản lý kho", icon: Warehouse },
     { href: "/admin/orders", label: "Đơn hàng", icon: ClipboardList },
-    { href: "/admin/categories", label: "Danh mục", icon: Settings },
+    { href: "/admin/categories", label: "Danh mục", icon: Tags },
     { href: "/admin/users", label: "Khách hàng", icon: Users },
     { href: "/admin/banners", label: "Banners", icon: LayoutDashboard },
+    { href: "/admin/settings", label: "Cài đặt chung", icon: Settings },
   ];
 
   const isActive = (item: typeof menuItems[0]) => {
@@ -25,11 +33,24 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   };
 
   return (
-    <div className="flex h-screen bg-gray-100 font-sans">
+    <div className="flex h-screen bg-gray-100 font-sans overflow-hidden">
+      {/* Mobile Overlay */}
+      {isMobileMenuOpen && (
+        <div 
+          className="fixed inset-0 bg-black/50 z-40 md:hidden"
+          onClick={() => setIsMobileMenuOpen(false)}
+        />
+      )}
+
       {/* Sidebar */}
-      <aside className="w-64 bg-[#111111] text-white flex flex-col">
-        <div className="p-6 text-2xl font-black text-center text-primary uppercase border-b border-gray-800">
-          ZCOMPUTER <span className="text-white text-sm block font-normal">Admin Panel</span>
+      <aside className={`fixed z-50 inset-y-0 left-0 w-64 bg-[#111111] text-white flex flex-col transform transition-transform duration-300 ease-in-out md:relative md:translate-x-0 ${isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"}`}>
+        <div className="p-6 flex items-center justify-between border-b border-gray-800">
+          <div className="text-2xl font-black text-primary uppercase w-full text-center">
+            ZCOMPUTER <span className="text-white text-sm block font-normal">Admin Panel</span>
+          </div>
+          <button className="md:hidden text-gray-400 absolute right-4 top-6" onClick={() => setIsMobileMenuOpen(false)}>
+            <X size={24} />
+          </button>
         </div>
         <nav className="flex-1 p-4 space-y-1.5 overflow-y-auto">
           {menuItems.map((item) => {
@@ -58,15 +79,23 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 flex flex-col overflow-hidden">
-        <header className="bg-white shadow-sm h-16 flex items-center px-6 justify-between">
-          <h2 className="text-xl font-bold text-gray-800">Quản trị hệ thống</h2>
+      <main className="flex-1 flex flex-col w-full min-w-0 h-screen overflow-hidden">
+        <header className="bg-white shadow-sm h-16 flex items-center px-4 md:px-6 justify-between shrink-0">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center font-bold">A</div>
-            <span className="text-sm font-semibold text-gray-700">Admin</span>
+            <button 
+              className="md:hidden p-2 -ml-2 text-gray-600 hover:text-gray-900 focus:outline-none" 
+              onClick={() => setIsMobileMenuOpen(true)}
+            >
+              <Menu size={24} />
+            </button>
+            <h2 className="text-lg md:text-xl font-bold text-gray-800 truncate">Quản trị hệ thống</h2>
+          </div>
+          <div className="flex items-center gap-3 shrink-0">
+            <div className="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center font-bold text-sm">A</div>
+            <span className="hidden sm:inline text-sm font-semibold text-gray-700">Admin</span>
           </div>
         </header>
-        <div className="flex-1 overflow-auto p-6">
+        <div className="flex-1 overflow-x-hidden overflow-y-auto p-4 md:p-6 w-full">
           {children}
         </div>
       </main>

@@ -9,6 +9,7 @@ interface Banner {
   title: string;
   image: string;
   link: string;
+  position: 'main' | 'sub';
   isActive: boolean;
   order: number;
 }
@@ -18,7 +19,7 @@ export default function AdminBannersPage() {
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [editingBannerId, setEditingBannerId] = useState<string | null>(null);
-  const [formData, setFormData] = useState({ title: "", image: "", link: "", isActive: true, order: 0 });
+  const [formData, setFormData] = useState<{ title: string; image: string; link: string; position: 'main' | 'sub'; isActive: boolean; order: number }>({ title: "", image: "", link: "", position: 'main', isActive: true, order: 0 });
 
   const fetchBanners = async () => {
     try {
@@ -36,7 +37,7 @@ export default function AdminBannersPage() {
 
   const openAddModal = () => {
     setEditingBannerId(null);
-    setFormData({ title: "", image: "", link: "", isActive: true, order: 0 });
+    setFormData({ title: "", image: "", link: "", position: 'main', isActive: true, order: 0 });
     setShowModal(true);
   };
 
@@ -46,6 +47,7 @@ export default function AdminBannersPage() {
       title: banner.title,
       image: banner.image,
       link: banner.link || "",
+      position: banner.position || 'main',
       isActive: banner.isActive,
       order: banner.order || 0
     });
@@ -149,7 +151,8 @@ export default function AdminBannersPage() {
             </div>
             <div className="p-4 space-y-4">
               <div>
-                <h3 className="font-bold text-gray-800 text-sm line-clamp-1">{banner.title}</h3>
+                <h3 className="font-bold text-gray-800 text-sm line-clamp-1">{banner.title || "Không có tiêu đề"}</h3>
+                <p className="text-xs font-semibold mt-1">Vị trí: <span className={banner.position === 'sub' ? 'text-blue-600' : 'text-primary'}>{banner.position === 'sub' ? 'Banner Phụ (3 cái nhỏ)' : 'Banner Chính (To)'}</span></p>
                 <p className="text-xs text-gray-500 mt-1">Thứ tự: {banner.order}</p>
               </div>
               <div className="flex justify-between items-center pt-3 border-t border-gray-100">
@@ -193,6 +196,13 @@ export default function AdminBannersPage() {
                     <input className="flex-1 border p-2 rounded text-sm" value={formData.image} onChange={e => setFormData({...formData, image: e.target.value})} placeholder="Hoặc dán URL ảnh trực tiếp (https://...)" />
                   </div>
                 </div>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Vị trí hiển thị</label>
+                <select className="w-full border p-2 rounded" value={formData.position} onChange={e => setFormData({...formData, position: e.target.value as 'main' | 'sub'})}>
+                  <option value="main">Banner Chính (Nằm trên, vuốt ngang)</option>
+                  <option value="sub">Banner Phụ (Nằm dưới, 3 cái chia cột)</option>
+                </select>
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Đường dẫn khi click (URL)</label>

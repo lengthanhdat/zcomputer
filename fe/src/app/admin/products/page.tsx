@@ -10,6 +10,9 @@ interface Product {
   price: number;
   stock: number;
   brand: string;
+  isHotSale?: boolean;
+  category_id?: { _id: string; name: string };
+  createdAt?: string;
 }
 
 export default function AdminProductsPage() {
@@ -18,6 +21,11 @@ export default function AdminProductsPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [brandFilter, setBrandFilter] = useState("");
   const [stockFilter, setStockFilter] = useState("");
+  const [categoryFilter, setCategoryFilter] = useState("");
+  const [hotSaleFilter, setHotSaleFilter] = useState("");
+  const [sortFilter, setSortFilter] = useState("newest");
+  const [minPrice, setMinPrice] = useState("");
+  const [maxPrice, setMaxPrice] = useState("");
 
   const fetchProducts = async () => {
     try {
@@ -51,12 +59,55 @@ export default function AdminProductsPage() {
     }
   };
 
+  const toggleHotSale = async (id: string, currentStatus: boolean) => {
+    // Optimistic UI update
+    setProducts(products.map(p => p._id === id ? { ...p, isHotSale: !currentStatus } : p));
+    
+    try {
+      const res = await fetch(`http://127.0.0.1:5000/api/products/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ isHotSale: !currentStatus })
+      });
+      if (!res.ok) {
+        // Revert on error
+        setProducts(products.map(p => p._id === id ? { ...p, isHotSale: currentStatus } : p));
+        alert("Lỗi khi cập nhật trạng thái Hot Sale");
+      }
+    } catch (error) {
+      console.error(error);
+      setProducts(products.map(p => p._id === id ? { ...p, isHotSale: currentStatus } : p));
+    }
+  };
+
+  const uniqueCategories = Array.from(new Map(
+    products.filter(p => p.category_id).map(p => [p.category_id?._id, p.category_id?.name])
+  ).entries());
+
   const filteredProducts = products.filter(p => {
     const matchSearch = p.name.toLowerCase().includes(searchTerm.toLowerCase());
     const matchBrand = brandFilter ? p.brand === brandFilter : true;
     const matchStock = stockFilter === "in_stock" ? p.stock > 0 : stockFilter === "out_of_stock" ? p.stock === 0 : true;
-    return matchSearch && matchBrand && matchStock;
+    const matchCategory = categoryFilter ? p.category_id?._id === categoryFilter : true;
+    const matchHotSale = hotSaleFilter === "hot" ? p.isHotSale : hotSaleFilter === "normal" ? !p.isHotSale : true;
+    const matchMinPrice = minPrice ? p.price >= Number(minPrice) : true;
+    const matchMaxPrice = maxPrice ? p.price <= Number(maxPrice) : true;
+    return matchSearch && matchBrand && matchStock && matchCategory && matchHotSale && matchMinPrice && matchMaxPrice;
+  }).sort((a, b) => {
+    if (sortFilter === "price_asc") return a.price - b.price;
+    if (sortFilter === "price_desc") return b.price - a.price;
+    if (sortFilter === "stock_asc") return a.stock - b.stock;
+    if (sortFilter === "stock_desc") return b.stock - a.stock;
+    if (sortFilter === "oldest") return new Date(a.createdAt || 0).getTime() - new Date(b.createdAt || 0).getTime();
+    return new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime(); // newest
   });
+
+  const groupedProducts = filteredProducts.reduce((acc, product) => {
+    const catName = product.category_id?.name || "Khác";
+    if (!acc[catName]) acc[catName] = [];
+    acc[catName].push(product);
+    return acc;
+  }, {} as Record<string, Product[]>);
 
   return (
     <div className="bg-white rounded-lg shadow-sm border border-gray-200 min-h-full">
@@ -71,37 +122,107 @@ export default function AdminProductsPage() {
       </div>
       
       <div className="p-6">
-        {/* Search & Filter */}
-        <div className="flex flex-wrap gap-4 mb-6">
-          <div className="relative flex-1 min-w-[200px] max-w-md">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
-            <input 
-              type="text" 
-              placeholder="Tìm kiếm sản phẩm..." 
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md outline-none focus:border-primary transition-colors"
-            />
+        {/* Professional Filter Section */}
+        <div className="bg-gray-50 border border-gray-200 rounded-xl p-5 mb-6">
+          <div className="flex flex-col gap-4">
+            {/* Top row: Search & Price */}
+            <div className="flex flex-col md:flex-row gap-4">
+              <div className="relative flex-1">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+                <input 
+                  type="text" 
+                  placeholder="Tìm kiếm sản phẩm theo tên..." 
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="w-full pl-10 pr-4 py-2 bg-white border border-gray-300 rounded-lg outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all text-sm h-[40px]"
+                />
+              </div>
+              
+              <div className="relative">
+                <div className="flex items-center bg-white border border-gray-300 rounded-lg px-3 focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20 transition-all h-[40px]">
+                  <span className="text-gray-500 text-sm font-medium border-r border-gray-200 pr-3 mr-2 hidden sm:block">Khoảng giá</span>
+                  <input 
+                    type="number" 
+                    placeholder="Từ..." 
+                    value={minPrice}
+                    onChange={(e) => setMinPrice(e.target.value)}
+                    className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none w-[80px] sm:w-[100px] outline-none text-sm bg-transparent"
+                  />
+                  <span className="text-gray-400 px-2">-</span>
+                  <input 
+                    type="number" 
+                    placeholder="Đến..." 
+                    value={maxPrice}
+                    onChange={(e) => setMaxPrice(e.target.value)}
+                    className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none w-[80px] sm:w-[100px] outline-none text-sm bg-transparent"
+                  />
+                </div>
+                {(minPrice || maxPrice) && (
+                  <div className="absolute top-[105%] left-0 text-[12px] text-emerald-600 font-medium whitespace-nowrap bg-emerald-50/90 backdrop-blur-sm px-2 py-0.5 rounded shadow-sm border border-emerald-100 z-10">
+                    Sẽ lọc từ: {minPrice ? Number(minPrice).toLocaleString('vi-VN') + ' đ' : '0 đ'} đến {maxPrice ? Number(maxPrice).toLocaleString('vi-VN') + ' đ' : 'Tối đa'}
+                  </div>
+                )}
+              </div>
+            </div>
+            
+            {/* Bottom row: Selects */}
+            <div className="grid grid-cols-2 lg:grid-cols-5 gap-3">
+              <select 
+                className="bg-white border border-gray-300 rounded-lg px-3 py-2 outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors text-gray-700 text-sm h-[40px]"
+                value={categoryFilter}
+                onChange={(e) => setCategoryFilter(e.target.value)}
+              >
+                <option value="">Tất cả danh mục</option>
+                {uniqueCategories.map(([id, name]) => (
+                  <option key={id as string} value={id as string}>{name as string}</option>
+                ))}
+              </select>
+              
+              <select 
+                className="bg-white border border-gray-300 rounded-lg px-3 py-2 outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors text-gray-700 text-sm h-[40px]"
+                value={brandFilter}
+                onChange={(e) => setBrandFilter(e.target.value)}
+              >
+                <option value="">Tất cả thương hiệu</option>
+                {Array.from(new Set(products.map(p => p.brand).filter(Boolean))).map(b => (
+                  <option key={b} value={b}>{b}</option>
+                ))}
+              </select>
+              
+              <select 
+                className="bg-white border border-gray-300 rounded-lg px-3 py-2 outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors text-gray-700 text-sm h-[40px]"
+                value={stockFilter}
+                onChange={(e) => setStockFilter(e.target.value)}
+              >
+                <option value="">Mọi trạng thái kho</option>
+                <option value="in_stock">Còn hàng</option>
+                <option value="out_of_stock">Hết hàng</option>
+              </select>
+              
+              <select 
+                className="bg-white border border-gray-300 rounded-lg px-3 py-2 outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors text-gray-700 text-sm h-[40px]"
+                value={hotSaleFilter}
+                onChange={(e) => setHotSaleFilter(e.target.value)}
+              >
+                <option value="">Mọi khuyến mãi</option>
+                <option value="hot">Chỉ hiện Hot Sale</option>
+                <option value="normal">Không phải Hot Sale</option>
+              </select>
+              
+              <select 
+                className="bg-white border border-gray-300 rounded-lg px-3 py-2 outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors text-gray-700 text-sm font-medium h-[40px]"
+                value={sortFilter}
+                onChange={(e) => setSortFilter(e.target.value)}
+              >
+                <option value="newest">Sắp xếp: Mới nhất</option>
+                <option value="oldest">Sắp xếp: Cũ nhất</option>
+                <option value="price_asc">Giá: Thấp đến cao</option>
+                <option value="price_desc">Giá: Cao đến thấp</option>
+                <option value="stock_asc">Kho: Ít nhất</option>
+                <option value="stock_desc">Kho: Nhiều nhất</option>
+              </select>
+            </div>
           </div>
-          <select 
-            className="border border-gray-300 rounded-md px-4 py-2 outline-none focus:border-primary transition-colors min-w-[160px] text-gray-700 bg-white"
-            value={brandFilter}
-            onChange={(e) => setBrandFilter(e.target.value)}
-          >
-            <option value="">Tất cả thương hiệu</option>
-            {Array.from(new Set(products.map(p => p.brand).filter(Boolean))).map(b => (
-              <option key={b} value={b}>{b}</option>
-            ))}
-          </select>
-          <select 
-            className="border border-gray-300 rounded-md px-4 py-2 outline-none focus:border-primary transition-colors min-w-[150px] text-gray-700 bg-white"
-            value={stockFilter}
-            onChange={(e) => setStockFilter(e.target.value)}
-          >
-            <option value="">Trạng thái kho</option>
-            <option value="in_stock">Còn hàng</option>
-            <option value="out_of_stock">Hết hàng</option>
-          </select>
         </div>
 
         {/* Table */}
@@ -113,41 +234,55 @@ export default function AdminProductsPage() {
                 <th className="py-3 px-4 font-semibold">Thương hiệu</th>
                 <th className="py-3 px-4 font-semibold">Giá bán</th>
                 <th className="py-3 px-4 font-semibold">Tồn kho</th>
+                <th className="py-3 px-4 font-semibold text-center">Hot Sale</th>
                 <th className="py-3 px-4 font-semibold text-right">Thao tác</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-100">
-              {loading ? (
-                <tr><td colSpan={5} className="py-8 text-center text-gray-500">Đang tải dữ liệu...</td></tr>
-              ) : filteredProducts.length === 0 ? (
-                <tr><td colSpan={5} className="py-8 text-center text-gray-500">Không tìm thấy sản phẩm nào phù hợp.</td></tr>
-              ) : (
-                filteredProducts.map((product) => (
-                  <tr key={product._id} className="hover:bg-gray-50 transition-colors">
-                    <td className="py-3 px-4 text-sm font-medium text-gray-900">{product.name}</td>
-                    <td className="py-3 px-4 text-sm text-gray-600">{product.brand || '---'}</td>
-                    <td className="py-3 px-4 text-sm text-primary font-semibold">{product.price.toLocaleString('vi-VN')}đ</td>
-                    <td className="py-3 px-4 text-sm text-gray-600">
-                      <span className={`px-2 py-1 rounded text-xs font-semibold ${product.stock > 0 ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
-                        {product.stock > 0 ? product.stock : 'Hết hàng'}
-                      </span>
-                    </td>
-                    <td className="py-3 px-4 text-right">
-                      <div className="flex justify-end gap-2">
-                        <Link href={`/admin/products/${product._id}`} className="p-1.5 text-blue-600 hover:bg-blue-50 rounded" title="Sửa">
-                          <Edit size={16} />
-                        </Link>
-                        <button 
-                          onClick={() => handleDelete(product._id)}
-                          className="p-1.5 text-red-600 hover:bg-red-50 rounded" title="Xóa">
-                          <Trash2 size={16} />
-                        </button>
-                      </div>
-                    </td>
+            {loading ? (
+              <tbody><tr><td colSpan={6} className="py-8 text-center text-gray-500">Đang tải dữ liệu...</td></tr></tbody>
+            ) : filteredProducts.length === 0 ? (
+              <tbody><tr><td colSpan={6} className="py-8 text-center text-gray-500">Không tìm thấy sản phẩm nào phù hợp.</td></tr></tbody>
+            ) : (
+              Object.entries(groupedProducts).map(([categoryName, prods]) => (
+                <tbody key={categoryName} className="divide-y divide-gray-100">
+                  <tr className="bg-gray-100/80 border-t-2 border-gray-200">
+                    <td colSpan={6} className="py-2.5 px-4 font-bold text-gray-700 uppercase text-xs tracking-widest">{categoryName} ({prods.length})</td>
                   </tr>
-                ))
-              )}
-            </tbody>
+                  {prods.map((product) => (
+                    <tr key={product._id} className="hover:bg-gray-50 transition-colors">
+                      <td className="py-3 px-4 text-sm font-medium text-gray-900">{product.name}</td>
+                      <td className="py-3 px-4 text-sm text-gray-600">{product.brand || '---'}</td>
+                      <td className="py-3 px-4 text-sm text-primary font-semibold">{product.price.toLocaleString('vi-VN')}đ</td>
+                      <td className="py-3 px-4 text-sm text-gray-600">
+                        <span className={`px-2 py-1 rounded text-xs font-semibold ${product.stock > 0 ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+                          {product.stock > 0 ? product.stock : 'Hết hàng'}
+                        </span>
+                      </td>
+                      <td className="py-3 px-4 text-center">
+                        <input 
+                          type="checkbox"
+                          checked={!!product.isHotSale}
+                          onChange={() => toggleHotSale(product._id, !!product.isHotSale)}
+                          className="w-4 h-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500 cursor-pointer accent-blue-600"
+                        />
+                      </td>
+                      <td className="py-3 px-4 text-right">
+                        <div className="flex justify-end gap-2">
+                          <Link href={`/admin/products/${product._id}`} className="p-1.5 text-blue-600 hover:bg-blue-50 rounded" title="Sửa">
+                            <Edit size={16} />
+                          </Link>
+                          <button 
+                            onClick={() => handleDelete(product._id)}
+                            className="p-1.5 text-red-600 hover:bg-red-50 rounded" title="Xóa">
+                            <Trash2 size={16} />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              ))
+            )}
           </table>
         </div>
       </div>

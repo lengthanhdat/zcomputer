@@ -31,8 +31,8 @@ export default function RootLayout({
         <PublicChrome>
           <Footer />
           <FloatingContact />
-          <Toaster position="top-right" />
         </PublicChrome>
+        <Toaster position="top-right" />
       </body>
     </html>
   );

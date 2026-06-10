@@ -6,6 +6,7 @@ import Link from "next/link";
 import { ArrowRight, Laptop, ShieldCheck, Truck, Zap, ChevronLeft, ChevronRight, Monitor, Cpu, Server, Mouse, Keyboard, Headphones, HardDrive, Maximize, Heart, type LucideIcon } from "lucide-react";
 import BannerSlider from "@/components/BannerSlider";
 import type { ReactNode } from "react";
+import HotSaleSection from "./HotSaleSection";
 
 type Product = {
   _id: string;
@@ -35,6 +36,7 @@ type Banner = {
   title: string;
   link?: string;
   image?: string;
+  position?: string;
 };
 
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:5000";
@@ -160,29 +162,52 @@ export default function HomeClient() {
         {banners === null ? (
           <BannerSkeleton />
         ) : (
-          <div className="flex flex-col lg:flex-row gap-4">
-            <div className="w-full lg:w-2/3">
-              <BannerSlider banners={banners} apiBase={API_BASE} />
+          <div className="flex flex-col gap-4">
+            <div className="w-full">
+              <BannerSlider banners={banners.filter(b => b.position !== 'sub')} apiBase={API_BASE} />
             </div>
-            <div className="hidden lg:flex w-full lg:w-1/3 flex-col gap-4">
-              <Link href="/category/laptop" className="relative w-full flex-1 rounded-2xl overflow-hidden group shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 bg-gradient-to-br from-indigo-900 to-purple-900 flex items-center p-8 border border-white/10">
-                 <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=600&h=300&fit=crop')] opacity-30 bg-cover bg-center group-hover:scale-110 transition-transform duration-700"></div>
-                 <div className="absolute inset-0 bg-gradient-to-r from-black/80 to-transparent"></div>
-                 <div className="relative z-10 text-white">
-                    <div className="bg-red-600 text-[10px] font-black px-2 py-1 inline-block rounded mb-2 uppercase tracking-widest">Thu Cũ Đổi Mới</div>
-                    <h3 className="text-xl lg:text-2xl font-black uppercase italic mb-1 text-yellow-400 drop-shadow-md tracking-tight">Lên Đời Laptop</h3>
-                    <p className="font-bold text-sm text-gray-200">Định giá máy cũ cực cao</p>
-                 </div>
-              </Link>
-              <Link href="/category/laptop" className="relative w-full flex-1 rounded-2xl overflow-hidden group shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 bg-gradient-to-bl from-blue-900 to-cyan-950 flex items-center p-8 border border-white/10">
-                 <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1525547719571-a2d4ac8945e2?w=600&h=300&fit=crop')] opacity-30 bg-cover bg-center group-hover:scale-110 transition-transform duration-700"></div>
-                 <div className="absolute inset-0 bg-gradient-to-r from-black/80 to-transparent"></div>
-                 <div className="relative z-10 text-white">
-                    <div className="bg-emerald-500 text-[10px] font-black px-2 py-1 inline-block rounded mb-2 uppercase tracking-widest">Mua Kèm Gói Build</div>
-                    <h3 className="text-xl lg:text-2xl font-black uppercase italic mb-1 text-cyan-300 drop-shadow-md tracking-tight">Tặng Gear Gaming</h3>
-                    <p className="font-bold text-sm text-gray-200">Combo phím chuột xịn</p>
-                 </div>
-              </Link>
+            <div className="hidden lg:grid grid-cols-3 gap-4">
+              {banners.filter(b => b.position === 'sub').length > 0 ? (
+                banners.filter(b => b.position === 'sub').slice(0, 3).map((banner) => (
+                  <Link key={banner._id} href={banner.link || "#"} className="block relative w-full rounded-2xl overflow-hidden group shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+                    <img src={(banner.image || "").startsWith('http') || (banner.image || "").startsWith('data:') ? banner.image : `${API_BASE}${banner.image}`} alt={banner.title} className="w-full h-auto object-contain group-hover:scale-105 transition-transform duration-500" />
+                  </Link>
+                ))
+              ) : (
+                <>
+                  <Link href="/build-pc" className="relative w-full aspect-[21/9] xl:aspect-[2/1] rounded-2xl overflow-hidden group shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 bg-gradient-to-br from-blue-950 to-indigo-900 flex items-center p-6 border border-white/10">
+                     <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1587202372634-32705e3bf49c?w=600&h=300&fit=crop')] opacity-30 bg-cover bg-center group-hover:scale-110 transition-transform duration-700"></div>
+                     <div className="absolute inset-0 bg-gradient-to-r from-[#003366] to-transparent"></div>
+                     <div className="relative z-10 text-white w-2/3">
+                        <h3 className="text-xl lg:text-3xl font-black uppercase mb-1 drop-shadow-md tracking-tight leading-tight">Tư Vấn<br/><span className="text-[#33ccff]">Build PC</span></h3>
+                        <div className="bg-[#0066cc] text-xs font-black px-3 py-1 inline-block rounded mb-2 uppercase tracking-wide border border-[#33ccff]">Theo Nhu Cầu</div>
+                     </div>
+                  </Link>
+                  
+                  <Link href="/khuyen-mai" className="relative w-full aspect-[21/9] xl:aspect-[2/1] rounded-2xl overflow-hidden group shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 bg-gradient-to-bl from-green-600 to-emerald-800 flex items-center p-6 border border-white/10">
+                     <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1605647540924-852290f6b0d5?w=600&h=300&fit=crop')] opacity-30 bg-cover bg-center group-hover:scale-110 transition-transform duration-700"></div>
+                     <div className="absolute inset-0 bg-gradient-to-r from-[#1b5e20]/90 to-[#4caf50]/20"></div>
+                     <div className="relative z-10 text-white flex flex-col items-start">
+                        <h3 className="text-lg lg:text-xl font-bold uppercase mb-0 drop-shadow-md tracking-tight text-white/90">Giới Thiệu</h3>
+                        <h3 className="text-2xl lg:text-3xl font-black uppercase mb-1 drop-shadow-md tracking-tight text-yellow-300">Bạn Ngay</h3>
+                        <div className="bg-white text-green-700 text-xs font-black px-3 py-1 inline-block rounded-full mb-1 uppercase shadow-sm">Nhận Quà Liền Tay</div>
+                        <p className="font-bold text-[11px] text-yellow-200 uppercase mt-1">Ưu đãi lên đến 2 triệu VNĐ</p>
+                     </div>
+                  </Link>
+                  
+                  <Link href="/thu-cu-doi-moi" className="relative w-full aspect-[21/9] xl:aspect-[2/1] rounded-2xl overflow-hidden group shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center p-6 border border-blue-200">
+                     <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1518770660439-4636190af475?w=600&h=300&fit=crop')] opacity-10 bg-cover bg-center group-hover:scale-110 transition-transform duration-700"></div>
+                     <div className="relative z-10 text-gray-800 flex flex-col items-start w-3/4">
+                        <div className="flex items-center gap-2 mb-1">
+                          <h3 className="text-xl lg:text-3xl font-black uppercase text-red-600 drop-shadow-sm tracking-tight" style={{ WebkitTextStroke: '0.5px white' }}>Thu Cũ</h3>
+                          <h3 className="text-xl lg:text-3xl font-black uppercase text-yellow-500 drop-shadow-sm tracking-tight" style={{ WebkitTextStroke: '0.5px white' }}>Đổi Mới</h3>
+                        </div>
+                        <div className="bg-[#004d99] text-white text-[10px] font-black px-2 py-1 rounded mb-1 uppercase tracking-wider">Lên Đời PC</div>
+                        <div className="bg-blue-500 text-white text-[10px] font-black px-2 py-1 rounded-full uppercase tracking-wider mt-1 absolute right-4 top-4">Trả Góp 0%</div>
+                     </div>
+                  </Link>
+                </>
+              )}
             </div>
           </div>
         )}
@@ -247,6 +272,11 @@ export default function HomeClient() {
         )}
       </section>
 
+      {/* Flash Sale Sections */}
+      {products && (
+        <HotSaleSection products={products} />
+      )}
+
       {/* Products by Categories */}
       {categories === null || products === null ? (
         <section className="container mx-auto px-4 mb-20"><ProductSkeleton /></section>
@@ -308,15 +338,15 @@ export default function HomeClient() {
                   <ChevronLeft size={24} />
                 </button>
                 
-                <div id={`slider-${cat._id}`} className="flex overflow-x-hidden gap-6 pb-6 scroll-smooth [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-                  <div id={`slider-inner-${cat._id}`} className="flex gap-6 pr-6 flex-shrink-0">
+                <div id={`slider-${cat._id}`} className="flex overflow-x-hidden gap-3 pb-6 scroll-smooth [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+                  <div id={`slider-inner-${cat._id}`} className="flex gap-3 pr-3 flex-shrink-0">
                     {catProducts.map((product) => (
                       <ProductCard key={product._id} product={product} />
                     ))}
                   </div>
 
                   {catProducts.length >= 5 && (
-                    <div className="flex gap-6 pr-6 flex-shrink-0" aria-hidden="true">
+                    <div className="flex gap-3 pr-3 flex-shrink-0" aria-hidden="true">
                       {catProducts.map((product) => (
                         <ProductCard key={`${product._id}-dup`} product={product} />
                       ))}
