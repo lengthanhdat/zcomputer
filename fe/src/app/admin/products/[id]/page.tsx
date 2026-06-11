@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { ArrowLeft, Image as ImageIcon, Box, Tag, DollarSign, FileText, UploadCloud, Loader2, X, Gift, Cpu } from "lucide-react";
 import Link from "next/link";
 import toast from "react-hot-toast";
+import { fetchApi } from "@/lib/api";
 
 interface Category {
   _id: string;
@@ -41,7 +42,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const res = await fetch("http://127.0.0.1:5000/api/categories");
+        const res = await fetchApi("/categories");
         const data = await res.json();
         setCategories(data);
       } catch (error) {
@@ -54,12 +55,12 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const res = await fetch(`http://127.0.0.1:5000/api/products`);
+        const res = await fetchApi(`/products`);
         const data = await res.json();
         const productFromList = data.find((p: any) => p._id === resolvedParams.id);
         
         if (productFromList) {
-          const detailRes = await fetch(`http://127.0.0.1:5000/api/products/${productFromList.slug}`);
+          const detailRes = await fetchApi(`/products/${productFromList.slug}`);
           if (detailRes.ok) {
             const product = await detailRes.json();
             setFormData({
@@ -110,7 +111,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
         const formDataObj = new FormData();
         formDataObj.append("image", file);
         
-        const res = await fetch("http://127.0.0.1:5000/api/upload/image", {
+        const res = await fetchApi("/upload/image", {
           method: "POST",
           body: formDataObj,
         });
@@ -181,11 +182,8 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
         specs: formData.specs
       };
 
-      const res = await fetch(`http://127.0.0.1:5000/api/products/${resolvedParams.id}`, {
+      const res = await fetchApi(`/products/${resolvedParams.id}`, {
         method: "PUT",
-        headers: {
-          "Content-Type": "application/json"
-        },
         body: JSON.stringify(payload)
       });
 

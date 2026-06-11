@@ -4,7 +4,9 @@ import cors from 'cors';
 import compression from 'compression';
 import dotenv from 'dotenv';
 import path from 'path';
-
+import helmet from 'helmet';
+import mongoSanitize from 'express-mongo-sanitize';
+import cookieParser from 'cookie-parser';
 
 dotenv.config();
 
@@ -12,9 +14,17 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/zcomputer';
 
-app.use(cors());
-app.use(compression()); // gzip all responses
+app.use(cors({
+  origin: ['http://localhost:3000', 'http://127.0.0.1:3000', 'http://192.168.1.15:3000'],
+  credentials: true
+}));
+app.use(compression()); 
+app.use(helmet());
+app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
 app.use(express.json({ limit: '1mb' }));
+app.use(cookieParser());
+app.use(mongoSanitize());
+
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
 // Request timeout middleware (10s)

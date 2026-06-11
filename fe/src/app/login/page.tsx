@@ -4,6 +4,8 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
+import { useAuthStore } from "@/store/useAuthStore";
+import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -11,6 +13,7 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const { login } = useAuthStore();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -18,9 +21,10 @@ export default function LoginPage() {
     setError("");
 
     try {
-      const res = await fetch("http://127.0.0.1:5000/api/auth/login", {
+      const res = await fetch("http://localhost:5000/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        credentials: "include",
         body: JSON.stringify({ email, password }),
       });
 
@@ -28,17 +32,46 @@ export default function LoginPage() {
 
       if (res.ok) {
         toast.success("Đăng nhập thành công!");
-        localStorage.setItem("token", data.token);
-        localStorage.setItem("user", JSON.stringify(data.user));
-        window.dispatchEvent(new Event("zcomputer-user-change"));
+        login(data.user, data.token);
         
-        if (data.user.role === 'admin') {
+        if (data.user.role === 'admin' || data.user.role === 'staff') {
           router.push("/admin");
         } else {
           router.push("/");
         }
       } else {
         setError(data.message || "Đăng nhập thất bại");
+      }
+    } catch (err) {
+      setError("Không thể kết nối đến máy chủ");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleGoogleSuccess = async (credentialResponse: any) => {
+    setLoading(true);
+    setError("");
+    try {
+      const res = await fetch("http://localhost:5000/api/auth/google", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ credential: credentialResponse.credential }),
+      });
+
+      const data = await res.json();
+      if (res.ok) {
+        toast.success("Đăng nhập Google thành công!");
+        login(data.user, data.token);
+        
+        if (data.user.role === 'admin' || data.user.role === 'staff') {
+          router.push("/admin");
+        } else {
+          router.push("/");
+        }
+      } else {
+        setError(data.message || "Đăng nhập Google thất bại");
       }
     } catch (err) {
       setError("Không thể kết nối đến máy chủ");
@@ -61,7 +94,33 @@ export default function LoginPage() {
             </Link>
           </p>
         </div>
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+
+        <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || ""}>
+          <div className="flex justify-center mt-4">
+            <GoogleLogin
+              onSuccess={handleGoogleSuccess}
+              onError={() => {
+                setError("Google Login encountered an error");
+              }}
+              useOneTap
+              theme="outline"
+              size="large"
+              text="signin_with"
+              shape="rectangular"
+            />
+          </div>
+        </GoogleOAuthProvider>
+
+        <div className="relative mt-6">
+          <div className="absolute inset-0 flex items-center">
+            <div className="w-full border-t border-gray-200"></div>
+          </div>
+          <div className="relative flex justify-center text-sm">
+            <span className="px-2 bg-white text-gray-500 font-medium">hoặc đăng nhập bằng email</span>
+          </div>
+        </div>
+
+        <form className="mt-6 space-y-6" onSubmit={handleSubmit}>
           <div className="rounded-md shadow-sm space-y-4">
             <div>
               <label className="text-sm font-semibold text-gray-700">Email</label>

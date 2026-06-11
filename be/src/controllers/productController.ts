@@ -11,7 +11,7 @@ export const getProducts = async (req: Request, res: Response) => {
     const limit = parseInt(req.query.limit as string) || 50;
     const categoryQuery = req.query.category as string;
     
-    let filter: any = { status: 'active' };
+    let filter: any = { status: { $in: ['active', 'out_of_stock'] } };
     
     const searchQuery = req.query.search as string;
     if (searchQuery) {
@@ -64,7 +64,7 @@ export const getProductBySlug = async (req: Request, res: Response) => {
 // Tạo sản phẩm mới
 export const createProduct = async (req: Request, res: Response) => {
   try {
-    const { name, category_id, brand, price, discountPrice, stock, sku, specs, images, gifts, description, condition, isHotSale } = req.body;
+    const { name, category_id, brand, price, discountPrice, stock, sku, specs, images, gifts, description, condition, isHotSale, flashSalePrice } = req.body;
     
     // Tạo slug từ name
     let slug = slugify(name, { lower: true, strict: true, locale: 'vi' });
@@ -75,7 +75,7 @@ export const createProduct = async (req: Request, res: Response) => {
     }
 
     const newProduct = new Product({
-      name, slug, category_id, brand, price, discountPrice, stock, sku, specs, images, gifts, description, condition, isHotSale
+      name, slug, category_id, brand, price, discountPrice, stock, sku, specs, images, gifts, description, condition, isHotSale, flashSalePrice
     });
     
     const savedProduct = await newProduct.save();

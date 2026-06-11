@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { Filter, Cpu, Monitor, Server, HardDrive, Maximize } from "lucide-react";
+import { Filter, Cpu, Monitor, Server, HardDrive, Maximize, ArrowRight } from "lucide-react";
 import { useState, useMemo, useEffect } from "react";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 
@@ -17,6 +17,9 @@ type Product = {
   brand?: string;
   condition?: string;
   isHotSale?: boolean;
+  flashSalePrice?: number;
+  stock?: number;
+  status?: string;
 };
 
 export default function CategoryClient({ 
@@ -300,13 +303,28 @@ export default function CategoryClient({
             <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4">
               {filteredProducts.length > 0 ? (
                 filteredProducts.map((product) => {
+                  const isHotSaleActive = !!(product.isHotSale && product.flashSalePrice && product.flashSalePrice < product.price);
+                  const originalPrice = (product.discountPrice && product.discountPrice > product.price) ? product.discountPrice : product.price;
+                  const currentPrice = isHotSaleActive ? product.flashSalePrice! : product.price;
+                  const saveAmount = originalPrice - currentPrice;
+                  const discountPercent = originalPrice > currentPrice ? Math.round((saveAmount / originalPrice) * 100) : 0;
+                  const isOutOfStock = product.status === 'out_of_stock' || product.stock === 0;
+
                   return (
                     <div
                       key={product._id}
-                      className="bg-white rounded-2xl border border-gray-100 overflow-hidden group shadow-sm hover:shadow-[0_8px_30px_rgb(220,38,38,0.12)] hover:border-red-200 hover:-translate-y-1 transition-all duration-300 flex flex-col relative"
+                      className={`bg-white rounded-2xl border border-gray-100 overflow-hidden group shadow-sm flex flex-col h-full relative transition-all duration-500 ${isOutOfStock ? 'opacity-80' : 'hover:shadow-[0_8px_30px_rgb(220,38,38,0.15)] hover:border-red-200 hover:-translate-y-2'}`}
                     >
                       <div className="relative aspect-[4/3] p-4 flex items-center justify-center bg-white overflow-hidden">
                         <Link href={`/product/${product.slug}`} className="absolute inset-0 z-20"></Link>
+
+                        {isOutOfStock && (
+                          <div className="absolute inset-0 bg-white/60 z-30 flex items-center justify-center backdrop-blur-[1px]">
+                            <div className="bg-gray-800/90 backdrop-blur-sm text-white font-black px-6 py-2 rounded-lg -rotate-12 shadow-2xl border border-gray-600/50 tracking-widest text-lg">
+                              HẾT HÀNG
+                            </div>
+                          </div>
+                        )}
 
                         {product.images?.[0] && (
                           <Image
@@ -320,18 +338,34 @@ export default function CategoryClient({
                         )}
                         
                         {/* Badges */}
-                        <div className="absolute top-4 left-4 z-20 flex flex-col shadow-lg rounded-md overflow-hidden transform -rotate-2 origin-top-left group-hover:rotate-0 transition-transform duration-300">
-                          {product.discountPrice && product.discountPrice > product.price && (
-                            <>
+                        <div className="absolute top-4 left-4 z-20 flex flex-col gap-1.5">
+                          {product.isHotSale && (
+                            <div className="shadow-lg rounded-md overflow-hidden transform -rotate-2 origin-top-left group-hover:rotate-0 transition-transform duration-300">
+                              <div className="bg-gradient-to-r from-orange-500 to-red-600 text-white text-[10px] font-black px-2 py-1 text-center uppercase tracking-widest">
+                                🔥 HOT SALE
+                              </div>
+                            </div>
+                          )}
+                          {saveAmount > 0 && !isOutOfStock && (
+                            <div className="shadow-lg rounded-md overflow-hidden transform -rotate-2 origin-top-left group-hover:rotate-0 transition-transform duration-300">
                               <div className="bg-gradient-to-r from-red-600 to-red-500 text-white text-[10px] font-black px-2 py-1 text-center uppercase tracking-widest">
                                 TIẾT KIỆM
                               </div>
                               <div className="bg-red-700 text-white text-[11px] font-black px-2 py-1 text-center border-t border-red-500">
-                                {(product.discountPrice - product.price).toLocaleString('vi-VN')} đ
+                                {saveAmount.toLocaleString('vi-VN')} đ
                               </div>
-                            </>
+                            </div>
                           )}
                         </div>
+
+                        {/* Hover Action */}
+                        {!isOutOfStock && (
+                          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 translate-y-8 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-300 z-30">
+                            <div className="bg-white/95 backdrop-blur-sm text-primary text-sm font-bold px-6 py-2 rounded-full shadow-lg border border-primary/20 flex items-center gap-2 whitespace-nowrap">
+                              Xem chi tiết <ArrowRight size={16} />
+                            </div>
+                          </div>
+                        )}
                       </div>
                       
                       <div className="p-4 flex flex-col flex-1 bg-white relative z-10 border-t border-gray-50/50">
@@ -343,29 +377,43 @@ export default function CategoryClient({
                         </Link>
                         
                         <div className="flex flex-col mb-4">
-                          {product.discountPrice && product.discountPrice > product.price ? (
+                          {isOutOfStock ? (
+                             <div className="h-full flex items-end">
+                               <span className="text-[15px] font-bold text-gray-500">Liên hệ</span>
+                             </div>
+                          ) : saveAmount > 0 ? (
                             <>
-                              <span className="text-gray-400 text-[12px] line-through mb-0.5">{product.discountPrice.toLocaleString('vi-VN')}₫</span>
+                              <span className="text-gray-400 text-[12px] line-through mb-0.5">{originalPrice.toLocaleString('vi-VN')}₫</span>
                               <div className="flex items-center gap-2">
-                                <span className="text-[16px] font-black text-red-600">{product.price.toLocaleString('vi-VN')}₫</span>
-                                <span className="text-red-500 border border-red-500 rounded text-[10px] font-bold px-1 py-[1px] leading-none">-{Math.round(((product.discountPrice - product.price) / product.discountPrice) * 100)}%</span>
+                                <span className="text-[16px] font-black text-red-600">{currentPrice.toLocaleString('vi-VN')}₫</span>
+                                <span className="text-red-500 border border-red-500 rounded text-[10px] font-bold px-1 py-[1px] leading-none">-{discountPercent}%</span>
                               </div>
                             </>
                           ) : (
                              <>
                                <div className="h-[18px] mb-0.5"></div>
-                               <span className="text-[16px] font-black text-red-600">{product.price.toLocaleString('vi-VN')}₫</span>
+                               <span className="text-[16px] font-black text-red-600">{currentPrice.toLocaleString('vi-VN')}₫</span>
                              </>
                           )}
                         </div>
 
                         {product.specs && Object.keys(product.specs).length > 0 && (
                           <div className="bg-gray-50/80 border border-gray-100 rounded-lg p-2.5 text-[10px] text-gray-600 grid grid-cols-2 gap-y-2 gap-x-2 mt-auto">
-                            {product.specs.cpu && <div className="flex items-center gap-1.5 truncate"><Cpu size={12} className="text-gray-400 shrink-0"/> <span className="truncate">{product.specs.cpu}</span></div>}
-                            {product.specs.vga && <div className="flex items-center gap-1.5 truncate"><Monitor size={12} className="text-gray-400 shrink-0"/> <span className="truncate">{product.specs.vga}</span></div>}
-                            {product.specs.ram && <div className="flex items-center gap-1.5 truncate"><Server size={12} className="text-gray-400 shrink-0"/> <span className="truncate">{product.specs.ram}</span></div>}
-                            {product.specs.storage && <div className="flex items-center gap-1.5 truncate"><HardDrive size={12} className="text-gray-400 shrink-0"/> <span className="truncate">{product.specs.storage}</span></div>}
-                            {product.specs.screen && <div className="col-span-2 flex items-center gap-1.5 truncate"><Maximize size={12} className="text-gray-400 shrink-0"/> <span className="truncate">{product.specs.screen}</span></div>}
+                            {Object.entries(product.specs).slice(0, 5).map(([key, value], index) => {
+                              const lowerKey = key.toLowerCase();
+                              let Icon = Maximize;
+                              if (lowerKey.includes('cpu') || lowerKey.includes('chip') || lowerKey.includes('vi xử lý')) Icon = Cpu;
+                              else if (lowerKey.includes('vga') || lowerKey.includes('card') || lowerKey.includes('đồ họa')) Icon = Monitor;
+                              else if (lowerKey.includes('ram')) Icon = Server;
+                              else if (lowerKey.includes('ổ') || lowerKey.includes('ssd') || lowerKey.includes('hdd') || lowerKey.includes('storage')) Icon = HardDrive;
+                              
+                              return (
+                                <div key={key} className={`flex items-center gap-1.5 truncate ${index === 4 ? 'col-span-2' : ''}`} title={`${key}: ${value}`}>
+                                  <Icon size={12} className="text-gray-400 shrink-0"/> 
+                                  <span className="truncate">{value as string}</span>
+                                </div>
+                              );
+                            })}
                           </div>
                         )}
                       </div>

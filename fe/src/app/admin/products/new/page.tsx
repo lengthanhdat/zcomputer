@@ -6,10 +6,62 @@ import { ArrowLeft, Sparkles, X, Image as ImageIcon, Box, Tag, DollarSign, FileT
 import Link from "next/link";
 import toast from "react-hot-toast";
 
+import { fetchApi } from "@/lib/api";
+
 interface Category {
   _id: string;
   name: string;
+  slug: string;
 }
+
+const SPEC_CONFIGS: Record<string, { key: string, label: string, placeholder: string }[]> = {
+  'laptop': [
+    { key: 'CPU', label: 'CPU', placeholder: 'VD: Intel Core i5 8350U' },
+    { key: 'RAM', label: 'RAM', placeholder: 'VD: 8GB DDR4' },
+    { key: 'Storage', label: 'Ổ cứng (Storage)', placeholder: 'VD: 256GB SSD' },
+    { key: 'VGA', label: 'Card màn hình (VGA)', placeholder: 'VD: Intel UHD Graphics' },
+    { key: 'Screen', label: 'Màn hình (Screen)', placeholder: 'VD: 14 inch FHD' },
+    { key: 'Battery', label: 'Pin (Battery)', placeholder: 'VD: 4 Cell 60Whr' }
+  ],
+  'pc-gaming': [
+    { key: 'CPU', label: 'CPU', placeholder: 'VD: Intel Core i5 10400F' },
+    { key: 'RAM', label: 'RAM', placeholder: 'VD: 16GB DDR4' },
+    { key: 'Storage', label: 'Ổ cứng (Storage)', placeholder: 'VD: 512GB SSD NVMe' },
+    { key: 'VGA', label: 'Card màn hình (VGA)', placeholder: 'VD: GTX 1660 Super 6GB' },
+    { key: 'Mainboard', label: 'Mainboard', placeholder: 'VD: B460M' },
+    { key: 'PSU', label: 'Nguồn (PSU)', placeholder: 'VD: 550W 80 Plus Bronze' }
+  ],
+  'man-hinh': [
+    { key: 'Size', label: 'Kích thước', placeholder: 'VD: 24 inch' },
+    { key: 'Panel', label: 'Tấm nền', placeholder: 'VD: IPS' },
+    { key: 'Resolution', label: 'Độ phân giải', placeholder: 'VD: Full HD (1920x1080)' },
+    { key: 'RefreshRate', label: 'Tần số quét', placeholder: 'VD: 144Hz' }
+  ],
+  'ban-phim': [
+    { key: 'Switch', label: 'Loại Switch', placeholder: 'VD: Blue Switch' },
+    { key: 'Keycap', label: 'Loại Keycap', placeholder: 'VD: PBT Double-shot' },
+    { key: 'Size', label: 'Kích thước', placeholder: 'VD: Tenkeyless (87 keys)' },
+    { key: 'Connection', label: 'Kết nối', placeholder: 'VD: USB / Bluetooth' }
+  ],
+  'chuot': [
+    { key: 'Sensor', label: 'Cảm biến', placeholder: 'VD: Quang học' },
+    { key: 'DPI', label: 'Chỉ số DPI', placeholder: 'VD: 200 - 8000 DPI' },
+    { key: 'LED', label: 'Loại LED', placeholder: 'VD: RGB 16.8 triệu màu' },
+    { key: 'Connection', label: 'Kết nối', placeholder: 'VD: Wireless 2.4GHz' }
+  ],
+  'tai-nghe': [
+    { key: 'Driver', label: 'Củ loa (Driver)', placeholder: 'VD: 50mm' },
+    { key: 'Frequency', label: 'Tần số phản hồi', placeholder: 'VD: 20Hz - 20kHz' },
+    { key: 'Microphone', label: 'Microphone', placeholder: 'VD: Có chống ồn' },
+    { key: 'Connection', label: 'Kết nối', placeholder: 'VD: Jack 3.5mm / USB' }
+  ],
+  'linh-kien-pc': [
+    { key: 'Chipset', label: 'Chipset / Loại', placeholder: 'VD: GeForce GTX 1660' },
+    { key: 'Memory', label: 'Bộ nhớ / Dung lượng', placeholder: 'VD: 6GB GDDR6' },
+    { key: 'Bus', label: 'Băng thông / Bus', placeholder: 'VD: 192-bit' },
+    { key: 'Power', label: 'Công suất', placeholder: 'VD: 65W' }
+  ]
+};
 
 export default function NewProductPage() {
   const router = useRouter();
@@ -38,13 +90,13 @@ export default function NewProductPage() {
     category_id: "",
     condition: "Đã qua sử dụng (Đẹp 99%)",
     isHotSale: false,
-    specs: { cpu: "", ram: "", storage: "", vga: "", screen: "" }
+    specs: {} as Record<string, string>
   });
 
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const res = await fetch("http://127.0.0.1:5000/api/categories");
+        const res = await fetchApi("/categories");
         const data = await res.json();
         setCategories(data);
         if (data.length > 0) {
@@ -61,6 +113,10 @@ export default function NewProductPage() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setFormData({ ...formData, category_id: e.target.value, specs: {} });
+  };
+
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
     if (files.length === 0) return;
@@ -73,7 +129,7 @@ export default function NewProductPage() {
         const formDataObj = new FormData();
         formDataObj.append("image", file);
         
-        const res = await fetch("http://127.0.0.1:5000/api/upload/image", {
+        const res = await fetchApi("/upload/image", {
           method: "POST",
           body: formDataObj,
         });
@@ -127,9 +183,8 @@ export default function NewProductPage() {
     
     setExtracting(true);
     try {
-      const res = await fetch("http://127.0.0.1:5000/api/products/smart-extract", {
+      const res = await fetchApi("/products/smart-extract", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ text: smartText })
       });
       
@@ -193,11 +248,8 @@ export default function NewProductPage() {
         specs: formData.specs
       };
 
-      const res = await fetch("http://127.0.0.1:5000/api/products", {
+      const res = await fetchApi("/products", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
         body: JSON.stringify(payload)
       });
 
@@ -205,8 +257,9 @@ export default function NewProductPage() {
         toast.success("Thêm sản phẩm thành công!");
         router.push("/admin/products");
       } else {
-        const error = await res.json();
-        toast.error(`Lỗi: ${error.message}`);
+        const errorData = await res.json();
+        const errorMsg = errorData.error?.message || errorData.message || "Lỗi không xác định";
+        toast.error(`Lỗi: ${errorMsg}`);
       }
     } catch (error) {
       console.error(error);
@@ -269,10 +322,11 @@ export default function NewProductPage() {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-sm font-bold text-gray-700 mb-2">Thương hiệu</label>
+                  <label className="block text-sm font-bold text-gray-700 mb-2">Thương hiệu <span className="text-red-500">*</span></label>
                   <input 
                     type="text" 
                     name="brand" 
+                    required
                     value={formData.brand} 
                     onChange={handleChange}
                     className="w-full px-4 py-3 bg-gray-50/50 border border-gray-200 rounded-xl outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all text-gray-800 font-medium"
@@ -310,10 +364,11 @@ export default function NewProductPage() {
               </div>
 
               <div>
-                <label className="block text-sm font-bold text-gray-700 mb-2">Mô tả & Cấu hình</label>
+                <label className="block text-sm font-bold text-gray-700 mb-2">Mô tả & Cấu hình <span className="text-red-500">*</span></label>
                 <textarea 
                   name="description" 
                   rows={8} 
+                  required
                   value={formData.description} 
                   onChange={handleChange}
                   className="w-full px-4 py-4 bg-gray-50/50 border border-gray-200 rounded-xl outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all text-gray-800 leading-relaxed resize-y"
@@ -417,56 +472,76 @@ export default function NewProductPage() {
               <h2 className="text-lg font-bold text-gray-800">Thông số kỹ thuật (Tùy chọn)</h2>
             </div>
             
+            {/* Form Specs dựa theo Config */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <label className="block text-sm font-bold text-gray-700 mb-2">CPU</label>
-                <input 
-                  type="text" 
-                  value={formData.specs.cpu} 
-                  onChange={(e) => setFormData({...formData, specs: {...formData.specs, cpu: e.target.value}})}
-                  className="w-full px-4 py-3 bg-gray-50/50 border border-gray-200 rounded-xl outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all text-gray-800 text-sm"
-                  placeholder="VD: Intel Core i7 13700H"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-bold text-gray-700 mb-2">RAM</label>
-                <input 
-                  type="text" 
-                  value={formData.specs.ram} 
-                  onChange={(e) => setFormData({...formData, specs: {...formData.specs, ram: e.target.value}})}
-                  className="w-full px-4 py-3 bg-gray-50/50 border border-gray-200 rounded-xl outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all text-gray-800 text-sm"
-                  placeholder="VD: 16GB DDR5"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-bold text-gray-700 mb-2">Ổ cứng (Storage)</label>
-                <input 
-                  type="text" 
-                  value={formData.specs.storage} 
-                  onChange={(e) => setFormData({...formData, specs: {...formData.specs, storage: e.target.value}})}
-                  className="w-full px-4 py-3 bg-gray-50/50 border border-gray-200 rounded-xl outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all text-gray-800 text-sm"
-                  placeholder="VD: 512GB SSD NVMe"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-bold text-gray-700 mb-2">Card đồ họa (VGA)</label>
-                <input 
-                  type="text" 
-                  value={formData.specs.vga} 
-                  onChange={(e) => setFormData({...formData, specs: {...formData.specs, vga: e.target.value}})}
-                  className="w-full px-4 py-3 bg-gray-50/50 border border-gray-200 rounded-xl outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all text-gray-800 text-sm"
-                  placeholder="VD: RTX 4060 8GB"
-                />
-              </div>
-              <div className="md:col-span-2">
-                <label className="block text-sm font-bold text-gray-700 mb-2">Màn hình (Screen)</label>
-                <input 
-                  type="text" 
-                  value={formData.specs.screen} 
-                  onChange={(e) => setFormData({...formData, specs: {...formData.specs, screen: e.target.value}})}
-                  className="w-full px-4 py-3 bg-gray-50/50 border border-gray-200 rounded-xl outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all text-gray-800 text-sm"
-                  placeholder="VD: 16 inch WQXGA 165Hz"
-                />
+              {(() => {
+                const currentCategory = categories.find(c => c._id === formData.category_id);
+                const currentSlug = currentCategory?.slug || '';
+                const currentFields = SPEC_CONFIGS[currentSlug] || [];
+                
+                return (
+                  <>
+                    {currentFields.map((field) => (
+                      <div key={field.key}>
+                        <label className="block text-sm font-bold text-gray-700 mb-2">{field.label}</label>
+                        <input 
+                          type="text" 
+                          value={formData.specs[field.key] || ''} 
+                          onChange={(e) => setFormData({...formData, specs: {...formData.specs, [field.key]: e.target.value}})}
+                          className="w-full px-4 py-3 bg-gray-50/50 border border-gray-200 rounded-xl outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all text-gray-800 text-sm"
+                          placeholder={field.placeholder}
+                        />
+                      </div>
+                    ))}
+                  </>
+                );
+              })()}
+            </div>
+            
+            {/* Dynamic Custom Specs */}
+            <div className="mt-8 border-t border-gray-100 pt-6">
+              <h3 className="text-sm font-bold text-gray-800 mb-4">Thuộc tính tùy chỉnh (Thêm nếu cần)</h3>
+              {(() => {
+                const currentCategory = categories.find(c => c._id === formData.category_id);
+                const currentFields = SPEC_CONFIGS[currentCategory?.slug || ''] || [];
+                const customKeys = Object.keys(formData.specs).filter(key => !currentFields.find(f => f.key === key));
+                
+                return (
+                  <div className="space-y-3">
+                    {customKeys.map((key, idx) => (
+                      <div key={idx} className="flex gap-2">
+                        <input type="text" disabled value={key} className="w-1/3 px-3 py-2.5 bg-gray-100 border border-gray-200 rounded-xl text-sm text-gray-600 font-bold" />
+                        <input 
+                          type="text" 
+                          value={formData.specs[key] as string} 
+                          onChange={(e) => setFormData({...formData, specs: {...formData.specs, [key]: e.target.value}})}
+                          className="flex-1 px-3 py-2.5 bg-gray-50/50 border border-gray-200 rounded-xl text-sm focus:border-indigo-500 outline-none" 
+                        />
+                        <button type="button" onClick={() => {
+                          const newSpecs = { ...formData.specs };
+                          delete newSpecs[key];
+                          setFormData({...formData, specs: newSpecs});
+                        }} className="px-3 bg-red-50 text-red-500 rounded-xl hover:bg-red-100 transition-colors">
+                          <X size={18} />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                );
+              })()}
+              
+              <div className="flex gap-2 mt-4">
+                 <input type="text" id="custom-spec-key" placeholder="Tên thông số (VD: Màu sắc)" className="w-1/3 px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm outline-none focus:border-indigo-500 transition-colors" />
+                 <input type="text" id="custom-spec-val" placeholder="Giá trị (VD: Đen)" className="flex-1 px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm outline-none focus:border-indigo-500 transition-colors" />
+                 <button type="button" onClick={() => {
+                    const keyInput = document.getElementById('custom-spec-key') as HTMLInputElement;
+                    const valInput = document.getElementById('custom-spec-val') as HTMLInputElement;
+                    if (keyInput && valInput && keyInput.value.trim()) {
+                      setFormData({...formData, specs: {...formData.specs, [keyInput.value.trim()]: valInput.value}});
+                      keyInput.value = '';
+                      valInput.value = '';
+                    }
+                 }} className="px-5 bg-indigo-50 text-indigo-600 font-bold rounded-xl hover:bg-indigo-100 transition-colors">Thêm</button>
               </div>
             </div>
           </div>
@@ -485,7 +560,7 @@ export default function NewProductPage() {
                 name="category_id"
                 required
                 value={formData.category_id}
-                onChange={handleChange}
+                onChange={handleCategoryChange}
                 className="w-full px-4 py-3 bg-gray-50/50 border border-gray-200 rounded-xl outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all font-bold text-gray-800 cursor-pointer"
               >
                 {categories.length === 0 && <option value="">Đang tải danh mục...</option>}

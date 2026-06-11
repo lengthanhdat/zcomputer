@@ -12,6 +12,9 @@ export const getUsers = async (req: Request, res: Response) => {
 
 export const deleteUser = async (req: Request, res: Response) => {
   try {
+    if (req.user?.userId === req.params.id) {
+      return res.status(403).json({ message: 'Bạn không thể tự xóa chính mình' });
+    }
     await User.findByIdAndDelete(req.params.id);
     res.json({ message: 'Đã xóa người dùng' });
   } catch (error) {
@@ -21,8 +24,13 @@ export const deleteUser = async (req: Request, res: Response) => {
 
 export const updateUserRole = async (req: Request, res: Response) => {
   try {
+    if (req.user?.userId === req.params.id) {
+      return res.status(403).json({ message: 'Bạn không thể tự thay đổi quyền của chính mình' });
+    }
     const { role } = req.body;
     const user = await User.findByIdAndUpdate(req.params.id, { role }, { new: true }).select('-password');
+    if (!user) return res.status(404).json({ message: 'Không tìm thấy user' });
+
     res.json(user);
   } catch (error) {
     res.status(500).json({ message: 'Lỗi server khi cập nhật quyền' });

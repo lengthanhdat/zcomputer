@@ -51,28 +51,42 @@ export default function Footer() {
             <h3 className="text-white font-bold text-lg uppercase tracking-wider">Hệ thống cửa hàng</h3>
             
             <div className="space-y-4">
-              <div className="bg-white/5 p-4 rounded-lg border border-white/10 hover:border-primary/50 transition-colors">
+              <div className="bg-white/5 p-4 rounded-lg border border-white/10 hover:border-primary/50 transition-colors flex flex-col h-full">
                 <h4 className="text-primary font-bold text-sm mb-1 flex items-center gap-2">
                   <FaMapMarkerAlt /> Chi nhánh Thủ Đức
                 </h4>
-                <p className="text-xs text-gray-400 leading-relaxed mb-2">
+                <p className="text-xs text-gray-400 leading-relaxed mb-3">
                   23 Đường số 1, Khu phố 61, Phường Linh Xuân, TP. Thủ Đức, TP.Hồ Chí Minh
                 </p>
-                <a href="https://maps.google.com/?q=Z+Computer" target="_blank" rel="noreferrer" className="text-xs font-semibold text-white hover:text-primary transition-colors hover:underline">
-                  Chỉ đường tới Shop &rarr;
-                </a>
+                <div className="mt-auto w-full h-[140px] rounded overflow-hidden">
+                  <iframe 
+                    width="100%" 
+                    height="100%" 
+                    style={{ border: 0 }}
+                    loading="lazy" 
+                    allowFullScreen 
+                    src="https://maps.google.com/maps?q=Z%20Computer-%20Pc%20Gaming-Laptop-Workstation&t=&z=15&ie=UTF8&iwloc=&output=embed"
+                  ></iframe>
+                </div>
               </div>
 
-              <div className="bg-white/5 p-4 rounded-lg border border-white/10 hover:border-primary/50 transition-colors">
+              <div className="bg-white/5 p-4 rounded-lg border border-white/10 hover:border-primary/50 transition-colors flex flex-col h-full">
                 <h4 className="text-primary font-bold text-sm mb-1 flex items-center gap-2">
                   <FaMapMarkerAlt /> Chi nhánh Bình Thạnh
                 </h4>
-                <p className="text-xs text-gray-400 leading-relaxed mb-2">
+                <p className="text-xs text-gray-400 leading-relaxed mb-3">
                   47/86B Bùi Đình Tuý, Phường 14, Q. Bình Thạnh, TP. Hồ Chí Minh
                 </p>
-                <a href="https://maps.google.com/?q=ZCOMPUTER+BÌNH+THẠNH" target="_blank" rel="noreferrer" className="text-xs font-semibold text-white hover:text-primary transition-colors hover:underline">
-                  Chỉ đường tới Shop &rarr;
-                </a>
+                <div className="mt-auto w-full h-[140px] rounded overflow-hidden">
+                  <iframe 
+                    width="100%" 
+                    height="100%" 
+                    style={{ border: 0 }}
+                    loading="lazy" 
+                    allowFullScreen 
+                    src="https://maps.google.com/maps?q=ZCOMPUTER-B%C3%8CNH%20TH%E1%BA%A0NH&t=&z=15&ie=UTF8&iwloc=&output=embed"
+                  ></iframe>
+                </div>
               </div>
             </div>
           </div>

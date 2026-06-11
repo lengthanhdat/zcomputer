@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { Edit, Trash2, Plus, Search } from "lucide-react";
 import Link from "next/link";
+import { fetchApi } from "@/lib/api";
 
 interface Product {
   _id: string;
@@ -11,6 +12,7 @@ interface Product {
   stock: number;
   brand: string;
   isHotSale?: boolean;
+  flashSalePrice?: number;
   category_id?: { _id: string; name: string };
   createdAt?: string;
 }
@@ -29,7 +31,7 @@ export default function AdminProductsPage() {
 
   const fetchProducts = async () => {
     try {
-      const res = await fetch(`http://127.0.0.1:5000/api/products?t=${Date.now()}`, { cache: "no-store" });
+      const res = await fetchApi(`/products?t=${Date.now()}`, { cache: "no-store", requireAuth: false });
       const data = await res.json();
       setProducts(data);
     } catch (error) {
@@ -46,7 +48,7 @@ export default function AdminProductsPage() {
   const handleDelete = async (id: string) => {
     if (!confirm("Bạn có chắc muốn xóa sản phẩm này?")) return;
     try {
-      const res = await fetch(`http://127.0.0.1:5000/api/products/${id}`, {
+      const res = await fetchApi(`/products/${id}`, {
         method: 'DELETE'
       });
       if (res.ok) {
@@ -64,9 +66,8 @@ export default function AdminProductsPage() {
     setProducts(products.map(p => p._id === id ? { ...p, isHotSale: !currentStatus } : p));
     
     try {
-      const res = await fetch(`http://127.0.0.1:5000/api/products/${id}`, {
+      const res = await fetchApi(`/products/${id}`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ isHotSale: !currentStatus })
       });
       if (!res.ok) {
@@ -77,6 +78,29 @@ export default function AdminProductsPage() {
     } catch (error) {
       console.error(error);
       setProducts(products.map(p => p._id === id ? { ...p, isHotSale: currentStatus } : p));
+    }
+  };
+
+  const updateFlashSalePrice = async (id: string, newPriceStr: string) => {
+    const newPrice = Number(newPriceStr);
+    if (isNaN(newPrice) || newPrice < 0) return;
+    
+    // Optimistic UI update
+    setProducts(products.map(p => p._id === id ? { ...p, flashSalePrice: newPrice } : p));
+    
+    try {
+      const res = await fetchApi(`/products/${id}`, {
+        method: 'PUT',
+        body: JSON.stringify({ flashSalePrice: newPrice })
+      });
+      if (!res.ok) {
+        // Revert will require reloading or keeping previous state
+        fetchProducts(); // simple revert
+        alert("Lỗi khi cập nhật giá Flash Sale");
+      }
+    } catch (error) {
+      console.error(error);
+      fetchProducts();
     }
   };
 
@@ -259,12 +283,24 @@ export default function AdminProductsPage() {
                         </span>
                       </td>
                       <td className="py-3 px-4 text-center">
-                        <input 
-                          type="checkbox"
-                          checked={!!product.isHotSale}
-                          onChange={() => toggleHotSale(product._id, !!product.isHotSale)}
-                          className="w-4 h-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500 cursor-pointer accent-blue-600"
-                        />
+                        <div className="flex flex-col items-center gap-1">
+                          <input 
+                            type="checkbox"
+                            checked={!!product.isHotSale}
+                            onChange={() => toggleHotSale(product._id, !!product.isHotSale)}
+                            className="w-4 h-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500 cursor-pointer accent-blue-600"
+                          />
+                          {product.isHotSale && (
+                            <input 
+                              type="number"
+                              placeholder="Giá Flash Sale"
+                              defaultValue={product.flashSalePrice || product.price}
+                              onBlur={(e) => updateFlashSalePrice(product._id, e.target.value)}
+                              className="w-[90px] text-[11px] border border-red-300 rounded px-1 py-0.5 mt-1 outline-none focus:border-red-500 text-center text-red-600 font-bold"
+                              title="Nhập giá Flash Sale và click ra ngoài để lưu"
+                            />
+                          )}
+                        </div>
                       </td>
                       <td className="py-3 px-4 text-right">
                         <div className="flex justify-end gap-2">

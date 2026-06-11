@@ -1,29 +1,66 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { Package, LayoutDashboard, Settings, LogOut, Users, Warehouse, ClipboardList, Menu, X, Tags } from "lucide-react";
 import { useState, useEffect } from "react";
+import { useAuthStore } from "@/store/useAuthStore";
+import toast from "react-hot-toast";
+
+const menuItems = [
+  { href: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true, allowedRoles: ['admin', 'staff'] },
+  { href: "/admin/products", label: "Sản phẩm", icon: Package, allowedRoles: ['admin', 'staff'] },
+  { href: "/admin/inventory", label: "Quản lý kho", icon: Warehouse, allowedRoles: ['admin', 'staff'] },
+  { href: "/admin/orders", label: "Đơn hàng", icon: ClipboardList, allowedRoles: ['admin', 'staff'] },
+  { href: "/admin/categories", label: "Danh mục", icon: Tags, allowedRoles: ['admin', 'staff'] },
+  { href: "/admin/users", label: "Khách hàng", icon: Users, allowedRoles: ['admin'] },
+  { href: "/admin/banners", label: "Banners", icon: LayoutDashboard, allowedRoles: ['admin', 'staff'] },
+  { href: "/admin/settings", label: "Cài đặt chung", icon: Settings, allowedRoles: ['admin'] },
+];
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const router = useRouter();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { user, logout } = useAuthStore();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!mounted) return;
+    
+    if (!user || (user.role !== 'admin' && user.role !== 'staff')) {
+      router.replace('/');
+      return;
+    }
+
+    const currentMenu = menuItems.find(item => 
+      item.exact ? pathname === item.href : pathname?.startsWith(item.href)
+    );
+
+    if (currentMenu && !currentMenu.allowedRoles.includes(user.role)) {
+      toast.error("Bạn không có quyền truy cập trang này!");
+      router.replace('/admin');
+    }
+  }, [mounted, user, router, pathname]);
 
   // Đóng menu khi chuyển trang trên mobile
   useEffect(() => {
     setIsMobileMenuOpen(false);
   }, [pathname]);
 
-  const menuItems = [
-    { href: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true },
-    { href: "/admin/products", label: "Sản phẩm", icon: Package },
-    { href: "/admin/inventory", label: "Quản lý kho", icon: Warehouse },
-    { href: "/admin/orders", label: "Đơn hàng", icon: ClipboardList },
-    { href: "/admin/categories", label: "Danh mục", icon: Tags },
-    { href: "/admin/users", label: "Khách hàng", icon: Users },
-    { href: "/admin/banners", label: "Banners", icon: LayoutDashboard },
-    { href: "/admin/settings", label: "Cài đặt chung", icon: Settings },
-  ];
+  if (!mounted) return null;
+  if (!user || (user.role !== 'admin' && user.role !== 'staff')) return null;
+
+  const visibleMenuItems = menuItems.filter(item => item.allowedRoles.includes(user.role));
+
+  const handleLogout = () => {
+    logout();
+    router.push('/login');
+  };
 
   const isActive = (item: typeof menuItems[0]) => {
     if (item.exact) {
@@ -53,7 +90,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           </button>
         </div>
         <nav className="flex-1 p-4 space-y-1.5 overflow-y-auto">
-          {menuItems.map((item) => {
+          {visibleMenuItems.map((item) => {
             const Icon = item.icon;
             const active = isActive(item);
             return (
@@ -71,10 +108,16 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             );
           })}
         </nav>
-        <div className="p-4 border-t border-gray-800">
+        <div className="p-4 border-t border-gray-800 space-y-2">
           <Link href="/" className="flex items-center gap-3 px-4 py-3 rounded hover:bg-gray-800 transition-colors text-gray-400 text-sm">
             <LogOut size={18} /> Về trang chủ
           </Link>
+          <button 
+            onClick={handleLogout}
+            className="w-full flex items-center gap-3 px-4 py-3 rounded hover:bg-red-900/50 hover:text-red-400 transition-colors text-gray-400 text-sm text-left"
+          >
+            <LogOut size={18} /> Đăng xuất
+          </button>
         </div>
       </aside>
 
@@ -91,8 +134,12 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             <h2 className="text-lg md:text-xl font-bold text-gray-800 truncate">Quản trị hệ thống</h2>
           </div>
           <div className="flex items-center gap-3 shrink-0">
-            <div className="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center font-bold text-sm">A</div>
-            <span className="hidden sm:inline text-sm font-semibold text-gray-700">Admin</span>
+            <div className="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center font-bold text-sm uppercase">
+              {user.name.charAt(0)}
+            </div>
+            <span className="hidden sm:inline text-sm font-semibold text-gray-700 capitalize">
+              {user.role}
+            </span>
           </div>
         </header>
         <div className="flex-1 overflow-x-hidden overflow-y-auto p-4 md:p-6 w-full">
