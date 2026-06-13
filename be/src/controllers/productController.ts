@@ -188,3 +188,115 @@ ${text}
     res.status(500).json({ message: 'Lỗi trích xuất AI', error: error?.message || 'Unknown error' });
   }
 };
+
+// Trích xuất hàng loạt từ text/excel bằng Gemini
+export const smartExtractBulk = async (req: Request, res: Response) => {
+  try {
+    let { text } = req.body;
+    if (!text) {
+      return res.status(400).json({ message: 'Vui lòng cung cấp nội dung cần trích xuất' });
+    }
+
+    // Nếu text là một URL, thử fetch nội dung
+    if (text.trim().startsWith('http://') || text.trim().startsWith('https://')) {
+      let fetchUrl = text.trim();
+      
+      // Chuyển đổi link Google Sheets thành link tải CSV tự động
+      const sheetsMatch = fetchUrl.match(/docs\.google\.com\/spreadsheets\/d\/([a-zA-Z0-9-_]+)/);
+      if (sheetsMatch) {
+        // Lấy gid nếu có (để tải đúng sheet)
+        const gidMatch = fetchUrl.match(/[#&]gid=([0-9]+)/);
+        const gid = gidMatch ? `&gid=${gidMatch[1]}` : '';
+        fetchUrl = `https://docs.google.com/spreadsheets/d/${sheetsMatch[1]}/export?format=csv${gid}`;
+      } 
+      // Chuyển đổi link Google Docs thành link tải Text tự động
+      else if (fetchUrl.match(/docs\.google\.com\/document\/d\/([a-zA-Z0-9-_]+)/)) {
+        const docMatch = fetchUrl.match(/docs\.google\.com\/document\/d\/([a-zA-Z0-9-_]+)/);
+        fetchUrl = `https://docs.google.com/document/d/${docMatch![1]}/export?format=txt`;
+      }
+
+      try {
+        const response = await fetch(fetchUrl);
+        if (!response.ok) {
+           return res.status(400).json({ message: `Không thể truy cập link này (Lỗi ${response.status}). Có thể trang web chặn lấy dữ liệu hoặc file Google Docs chưa được mở quyền chia sẻ (Public).` });
+        }
+        const html = await response.text();
+        
+        // Nếu là Google Docs/Sheets export thì text đã là raw text/csv
+        if (sheetsMatch || fetchUrl.includes('export?format=')) {
+           text = html;
+        } else {
+           // Lấy đoạn text thô (bỏ tag HTML), bao gồm cả script và style
+           text = html.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, ' ')
+                      .replace(/<style\b[^<]*(?:(?!<\/style>)<[^<]*)*<\/style>/gi, ' ')
+                      .replace(/<[^>]*>?/gm, ' ');
+        }
+      } catch (err) {
+        console.error('Fetch URL error:', err);
+        return res.status(400).json({ message: 'Không thể đọc nội dung từ đường link này. Trang web có thể đang chặn hoặc không tồn tại.' });
+      }
+    }
+
+    const apiKey = process.env.GEMINI_API_KEY;
+    if (!apiKey) {
+      return res.status(500).json({ message: 'GEMINI_API_KEY chưa được cấu hình trên server.' });
+    }
+
+    const genAI = new GoogleGenerativeAI(apiKey);
+    const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+
+    const prompt = `
+Bạn là chuyên gia phân tích dữ liệu máy tính. Hãy đọc đoạn nội dung sau (có thể là văn bản hoặc HTML thô) và trích xuất TẤT CẢ các sản phẩm tìm thấy thành một MẢNG JSON (Array of Objects).
+Chỉ trả về MẢNG JSON hợp lệ. Nếu không tìm thấy bất kỳ sản phẩm nào, hãy trả về mảng rỗng [].
+
+Cấu trúc MẢNG JSON bắt buộc:
+[
+  {
+    "name": "Tên sản phẩm đầy đủ",
+    "price": "Giá bán dạng SỐ (ví dụ: 15500000. Nếu không rõ, để 0)",
+    "brand": "Tên hãng sản xuất",
+    "category_name": "Tên danh mục (nếu có trong dữ liệu, ví dụ: Laptop, PC, Màn Hình...)",
+    "specs": {
+      "cpu": "Thông tin CPU",
+      "ram": "Thông tin RAM",
+      "storage": "Thông tin ổ cứng (SSD/HDD)",
+      "vga": "Thông tin Card màn hình (VGA)",
+      "screen": "Thông tin màn hình (nếu có)"
+    },
+    "condition": "Tình trạng máy (ví dụ: Mới, Cũ 99%, Likenew)"
+  }
+]
+
+Đoạn text cần phân tích:
+"""
+${text.substring(0, 50000)}
+"""
+    `;
+
+    const result = await model.generateContent(prompt);
+    let responseText = result.response.text().trim();
+    
+    // Tìm mảng JSON hoặc object JSON bằng regex để tránh lỗi do markdown hoặc văn bản dư thừa
+    let parsedData = [];
+    const arrayMatch = responseText.match(/\[[\s\S]*\]/);
+    if (arrayMatch) {
+      parsedData = JSON.parse(arrayMatch[0]);
+    } else {
+      const objMatch = responseText.match(/\{[\s\S]*\}/);
+      if (objMatch) {
+        parsedData = [JSON.parse(objMatch[0])];
+      } else {
+        throw new Error("AI không trả về JSON hợp lệ: " + responseText);
+      }
+    }
+
+    if (!res.headersSent) {
+      res.json(Array.isArray(parsedData) ? parsedData : [parsedData]);
+    }
+  } catch (error: any) {
+    console.error('Smart Extract Bulk Error:', error);
+    if (!res.headersSent) {
+      res.status(500).json({ message: 'Hệ thống AI đang quá tải hoặc phản hồi chậm. Vui lòng thử lại sau.', error: error?.message || 'Unknown error' });
+    }
+  }
+};

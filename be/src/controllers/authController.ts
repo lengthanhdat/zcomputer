@@ -7,8 +7,11 @@ import { OAuth2Client } from 'google-auth-library';
 
 const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
-const JWT_SECRET = process.env.JWT_SECRET || 'supersecretkey123';
-const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET || 'superrefreshkey123';
+const JWT_SECRET = process.env.JWT_SECRET;
+const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET;
+if (!JWT_SECRET || !JWT_REFRESH_SECRET) {
+  throw new Error('JWT_SECRET and JWT_REFRESH_SECRET must be set in environment variables!');
+}
 
 export const register = async (req: Request, res: Response) => {
   try {
