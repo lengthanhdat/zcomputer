@@ -19,7 +19,8 @@ jobs:
           port: 22
           script: |
             cd /var/www/zcomputer
-            git pull origin main
+            git fetch --all
+            git reset --hard origin/main
             
             echo "Deploying Backend..."
             cd be
