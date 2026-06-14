@@ -104,22 +104,28 @@ export default function HomeClient() {
     const controller = new AbortController();
 
     async function fetchData() {
-      const [catRes, prodRes, bannerRes, videoRes] = await Promise.all([
-        fetchApi("/categories", { signal: controller.signal }),
-        fetchApi("/products?limit=100", { signal: controller.signal }),
-        fetchApi("/banners", { signal: controller.signal }),
-        fetchApi("/video-reviews", { signal: controller.signal })
-      ]);
-      const [catData, prodData, bannerData, videoData] = await Promise.all([
-        catRes.ok ? catRes.json() : [],
-        prodRes.ok ? prodRes.json() : [],
-        bannerRes.ok ? bannerRes.json() : [],
-        videoRes.ok ? videoRes.json() : []
-      ]);
-      setCategories(catData);
-      setProducts(prodData.products || prodData);
-      setBanners(bannerData.filter((b: any) => b.isActive).sort((a: any, b: any) => a.order - b.order));
-      setVideoReviews(videoData);
+      try {
+        const [catRes, prodRes, bannerRes, videoRes] = await Promise.all([
+          fetchApi("/categories", { signal: controller.signal }),
+          fetchApi("/products?limit=100", { signal: controller.signal }),
+          fetchApi("/banners", { signal: controller.signal }),
+          fetchApi("/video-reviews", { signal: controller.signal })
+        ]);
+        const [catData, prodData, bannerData, videoData] = await Promise.all([
+          catRes.ok ? catRes.json() : [],
+          prodRes.ok ? prodRes.json() : [],
+          bannerRes.ok ? bannerRes.json() : [],
+          videoRes.ok ? videoRes.json() : []
+        ]);
+        setCategories(catData);
+        setProducts(prodData.products || prodData);
+        setBanners(bannerData.filter((b: any) => b.isActive).sort((a: any, b: any) => a.order - b.order));
+        setVideoReviews(videoData);
+      } catch (err: any) {
+        if (err.name !== 'AbortError') {
+          console.error("Lỗi khi tải dữ liệu trang chủ:", err);
+        }
+      }
     }
     fetchData();
 
