@@ -2,9 +2,10 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, Sparkles, X, Image as ImageIcon, Box, Tag, DollarSign, FileText, UploadCloud, Loader2, Gift, Cpu } from "lucide-react";
+import { ArrowLeft, Sparkles, X, Image as ImageIcon, Box, Tag, DollarSign, FileText, UploadCloud, Loader2, Gift, Cpu, Trash2, Save } from "lucide-react";
 import Link from "next/link";
 import toast from "react-hot-toast";
+import * as XLSX from "xlsx";
 
 import { fetchApi } from "@/lib/api";
 
@@ -72,6 +73,9 @@ export default function NewProductPage() {
   const [showSmartModal, setShowSmartModal] = useState(false);
   const [smartText, setSmartText] = useState("");
   const [extracting, setExtracting] = useState(false);
+  const [bulkPreviewData, setBulkPreviewData] = useState<any[]>([]);
+  const [isPreviewMode, setIsPreviewMode] = useState(false);
+  const [isSavingBulk, setIsSavingBulk] = useState(false);
   
   // Upload State
   const [uploadingImage, setUploadingImage] = useState(false);
@@ -175,45 +179,114 @@ export default function NewProductPage() {
     setDraggedIdx(null);
   };
 
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (evt) => {
+      try {
+        const bstr = evt.target?.result;
+        const wb = XLSX.read(bstr, { type: 'binary' });
+        const wsname = wb.SheetNames[0];
+        const ws = wb.Sheets[wsname];
+        const data = XLSX.utils.sheet_to_json(ws, { header: 1 });
+        const textData = data.map(row => (row as any[]).join(" | ")).join("\n");
+        setSmartText(prev => prev + (prev ? "\n" : "") + textData);
+        toast.success("Đã nạp dữ liệu từ file Excel. Vui lòng bấm Trích xuất!");
+      } catch (err) {
+        toast.error("Không thể đọc file Excel này");
+      }
+    };
+    reader.readAsBinaryString(file);
+    e.target.value = "";
+  };
+
   const handleSmartExtract = async () => {
     if (!smartText.trim()) {
-      toast.error("Vui lòng dán nội dung cấu hình vào ô trống");
+      toast.error("Vui lòng dán nội dung cấu hình vào ô trống hoặc tải file Excel lên");
       return;
     }
     
     setExtracting(true);
     try {
-      const res = await fetchApi("/products/smart-extract", {
+      const res = await fetchApi("/products/smart-extract-bulk", {
         method: "POST",
         body: JSON.stringify({ text: smartText })
       });
       
-      const data = await res.json();
+      const dataArray = await res.json();
       
-      if (res.ok) {
-        toast.success("Trích xuất thông minh thành công!");
-        
-        let specsDesc = "";
-        if (data.specs) {
-          specsDesc = Object.entries(data.specs)
-            .filter(([_, val]) => val && val !== "")
-            .map(([key, val]) => `- ${key.toUpperCase()}: ${val}`)
-            .join("\n");
+      if (res.ok && Array.isArray(dataArray) && dataArray.length > 0) {
+        if (dataArray.length === 1) {
+          const data = dataArray[0];
+          toast.success("Trích xuất thông minh thành công!");
+          
+          const mappedSpecs: Record<string, string> = data.specs ? {
+            CPU: data.specs.cpu || '',
+            RAM: data.specs.ram || '',
+            Storage: data.specs.storage || '',
+            VGA: data.specs.vga || '',
+            Screen: data.specs.screen || ''
+          } : {};
+          
+          setFormData((prev) => ({
+            ...prev,
+            name: data.name || prev.name,
+            price: data.price ? data.price.toString() : prev.price,
+            brand: data.brand || prev.brand,
+            condition: data.condition || prev.condition,
+            description: prev.description, // Dữ liệu cũ giữ nguyên
+            specs: { ...prev.specs, ...mappedSpecs }
+          }));
+          
+          setShowSmartModal(false);
+          setSmartText("");
+        } else {
+          toast.success(`Tìm thấy ${dataArray.length} sản phẩm. Vui lòng kiểm tra lại trước khi lưu.`);
+          
+          const mappedData = dataArray.map((data: any) => {
+            const mappedSpecs: Record<string, string> = data.specs ? {
+              CPU: data.specs.cpu || '',
+              RAM: data.specs.ram || '',
+              Storage: data.specs.storage || '',
+              VGA: data.specs.vga || '',
+              Screen: data.specs.screen || ''
+            } : {};
+            
+            let matchedCategory = formData.category_id;
+            if (data.category_name) {
+              const found = categories.find(c => 
+                c.name.toLowerCase().includes(data.category_name.toLowerCase()) || 
+                data.category_name.toLowerCase().includes(c.name.toLowerCase())
+              );
+              if (found) matchedCategory = found._id;
+            }
+            
+            return {
+              name: data.name || "Sản phẩm mới",
+              brand: data.brand || "",
+              price: Number(data.price) || 0,
+              discountPrice: 0,
+              stock: 10,
+              sku: "",
+              description: "Đang cập nhật...",
+              images: [],
+              gifts: [],
+              category_id: matchedCategory,
+              condition: data.condition || formData.condition,
+              isHotSale: false,
+              specs: mappedSpecs
+            };
+          });
+          
+          setBulkPreviewData(mappedData);
+          setIsPreviewMode(true);
+          setShowSmartModal(false);
+          setSmartText("");
         }
-        
-        setFormData((prev) => ({
-          ...prev,
-          name: data.name || prev.name,
-          price: data.price ? data.price.toString() : prev.price,
-          brand: data.brand || prev.brand,
-          condition: data.condition || prev.condition,
-          description: specsDesc ? (specsDesc + "\n\n" + prev.description).trim() : prev.description
-        }));
-        
-        setShowSmartModal(false);
-        setSmartText("");
       } else {
-        toast.error(`Lỗi trích xuất: ${data.message || 'Không xác định'}`);
+        toast.error(`Lỗi trích xuất: ${dataArray.message || 'Không tìm thấy sản phẩm nào'}`);
       }
     } catch (error) {
       console.error(error);
@@ -268,6 +341,181 @@ export default function NewProductPage() {
       setLoading(false);
     }
   };
+
+  const handleSaveBulk = async () => {
+    if (bulkPreviewData.some(item => !item.category_id)) {
+      toast.error("Lỗi: Không xác định được Danh mục cho sản phẩm. Vui lòng thử lại!");
+      setIsSavingBulk(false);
+      return;
+    }
+
+    setIsSavingBulk(true);
+    let successCount = 0;
+    let lastError = "";
+    
+    for (const item of bulkPreviewData) {
+      try {
+        const resCreate = await fetchApi("/products", { 
+          method: "POST", 
+          body: JSON.stringify(item) 
+        });
+        if (resCreate.ok) {
+          successCount++;
+        } else {
+          const errData = await resCreate.json();
+          lastError = errData.message || errData.error?.message || "Lỗi tạo SP";
+          console.error("Lỗi tạo SP:", errData);
+        }
+      } catch (err: any) {
+        lastError = err.message || "Lỗi mạng";
+        console.error("Lỗi tạo SP:", err);
+      }
+    }
+    
+    setIsSavingBulk(false);
+    if (successCount === bulkPreviewData.length) {
+      toast.success(`Đã lưu thành công ${successCount}/${bulkPreviewData.length} sản phẩm!`);
+      setIsPreviewMode(false);
+      setBulkPreviewData([]);
+      router.push('/admin/products');
+    } else {
+      toast.error(`Lưu thất bại. Đã lưu ${successCount}/${bulkPreviewData.length}. Lỗi: ${lastError}`);
+    }
+  };
+
+  const updatePreviewItem = (index: number, field: string, value: any) => {
+    const newData = [...bulkPreviewData];
+    newData[index] = { ...newData[index], [field]: value };
+    setBulkPreviewData(newData);
+  };
+
+  const removePreviewItem = (index: number) => {
+    const newData = bulkPreviewData.filter((_, i) => i !== index);
+    setBulkPreviewData(newData);
+    if (newData.length === 0) {
+      setIsPreviewMode(false);
+    }
+  };
+
+  if (isPreviewMode) {
+    return (
+      <div className="pb-12 max-w-[1600px] mx-auto">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+          <div className="flex items-center gap-4">
+            <button 
+              onClick={() => setIsPreviewMode(false)}
+              className="p-2.5 bg-white shadow-sm border border-gray-200 hover:bg-gray-50 rounded-xl transition-all"
+            >
+              <ArrowLeft size={20} className="text-gray-600" />
+            </button>
+            <div>
+              <h1 className="text-2xl font-black text-gray-900 tracking-tight">Duyệt sản phẩm trích xuất ({bulkPreviewData.length})</h1>
+              <p className="text-sm font-medium text-gray-500 mt-1">Kiểm tra và chỉnh sửa thông tin trước khi lưu</p>
+            </div>
+          </div>
+          <button
+            onClick={handleSaveBulk}
+            disabled={isSavingBulk || bulkPreviewData.length === 0}
+            className="flex items-center justify-center gap-2 px-6 py-2.5 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-bold rounded-xl shadow-sm transition-all shadow-blue-600/20"
+          >
+            {isSavingBulk ? (
+              <><Loader2 size={18} className="animate-spin" /> Đang lưu...</>
+            ) : (
+              <><Save size={18} /> Lưu tất cả</>
+            )}
+          </button>
+        </div>
+
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm text-left">
+              <thead className="text-xs text-gray-500 uppercase bg-gray-50/80 border-b border-gray-100">
+                <tr>
+                  <th className="px-4 py-3 font-semibold whitespace-nowrap">Tên Sản Phẩm</th>
+                  <th className="px-4 py-3 font-semibold whitespace-nowrap w-48">Danh Mục</th>
+                  <th className="px-4 py-3 font-semibold whitespace-nowrap w-48">Thương Hiệu</th>
+                  <th className="px-4 py-3 font-semibold whitespace-nowrap w-48">Giá Bán</th>
+                  <th className="px-4 py-3 font-semibold whitespace-nowrap min-w-[300px]">Cấu hình (CPU / RAM / SSD / VGA)</th>
+                  <th className="px-4 py-3 font-semibold text-center w-20">Xóa</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-100">
+                {bulkPreviewData.map((item, idx) => (
+                  <tr key={idx} className="hover:bg-gray-50/50 transition-colors">
+                    <td className="px-4 py-3">
+                      <input 
+                        type="text" 
+                        value={item.name} 
+                        onChange={(e) => updatePreviewItem(idx, 'name', e.target.value)}
+                        className="w-full px-3 py-1.5 border border-gray-200 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 text-sm"
+                      />
+                    </td>
+                    <td className="px-4 py-3">
+                      <select 
+                        value={item.category_id} 
+                        onChange={(e) => updatePreviewItem(idx, 'category_id', e.target.value)}
+                        className="w-full px-3 py-1.5 border border-gray-200 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 text-sm bg-white"
+                      >
+                        <option value="">Chọn danh mục</option>
+                        {categories.map((cat) => (
+                          <option key={cat._id} value={cat._id}>{cat.name}</option>
+                        ))}
+                      </select>
+                    </td>
+                    <td className="px-4 py-3">
+                      <input 
+                        type="text" 
+                        value={item.brand} 
+                        onChange={(e) => updatePreviewItem(idx, 'brand', e.target.value)}
+                        className="w-full px-3 py-1.5 border border-gray-200 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 text-sm"
+                      />
+                    </td>
+                    <td className="px-4 py-3">
+                      <input 
+                        type="number" 
+                        value={item.price || ''} 
+                        onChange={(e) => updatePreviewItem(idx, 'price', Number(e.target.value))}
+                        className="w-full px-3 py-1.5 border border-gray-200 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 text-sm"
+                      />
+                    </td>
+                    <td className="px-4 py-3">
+                      <div className="flex flex-col gap-1 text-xs text-gray-600">
+                        <input type="text" value={item.specs.CPU || ''} onChange={(e) => {
+                          const newSpecs = {...item.specs, CPU: e.target.value};
+                          updatePreviewItem(idx, 'specs', newSpecs);
+                        }} className="w-full px-2 py-1 border border-gray-100 rounded bg-gray-50 focus:bg-white focus:border-blue-300" placeholder="CPU..." title="CPU" />
+                        <input type="text" value={item.specs.RAM || ''} onChange={(e) => {
+                          const newSpecs = {...item.specs, RAM: e.target.value};
+                          updatePreviewItem(idx, 'specs', newSpecs);
+                        }} className="w-full px-2 py-1 border border-gray-100 rounded bg-gray-50 focus:bg-white focus:border-blue-300" placeholder="RAM..." title="RAM" />
+                        <input type="text" value={item.specs.Storage || ''} onChange={(e) => {
+                          const newSpecs = {...item.specs, Storage: e.target.value};
+                          updatePreviewItem(idx, 'specs', newSpecs);
+                        }} className="w-full px-2 py-1 border border-gray-100 rounded bg-gray-50 focus:bg-white focus:border-blue-300" placeholder="Storage..." title="Storage" />
+                        <input type="text" value={item.specs.VGA || ''} onChange={(e) => {
+                          const newSpecs = {...item.specs, VGA: e.target.value};
+                          updatePreviewItem(idx, 'specs', newSpecs);
+                        }} className="w-full px-2 py-1 border border-gray-100 rounded bg-gray-50 focus:bg-white focus:border-blue-300" placeholder="VGA..." title="VGA" />
+                      </div>
+                    </td>
+                    <td className="px-4 py-3 text-center">
+                      <button 
+                        onClick={() => removePreviewItem(idx)}
+                        className="p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+                        title="Xóa sản phẩm này"
+                      >
+                        <Trash2 size={16} />
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="pb-12">
@@ -477,7 +725,18 @@ export default function NewProductPage() {
               {(() => {
                 const currentCategory = categories.find(c => c._id === formData.category_id);
                 const currentSlug = currentCategory?.slug || '';
-                const currentFields = SPEC_CONFIGS[currentSlug] || [];
+                let currentFields = SPEC_CONFIGS[currentSlug] || [];
+                
+                if (currentFields.length === 0 && currentCategory) {
+                  const nameStr = currentCategory.name.toLowerCase();
+                  if (nameStr.includes('laptop')) currentFields = SPEC_CONFIGS['laptop'];
+                  else if (nameStr.includes('pc') || nameStr.includes('máy tính')) currentFields = SPEC_CONFIGS['pc-gaming'];
+                  else if (nameStr.includes('màn hình')) currentFields = SPEC_CONFIGS['man-hinh'];
+                  else if (nameStr.includes('chuột')) currentFields = SPEC_CONFIGS['chuot'];
+                  else if (nameStr.includes('phím')) currentFields = SPEC_CONFIGS['ban-phim'];
+                  else if (nameStr.includes('tai nghe')) currentFields = SPEC_CONFIGS['tai-nghe'];
+                  else if (nameStr.includes('linh kiện')) currentFields = SPEC_CONFIGS['linh-kien-pc'];
+                }
                 
                 return (
                   <>
@@ -503,7 +762,20 @@ export default function NewProductPage() {
               <h3 className="text-sm font-bold text-gray-800 mb-4">Thuộc tính tùy chỉnh (Thêm nếu cần)</h3>
               {(() => {
                 const currentCategory = categories.find(c => c._id === formData.category_id);
-                const currentFields = SPEC_CONFIGS[currentCategory?.slug || ''] || [];
+                const currentSlug = currentCategory?.slug || '';
+                let currentFields = SPEC_CONFIGS[currentSlug] || [];
+                
+                if (currentFields.length === 0 && currentCategory) {
+                  const nameStr = currentCategory.name.toLowerCase();
+                  if (nameStr.includes('laptop')) currentFields = SPEC_CONFIGS['laptop'];
+                  else if (nameStr.includes('pc') || nameStr.includes('máy tính')) currentFields = SPEC_CONFIGS['pc-gaming'];
+                  else if (nameStr.includes('màn hình')) currentFields = SPEC_CONFIGS['man-hinh'];
+                  else if (nameStr.includes('chuột')) currentFields = SPEC_CONFIGS['chuot'];
+                  else if (nameStr.includes('phím')) currentFields = SPEC_CONFIGS['ban-phim'];
+                  else if (nameStr.includes('tai nghe')) currentFields = SPEC_CONFIGS['tai-nghe'];
+                  else if (nameStr.includes('linh kiện')) currentFields = SPEC_CONFIGS['linh-kien-pc'];
+                }
+
                 const customKeys = Object.keys(formData.specs).filter(key => !currentFields.find(f => f.key === key));
                 
                 return (
@@ -765,9 +1037,30 @@ export default function NewProductPage() {
               <textarea
                 value={smartText}
                 onChange={(e) => setSmartText(e.target.value)}
-                placeholder="VD: Pass lại em Dell Latitude 7490 Core i5 gen 8 ram 8GB ssd 256GB màn 14 FHD máy keng mỏng nhẹ. Giá rẽ chỉ 5 củ rưỡi gdtt SG..."
+                placeholder="VD: Dán cấu hình văn bản, hoặc dán LINK GOOGLE DOCS (Public) vào đây... Hệ thống sẽ tự động đọc."
                 className="w-full h-48 p-4 border border-purple-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm resize-none bg-purple-50/30 font-medium"
               />
+              
+              <div className="mt-4 flex flex-col md:flex-row items-center gap-3 w-full bg-blue-50/50 p-4 rounded-xl border border-blue-100 border-dashed">
+                <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center text-blue-500 shadow-sm shrink-0">
+                  <FileText size={20} />
+                </div>
+                <div className="flex-1">
+                  <h4 className="font-bold text-sm text-gray-800">Hoặc tải lên File Excel</h4>
+                  <p className="text-xs text-gray-500 mt-0.5">Hỗ trợ file .xlsx, .csv chứa hàng loạt sản phẩm</p>
+                </div>
+                <div className="relative">
+                  <input 
+                    type="file" 
+                    accept=".xlsx, .csv" 
+                    onChange={handleFileUpload}
+                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                  />
+                  <button type="button" className="bg-white border border-gray-200 hover:border-blue-400 text-sm px-4 py-2 rounded-lg font-medium text-gray-700 transition-colors whitespace-nowrap">
+                    Chọn File Excel
+                  </button>
+                </div>
+              </div>
               
               <div className="mt-6 flex justify-end gap-3">
                 <button

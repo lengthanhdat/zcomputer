@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { LogOut, User } from "lucide-react";
+import { LogOut, User, Shield, Settings } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/store/useAuthStore";
 import { useCartStore } from "@/store/useCartStore";
@@ -41,8 +41,8 @@ export default function HeaderAuth() {
   }
 
   return (
-    <div className="flex items-center gap-4">
-      <div className="flex items-center gap-2 cursor-pointer group">
+    <div className="relative group pb-2">
+      <div className="flex items-center gap-2 cursor-pointer">
         <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors">
           <User size={24} />
         </div>
@@ -51,14 +51,30 @@ export default function HeaderAuth() {
           <span className="text-sm font-bold text-gray-800">{user.name}</span>
         </div>
       </div>
-      {(user.role === 'admin' || user.role === 'staff') && (
-        <Link href="/admin" className="text-sm font-semibold text-primary hover:underline bg-red-50 px-2 py-1 rounded">
-          Trang Quản Trị
-        </Link>
-      )}
-      <button onClick={handleLogout} className="text-gray-500 hover:text-red-600 transition-colors" title="Đăng xuất">
-        <LogOut size={20} />
-      </button>
+
+      {/* Dropdown Menu */}
+      <div className="absolute top-full right-0 w-48 bg-white border border-gray-100 rounded-xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 overflow-hidden transform origin-top-right group-hover:translate-y-0 translate-y-2">
+        <div className="py-1">
+          <Link href="/profile" className="flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-primary transition-colors">
+            <Settings size={16} />
+            Hồ sơ cá nhân
+          </Link>
+          
+          {(user.role === 'admin' || user.role === 'staff') && (
+            <Link href="/admin" className="flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-primary transition-colors">
+              <Shield size={16} />
+              Trang Quản Trị
+            </Link>
+          )}
+
+          <div className="h-px bg-gray-100 my-1"></div>
+
+          <button onClick={handleLogout} className="w-full flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-red-600 hover:bg-red-50 transition-colors">
+            <LogOut size={16} />
+            Đăng xuất
+          </button>
+        </div>
+      </div>
     </div>
   );
 }

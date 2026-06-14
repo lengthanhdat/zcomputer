@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { Edit, Trash2, X, Plus } from "lucide-react";
 import toast from "react-hot-toast";
+import { fetchApi } from "@/lib/api";
 
 interface Category {
   _id: string;
@@ -25,7 +26,7 @@ export default function AdminCategoriesPage() {
 
   const fetchCategories = async () => {
     try {
-      const res = await fetch(`${API}?t=${Date.now()}`, { cache: "no-store" });
+      const res = await fetchApi("/categories");
       const data = await res.json();
       setCategories(data);
     } catch {
@@ -54,7 +55,7 @@ export default function AdminCategoriesPage() {
   const handleDelete = async (id: string, catName: string) => {
     if (!confirm(`Xóa danh mục "${catName}"?`)) return;
     try {
-      const res = await fetch(`${API}/${id}`, { method: "DELETE" });
+      const res = await fetchApi(`/categories/${id}`, { method: "DELETE" });
       if (res.ok) {
         setCategories((prev) => prev.filter((c) => c._id !== id));
         if (editingId === id) startAdd();
@@ -74,7 +75,7 @@ export default function AdminCategoriesPage() {
     try {
       if (editingId) {
         // UPDATE
-        const res = await fetch(`${API}/${editingId}`, {
+        const res = await fetchApi(`/categories/${editingId}`, {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ name: name.trim(), description: desc }),
@@ -91,7 +92,7 @@ export default function AdminCategoriesPage() {
         }
       } else {
         // CREATE
-        const res = await fetch(API, {
+        const res = await fetchApi(`/categories`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ name: name.trim(), description: desc }),

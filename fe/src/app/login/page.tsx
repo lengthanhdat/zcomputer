@@ -6,11 +6,13 @@ import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { useAuthStore } from "@/store/useAuthStore";
 import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
+import { Eye, EyeOff } from "lucide-react";
 
 export default function LoginPage() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const { login } = useAuthStore();
@@ -95,21 +97,27 @@ export default function LoginPage() {
           </p>
         </div>
 
-        <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || ""}>
-          <div className="flex justify-center mt-4">
-            <GoogleLogin
-              onSuccess={handleGoogleSuccess}
-              onError={() => {
-                setError("Google Login encountered an error");
-              }}
-              useOneTap
-              theme="outline"
-              size="large"
-              text="signin_with"
-              shape="rectangular"
-            />
+        {process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID ? (
+          <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}>
+            <div className="flex justify-center mt-4">
+              <GoogleLogin
+                onSuccess={handleGoogleSuccess}
+                onError={() => {
+                  setError("Google Login encountered an error");
+                }}
+                useOneTap
+                theme="outline"
+                size="large"
+                text="signin_with"
+                shape="rectangular"
+              />
+            </div>
+          </GoogleOAuthProvider>
+        ) : (
+          <div className="text-center text-sm text-yellow-600 bg-yellow-50 p-3 mt-4 rounded border border-yellow-200">
+            Chưa cấu hình NEXT_PUBLIC_GOOGLE_CLIENT_ID trong file .env
           </div>
-        </GoogleOAuthProvider>
+        )}
 
         <div className="relative mt-6">
           <div className="absolute inset-0 flex items-center">
@@ -135,14 +143,23 @@ export default function LoginPage() {
             </div>
             <div>
               <label className="text-sm font-semibold text-gray-700">Mật khẩu</label>
-              <input
-                type="password"
-                required
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="appearance-none relative block w-full px-3 py-2.5 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-primary focus:border-primary focus:z-10 sm:text-sm"
-                placeholder="Nhập mật khẩu"
-              />
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  required
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="appearance-none relative block w-full px-3 py-2.5 pr-10 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-primary focus:border-primary focus:z-10 sm:text-sm"
+                  placeholder="Nhập mật khẩu"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500 hover:text-gray-700"
+                >
+                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
+              </div>
             </div>
           </div>
 
@@ -162,9 +179,9 @@ export default function LoginPage() {
             </div>
 
             <div className="text-sm">
-              <a href="#" className="font-medium text-primary hover:text-red-700">
+              <Link href="/forgot-password" className="font-medium text-primary hover:text-red-700">
                 Quên mật khẩu?
-              </a>
+              </Link>
             </div>
           </div>
 

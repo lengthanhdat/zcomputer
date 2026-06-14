@@ -92,7 +92,7 @@ export default function PrivacyPolicyPage() {
             <div className="ml-11 space-y-2 text-gray-600">
               <p><strong className="text-gray-800">Tên doanh nghiệp:</strong> CÔNG TY TNHH TM DV ZCOM</p>
               <p><strong className="text-gray-800">MST:</strong> 0317130199 – do Chi cục Thuế TP. Thủ Đức cấp ngày 18/01/2022</p>
-              <p className="flex items-start gap-2"><MapPin size={16} className="text-gray-500 shrink-0 mt-0.5" /><span><strong className="text-gray-800">Trụ sở:</strong> Số 40 Đường 08, Phường Trường Thọ, Thành Phố Thủ Đức, Hồ Chí Minh</span></p>
+              <p className="flex items-start gap-2"><MapPin size={16} className="text-gray-500 shrink-0 mt-0.5" /><span><strong className="text-gray-800">Trụ sở:</strong> 23 Đường số 1, Khu phố 61, Phường Linh Xuân (Phường Linh Tây cũ), TP.Hồ Chí Minh</span></p>
             </div>
           </div>
 
@@ -100,22 +100,25 @@ export default function PrivacyPolicyPage() {
           <div className="p-8">
             <div className="flex items-center gap-3 mb-4">
               <span className="w-8 h-8 bg-gray-800 text-white rounded-full flex items-center justify-center text-sm font-black shrink-0">6</span>
-              <h2 className="text-xl font-bold text-gray-900">Tiếp cận, chỉnh sửa và khiếu nại</h2>
+              <h2 className="text-xl font-bold text-gray-900">Phương thức và công cụ để người dùng tiếp cận và chỉnh sửa dữ liệu</h2>
             </div>
             <div className="ml-11 space-y-4">
-              <p className="text-gray-600 leading-relaxed">Nếu quý khách có yêu cầu về tiếp cận, chỉnh sửa thông tin hoặc khiếu nại về việc thông tin bị sử dụng sai mục đích, vui lòng liên hệ:</p>
-              <div className="p-5 bg-gray-50 rounded-xl border border-gray-200">
-                <p className="font-bold text-gray-800 mb-3">ZCOMPUTER cam kết giải quyết mọi khiếu nại trong vòng <span className="text-primary">3 ngày</span>.</p>
-                <div className="flex flex-col sm:flex-row gap-4">
-                  <a href="tel:0977334415" className="flex items-center gap-2 px-4 py-3 bg-white rounded-lg border border-gray-200 hover:border-gray-400 transition-colors text-gray-700">
-                    <Phone size={16} className="text-primary" />
-                    <span className="font-semibold">0977 334 415</span>
-                  </a>
-                  <a href="mailto:truong.zvncomputer@gmail.com" className="flex items-center gap-2 px-4 py-3 bg-white rounded-lg border border-gray-200 hover:border-gray-400 transition-colors text-gray-700">
-                    <Mail size={16} className="text-primary" />
-                    <span className="font-semibold">truong.zvncomputer@gmail.com</span>
-                  </a>
-                </div>
+              <p className="text-gray-600 leading-relaxed">Nếu quý khách có bất cứ về yêu cầu nào về việc tiếp cận và chỉnh sửa thông tin cá nhân đã cung cấp, quý khách có thể:</p>
+              <ul className="space-y-2 text-gray-600">
+                <li className="flex gap-2"><span className="text-gray-800 font-bold">–</span> Gọi điện trực tiếp về số điện thoại: <strong>0977 334 415</strong></li>
+                <li className="flex gap-2"><span className="text-gray-800 font-bold">–</span> Gửi mail: <strong>truong.zvncomputer@gmail.com</strong></li>
+              </ul>
+              
+              <div className="mt-6 pt-6 border-t border-gray-100">
+                <h3 className="font-bold text-gray-800 mb-3 uppercase text-sm tracking-wide text-primary">* Cơ chế tiếp nhận và giải quyết khiếu nại của người tiêu dùng</h3>
+                <p className="text-gray-600 leading-relaxed mb-3">Liên quan đến việc thông tin cá nhân bị sử dụng sai mục đích hoặc phạm vi đã thông báo:</p>
+                <p className="text-gray-600 leading-relaxed mb-3">Tại zcomputer.vn, việc bảo vệ thông tin cá nhân của bạn là rất quan trọng, bạn được đảm bảo rằng thông tin cung cấp cho chúng tôi sẽ được bảo mật. ZCOMPUTER cam kết không chia sẻ, bán hoặc cho thuê thông tin cá nhân của bạn cho bất kỳ người nào khác. Chúng tôi cam kết chỉ sử dụng các thông tin của bạn vào các trường hợp sau:</p>
+                <ul className="space-y-2 text-gray-600 mb-4">
+                  <li className="flex gap-2"><span className="text-gray-800 font-bold">–</span> Nâng cao chất lượng dịch vụ dành cho khách hàng</li>
+                  <li className="flex gap-2"><span className="text-gray-800 font-bold">–</span> Giải quyết các tranh chấp, khiếu nại trong vòng 3 ngày sau khi nhận được thông tin.</li>
+                  <li className="flex gap-2"><span className="text-gray-800 font-bold">–</span> Khi cơ quan pháp luật có yêu cầu.</li>
+                </ul>
+                <p className="text-gray-600 leading-relaxed">ZCOMPUTER hiểu rằng quyền lợi của bạn trong việc bảo vệ thông tin cá nhân cũng chính là trách nhiệm của chúng tôi nên trong bất kỳ trường hợp có thắc mắc, góp ý nào liên quan đến chính sách bảo mật của chúng tôi, và liên quan đến việc thông tin cá nhân bị sử dụng sai mục đích hoặc phạm vi đã thông báo, vui lòng liên hệ qua số hotline <strong>0977 334 415</strong> hoặc email <strong>truong.zvncomputer@gmail.com</strong> để xử lý và làm việc trực tiếp với khách hàng.</p>
               </div>
             </div>
           </div>

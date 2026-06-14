@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { Filter, Cpu, Monitor, Server, HardDrive, Maximize, ArrowRight } from "lucide-react";
+import { Filter, Cpu, Monitor, Server, HardDrive, Maximize, ArrowRight, Eye } from "lucide-react";
 import { useState, useMemo, useEffect } from "react";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 
@@ -20,6 +20,7 @@ type Product = {
   flashSalePrice?: number;
   stock?: number;
   status?: string;
+  views?: number;
 };
 
 export default function CategoryClient({ 
@@ -315,8 +316,8 @@ export default function CategoryClient({
                       key={product._id}
                       className={`bg-white rounded-2xl border border-gray-100 overflow-hidden group shadow-sm flex flex-col h-full relative transition-all duration-500 ${isOutOfStock ? 'opacity-80' : 'hover:shadow-[0_8px_30px_rgb(220,38,38,0.15)] hover:border-red-200 hover:-translate-y-2'}`}
                     >
+                      <Link href={`/product/${product.slug}`} className="absolute inset-0 z-10"></Link>
                       <div className="relative aspect-[4/3] p-4 flex items-center justify-center bg-white overflow-hidden">
-                        <Link href={`/product/${product.slug}`} className="absolute inset-0 z-20"></Link>
 
                         {isOutOfStock && (
                           <div className="absolute inset-0 bg-white/60 z-30 flex items-center justify-center backdrop-blur-[1px]">
@@ -416,6 +417,10 @@ export default function CategoryClient({
                             })}
                           </div>
                         )}
+
+                        <div className="mt-4 mb-2 flex justify-center text-gray-900 text-[13px] items-center gap-1.5 pt-3 border-t border-gray-100">
+                          <Eye size={15} /> {(product.views || 0).toLocaleString('vi-VN')} lượt xem
+                        </div>
                       </div>
                     </div>
                   );

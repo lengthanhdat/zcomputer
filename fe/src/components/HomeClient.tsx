@@ -3,10 +3,11 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, Laptop, ShieldCheck, Truck, Zap, ChevronLeft, ChevronRight, Monitor, Cpu, Server, Mouse, Keyboard, Headphones, HardDrive, Maximize, Heart, type LucideIcon } from "lucide-react";
+import { ArrowRight, Laptop, ShieldCheck, Truck, Zap, ChevronLeft, ChevronRight, Monitor, Cpu, Server, Mouse, Keyboard, Headphones, HardDrive, Maximize, Heart, Eye, type LucideIcon } from "lucide-react";
 import BannerSlider from "@/components/BannerSlider";
 import type { ReactNode } from "react";
 import HotSaleSection from "./HotSaleSection";
+import { fetchApi } from "@/lib/api";
 
 type Product = {
   _id: string;
@@ -27,6 +28,7 @@ type Product = {
   } | string;
   stock?: number;
   status?: string;
+  views?: number;
 };
 
 type Category = {
@@ -43,7 +45,7 @@ type Banner = {
   position?: string;
 };
 
-const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:5000";
+const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || "";
 
 // Skeleton loaders
 function BannerSkeleton() {
@@ -96,9 +98,9 @@ export default function HomeClient() {
     const controller = new AbortController();
 
     Promise.all([
-      fetch(`${API_BASE}/api/products?limit=100`, { signal: controller.signal, cache: 'no-store' }).then(r => r.ok ? r.json() : []).catch(() => []),
-      fetch(`${API_BASE}/api/categories`, { signal: controller.signal, cache: 'no-store' }).then(r => r.ok ? r.json() : []).catch(() => []),
-      fetch(`${API_BASE}/api/banners/active`, { signal: controller.signal, cache: 'no-store' }).then(r => r.ok ? r.json() : []).catch(() => []),
+      fetchApi(`/products?limit=100`, { signal: controller.signal, cache: 'no-store', requireAuth: false }).then(r => r.ok ? r.json() : []).catch(() => []),
+      fetchApi(`/categories`, { signal: controller.signal, cache: 'no-store', requireAuth: false }).then(r => r.ok ? r.json() : []).catch(() => []),
+      fetchApi(`/banners/active`, { signal: controller.signal, cache: 'no-store', requireAuth: false }).then(r => r.ok ? r.json() : []).catch(() => []),
     ]).then(([p, c, b]) => {
       setProducts(p);
       setCategories(c);
@@ -117,28 +119,62 @@ export default function HomeClient() {
       const slider = document.getElementById(sliderId);
       if (slider) {
         let isHovered = false;
-        const setHover = () => isHovered = true;
-        const removeHover = () => isHovered = false;
+        let isDown = false;
+        let startX: number;
+        let scrollLeft: number;
+        let dragged = false;
+
+        const setHover = () => { if (!isDown) isHovered = true; };
+        const removeHover = () => { isHovered = false; isDown = false; slider.classList.remove('cursor-grabbing'); };
+        
+        const mouseDown = (e: MouseEvent) => {
+          isDown = true;
+          dragged = false;
+          slider.classList.add('cursor-grabbing');
+          startX = e.pageX - slider.offsetLeft;
+          scrollLeft = slider.scrollLeft;
+        };
+        
+        const mouseUp = () => {
+          isDown = false;
+          slider.classList.remove('cursor-grabbing');
+        };
+        
+        const mouseMove = (e: MouseEvent) => {
+          if (!isDown) return;
+          e.preventDefault();
+          const x = e.pageX - slider.offsetLeft;
+          const walk = (x - startX) * 1.5;
+          if (Math.abs(walk) > 5) dragged = true;
+          slider.scrollLeft = scrollLeft - walk;
+        };
+
+        const preventClick = (e: MouseEvent) => {
+          if (dragged) {
+            e.preventDefault();
+            e.stopPropagation();
+          }
+        };
         
         slider.addEventListener('mouseenter', setHover);
         slider.addEventListener('mouseleave', removeHover);
+        slider.addEventListener('mousedown', mouseDown);
+        slider.addEventListener('mouseup', mouseUp);
+        slider.addEventListener('mousemove', mouseMove);
+        slider.addEventListener('click', preventClick, true);
 
         let animationId: number;
         let frameCount = 0;
         const scroll = () => {
           const inner = document.getElementById(`slider-inner-${cat._id}`);
-          if (!isHovered && inner && inner.offsetWidth > slider.clientWidth / 2) {
+          if (!isHovered && !isDown && inner && inner.offsetWidth > slider.clientWidth / 2) {
             frameCount++;
-            // Cuộn 1px mỗi 2 khung hình để giảm nửa tốc độ (chậm lại 1 tí)
             if (frameCount >= 2) {
               slider.scrollLeft += 1;
               frameCount = 0;
             }
             
-            // Limit is exactly the width of the first inner wrapper
             const limit = inner.offsetWidth;
-            
-            // Nếu đã cuộn hết block đầu tiên, vòng lại 0 để tạo hiệu ứng seamless
             if (slider.scrollLeft >= limit) {
               slider.scrollLeft -= limit;
             }
@@ -152,6 +188,10 @@ export default function HomeClient() {
           cancelAnimationFrame(animationId);
           slider.removeEventListener('mouseenter', setHover);
           slider.removeEventListener('mouseleave', removeHover);
+          slider.removeEventListener('mousedown', mouseDown);
+          slider.removeEventListener('mouseup', mouseUp);
+          slider.removeEventListener('mousemove', mouseMove);
+          slider.removeEventListener('click', preventClick, true);
         });
       }
     });
@@ -170,49 +210,15 @@ export default function HomeClient() {
             <div className="w-full">
               <BannerSlider banners={banners.filter(b => b.position !== 'sub')} apiBase={API_BASE} />
             </div>
-            <div className="hidden lg:grid grid-cols-3 gap-4">
-              {banners.filter(b => b.position === 'sub').length > 0 ? (
-                banners.filter(b => b.position === 'sub').slice(0, 3).map((banner) => (
+            {banners.filter(b => b.position === 'sub').length > 0 && (
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-2 lg:mt-0">
+                {banners.filter(b => b.position === 'sub').slice(0, 3).map((banner) => (
                   <Link key={banner._id} href={banner.link || "#"} className="block relative w-full rounded-2xl overflow-hidden group shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
                     <img src={(banner.image || "").startsWith('http') || (banner.image || "").startsWith('data:') ? banner.image : `${API_BASE}${banner.image}`} alt={banner.title} className="w-full h-auto object-contain group-hover:scale-105 transition-transform duration-500" />
                   </Link>
-                ))
-              ) : (
-                <>
-                  <Link href="/build-pc" className="relative w-full aspect-[21/9] xl:aspect-[2/1] rounded-2xl overflow-hidden group shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 bg-gradient-to-br from-blue-950 to-indigo-900 flex items-center p-6 border border-white/10">
-                     <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1587202372634-32705e3bf49c?w=600&h=300&fit=crop')] opacity-30 bg-cover bg-center group-hover:scale-110 transition-transform duration-700"></div>
-                     <div className="absolute inset-0 bg-gradient-to-r from-[#003366] to-transparent"></div>
-                     <div className="relative z-10 text-white w-2/3">
-                        <h3 className="text-xl lg:text-3xl font-black uppercase mb-1 drop-shadow-md tracking-tight leading-tight">Tư Vấn<br/><span className="text-[#33ccff]">Build PC</span></h3>
-                        <div className="bg-[#0066cc] text-xs font-black px-3 py-1 inline-block rounded mb-2 uppercase tracking-wide border border-[#33ccff]">Theo Nhu Cầu</div>
-                     </div>
-                  </Link>
-                  
-                  <Link href="/khuyen-mai" className="relative w-full aspect-[21/9] xl:aspect-[2/1] rounded-2xl overflow-hidden group shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 bg-gradient-to-bl from-green-600 to-emerald-800 flex items-center p-6 border border-white/10">
-                     <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1605647540924-852290f6b0d5?w=600&h=300&fit=crop')] opacity-30 bg-cover bg-center group-hover:scale-110 transition-transform duration-700"></div>
-                     <div className="absolute inset-0 bg-gradient-to-r from-[#1b5e20]/90 to-[#4caf50]/20"></div>
-                     <div className="relative z-10 text-white flex flex-col items-start">
-                        <h3 className="text-lg lg:text-xl font-bold uppercase mb-0 drop-shadow-md tracking-tight text-white/90">Giới Thiệu</h3>
-                        <h3 className="text-2xl lg:text-3xl font-black uppercase mb-1 drop-shadow-md tracking-tight text-yellow-300">Bạn Ngay</h3>
-                        <div className="bg-white text-green-700 text-xs font-black px-3 py-1 inline-block rounded-full mb-1 uppercase shadow-sm">Nhận Quà Liền Tay</div>
-                        <p className="font-bold text-[11px] text-yellow-200 uppercase mt-1">Ưu đãi lên đến 2 triệu VNĐ</p>
-                     </div>
-                  </Link>
-                  
-                  <Link href="/thu-cu-doi-moi" className="relative w-full aspect-[21/9] xl:aspect-[2/1] rounded-2xl overflow-hidden group shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center p-6 border border-blue-200">
-                     <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1518770660439-4636190af475?w=600&h=300&fit=crop')] opacity-10 bg-cover bg-center group-hover:scale-110 transition-transform duration-700"></div>
-                     <div className="relative z-10 text-gray-800 flex flex-col items-start w-3/4">
-                        <div className="flex items-center gap-2 mb-1">
-                          <h3 className="text-xl lg:text-3xl font-black uppercase text-red-600 drop-shadow-sm tracking-tight" style={{ WebkitTextStroke: '0.5px white' }}>Thu Cũ</h3>
-                          <h3 className="text-xl lg:text-3xl font-black uppercase text-yellow-500 drop-shadow-sm tracking-tight" style={{ WebkitTextStroke: '0.5px white' }}>Đổi Mới</h3>
-                        </div>
-                        <div className="bg-[#004d99] text-white text-[10px] font-black px-2 py-1 rounded mb-1 uppercase tracking-wider">Lên Đời PC</div>
-                        <div className="bg-blue-500 text-white text-[10px] font-black px-2 py-1 rounded-full uppercase tracking-wider mt-1 absolute right-4 top-4">Trả Góp 0%</div>
-                     </div>
-                  </Link>
-                </>
-              )}
-            </div>
+                ))}
+              </div>
+            )}
           </div>
         )}
       </section>
@@ -418,8 +424,8 @@ function ProductCard({ product }: { product: Product }) {
     <div
       className={`flex-none w-[280px] md:w-[280px] bg-white rounded-2xl border border-gray-100 overflow-hidden group shadow-md flex flex-col relative transition-all duration-500 ${isOutOfStock ? 'opacity-80' : 'hover:shadow-[0_8px_30px_rgb(220,38,38,0.15)] hover:border-red-200 hover:-translate-y-2'}`}
     >
+      <Link href={`/product/${product.slug}`} className="absolute inset-0 z-10"></Link>
       <div className="relative aspect-[4/3] p-4 flex items-center justify-center bg-white overflow-hidden">
-        <Link href={`/product/${product.slug}`} className="absolute inset-0 z-20"></Link>
 
         {isOutOfStock && (
           <div className="absolute inset-0 bg-white/60 z-30 flex items-center justify-center backdrop-blur-[1px]">
@@ -474,7 +480,7 @@ function ProductCard({ product }: { product: Product }) {
       <div className="p-4 flex flex-col flex-1 bg-white relative z-10">
         <div className="flex items-center justify-between mb-2">
           <div className="text-[11px] font-bold text-gray-500 uppercase">{product.brand || "KHÁC"}</div>
-          <Heart size={16} className="text-red-600 cursor-pointer" />
+          <Heart size={16} className="text-red-600 cursor-pointer relative z-30" />
         </div>
         <Link href={`/product/${product.slug}`} className="hover:text-red-600 transition-colors mb-3 z-30 relative">
           <h3 className="text-gray-700 text-[13px] leading-relaxed line-clamp-2">{product.name}</h3>
@@ -520,6 +526,10 @@ function ProductCard({ product }: { product: Product }) {
             })}
           </div>
         )}
+
+        <div className="mt-4 mb-2 flex justify-center text-gray-900 text-[13px] items-center gap-1.5">
+          <Eye size={15} /> {(product.views || 0).toLocaleString('vi-VN')} lượt xem
+        </div>
       </div>
     </div>
   );

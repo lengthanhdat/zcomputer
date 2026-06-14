@@ -207,7 +207,11 @@ export default function CartPage() {
                 </a>
 
                 <a 
-                  href="https://zalo.me/0977334415" 
+                  href={`https://zalo.me/0977334415?text=${encodeURIComponent(
+                    "Chào ZCOMPUTER, mình cần tư vấn báo giá các sản phẩm sau:\n" + 
+                    items.map((i, index) => `${index + 1}. ${i.name} (x${i.quantity}) - Giá: ${i.price.toLocaleString('vi-VN')}đ`).join('\n') +
+                    `\n\nTổng cộng: ${getTotalPrice().toLocaleString('vi-VN')}đ`
+                  )}`}
                   target="_blank" 
                   rel="noreferrer"
                   className="flex items-center gap-4 bg-gray-50 hover:bg-blue-50 p-4 rounded-xl border border-gray-100 transition-colors group"
@@ -216,8 +220,8 @@ export default function CartPage() {
                     <MessageCircle size={24} />
                   </div>
                   <div>
-                    <div className="text-sm font-semibold text-gray-500 uppercase">Chat Zalo</div>
-                    <div className="text-xl font-black text-gray-900">ZComputer Store</div>
+                    <div className="text-sm font-semibold text-gray-500 uppercase">Chat Zalo Nhận Báo Giá</div>
+                    <div className="text-xl font-black text-gray-900">Gửi Cấu Hình Ngay</div>
                   </div>
                 </a>
               </div>

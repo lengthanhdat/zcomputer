@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 import { Settings, Zap, Save } from "lucide-react";
+import { fetchApi } from "@/lib/api";
 
 export default function SettingsPage() {
   const [flashSaleEnd, setFlashSaleEnd] = useState("");
@@ -11,7 +12,7 @@ export default function SettingsPage() {
 
   useEffect(() => {
     setLoading(true);
-    fetch("http://127.0.0.1:5000/api/settings/flash_sale_end_time")
+    fetchApi("/settings/flash_sale_end_time", { requireAuth: false })
       .then(res => res.json())
       .then(data => {
         if (data && data.value) {
@@ -31,7 +32,7 @@ export default function SettingsPage() {
     setSaving(true);
     try {
       const date = new Date(flashSaleEnd);
-      const res = await fetch("http://127.0.0.1:5000/api/settings/flash_sale_end_time", {
+      const res = await fetchApi("/settings/flash_sale_end_time", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ value: date.toISOString() })

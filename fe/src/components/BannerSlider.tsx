@@ -66,7 +66,7 @@ export default function BannerSlider({ banners, apiBase }: BannerSliderProps) {
 
           return (
             <SwiperSlide key={banner._id} className="relative w-full overflow-hidden flex items-center justify-center bg-[#111]">
-              <Link href={banner.link || "/laptop"} className="block relative w-full group/slide">
+              <Link href={banner.link || "/"} className="block relative w-full group/slide">
                 {imageUrl ? (
                   <img
                     src={imageUrl}

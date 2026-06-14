@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { Filter, Search } from "lucide-react";
+import { Filter, Search, Eye } from "lucide-react";
 
 export const revalidate = 0;
 
@@ -14,6 +14,7 @@ type Product = {
   specs?: Record<string, string>;
   brand?: string;
   condition?: string;
+  views?: number;
 };
 
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:5000";
@@ -87,8 +88,8 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
                     key={product._id}
                     className="flex-none bg-white rounded-2xl border border-gray-100 overflow-hidden group hover:shadow-[0_20px_40px_rgb(0,0,0,0.08)] hover:border-primary/30 hover:-translate-y-1 transition-all duration-500 flex flex-col relative"
                   >
+                    <Link href={`/product/${product.slug}`} className="absolute inset-0 z-10"></Link>
                     <div className="relative aspect-[4/3] p-6 flex items-center justify-center bg-gradient-to-b from-gray-50 to-white overflow-hidden">
-                      <Link href={`/product/${product.slug}`} className="absolute inset-0 z-20"></Link>
                       
                       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-white rounded-full shadow-sm opacity-0 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500"></div>
 
@@ -130,6 +131,10 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
                           )}
                           <span className="text-xl font-black text-red-600">{product.price.toLocaleString('vi-VN')}đ</span>
                         </div>
+                      </div>
+                      
+                      <div className="mt-4 mb-2 flex justify-center text-gray-900 text-[13px] items-center gap-1.5 pt-3 border-t border-gray-100">
+                        <Eye size={15} /> {(product.views || 0).toLocaleString('vi-VN')} lượt xem
                       </div>
                     </div>
                   </div>

@@ -4,6 +4,7 @@ import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import FloatingContact from "@/components/FloatingContact";
+import ChatWidget from "@/components/ChatWidget";
 import PublicChrome from "@/components/PublicChrome";
 import { Toaster } from "react-hot-toast";
 
@@ -31,6 +32,7 @@ export default function RootLayout({
         <PublicChrome>
           <Footer />
           <FloatingContact />
+          <ChatWidget />
         </PublicChrome>
         <Toaster position="top-right" />
       </body>
