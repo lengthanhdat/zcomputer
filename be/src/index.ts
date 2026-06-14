@@ -106,6 +106,7 @@ import bannerRoutes from './routes/bannerRoutes';
 import uploadRoutes from './routes/uploadRoutes';
 import settingRoutes from './routes/settingRoutes';
 import chatRoutes from './routes/chatRoutes';
+import videoReviewRoutes from './routes/videoReviewRoutes';
 
 app.use('/api/users', userRoutes);
 app.use('/api/orders', orderRoutes);
@@ -113,6 +114,7 @@ app.use('/api/banners', bannerRoutes);
 app.use('/api/upload', uploadRoutes);
 app.use('/api/settings', settingRoutes);
 app.use('/api/chat', chatRoutes);
+app.use('/api/video-reviews', videoReviewRoutes);
 
 app.use('/api/products', productRoutes);
 app.use('/api/categories', categoryRoutes);

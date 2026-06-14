@@ -8,6 +8,7 @@ import { Playfair_Display, Montserrat } from "next/font/google";
 import { Search, Menu, X, PhoneCall, MapPin } from "lucide-react";
 import HeaderAuth from "./HeaderAuth";
 import HeaderCart from "./HeaderCart";
+import HeaderNav from "./HeaderNav";
 
 const montserrat = Montserrat({ subsets: ["latin", "vietnamese"], weight: ["700", "900"] });
 const playfair = Playfair_Display({ subsets: ["latin", "vietnamese"], weight: ["700", "900"] });
@@ -107,6 +108,9 @@ export default function Header() {
           </div>
         </div>
       </div>
+
+      {/* Main Navigation Bar (Mega Menu) */}
+      <HeaderNav />
 
       {/* Mobile Search Bar (Only visible on small devices) */}
       <div className="md:hidden px-4 pb-3">

@@ -10,7 +10,7 @@ export default function Footer() {
   return (
     <footer className="bg-[#0f1115] text-gray-400 font-sans mt-20 border-t border-gray-800">
       <div className="container mx-auto px-4 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 lg:gap-8">
           
           {/* Column 1: Về ZCOMPUTER */}
           <div className="space-y-6">
@@ -70,14 +70,24 @@ export default function Footer() {
                   <FaMapMarkerAlt className="text-primary" /> Chi nhánh Thủ Đức
                 </h4>
                 <p className="text-sm leading-relaxed mb-3 group-hover:text-gray-300 transition-colors">
-                  23 Đường số 1, Khu phố 61, Phường Linh Xuân (Phường Linh Tây cũ), TP.Hồ Chí Minh
+                  23 Đường số 1, Khu phố 61, Phường Linh Xuân, 23 Đ. số 1, Linh Xuân, Hồ Chí Minh, Việt Nam
                 </p>
-                <a href="https://maps.google.com/?q=Z+Computer" target="_blank" rel="noreferrer" className="text-xs font-bold text-primary hover:text-red-400 uppercase tracking-wider flex items-center gap-1">
+                <a href="https://www.google.com/maps/place/Z+Computer-+Pc+Gaming-Laptop-Workstation/@10.8522646,106.7537944,20z/data=!4m14!1m7!3m6!1s0x31752722e4c10833:0x6ac88810b4b7dee!2sZ+Computer-+Pc+Gaming-Laptop-Workstation!8m2!3d10.8521273!4d106.7538518!16s%2Fg%2F11lbjb7txf!3m5!1s0x31752722e4c10833:0x6ac88810b4b7dee!8m2!3d10.8521273!4d106.7538518!16s%2Fg%2F11lbjb7txf?entry=ttu&g_ep=EgoyMDI2MDYxMC4wIKXMDSoASAFQAw%3D%3D" target="_blank" rel="noreferrer" className="text-xs font-bold text-primary hover:text-red-400 uppercase tracking-wider flex items-center gap-1 mb-3">
                   Chỉ đường tới shop <FaChevronRight size={10} />
                 </a>
+                <iframe 
+                  src="https://maps.google.com/maps?q=Z+Computer-+Pc+Gaming-Laptop-Workstation&t=&z=16&ie=UTF8&iwloc=&output=embed" 
+                  width="100%" 
+                  height="120" 
+                  style={{ border: 0, borderRadius: '8px' }} 
+                  allowFullScreen 
+                  loading="lazy" 
+                  referrerPolicy="no-referrer-when-downgrade"
+                  className="shadow-sm mt-1"
+                ></iframe>
               </div>
 
-              <div className="w-full h-px bg-gray-800/50"></div>
+              <div className="w-full h-px bg-gray-800/50 my-4"></div>
 
               <div className="group">
                 <h4 className="text-gray-200 font-bold text-sm mb-2 flex items-center gap-2">
@@ -86,39 +96,24 @@ export default function Footer() {
                 <p className="text-sm leading-relaxed mb-3 group-hover:text-gray-300 transition-colors">
                   47/86B Bùi Đình Tuý, Phường 14, Q. Bình Thạnh, TP. Hồ Chí Minh
                 </p>
-                <a href="https://maps.google.com/?q=ZCOMPUTER+BÌNH+THẠNH" target="_blank" rel="noreferrer" className="text-xs font-bold text-primary hover:text-red-400 uppercase tracking-wider flex items-center gap-1">
+                <a href="https://maps.google.com/?q=ZCOMPUTER+BÌNH+THẠNH" target="_blank" rel="noreferrer" className="text-xs font-bold text-primary hover:text-red-400 uppercase tracking-wider flex items-center gap-1 mb-3">
                   Chỉ đường tới shop <FaChevronRight size={10} />
                 </a>
+                <iframe 
+                  src="https://maps.google.com/maps?q=47/86B+Bùi+Đình+Tuý,+Phường+14,+Bình+Thạnh,+TP.+Hồ+Chí+Minh&t=&z=15&ie=UTF8&iwloc=&output=embed" 
+                  width="100%" 
+                  height="120" 
+                  style={{ border: 0, borderRadius: '8px' }} 
+                  allowFullScreen 
+                  loading="lazy" 
+                  referrerPolicy="no-referrer-when-downgrade"
+                  className="shadow-sm mt-1"
+                ></iframe>
               </div>
             </div>
           </div>
 
-          {/* Column 3: Hỗ trợ khách hàng */}
-          <div className="space-y-6 lg:pl-4">
-            <h3 className="text-white font-bold text-lg uppercase tracking-widest relative pb-4 inline-block">
-              Hỗ trợ khách hàng
-              <span className="absolute bottom-0 left-0 w-12 h-1 bg-primary rounded-full"></span>
-            </h3>
-            <ul className="space-y-3">
-              {[
-                { title: 'Chính sách bảo mật', link: '/chinh-sach-bao-mat' },
-                { title: 'Chính sách vận chuyển', link: '/chinh-sach-van-chuyen' },
-                { title: 'Chính sách bảo hành', link: '/chinh-sach-bao-hanh' },
-                { title: 'Chính sách đổi trả', link: '/chinh-sach-doi-tra' },
-                { title: 'Chính sách thanh toán', link: '/chinh-sach-thanh-toan' },
-                { title: 'Hướng dẫn mua hàng', link: '/huong-dan-mua-hang' },
-              ].map((item, idx) => (
-                <li key={idx} className="group flex">
-                  <Link href={item.link} className="flex items-center gap-2 text-sm hover:text-white hover:translate-x-2 transition-all duration-300">
-                    <FaChevronRight size={10} className="text-primary opacity-0 -ml-3 group-hover:opacity-100 group-hover:ml-0 transition-all duration-300" />
-                    <span>{item.title}</span>
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Column 4: Kết nối & Thanh toán */}
+          {/* Column 3: Kết nối & Thanh toán */}
           <div className="space-y-8">
             <div>
               <h3 className="text-white font-bold text-lg uppercase tracking-widest relative pb-4 inline-block mb-4">

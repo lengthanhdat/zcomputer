@@ -5,7 +5,7 @@ import slugify from 'slugify';
 // Lấy danh sách danh mục
 export const getCategories = async (req: Request, res: Response) => {
   try {
-    const categories = await Category.find().select('name slug description').lean();
+    const categories = await Category.find().select('name slug description parent_id image').lean();
     res.set('Cache-Control', 'public, max-age=120, stale-while-revalidate=60');
     res.json(categories);
   } catch (error) {
@@ -16,7 +16,7 @@ export const getCategories = async (req: Request, res: Response) => {
 // Tạo danh mục mới
 export const createCategory = async (req: Request, res: Response) => {
   try {
-    const { name, description } = req.body;
+    const { name, description, parent_id, image } = req.body;
     let slug = slugify(name, { lower: true, strict: true, locale: 'vi' });
 
     const existing = await Category.findOne({ slug });
@@ -24,7 +24,7 @@ export const createCategory = async (req: Request, res: Response) => {
       slug = `${slug}-${Date.now()}`;
     }
 
-    const newCategory = new Category({ name, slug, description });
+    const newCategory = new Category({ name, slug, description, parent_id: parent_id || null, image });
     const saved = await newCategory.save();
     res.status(201).json(saved);
   } catch (error) {
@@ -47,7 +47,7 @@ export const deleteCategory = async (req: Request, res: Response) => {
 export const updateCategory = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-    const { name, description } = req.body;
+    const { name, description, parent_id, image } = req.body;
 
     if (!name) {
       return res.status(400).json({ message: 'Tên danh mục không được bỏ trống' });
@@ -61,7 +61,7 @@ export const updateCategory = async (req: Request, res: Response) => {
 
     const updated = await Category.findByIdAndUpdate(
       id,
-      { name, slug: finalSlug, description },
+      { name, slug: finalSlug, description, parent_id: parent_id || null, image },
       { new: true, runValidators: true }
     );
 

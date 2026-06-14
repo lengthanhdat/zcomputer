@@ -6,6 +6,7 @@ import Footer from "@/components/Footer";
 import FloatingContact from "@/components/FloatingContact";
 import ChatWidget from "@/components/ChatWidget";
 import PublicChrome from "@/components/PublicChrome";
+import PopupAnnouncement from "@/components/PopupAnnouncement";
 import { Toaster } from "react-hot-toast";
 
 const inter = Inter({ subsets: ["latin", "vietnamese"] });
@@ -33,6 +34,7 @@ export default function RootLayout({
           <Footer />
           <FloatingContact />
           <ChatWidget />
+          <PopupAnnouncement />
         </PublicChrome>
         <Toaster position="top-right" />
       </body>

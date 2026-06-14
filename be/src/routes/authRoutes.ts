@@ -1,5 +1,5 @@
 import express from 'express';
-import { login, register, refreshToken, logout, googleLogin } from '../controllers/authController';
+import { login, register, refreshToken, logout, googleLogin, forgotPassword, resetPassword } from '../controllers/authController';
 import rateLimit from 'express-rate-limit';
 
 const router = express.Router();
@@ -25,5 +25,7 @@ router.post('/login', loginLimiter, login);
 router.post('/refresh', refreshToken);
 router.post('/logout', logout);
 router.post('/google', googleLogin);
+router.post('/forgot-password', forgotPassword);
+router.post('/reset-password', resetPassword);
 
 export default router;

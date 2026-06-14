@@ -41,6 +41,7 @@ async function getProducts(categorySlug: string): Promise<Product[]> {
 }
 
 async function getCategoryName(categorySlug: string): Promise<string> {
+  if (categorySlug === 'all') return 'Tất cả sản phẩm';
   try {
     const res = await fetch(`${API_BASE}/api/categories`);
     if (res.ok) {

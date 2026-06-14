@@ -8,28 +8,28 @@ import { fetchApi } from "@/lib/api";
 export default function SettingsPage() {
   const [flashSaleEnd, setFlashSaleEnd] = useState("");
   const [loading, setLoading] = useState(false);
-  const [saving, setSaving] = useState(false);
+  const [savingFlashSale, setSavingFlashSale] = useState(false);
 
   useEffect(() => {
     setLoading(true);
     fetchApi("/settings/flash_sale_end_time", { requireAuth: false })
       .then(res => res.json())
-      .then(data => {
-        if (data && data.value) {
-          const date = new Date(data.value);
+      .then(flashSaleData => {
+        if (flashSaleData && flashSaleData.value) {
+          const date = new Date(flashSaleData.value);
           const tzoffset = date.getTimezoneOffset() * 60000;
           const localISOTime = (new Date(date.getTime() - tzoffset)).toISOString().slice(0, 16);
           setFlashSaleEnd(localISOTime);
         }
       })
-      .catch(console.error)
+      .catch(() => null)
       .finally(() => setLoading(false));
   }, []);
 
   const handleSaveFlashSale = async () => {
     if (!flashSaleEnd) return toast.error("Vui lòng chọn thời gian kết thúc!");
     
-    setSaving(true);
+    setSavingFlashSale(true);
     try {
       const date = new Date(flashSaleEnd);
       const res = await fetchApi("/settings/flash_sale_end_time", {
@@ -46,10 +46,11 @@ export default function SettingsPage() {
     } catch (error) {
       toast.error("Đã xảy ra lỗi kết nối");
     } finally {
-      setSaving(false);
+      setSavingFlashSale(false);
     }
   };
 
+  // End of settings handlers
   return (
     <div className="pb-12">
       <div className="flex items-center gap-3 mb-8">
@@ -89,11 +90,11 @@ export default function SettingsPage() {
                 />
                 <button
                   onClick={handleSaveFlashSale}
-                  disabled={saving}
+                  disabled={savingFlashSale}
                   className="flex items-center justify-center gap-2 bg-orange-500 text-white px-6 py-3 rounded-xl font-bold hover:bg-orange-600 transition-colors disabled:opacity-50 w-full md:w-auto"
                 >
                   <Save size={18} />
-                  {saving ? "Đang lưu..." : "Lưu thời gian"}
+                  {savingFlashSale ? "Đang lưu..." : "Lưu thời gian"}
                 </button>
               </div>
               <div className="mt-3 p-4 bg-blue-50/50 rounded-xl border border-blue-100 text-sm text-blue-700 leading-relaxed">

@@ -18,7 +18,7 @@ export const getProducts = async (req: Request, res: Response) => {
       filter.name = { $regex: searchQuery, $options: 'i' };
     }
     
-    if (categoryQuery) {
+    if (categoryQuery && categoryQuery !== 'all') {
       const category = await Category.findOne({
         $or: [
           { slug: categoryQuery },

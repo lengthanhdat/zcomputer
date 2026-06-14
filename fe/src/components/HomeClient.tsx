@@ -5,6 +5,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, Laptop, ShieldCheck, Truck, Zap, ChevronLeft, ChevronRight, Monitor, Cpu, Server, Mouse, Keyboard, Headphones, HardDrive, Maximize, Heart, Eye, type LucideIcon } from "lucide-react";
 import BannerSlider from "@/components/BannerSlider";
+import CategoryMenu from "@/components/CategoryMenu";
+import VideoReviewSection from "@/components/VideoReviewSection";
+import BrandMarquee from "@/components/BrandMarquee";
 import type { ReactNode } from "react";
 import HotSaleSection from "./HotSaleSection";
 import { fetchApi } from "@/lib/api";
@@ -31,10 +34,12 @@ type Product = {
   views?: number;
 };
 
-type Category = {
+interface Category {
   _id: string;
   name: string;
   slug: string;
+  parent_id?: string;
+  image?: string;
 };
 
 type Banner = {
@@ -50,8 +55,8 @@ const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || "";
 // Skeleton loaders
 function BannerSkeleton() {
   return (
-    <div className="flex flex-col lg:flex-row gap-4">
-      <div className="w-full lg:w-2/3 rounded-2xl bg-gray-200 animate-pulse aspect-[21/9]" />
+    <div className="w-full flex flex-col lg:flex-row gap-4">
+      <div className="w-full lg:w-2/3 rounded-2xl bg-gray-200 animate-pulse h-[400px] lg:h-[450px]" />
       <div className="hidden lg:flex lg:w-1/3 flex-col gap-4">
         <div className="w-full flex-1 rounded-2xl bg-gray-200 animate-pulse" />
         <div className="w-full flex-1 rounded-2xl bg-gray-200 animate-pulse" />
@@ -91,113 +96,37 @@ function ProductSkeleton() {
 export default function HomeClient() {
   const [products, setProducts] = useState<Product[] | null>(null);
   const [categories, setCategories] = useState<Category[] | null>(null);
-  const [banners, setBanners] = useState<Banner[] | null>(null);
+  const [banners, setBanners] = useState<any[] | null>(null);
+  const [videoReviews, setVideoReviews] = useState<any[]>([]);
   const [showAllCategories, setShowAllCategories] = useState(false);
 
   useEffect(() => {
     const controller = new AbortController();
 
-    Promise.all([
-      fetchApi(`/products?limit=100`, { signal: controller.signal, cache: 'no-store', requireAuth: false }).then(r => r.ok ? r.json() : []).catch(() => []),
-      fetchApi(`/categories`, { signal: controller.signal, cache: 'no-store', requireAuth: false }).then(r => r.ok ? r.json() : []).catch(() => []),
-      fetchApi(`/banners/active`, { signal: controller.signal, cache: 'no-store', requireAuth: false }).then(r => r.ok ? r.json() : []).catch(() => []),
-    ]).then(([p, c, b]) => {
-      setProducts(p);
-      setCategories(c);
-      setBanners(b);
-    });
+    async function fetchData() {
+      const [catRes, prodRes, bannerRes, videoRes] = await Promise.all([
+        fetchApi("/categories", { signal: controller.signal }),
+        fetchApi("/products?limit=100", { signal: controller.signal }),
+        fetchApi("/banners", { signal: controller.signal }),
+        fetchApi("/video-reviews", { signal: controller.signal })
+      ]);
+      const [catData, prodData, bannerData, videoData] = await Promise.all([
+        catRes.ok ? catRes.json() : [],
+        prodRes.ok ? prodRes.json() : [],
+        bannerRes.ok ? bannerRes.json() : [],
+        videoRes.ok ? videoRes.json() : []
+      ]);
+      setCategories(catData);
+      setProducts(prodData.products || prodData);
+      setBanners(bannerData.filter((b: any) => b.isActive).sort((a: any, b: any) => a.order - b.order));
+      setVideoReviews(videoData);
+    }
+    fetchData();
 
     return () => controller.abort();
   }, []);
 
-  useEffect(() => {
-    if (!categories || !products) return;
-    
-    const cleanupFns: (() => void)[] = [];
-    categories.forEach((cat) => {
-      const sliderId = `slider-${cat._id}`;
-      const slider = document.getElementById(sliderId);
-      if (slider) {
-        let isHovered = false;
-        let isDown = false;
-        let startX: number;
-        let scrollLeft: number;
-        let dragged = false;
 
-        const setHover = () => { if (!isDown) isHovered = true; };
-        const removeHover = () => { isHovered = false; isDown = false; slider.classList.remove('cursor-grabbing'); };
-        
-        const mouseDown = (e: MouseEvent) => {
-          isDown = true;
-          dragged = false;
-          slider.classList.add('cursor-grabbing');
-          startX = e.pageX - slider.offsetLeft;
-          scrollLeft = slider.scrollLeft;
-        };
-        
-        const mouseUp = () => {
-          isDown = false;
-          slider.classList.remove('cursor-grabbing');
-        };
-        
-        const mouseMove = (e: MouseEvent) => {
-          if (!isDown) return;
-          e.preventDefault();
-          const x = e.pageX - slider.offsetLeft;
-          const walk = (x - startX) * 1.5;
-          if (Math.abs(walk) > 5) dragged = true;
-          slider.scrollLeft = scrollLeft - walk;
-        };
-
-        const preventClick = (e: MouseEvent) => {
-          if (dragged) {
-            e.preventDefault();
-            e.stopPropagation();
-          }
-        };
-        
-        slider.addEventListener('mouseenter', setHover);
-        slider.addEventListener('mouseleave', removeHover);
-        slider.addEventListener('mousedown', mouseDown);
-        slider.addEventListener('mouseup', mouseUp);
-        slider.addEventListener('mousemove', mouseMove);
-        slider.addEventListener('click', preventClick, true);
-
-        let animationId: number;
-        let frameCount = 0;
-        const scroll = () => {
-          const inner = document.getElementById(`slider-inner-${cat._id}`);
-          if (!isHovered && !isDown && inner && inner.offsetWidth > slider.clientWidth / 2) {
-            frameCount++;
-            if (frameCount >= 2) {
-              slider.scrollLeft += 1;
-              frameCount = 0;
-            }
-            
-            const limit = inner.offsetWidth;
-            if (slider.scrollLeft >= limit) {
-              slider.scrollLeft -= limit;
-            }
-          }
-          animationId = requestAnimationFrame(scroll);
-        };
-        
-        animationId = requestAnimationFrame(scroll);
-        
-        cleanupFns.push(() => {
-          cancelAnimationFrame(animationId);
-          slider.removeEventListener('mouseenter', setHover);
-          slider.removeEventListener('mouseleave', removeHover);
-          slider.removeEventListener('mousedown', mouseDown);
-          slider.removeEventListener('mouseup', mouseUp);
-          slider.removeEventListener('mousemove', mouseMove);
-          slider.removeEventListener('click', preventClick, true);
-        });
-      }
-    });
-
-    return () => cleanupFns.forEach(fn => fn());
-  }, [categories, products]);
 
   return (
     <div className="bg-[#f8f9fa] min-h-screen text-gray-900 selection:bg-primary selection:text-white pb-20">
@@ -223,6 +152,9 @@ export default function HomeClient() {
         )}
       </section>
 
+      {/* Brand Marquee */}
+      <BrandMarquee />
+
       {/* Categories */}
       <section className="container mx-auto px-4 mb-16">
         <div className="text-center mb-8">
@@ -234,12 +166,12 @@ export default function HomeClient() {
         {categories === null ? (
           <CategorySkeleton />
         ) : categories.length > 0 ? (
-          <div className="flex flex-wrap justify-center gap-4">
-            {(showAllCategories ? categories : categories.slice(0, 6)).map((cat) => {
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4 lg:gap-6">
+            {(showAllCategories ? categories.filter(c => !c.parent_id) : categories.filter(c => !c.parent_id).slice(0, 6)).map((cat) => {
               const getIcon = (name: string) => {
                 const lower = name.toLowerCase();
                 if (lower.includes('màn hình')) return Monitor;
-                if (lower.includes('pc')) return Server;
+                if (lower.includes('pc') || lower.includes('máy tính')) return Server;
                 if (lower.includes('linh kiện') || lower.includes('cpu') || lower.includes('vga')) return Cpu;
                 if (lower.includes('chuột')) return Mouse;
                 if (lower.includes('phím')) return Keyboard;
@@ -252,28 +184,36 @@ export default function HomeClient() {
               <Link
                 key={cat._id}
                 href={`/category/${cat.slug}`}
-                className="flex items-center gap-3 px-6 py-3 rounded-full bg-white border border-gray-200 shadow-sm hover:shadow-md hover:border-primary hover:text-primary transition-all cursor-pointer group text-gray-700 font-bold"
+                className="flex flex-col items-center justify-center gap-4 p-6 rounded-[2rem] bg-white border-2 border-transparent hover:border-primary/10 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(220,38,38,0.1)] hover:-translate-y-2 transition-all duration-300 cursor-pointer group text-gray-700 font-bold relative overflow-hidden"
               >
-                <Icon size={20} className="text-gray-400 group-hover:text-primary transition-colors" />
-                <span className="uppercase tracking-wide text-sm">{cat.name}</span>
+                <div className="absolute inset-0 bg-gradient-to-br from-red-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                <div className="w-20 h-20 rounded-full bg-gray-50 group-hover:bg-white flex items-center justify-center relative z-10 transition-colors duration-500 shadow-inner group-hover:shadow-[0_0_20px_rgb(220,38,38,0.15)]">
+                  <Icon size={32} strokeWidth={1.5} className="text-gray-400 group-hover:text-primary transition-colors duration-500 group-hover:scale-110" />
+                </div>
+                <span className="uppercase tracking-widest text-[12px] relative z-10 text-center leading-relaxed">{cat.name}</span>
               </Link>
             )})}
             
-            {!showAllCategories && categories.length > 6 && (
+            {!showAllCategories && categories.filter(c => !c.parent_id).length > 6 && (
               <button
                 onClick={() => setShowAllCategories(true)}
-                className="flex items-center gap-2 px-6 py-3 rounded-full bg-red-50 border border-red-100 shadow-sm hover:shadow-md hover:border-primary text-primary transition-all cursor-pointer font-bold"
+                className="flex flex-col items-center justify-center gap-4 p-6 rounded-[2rem] bg-red-50 border-2 border-red-100 shadow-sm hover:shadow-md hover:border-primary/30 text-primary transition-all duration-300 cursor-pointer font-bold group relative overflow-hidden hover:-translate-y-2"
               >
-                <span className="uppercase tracking-wide text-sm">Xem tất cả ({categories.length - 6})</span>
-                <ArrowRight size={18} />
+                <div className="w-20 h-20 rounded-full bg-white flex items-center justify-center relative z-10 shadow-sm group-hover:shadow-[0_0_20px_rgb(220,38,38,0.2)] transition-shadow duration-500">
+                  <ArrowRight size={32} strokeWidth={1.5} className="text-primary group-hover:translate-x-2 transition-transform duration-300" />
+                </div>
+                <span className="uppercase tracking-widest text-[12px] relative z-10 text-center leading-relaxed">Xem tất cả ({categories.filter(c => !c.parent_id).length - 6})</span>
               </button>
             )}
-            {showAllCategories && categories.length > 6 && (
+            {showAllCategories && categories.filter(c => !c.parent_id).length > 6 && (
               <button
                 onClick={() => setShowAllCategories(false)}
-                className="flex items-center gap-2 px-6 py-3 rounded-full bg-gray-50 border border-gray-200 shadow-sm hover:shadow-md hover:border-gray-400 text-gray-600 transition-all cursor-pointer font-bold"
+                className="flex flex-col items-center justify-center gap-4 p-6 rounded-[2rem] bg-gray-50 border-2 border-gray-200 shadow-sm hover:shadow-md hover:border-gray-300 text-gray-600 transition-all duration-300 cursor-pointer font-bold group relative overflow-hidden hover:-translate-y-2"
               >
-                <span className="uppercase tracking-wide text-sm">Thu gọn</span>
+                <div className="w-20 h-20 rounded-full bg-white flex items-center justify-center relative z-10 shadow-sm transition-shadow duration-500">
+                  <ArrowRight size={32} strokeWidth={1.5} className="text-gray-400 group-hover:-translate-x-2 transition-transform duration-300 rotate-180" />
+                </div>
+                <span className="uppercase tracking-widest text-[12px] relative z-10 text-center leading-relaxed">Thu gọn</span>
               </button>
             )}
           </div>
@@ -283,98 +223,86 @@ export default function HomeClient() {
       </section>
 
       {/* Flash Sale Sections */}
-      {products && (
-        <HotSaleSection products={products} />
-      )}
+      {/* Hot Sale Section */}
+      <HotSaleSection products={products || []} />
+
+      {/* Video Review Section */}
+      <VideoReviewSection videos={videoReviews} />
 
       {/* Products by Categories */}
       {categories === null || products === null ? (
         <section className="container mx-auto px-4 mb-20"><ProductSkeleton /></section>
       ) : categories.length > 0 ? (
-        categories.map((cat) => {
-          const catProducts = products.filter((p: any) => p.category_id?._id === cat._id || p.category_id === cat._id).slice(0, 8);
+        categories.filter(c => !c.parent_id).map((cat) => {
+          // get IDs of the main category and all its subcategories
+          const subCategoryIds = categories.filter(c => c.parent_id === cat._id).map(c => c._id);
+          const relevantIds = [cat._id, ...subCategoryIds];
+          
+          let catProducts = products.filter((p: any) => 
+            relevantIds.includes(p.category_id?._id) || relevantIds.includes(p.category_id)
+          ).slice(0, 8);
           
           if (catProducts.length === 0) return null; // Ẩn danh mục nếu không có sản phẩm nào
 
           return (
-            <section key={cat._id} className="container mx-auto px-4 mb-20">
-              <div className="flex flex-col md:flex-row md:items-center bg-gray-900 rounded-3xl md:rounded-full mb-3 shadow-md">
-                <Link href={`/category/${cat.slug}`} className="bg-primary text-white font-black uppercase px-8 py-3.5 rounded-full shrink-0 text-center hover:bg-red-700 transition-colors text-lg tracking-wide z-10 -ml-[1px] shadow-[4px_0_15px_rgba(227,0,25,0.4)] relative">
+            <section key={cat._id} className="container mx-auto px-4 mb-16">
+              {/* Mobile Category Header */}
+              <div className="flex lg:hidden items-center justify-between mb-6 px-2">
+                <h3 className="text-2xl font-black text-gray-900 uppercase tracking-tight relative inline-block">
                   {cat.name}
+                  <div className="absolute -bottom-2 left-0 w-1/2 h-1 bg-primary rounded-full"></div>
+                </h3>
+                <Link href={`/category/${cat.slug}`} className="text-primary text-sm font-bold flex items-center hover:underline">
+                  Xem tất cả <ChevronRight size={16} />
                 </Link>
-                
-                <div className="flex-1 flex items-center justify-center md:justify-start gap-6 px-6 py-3 md:py-0 overflow-x-auto [&::-webkit-scrollbar]:hidden whitespace-nowrap">
-                  <span className="text-gray-400 font-medium text-sm">Mức giá</span>
-                  <Link href={`/category/${cat.slug}?price=under-10`} className="text-gray-200 font-bold uppercase text-sm hover:text-primary transition-colors">
-                    DƯỚI 10 TRIỆU
-                  </Link>
-                  <Link href={`/category/${cat.slug}?price=10-20`} className="text-gray-200 font-bold uppercase text-sm hover:text-primary transition-colors">
-                    TỪ 10 TRIỆU - 20 TRIỆU
-                  </Link>
-                  <Link href={`/category/${cat.slug}?price=over-20`} className="text-gray-200 font-bold uppercase text-sm hover:text-primary transition-colors">
-                    TRÊN 20 TRIỆU
-                  </Link>
-                </div>
               </div>
 
-              <div className="flex flex-col md:flex-row items-center justify-between bg-white rounded-2xl md:rounded-full px-6 py-3 shadow-sm border border-gray-100 mb-8">
-                <div className="flex items-center gap-2 text-gray-800 font-bold text-[15px] mb-3 md:mb-0 shrink-0">
-                  <Truck size={20} className="text-red-500 fill-red-500" />
-                  <span>Miễn phí giao hàng</span>
-                </div>
-                <div className="flex items-center md:justify-end gap-6 text-[13px] font-bold overflow-x-auto [&::-webkit-scrollbar]:hidden whitespace-nowrap w-full">
-                  {['ASUS', 'ACER', 'MSI', 'LENOVO', 'GIGABYTE', 'DELL'].map(brand => (
-                     <Link key={brand} href={`/category/${cat.slug}?brand=${brand.toLowerCase()}`} className="text-gray-600 hover:text-red-600 transition-colors uppercase tracking-wide">
-                       {brand}
-                     </Link>
-                  ))}
-                  <Link href={`/category/${cat.slug}`} className="text-blue-500 hover:text-blue-600 transition-colors tracking-wide ml-2 shrink-0">
-                    Xem tất cả
-                  </Link>
-                </div>
-              </div>
-
-              <div className="bg-gradient-to-br from-[#ffffff] to-[#f0f3f5] rounded-[2rem] shadow-sm border border-gray-200/80 p-6 md:p-8 relative overflow-hidden">
-                <div className="absolute -top-32 -right-32 w-64 h-64 bg-red-600/10 rounded-full blur-3xl pointer-events-none"></div>
-                <div className="absolute -bottom-32 -left-32 w-64 h-64 bg-blue-600/10 rounded-full blur-3xl pointer-events-none"></div>
-                <div className="relative group/slider">
-                <button 
-                  onClick={(e) => {
-                    const slider = document.getElementById(`slider-${cat._id}`);
-                    if (slider) slider.scrollBy({ left: -340, behavior: 'smooth' });
-                  }}
-                  className="absolute -left-5 top-1/2 -translate-y-1/2 w-12 h-12 bg-white border border-gray-100 rounded-full shadow-lg flex items-center justify-center text-gray-600 hover:text-primary hover:scale-110 z-10 opacity-0 group-hover/slider:opacity-100 transition-all focus:outline-none"
-                >
-                  <ChevronLeft size={24} />
-                </button>
-                
-                <div id={`slider-${cat._id}`} className="flex overflow-x-hidden gap-3 pb-6 scroll-smooth [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-                  <div id={`slider-inner-${cat._id}`} className="flex gap-3 pr-3 flex-shrink-0">
-                    {catProducts.map((product) => (
-                      <ProductCard key={product._id} product={product} />
-                    ))}
+              <div className="flex flex-col lg:flex-row bg-white rounded-[2rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100/80 overflow-hidden">
+                {/* Vertical Category Banner */}
+                <div className="hidden lg:block w-1/4 xl:w-[280px] flex-shrink-0 relative group rounded-l-[2rem] overflow-hidden">
+                  <Image src={cat.image ? (cat.image.startsWith('http') || cat.image.startsWith('data:') ? cat.image : `http://localhost:5000${cat.image}`) : "https://images.unsplash.com/photo-1542393545-10f5cde2c810?w=400&q=80"} alt={cat.name} fill className="object-cover opacity-80 group-hover:scale-105 transition-transform duration-500" unoptimized />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent flex flex-col justify-end p-8">
+                    <h3 className="text-white font-black text-2xl uppercase leading-tight drop-shadow-lg">{cat.name}</h3>
+                    <Link href={`/category/${cat.slug}`} className="text-white/80 font-medium text-sm mt-3 flex items-center gap-1 hover:text-white transition-colors">
+                      XEM TẤT CẢ <ChevronRight size={16} />
+                    </Link>
                   </div>
-
-                  {catProducts.length >= 5 && (
-                    <div className="flex gap-3 pr-3 flex-shrink-0" aria-hidden="true">
-                      {catProducts.map((product) => (
-                        <ProductCard key={`${product._id}-dup`} product={product} />
-                      ))}
-                    </div>
-                  )}
                 </div>
 
-                <button 
-                  onClick={(e) => {
-                    const slider = document.getElementById(`slider-${cat._id}`);
-                    if (slider) slider.scrollBy({ left: 340, behavior: 'smooth' });
-                  }}
-                  className="absolute -right-5 top-1/2 -translate-y-1/2 w-12 h-12 bg-white border border-gray-100 rounded-full shadow-lg flex items-center justify-center text-gray-600 hover:text-primary hover:scale-110 z-10 opacity-0 group-hover/slider:opacity-100 transition-all focus:outline-none"
-                >
-                  <ChevronRight size={24} />
-                </button>
+                {/* Slider Container */}
+                <div className="w-full lg:w-3/4 xl:w-[calc(100%-280px)] bg-transparent p-6 md:p-8 relative flex-1">
+                  <div className="absolute -top-32 -right-32 w-64 h-64 bg-red-600/10 rounded-full blur-3xl pointer-events-none"></div>
+                  <div className="absolute -bottom-32 -left-32 w-64 h-64 bg-blue-600/10 rounded-full blur-3xl pointer-events-none"></div>
+                  <div className="relative group/slider">
+                    <button 
+                      onClick={(e) => {
+                        const slider = document.getElementById(`slider-${cat._id}`);
+                        if (slider) slider.scrollBy({ left: -340, behavior: 'smooth' });
+                      }}
+                      className="absolute -left-5 top-1/2 -translate-y-1/2 w-12 h-12 bg-white border border-gray-100 rounded-full shadow-lg flex items-center justify-center text-gray-600 hover:text-primary hover:scale-110 z-50 opacity-0 group-hover/slider:opacity-100 transition-all focus:outline-none"
+                    >
+                      <ChevronLeft size={24} />
+                    </button>
+                    <div id={`slider-${cat._id}`} className="flex overflow-x-auto gap-3 pb-6 scroll-smooth snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+                      <div id={`slider-inner-${cat._id}`} className="flex gap-3 pr-3 flex-shrink-0 snap-start">
+                        {catProducts.map((product) => (
+                          <ProductCard key={product._id} product={product} />
+                        ))}
+                      </div>
+                    </div>
+
+                    <button 
+                      onClick={(e) => {
+                        const slider = document.getElementById(`slider-${cat._id}`);
+                        if (slider) slider.scrollBy({ left: 340, behavior: 'smooth' });
+                      }}
+                      className="absolute -right-5 top-1/2 -translate-y-1/2 w-12 h-12 bg-white border border-gray-100 rounded-full shadow-lg flex items-center justify-center text-gray-600 hover:text-primary hover:scale-110 z-50 opacity-0 group-hover/slider:opacity-100 transition-all focus:outline-none"
+                    >
+                      <ChevronRight size={24} />
+                    </button>
+                  </div>
+                </div>
               </div>
-            </div>
             </section>
           );
         })
@@ -386,13 +314,17 @@ export default function HomeClient() {
         </section>
       )}
 
-      {/* Features */}
-      <section className="bg-white py-16 border-y border-gray-200">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <Feature icon={<ShieldCheck size={32} />} title="Bảo Hành Tận Nơi" body="Cam kết bảo hành chính hãng. Hỗ trợ kỹ thuật tại nhà nhanh chóng trong 2h." />
-            <Feature icon={<Zap size={32} />} title="Cấu Hình Cực Đỉnh" body="Chỉ cung cấp những linh kiện hiệu năng cao nhất, đã qua kiểm tra nghiêm ngặt." bordered />
-            <Feature icon={<Truck size={32} />} title="Giao Hàng Hỏa Tốc" body="Miễn phí giao hàng toàn quốc. Đóng gói an toàn tuyệt đối chống sốc." />
+      {/* Features - Promax Design */}
+      <section className="bg-[#0a0a0a] text-white py-24 relative overflow-hidden mt-12 border-t border-gray-800">
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-red-600/10 rounded-full blur-[100px] pointer-events-none"></div>
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-blue-600/10 rounded-full blur-[100px] pointer-events-none"></div>
+        <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-5 mix-blend-overlay"></div>
+        
+        <div className="container mx-auto px-4 relative z-10">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8">
+            <Feature icon={<ShieldCheck size={36} />} title="Bảo Hành Tận Nơi" body="Cam kết bảo hành chính hãng. Hỗ trợ kỹ thuật tại nhà nhanh chóng trong 2h." />
+            <Feature icon={<Zap size={36} />} title="Cấu Hình Cực Đỉnh" body="Chỉ cung cấp những linh kiện hiệu năng cao nhất, đã qua kiểm tra nghiêm ngặt." bordered />
+            <Feature icon={<Truck size={36} />} title="Giao Hàng Hỏa Tốc" body="Miễn phí giao hàng toàn quốc. Đóng gói an toàn tuyệt đối chống sốc." />
           </div>
         </div>
       </section>
@@ -402,12 +334,14 @@ export default function HomeClient() {
 
 function Feature({ icon, title, body, bordered = false }: { icon: ReactNode; title: string; body: string; bordered?: boolean }) {
   return (
-    <div className={`flex flex-col items-center text-center px-4 ${bordered ? "border-y md:border-y-0 md:border-x border-gray-100" : ""}`}>
-      <div className="w-16 h-16 rounded-full bg-red-50 text-primary flex items-center justify-center mb-5">
-        {icon}
+    <div className={`flex flex-col items-center text-center px-4 group ${bordered ? "md:border-x border-gray-800" : ""}`}>
+      <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-gray-800 to-gray-900 border border-gray-700/50 text-white flex items-center justify-center mb-6 group-hover:scale-110 group-hover:border-red-500/50 group-hover:shadow-[0_0_30px_rgb(220,38,38,0.2)] transition-all duration-500">
+        <div className="group-hover:text-red-500 transition-colors duration-500">
+          {icon}
+        </div>
       </div>
-      <h4 className="text-lg font-bold text-gray-900 mb-2 uppercase">{title}</h4>
-      <p className="text-gray-500 text-sm leading-relaxed">{body}</p>
+      <h4 className="text-xl font-black text-white mb-3 uppercase tracking-widest">{title}</h4>
+      <p className="text-gray-400 text-sm leading-relaxed max-w-sm">{body}</p>
     </div>
   );
 }
