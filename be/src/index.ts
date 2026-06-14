@@ -7,12 +7,20 @@ import path from 'path';
 import helmet from 'helmet';
 import mongoSanitize from 'express-mongo-sanitize';
 import cookieParser from 'cookie-parser';
+import http from 'http';
+import { Server } from 'socket.io';
 import rateLimit from 'express-rate-limit';
 
 dotenv.config();
 
 const app = express();
-
+const server = http.createServer(app);
+const io = new Server(server, {
+  cors: {
+    origin: true,
+    credentials: true
+  }
+});
 const PORT = process.env.PORT || 5000;
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/zcomputer';
 
@@ -37,7 +45,7 @@ const globalLimiter = rateLimit({
   message: { message: 'Quá nhiều yêu cầu, vui lòng thử lại sau.' },
   standardHeaders: true,
   legacyHeaders: false,
-  skip: (req: any) => req.path.startsWith('/uploads'), // Don't limit static files
+  skip: (req) => req.path.startsWith('/uploads'), // Don't limit static files
 });
 app.use('/api', globalLimiter);
 
@@ -97,34 +105,92 @@ import orderRoutes from './routes/orderRoutes';
 import bannerRoutes from './routes/bannerRoutes';
 import uploadRoutes from './routes/uploadRoutes';
 import settingRoutes from './routes/settingRoutes';
+import chatRoutes from './routes/chatRoutes';
 import videoReviewRoutes from './routes/videoReviewRoutes';
-import jobRoutes from './routes/jobRoutes';
 
 app.use('/api/users', userRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/banners', bannerRoutes);
 app.use('/api/upload', uploadRoutes);
 app.use('/api/settings', settingRoutes);
+app.use('/api/chat', chatRoutes);
 app.use('/api/video-reviews', videoReviewRoutes);
 
 app.use('/api/products', productRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/auth', authRoutes);
-app.use('/api/jobs', jobRoutes);
 
+import { Message } from './models/Message';
 
+// --- Socket.IO Setup ---
+io.on('connection', (socket) => {
+  console.log('User connected:', socket.id);
+
+  // User joins a session room
+  socket.on('join', (sessionId: string) => {
+    if (sessionId) {
+      socket.join(sessionId);
+      console.log(`Socket ${socket.id} joined session ${sessionId}`);
+    }
+  });
+
+  // Admin joins the admin room
+  socket.on('joinAdmin', () => {
+    socket.join('admin-room');
+    console.log(`Admin ${socket.id} joined admin-room`);
+  });
+
+  // Handle incoming messages
+  socket.on('sendMessage', async (data: { sessionId: string; content: string; isAdmin: boolean; senderId?: string }) => {
+    try {
+      // Save message to database
+      const newMessage = new Message({
+        sessionId: data.sessionId,
+        content: data.content,
+        isAdmin: data.isAdmin,
+        senderId: data.senderId || null,
+        isRead: false
+      });
+      await newMessage.save();
+
+      // Broadcast to the user's specific room
+      io.to(data.sessionId).emit('newMessage', newMessage);
+
+      // Also broadcast to admin room so admins see it immediately
+      io.to('admin-room').emit('adminMessage', newMessage);
+      
+    } catch (error) {
+      console.error('Error saving message:', error);
+    }
+  });
+
+  socket.on('markAsRead', async (data: { sessionId: string; isAdmin: boolean }) => {
+    try {
+      // If admin marks as read, update all user messages to isRead = true
+      // If user marks as read, update all admin messages to isRead = true
+      await Message.updateMany(
+        { sessionId: data.sessionId, isAdmin: !data.isAdmin, isRead: false },
+        { $set: { isRead: true } }
+      );
+      io.to(data.sessionId).emit('messagesRead', { sessionId: data.sessionId, isAdmin: data.isAdmin });
+      io.to('admin-room').emit('messagesRead', { sessionId: data.sessionId, isAdmin: data.isAdmin });
+    } catch (error) {
+      console.error('Error marking as read:', error);
+    }
+  });
+
+  socket.on('disconnect', () => {
+    console.log('User disconnected:', socket.id);
+  });
+});
 
 // Connect to MongoDB
 mongoose.connect(MONGODB_URI)
   .then(() => {
     console.log('Connected to MongoDB');
-    const server = app.listen(PORT, () => {
+    server.listen(PORT, () => {
       console.log(`Server is running on port ${PORT}`);
     });
-    // Tăng timeout cho Express server lên 5 phút để tránh lỗi socket hang up khi chờ AI xử lý lâu
-    server.keepAliveTimeout = 300000;
-    server.headersTimeout = 300000;
-    server.setTimeout(300000);
   })
   .catch((err) => {
     console.error('Failed to connect to MongoDB', err);
