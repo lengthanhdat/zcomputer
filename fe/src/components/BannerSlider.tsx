@@ -78,25 +78,7 @@ export default function BannerSlider({ banners, apiBase }: BannerSliderProps) {
                   <div className="w-full aspect-[21/9] bg-gradient-to-br from-[#1a1a1a] via-[#3a0d0d] to-[#111111]" />
                 )}
 
-                {/* Chỉ hiển thị chữ đè lên nếu Banner được nhập tiêu đề */}
-                {banner.title && (
-                  <>
-                    <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent pointer-events-none" />
-                    <div className="absolute inset-y-0 left-0 p-8 md:p-12 z-10 flex flex-col justify-center">
-                      <div className="max-w-xl">
-                        <div className="inline-block px-3 py-1 mb-4 rounded-full bg-primary text-white text-xs font-bold uppercase tracking-wider translate-y-4 opacity-0 group-[.swiper-slide-active]:translate-y-0 group-[.swiper-slide-active]:opacity-100 transition-all duration-700 delay-300">
-                          ZCOMPUTER
-                        </div>
-                        <h1 className="text-4xl md:text-5xl font-black mb-4 uppercase leading-tight text-white drop-shadow-md translate-y-4 opacity-0 group-[.swiper-slide-active]:translate-y-0 group-[.swiper-slide-active]:opacity-100 transition-all duration-700 delay-500">
-                          {banner.title}
-                        </h1>
-                        <div className="inline-flex items-center gap-2 bg-white text-primary px-8 py-3.5 rounded-full font-bold hover:bg-gray-100 transition-colors shadow-lg translate-y-4 opacity-0 group-[.swiper-slide-active]:translate-y-0 group-[.swiper-slide-active]:opacity-100 transition-all duration-700 delay-700">
-                          Khám phá ngay <ArrowRight size={18} />
-                        </div>
-                      </div>
-                    </div>
-                  </>
-                )}
+
               </Link>
             </SwiperSlide>
           );
