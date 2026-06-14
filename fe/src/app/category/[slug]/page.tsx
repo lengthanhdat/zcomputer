@@ -1,3 +1,4 @@
+import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { Filter } from "lucide-react";
@@ -40,6 +41,7 @@ async function getProducts(categorySlug: string): Promise<Product[]> {
 }
 
 async function getCategoryName(categorySlug: string): Promise<string> {
+  if (categorySlug === 'all') return 'Tất cả sản phẩm';
   try {
     const res = await fetch(`${API_BASE}/api/categories`);
     if (res.ok) {
@@ -51,6 +53,20 @@ async function getCategoryName(categorySlug: string): Promise<string> {
     console.error("Failed to fetch category name:", error);
   }
   return "Sản phẩm";
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const resolvedParams = await params;
+  const categoryName = await getCategoryName(resolvedParams.slug);
+
+  return {
+    title: `${categoryName} chính hãng, giá tốt | ZCOMPUTER`,
+    description: `Mua ${categoryName} tại ZCOMPUTER với giá tốt nhất thị trường, cam kết chính hãng 100%, bảo hành uy tín, giao hàng toàn quốc.`,
+    openGraph: {
+      title: `${categoryName} | ZCOMPUTER`,
+      description: `Khám phá các sản phẩm ${categoryName} chất lượng cao tại ZCOMPUTER.`,
+    },
+  };
 }
 
 export default async function CategoryPage({ params }: { params: Promise<{ slug: string }> }) {

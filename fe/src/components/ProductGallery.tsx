@@ -60,7 +60,7 @@ export default function ProductGallery({ images, altText }: { images: string[], 
             
             {/* Logo Thương hiệu Watermark */}
             <div className="absolute top-4 left-4 flex items-center gap-2 opacity-80 mix-blend-multiply">
-              <Image src="/logo.webp" alt="ZCOMPUTER" width={32} height={32} className="w-8 h-8 object-contain" unoptimized />
+              <Image src="/logo.png" alt="ZCOMPUTER" width={32} height={32} className="w-8 h-8 object-contain" unoptimized />
               <div className="flex items-baseline select-none tracking-tighter">
                 <span className="text-red-600 font-black text-xl sm:text-2xl drop-shadow-sm">Z</span>
                 <span className="text-slate-800 font-black text-lg sm:text-xl uppercase drop-shadow-sm">COMPUTER</span>

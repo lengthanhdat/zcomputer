@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { Zap, Timer, ShoppingCart } from "lucide-react";
+import { Zap, Timer, ShoppingCart, ArrowRight, Eye } from "lucide-react";
 import { useState, useEffect } from "react";
 
 export default function HotSaleSection({ 
@@ -35,13 +35,7 @@ export default function HotSaleSection({
 
   const activeProducts = grouped[activeTab] || [];
 
-  let displayProducts = [...activeProducts];
-  if (displayProducts.length > 0) {
-    while (displayProducts.length < 8) {
-      displayProducts = [...displayProducts, ...activeProducts];
-    }
-  }
-  const marqueeProducts = [...displayProducts, ...displayProducts];
+  const displayProducts = activeProducts;
 
   // Countdown timer logic from Backend Setting
   const [endTime, setEndTime] = useState<Date | null>(null);
@@ -66,6 +60,66 @@ export default function HotSaleSection({
         setEndTime(dt);
       });
   }, []);
+
+  useEffect(() => {
+    const slider = document.getElementById('hotsale-slider');
+    if (!slider) return;
+
+    let isHovered = false;
+    let isDown = false;
+    let startX: number;
+    let scrollLeft: number;
+    let dragged = false;
+
+    const setHover = () => { if (!isDown) isHovered = true; };
+    const removeHover = () => { isHovered = false; isDown = false; slider.classList.remove('cursor-grabbing'); };
+    
+    const mouseDown = (e: MouseEvent) => {
+      isDown = true;
+      dragged = false;
+      slider.classList.add('cursor-grabbing');
+      startX = e.pageX - slider.offsetLeft;
+      scrollLeft = slider.scrollLeft;
+    };
+    
+    const mouseUp = () => {
+      isDown = false;
+      slider.classList.remove('cursor-grabbing');
+    };
+    
+    const mouseMove = (e: MouseEvent) => {
+      if (!isDown) return;
+      e.preventDefault();
+      const x = e.pageX - slider.offsetLeft;
+      const walk = (x - startX) * 1.5;
+      if (Math.abs(walk) > 5) dragged = true;
+      slider.scrollLeft = scrollLeft - walk;
+    };
+
+    // Ngăn chặn click nếu đang kéo (drag)
+    const preventClick = (e: MouseEvent) => {
+      if (dragged) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+    };
+    
+    slider.addEventListener('mouseenter', setHover);
+    slider.addEventListener('mouseleave', removeHover);
+    slider.addEventListener('mousedown', mouseDown);
+    slider.addEventListener('mouseup', mouseUp);
+    slider.addEventListener('mousemove', mouseMove);
+    slider.addEventListener('click', preventClick, true);
+
+    return () => {
+      slider.removeEventListener('mouseenter', setHover);
+      slider.removeEventListener('mouseleave', removeHover);
+      slider.removeEventListener('mousedown', mouseDown);
+      slider.removeEventListener('mouseup', mouseUp);
+      slider.removeEventListener('mousemove', mouseMove);
+      slider.removeEventListener('click', preventClick, true);
+    };
+  }, [displayProducts]);
 
   useEffect(() => {
     if (!endTime) return;
@@ -100,15 +154,12 @@ export default function HotSaleSection({
   return (
     <section className="container mx-auto px-4 mb-16">
       <style>{`
-        @keyframes marquee {
-          0% { transform: translateX(0); }
-          100% { transform: translateX(calc(-50% - 8px)); }
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
         }
-        .animate-marquee {
-          animation: marquee 60s linear infinite;
-        }
-        .animate-marquee:hover {
-          animation-play-state: paused;
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
         }
         .neon-glow {
           box-shadow: 0 0 15px rgba(239, 68, 68, 0.6), 0 0 30px rgba(239, 68, 68, 0.4);
@@ -207,15 +258,31 @@ export default function HotSaleSection({
           {/* Right Slider - Dark Cards */}
           <div className="relative z-10 overflow-hidden w-full flex-1 py-6 xl:py-10 flex items-center bg-[#0b0f19]">
             {activeProducts.length > 0 ? (
-              <div className="flex gap-5 w-max animate-marquee px-6 hover:[animation-play-state:paused]">
-                {marqueeProducts.map((product, idx) => {
-                  return (
+              <div id="hotsale-slider" className="flex w-full overflow-x-auto px-6 pb-4 scrollbar-hide relative z-10">
+                <div id="hotsale-slider-inner" className="flex gap-5 shrink-0">
+                  {displayProducts.map((product, idx) => {
+                    const isHotSaleActive = !!(product.isHotSale && product.flashSalePrice && product.flashSalePrice < product.price);
+                    const originalPrice = (product.discountPrice && product.discountPrice > product.price) ? product.discountPrice : product.price;
+                    const currentPrice = isHotSaleActive ? product.flashSalePrice! : product.price;
+                    const saveAmount = originalPrice - currentPrice;
+                    const discountPercent = originalPrice > currentPrice ? Math.round((saveAmount / originalPrice) * 100) : 0;
+                    const isOutOfStock = product.status === 'out_of_stock' || product.stock === 0;
+
+                    return (
                     <div
                       key={`${product._id}-${idx}`}
-                      className="flex-none w-[260px] bg-[#131b2c] rounded-xl border border-gray-800 overflow-hidden group hover:border-red-500/50 hover:shadow-[0_0_20px_rgba(239,68,68,0.15)] hover:-translate-y-2 transition-all duration-500 flex flex-col relative cursor-pointer"
+                      className={`flex-none w-[280px] bg-white rounded-2xl border border-red-100 overflow-hidden group shadow-[0_4px_15px_rgba(220,38,38,0.1)] flex flex-col relative transition-all duration-500 ${isOutOfStock ? 'opacity-80' : 'hover:shadow-[0_8px_30px_rgba(220,38,38,0.25)] hover:border-red-300 hover:-translate-y-2'}`}
                     >
-                      <div className="relative aspect-[4/3] p-6 flex items-center justify-center bg-white/5 overflow-hidden">
-                        <Link href={`/product/${product.slug}`} className="absolute inset-0 z-20"></Link>
+                      <Link href={`/product/${product.slug}`} className="absolute inset-0 z-10"></Link>
+                      <div className="relative aspect-[4/3] p-4 flex items-center justify-center bg-white overflow-hidden">
+
+                        {isOutOfStock && (
+                          <div className="absolute inset-0 bg-white/60 z-30 flex items-center justify-center backdrop-blur-[1px]">
+                            <div className="bg-gray-800/90 backdrop-blur-sm text-white font-black px-6 py-2 rounded-lg -rotate-12 shadow-2xl border border-gray-600/50 tracking-widest text-lg">
+                              HẾT HÀNG
+                            </div>
+                          </div>
+                        )}
 
                         {product.images?.[0] && (
                           <Image
@@ -233,17 +300,26 @@ export default function HotSaleSection({
                         
                         {/* Badges */}
                         <div className="absolute top-3 left-3 z-20 flex flex-col shadow-lg rounded overflow-hidden transform group-hover:scale-110 origin-top-left transition-transform duration-300">
-                          {product.discountPrice > product.price && (
+                          {saveAmount > 0 && (
                             <>
                               <div className="bg-gradient-to-r from-red-600 to-orange-500 text-white text-[10px] font-black px-2 py-1 text-center uppercase tracking-widest">
                                 GIẢM SỐC
                               </div>
                               <div className="bg-[#0b0f19] text-red-400 text-[12px] font-black px-2 py-1 text-center border-t border-red-500/30">
-                                -{Math.round(((product.discountPrice - product.price) / product.discountPrice) * 100)}%
+                                -{discountPercent}%
                               </div>
                             </>
                           )}
                         </div>
+
+                        {/* Hover Action */}
+                        {!isOutOfStock && (
+                          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 translate-y-8 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-300 z-30">
+                            <div className="bg-white/95 backdrop-blur-sm text-red-600 text-sm font-bold px-6 py-2 rounded-full shadow-lg border border-red-200 flex items-center gap-2 whitespace-nowrap">
+                              Mua ngay <ArrowRight size={16} />
+                            </div>
+                          </div>
+                        )}
                       </div>
                       
                       <div className="p-5 flex flex-col flex-1 relative z-10 border-t border-gray-800/50 bg-[#151e32]">
@@ -254,20 +330,23 @@ export default function HotSaleSection({
                           <h3 className="text-gray-200 text-[14px] font-medium leading-relaxed line-clamp-2">{product.name}</h3>
                         </Link>
                         
-                        <div className="flex flex-col mb-5 mt-auto">
-                          {product.discountPrice > product.price ? (
+                        <div className="flex flex-col mb-4">
+                          {isOutOfStock ? (
+                             <div className="h-full flex items-end">
+                               <span className="text-[15px] font-bold text-gray-500">Liên hệ</span>
+                             </div>
+                          ) : saveAmount > 0 ? (
                             <>
-                              <div className="flex items-center gap-2 mt-0.5 mb-1">
-                                <span className="text-gray-500 text-[13px] line-through decoration-gray-600">{product.discountPrice.toLocaleString('vi-VN')}₫</span>
-                              </div>
+                              <span className="text-gray-500 text-[12px] line-through mb-0.5">{originalPrice.toLocaleString('vi-VN')}₫</span>
                               <div className="flex items-center gap-2">
-                                <span className="text-[20px] font-black text-red-500 drop-shadow-[0_0_8px_rgba(239,68,68,0.4)]">{product.price.toLocaleString('vi-VN')}₫</span>
+                                <span className="text-[18px] font-black text-red-500">{currentPrice.toLocaleString('vi-VN')}₫</span>
+                                <span className="text-white bg-red-600 rounded text-[10px] font-black px-1.5 py-[2px] leading-none">-{discountPercent}%</span>
                               </div>
                             </>
                           ) : (
-                             <>
-                               <div className="h-[21px] mb-1"></div>
-                               <span className="text-[20px] font-black text-red-500 drop-shadow-[0_0_8px_rgba(239,68,68,0.4)]">{product.price.toLocaleString('vi-VN')}₫</span>
+                            <>
+                               <div className="h-[18px] mb-0.5"></div>
+                               <span className="text-[18px] font-black text-red-500">{currentPrice.toLocaleString('vi-VN')}₫</span>
                              </>
                           )}
                         </div>
@@ -281,10 +360,16 @@ export default function HotSaleSection({
                             <ShoppingCart size={14} className="group-hover/btn:animate-bounce" />
                           </Link>
                         </div>
+                        
+                        <div className="mt-4 mb-2 flex justify-center text-gray-400 text-[13px] items-center gap-1.5">
+                          <Eye size={15} /> {(product.views || 0).toLocaleString('vi-VN')} lượt xem
+                        </div>
                       </div>
                     </div>
                   );
                 })}
+                </div>
+
               </div>
             ) : (
               <div className="w-full text-center text-gray-500 py-10">

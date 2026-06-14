@@ -1,8 +1,10 @@
+import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import ProductActions from "@/components/ProductActions";
 import ProductGallery from "@/components/ProductGallery";
-import { CheckCircle2, ShieldCheck, Truck, Zap, Gift, ArrowRight, RefreshCcw, Settings } from "lucide-react";
+import ViewIncrementer from "@/components/ViewIncrementer";
+import { CheckCircle2, ShieldCheck, Truck, Zap, Gift, ArrowRight, RefreshCcw, Settings, Eye } from "lucide-react";
 
 export const revalidate = 0;
 
@@ -25,6 +27,8 @@ type Product = {
   };
   condition?: string;
   sku?: string;
+  status?: string;
+  views?: number;
 };
 
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:5000";
@@ -73,6 +77,32 @@ async function getSimilarProducts(categoryId: string | null, excludeId: string):
   } finally {
     clearTimeout(timeout);
   }
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const resolvedParams = await params;
+  const product = await getProduct(resolvedParams.slug);
+
+  if (!product) {
+    return {
+      title: "Không tìm thấy sản phẩm - ZCOMPUTER",
+      description: "Sản phẩm bạn tìm kiếm không tồn tại hoặc đã bị xóa.",
+    };
+  }
+
+  const plainTextDescription = product.description 
+    ? product.description.replace(/<[^>]+>/g, '').substring(0, 160) + '...'
+    : `Mua ${product.name} chính hãng tại ZCOMPUTER với giá tốt nhất, bảo hành uy tín.`;
+
+  return {
+    title: `${product.name} | ZCOMPUTER`,
+    description: plainTextDescription,
+    openGraph: {
+      title: product.name,
+      description: plainTextDescription,
+      images: product.images?.[0] ? [{ url: product.images[0] }] : [],
+    },
+  };
 }
 
 export default async function ProductDetailPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -136,6 +166,8 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
           <span className="text-gray-900 font-bold truncate max-w-[200px] sm:max-w-md">{product.name}</span>
         </div>
       </div>
+
+      <ViewIncrementer slug={product.slug} />
 
       <div className="container mx-auto px-4 py-8">
         <div className="bg-white rounded-3xl border border-gray-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] overflow-hidden">
@@ -205,14 +237,20 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
                 <div className="w-1 h-1 rounded-full bg-gray-300 hidden sm:block"></div>
                 <div className="flex items-center gap-1.5 text-gray-600">
                   <span className="text-gray-400">Tình trạng:</span>
-                  <span className={`font-bold ${(product.stock ?? 0) > 0 ? "text-emerald-600" : "text-red-500"}`}>
-                    {(product.stock ?? 0) > 0 ? "Còn hàng" : "Hết hàng"}
+                  <span className={`font-bold ${((product.stock ?? 0) > 0 && product.status !== 'out_of_stock') ? "text-emerald-600" : "text-red-500"}`}>
+                    {((product.stock ?? 0) > 0 && product.status !== 'out_of_stock') ? "Còn hàng" : "Hết hàng"}
                   </span>
                 </div>
                 <div className="w-1 h-1 rounded-full bg-gray-300 hidden sm:block"></div>
                 <div className="flex items-center gap-1.5 text-gray-600">
                   <span className="text-gray-400">SKU:</span>
                   <span className="font-mono font-medium">{product.sku || product.slug.split('-').pop()?.substring(0,6).toUpperCase()}</span>
+                </div>
+                <div className="w-1 h-1 rounded-full bg-gray-300 hidden sm:block"></div>
+                <div className="flex items-center gap-1.5 text-gray-600">
+                  <Eye size={14} className="text-gray-400" />
+                  <span className="font-bold text-gray-700">{(product.views || 0).toLocaleString('vi-VN')}</span>
+                  <span className="text-gray-400 text-sm">lượt xem</span>
                 </div>
               </div>
 
@@ -238,29 +276,40 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
               <div className="relative bg-gradient-to-br from-red-50/80 via-white to-orange-50/80 rounded-2xl p-6 lg:p-8 mb-6 border border-red-100 shadow-[0_4px_20px_rgb(239,68,68,0.05)] overflow-hidden">
                 <div className="absolute top-0 right-0 w-40 h-40 bg-red-500/5 rounded-full blur-3xl -mr-10 -mt-10 pointer-events-none"></div>
                 <div className="relative z-10 flex flex-col sm:flex-row sm:items-end gap-3 sm:gap-6">
-                  <div>
-                    <div className="text-xs font-bold text-red-500/80 uppercase tracking-wider mb-2">Giá ưu đãi đặc biệt</div>
-                    <div className="text-4xl lg:text-5xl font-black text-primary tracking-tight flex items-start">
-                      {product.price.toLocaleString("vi-VN")}
-                      <span className="text-2xl lg:text-3xl font-bold ml-1 mt-1">₫</span>
-                    </div>
-                  </div>
-                  {product.discountPrice && (
-                    <div className="pb-1.5 flex flex-col items-start">
-                      <div className="text-lg text-gray-400 line-through font-semibold decoration-gray-300 decoration-2">
-                        {product.discountPrice.toLocaleString("vi-VN")}₫
+                  {((product.stock ?? 0) <= 0 || product.status === 'out_of_stock') ? (
+                    <div>
+                      <div className="text-4xl lg:text-5xl font-black text-gray-500 tracking-tight flex items-start uppercase">
+                        HẾT HÀNG
                       </div>
-                      <div className="inline-flex items-center justify-center px-2.5 py-0.5 bg-red-100 text-red-600 text-[11px] font-black uppercase rounded mt-1 shadow-sm border border-red-200/50">
-                        Giảm {Math.round((1 - product.price / product.discountPrice) * 100)}%
-                      </div>
+                      <div className="text-sm font-bold text-gray-400 mt-2">Vui lòng liên hệ để nhận thông tin mới nhất</div>
                     </div>
+                  ) : (
+                    <>
+                      <div>
+                        <div className="text-xs font-bold text-red-500/80 uppercase tracking-wider mb-2">Giá ưu đãi đặc biệt</div>
+                        <div className="text-4xl lg:text-5xl font-black text-primary tracking-tight flex items-start">
+                          {product.price.toLocaleString("vi-VN")}
+                          <span className="text-2xl lg:text-3xl font-bold ml-1 mt-1">₫</span>
+                        </div>
+                      </div>
+                      {(product.discountPrice ?? 0) > 0 && (
+                        <div className="pb-1.5 flex flex-col items-start">
+                          <div className="text-lg text-gray-400 line-through font-semibold decoration-gray-300 decoration-2">
+                            {(product.discountPrice || 0).toLocaleString("vi-VN")}₫
+                          </div>
+                          <div className="inline-flex items-center justify-center px-2.5 py-0.5 bg-red-100 text-red-600 text-[11px] font-black uppercase rounded mt-1 shadow-sm border border-red-200/50">
+                            Giảm {Math.round((1 - product.price / (product.discountPrice || 1)) * 100)}%
+                          </div>
+                        </div>
+                      )}
+                    </>
                   )}
                 </div>
                 
-                {product.discountPrice && (
+                {(product.discountPrice ?? 0) > 0 && !((product.stock ?? 0) <= 0 || product.status === 'out_of_stock') && (
                   <div className="relative z-10 mt-6 pt-4 flex items-center gap-2 text-sm font-bold text-emerald-700 bg-emerald-50 border-t border-emerald-100 -mx-6 lg:-mx-8 -mb-6 lg:-mb-8 px-6 lg:px-8 py-3">
                     <CheckCircle2 size={18} className="text-emerald-500" />
-                    <span>Tiết kiệm ngay {(product.discountPrice - product.price).toLocaleString("vi-VN")}₫ so với giá gốc!</span>
+                    <span>Tiết kiệm ngay {((product.discountPrice || 0) - product.price).toLocaleString("vi-VN")}₫ so với giá gốc!</span>
                   </div>
                 )}
               </div>
@@ -360,9 +409,9 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
                     <div className="mt-auto pt-4 border-t border-gray-100 flex items-end justify-between">
                       <div>
                         <div className="text-xl font-black text-primary">{p.price?.toLocaleString("vi-VN")}đ</div>
-                        {p.discountPrice && (
+                        {(p.discountPrice ?? 0) > 0 && (
                           <div className="text-xs font-medium text-gray-400 line-through mt-1">
-                            {p.discountPrice.toLocaleString("vi-VN")}đ
+                            {(p.discountPrice || 0).toLocaleString("vi-VN")}đ
                           </div>
                         )}
                       </div>

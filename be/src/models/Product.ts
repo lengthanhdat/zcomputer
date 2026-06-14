@@ -15,6 +15,8 @@ export interface IProduct extends Document {
   status: 'active' | 'inactive' | 'out_of_stock';
   condition: string;
   isHotSale?: boolean;
+  flashSalePrice?: number;
+  views: number;
 }
 
 const ProductSchema = new Schema<IProduct>(
@@ -33,6 +35,8 @@ const ProductSchema = new Schema<IProduct>(
     status: { type: String, enum: ['active', 'inactive', 'out_of_stock'], default: 'active' },
     condition: { type: String, default: 'Đã qua sử dụng (Đẹp 99%)' },
     isHotSale: { type: Boolean, default: false },
+    flashSalePrice: { type: Number },
+    views: { type: Number, default: 0 },
   },
   { timestamps: true }
 );

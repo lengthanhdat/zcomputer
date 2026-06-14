@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Edit, Trash2, Plus, Search } from "lucide-react";
+import { Edit, Trash2, Plus, Search, ImageOff } from "lucide-react";
 import Link from "next/link";
+import { fetchApi } from "@/lib/api";
 
 interface Product {
   _id: string;
@@ -11,8 +12,10 @@ interface Product {
   stock: number;
   brand: string;
   isHotSale?: boolean;
+  flashSalePrice?: number;
   category_id?: { _id: string; name: string };
   createdAt?: string;
+  images?: string[];
 }
 
 export default function AdminProductsPage() {
@@ -26,10 +29,11 @@ export default function AdminProductsPage() {
   const [sortFilter, setSortFilter] = useState("newest");
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
 
   const fetchProducts = async () => {
     try {
-      const res = await fetch(`http://127.0.0.1:5000/api/products?t=${Date.now()}`, { cache: "no-store" });
+      const res = await fetchApi(`/products?t=${Date.now()}`, { cache: "no-store", requireAuth: false });
       const data = await res.json();
       setProducts(data);
     } catch (error) {
@@ -46,7 +50,7 @@ export default function AdminProductsPage() {
   const handleDelete = async (id: string) => {
     if (!confirm("Bạn có chắc muốn xóa sản phẩm này?")) return;
     try {
-      const res = await fetch(`http://127.0.0.1:5000/api/products/${id}`, {
+      const res = await fetchApi(`/products/${id}`, {
         method: 'DELETE'
       });
       if (res.ok) {
@@ -59,14 +63,48 @@ export default function AdminProductsPage() {
     }
   };
 
+  const handleBulkDelete = async () => {
+    if (selectedIds.length === 0) return;
+    if (!confirm(`Bạn có chắc muốn xóa ${selectedIds.length} sản phẩm đã chọn?`)) return;
+    try {
+      const res = await fetchApi(`/products/bulk-delete`, {
+        method: 'POST',
+        body: JSON.stringify({ ids: selectedIds })
+      });
+      if (res.ok) {
+        setProducts(products.filter(p => !selectedIds.includes(p._id)));
+        setSelectedIds([]);
+      } else {
+        alert("Xóa thất bại");
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleSelectAll = (e: React.ChangeEvent<HTMLInputElement>, currentGroupProducts?: Product[]) => {
+    if (currentGroupProducts) {
+      // Nhóm category (chưa hỗ trợ tick all theo group trong code này, mình support tất cả theo table)
+    } else {
+      if (e.target.checked) {
+        setSelectedIds(filteredProducts.map(p => p._id));
+      } else {
+        setSelectedIds([]);
+      }
+    }
+  };
+
+  const handleSelectOne = (id: string) => {
+    setSelectedIds(prev => prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]);
+  };
+
   const toggleHotSale = async (id: string, currentStatus: boolean) => {
     // Optimistic UI update
     setProducts(products.map(p => p._id === id ? { ...p, isHotSale: !currentStatus } : p));
     
     try {
-      const res = await fetch(`http://127.0.0.1:5000/api/products/${id}`, {
+      const res = await fetchApi(`/products/${id}`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ isHotSale: !currentStatus })
       });
       if (!res.ok) {
@@ -77,6 +115,29 @@ export default function AdminProductsPage() {
     } catch (error) {
       console.error(error);
       setProducts(products.map(p => p._id === id ? { ...p, isHotSale: currentStatus } : p));
+    }
+  };
+
+  const updateFlashSalePrice = async (id: string, newPriceStr: string) => {
+    const newPrice = Number(newPriceStr);
+    if (isNaN(newPrice) || newPrice < 0) return;
+    
+    // Optimistic UI update
+    setProducts(products.map(p => p._id === id ? { ...p, flashSalePrice: newPrice } : p));
+    
+    try {
+      const res = await fetchApi(`/products/${id}`, {
+        method: 'PUT',
+        body: JSON.stringify({ flashSalePrice: newPrice })
+      });
+      if (!res.ok) {
+        // Revert will require reloading or keeping previous state
+        fetchProducts(); // simple revert
+        alert("Lỗi khi cập nhật giá Flash Sale");
+      }
+    } catch (error) {
+      console.error(error);
+      fetchProducts();
     }
   };
 
@@ -116,9 +177,19 @@ export default function AdminProductsPage() {
           <h1 className="text-2xl font-bold text-gray-800 mb-1">Quản lý sản phẩm</h1>
           <p className="text-sm text-gray-500">Xem, thêm, sửa, xóa danh sách sản phẩm trên hệ thống.</p>
         </div>
-        <Link href="/admin/products/new" className="bg-primary hover:bg-red-700 text-white px-4 py-2 rounded-md font-semibold flex items-center gap-2 transition-colors">
-          <Plus size={18} /> Thêm sản phẩm
-        </Link>
+        <div className="flex gap-3">
+          {selectedIds.length > 0 && (
+            <button 
+              onClick={handleBulkDelete}
+              className="bg-red-100 hover:bg-red-200 text-red-700 px-4 py-2 rounded-md font-bold flex items-center gap-2 transition-colors border border-red-200"
+            >
+              <Trash2 size={18} /> Xóa {selectedIds.length} sản phẩm
+            </button>
+          )}
+          <Link href="/admin/products/new" className="bg-primary hover:bg-red-700 text-white px-4 py-2 rounded-md font-semibold flex items-center gap-2 transition-colors">
+            <Plus size={18} /> Thêm sản phẩm
+          </Link>
+        </div>
       </div>
       
       <div className="p-6">
@@ -230,6 +301,14 @@ export default function AdminProductsPage() {
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="bg-gray-50 text-gray-600 text-sm border-y border-gray-200">
+                <th className="py-3 px-4 w-12 text-center">
+                  <input 
+                    type="checkbox" 
+                    onChange={(e) => handleSelectAll(e)}
+                    checked={filteredProducts.length > 0 && selectedIds.length === filteredProducts.length}
+                    className="w-4 h-4 text-primary rounded border-gray-300 focus:ring-primary cursor-pointer"
+                  />
+                </th>
                 <th className="py-3 px-4 font-semibold">Tên sản phẩm</th>
                 <th className="py-3 px-4 font-semibold">Thương hiệu</th>
                 <th className="py-3 px-4 font-semibold">Giá bán</th>
@@ -239,18 +318,35 @@ export default function AdminProductsPage() {
               </tr>
             </thead>
             {loading ? (
-              <tbody><tr><td colSpan={6} className="py-8 text-center text-gray-500">Đang tải dữ liệu...</td></tr></tbody>
+              <tbody><tr><td colSpan={7} className="py-8 text-center text-gray-500">Đang tải dữ liệu...</td></tr></tbody>
             ) : filteredProducts.length === 0 ? (
-              <tbody><tr><td colSpan={6} className="py-8 text-center text-gray-500">Không tìm thấy sản phẩm nào phù hợp.</td></tr></tbody>
+              <tbody><tr><td colSpan={7} className="py-8 text-center text-gray-500">Không tìm thấy sản phẩm nào phù hợp.</td></tr></tbody>
             ) : (
               Object.entries(groupedProducts).map(([categoryName, prods]) => (
                 <tbody key={categoryName} className="divide-y divide-gray-100">
                   <tr className="bg-gray-100/80 border-t-2 border-gray-200">
-                    <td colSpan={6} className="py-2.5 px-4 font-bold text-gray-700 uppercase text-xs tracking-widest">{categoryName} ({prods.length})</td>
+                    <td colSpan={7} className="py-2.5 px-4 font-bold text-gray-700 uppercase text-xs tracking-widest">{categoryName} ({prods.length})</td>
                   </tr>
                   {prods.map((product) => (
                     <tr key={product._id} className="hover:bg-gray-50 transition-colors">
-                      <td className="py-3 px-4 text-sm font-medium text-gray-900">{product.name}</td>
+                      <td className="py-3 px-4 text-center">
+                        <input 
+                          type="checkbox"
+                          checked={selectedIds.includes(product._id)}
+                          onChange={() => handleSelectOne(product._id)}
+                          className="w-4 h-4 text-primary rounded border-gray-300 focus:ring-primary cursor-pointer"
+                        />
+                      </td>
+                      <td className="py-3 px-4 text-sm font-medium text-gray-900">
+                        <div className="flex items-center gap-2">
+                          <span className="truncate max-w-[200px] xl:max-w-[300px]" title={product.name}>{product.name}</span>
+                          {(!product.images || product.images.length === 0) && (
+                            <span className="shrink-0 flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-bold bg-red-100 text-red-600 border border-red-200 cursor-help" title="Sản phẩm này chưa có hình đại diện">
+                              <ImageOff size={12} /> Thiếu ảnh
+                            </span>
+                          )}
+                        </div>
+                      </td>
                       <td className="py-3 px-4 text-sm text-gray-600">{product.brand || '---'}</td>
                       <td className="py-3 px-4 text-sm text-primary font-semibold">{product.price.toLocaleString('vi-VN')}đ</td>
                       <td className="py-3 px-4 text-sm text-gray-600">
@@ -259,12 +355,24 @@ export default function AdminProductsPage() {
                         </span>
                       </td>
                       <td className="py-3 px-4 text-center">
-                        <input 
-                          type="checkbox"
-                          checked={!!product.isHotSale}
-                          onChange={() => toggleHotSale(product._id, !!product.isHotSale)}
-                          className="w-4 h-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500 cursor-pointer accent-blue-600"
-                        />
+                        <div className="flex flex-col items-center gap-1">
+                          <input 
+                            type="checkbox"
+                            checked={!!product.isHotSale}
+                            onChange={() => toggleHotSale(product._id, !!product.isHotSale)}
+                            className="w-4 h-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500 cursor-pointer accent-blue-600"
+                          />
+                          {product.isHotSale && (
+                            <input 
+                              type="number"
+                              placeholder="Giá Flash Sale"
+                              defaultValue={product.flashSalePrice || product.price}
+                              onBlur={(e) => updateFlashSalePrice(product._id, e.target.value)}
+                              className="w-[90px] text-[11px] border border-red-300 rounded px-1 py-0.5 mt-1 outline-none focus:border-red-500 text-center text-red-600 font-bold"
+                              title="Nhập giá Flash Sale và click ra ngoài để lưu"
+                            />
+                          )}
+                        </div>
                       </td>
                       <td className="py-3 px-4 text-right">
                         <div className="flex justify-end gap-2">

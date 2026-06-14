@@ -4,12 +4,14 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Montserrat } from "next/font/google";
-import { Search, Menu, X } from "lucide-react";
+import { Playfair_Display, Montserrat } from "next/font/google";
+import { Search, Menu, X, PhoneCall, MapPin } from "lucide-react";
 import HeaderAuth from "./HeaderAuth";
 import HeaderCart from "./HeaderCart";
+import HeaderNav from "./HeaderNav";
 
-const montserrat = Montserrat({ subsets: ["latin", "vietnamese"], weight: ["900"] });
+const montserrat = Montserrat({ subsets: ["latin", "vietnamese"], weight: ["700", "900"] });
+const playfair = Playfair_Display({ subsets: ["latin", "vietnamese"], weight: ["700", "900"] });
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -37,14 +39,26 @@ export default function Header() {
           {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
 
-        {/* Logo */}
-        <Link href="/" className="flex items-center gap-2.5 shrink-0 group">
-          <Image src="/logo.webp" alt="Z" width={48} height={48} priority className="h-10 w-10 sm:h-12 sm:w-12 object-contain group-hover:scale-105 group-hover:rotate-[4deg] transition-all duration-300" />
-          <span className={`${montserrat.className} flex items-baseline select-none tracking-tighter relative group-hover:scale-[1.02] transition-transform duration-300`}>
-            <span className="text-red-600 drop-shadow-[0_2px_4px_rgba(220,38,38,0.2)] text-2xl sm:text-3xl">Z</span>
-            <span className="text-slate-900 uppercase text-xl sm:text-2xl">COMPUTER</span>
-            <span className="absolute -bottom-1.5 left-0 w-full h-[2.5px] bg-red-600 scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300 rounded-full" />
-          </span>
+        <Link 
+          href="/" 
+          className="flex items-center gap-3 shrink-0 group"
+          onClick={(e) => {
+            if (window.location.pathname === "/") {
+              e.preventDefault();
+              window.scrollTo({ top: 0, behavior: "smooth" });
+            }
+          }}
+        >
+          <Image src="/logo.png" alt="Z" width={80} height={80} priority className="h-14 w-14 sm:h-[68px] sm:w-[68px] object-contain group-hover:scale-105 transition-all duration-300 drop-shadow-md" />
+          <div className="flex flex-col items-start justify-center">
+            <div className={`${montserrat.className} flex items-center select-none group-hover:scale-[1.02] transition-transform duration-300`}>
+              <span className="text-[#CC0000] text-[28px] sm:text-[34px] font-black drop-shadow-sm leading-none">Z</span>
+              <span className="text-black text-[28px] sm:text-[34px] font-black uppercase drop-shadow-sm leading-none">COMPUTER</span>
+            </div>
+            <span className={`${montserrat.className} text-[#CC0000] text-[8px] sm:text-[9.5px] font-black uppercase tracking-widest mt-1`}>
+              PC GAMING - LAPTOP - WORKSTATION
+            </span>
+          </div>
         </Link>
 
         {/* Desktop Search Bar (Hidden on Mobile) */}
@@ -65,12 +79,38 @@ export default function Header() {
 
         {/* Cart & Authentication */}
         <div className="flex items-center gap-3 sm:gap-5 shrink-0">
+          {/* Hotline & Showroom */}
+          <div className="hidden xl:flex items-center gap-6 mr-4 border-r pr-6 border-gray-200">
+            <div className="flex items-center gap-2 group cursor-pointer">
+              <div className="w-10 h-10 rounded-full bg-red-50 flex items-center justify-center text-red-600 group-hover:bg-red-600 group-hover:text-white transition-colors duration-300">
+                <PhoneCall size={20} />
+              </div>
+              <div className="flex flex-col">
+                <span className="text-[11px] text-gray-500 font-medium uppercase tracking-wide">Hotline mua hàng</span>
+                <span className="text-[15px] font-black text-red-600 leading-tight">0977 334 415</span>
+              </div>
+            </div>
+
+            <Link href="/he-thong-cua-hang" className="flex items-center gap-2 group cursor-pointer">
+              <div className="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center text-gray-600 group-hover:bg-gray-800 group-hover:text-white transition-colors duration-300">
+                <MapPin size={20} />
+              </div>
+              <div className="flex flex-col">
+                <span className="text-[11px] text-gray-500 font-medium uppercase tracking-wide">Hệ thống 2 cơ sở</span>
+                <span className="text-[15px] font-black text-gray-800 leading-tight">Showroom</span>
+              </div>
+            </Link>
+          </div>
+
           <HeaderCart />
           <div className="hidden sm:block">
             <HeaderAuth />
           </div>
         </div>
       </div>
+
+      {/* Main Navigation Bar (Mega Menu) */}
+      <HeaderNav />
 
       {/* Mobile Search Bar (Only visible on small devices) */}
       <div className="md:hidden px-4 pb-3">

@@ -2,10 +2,12 @@
 
 import { useCartStore } from "@/store/useCartStore";
 import Link from "next/link";
-import { Trash2, ArrowRight, ShoppingBag } from "lucide-react";
+import { Trash2, ArrowRight, ShoppingBag, Phone, MessageCircle, X, Package } from "lucide-react";
+import { useState } from "react";
 
 export default function CartPage() {
   const { items, removeItem, updateQuantity, getTotalPrice } = useCartStore();
+  const [showContactModal, setShowContactModal] = useState(false);
 
   if (items.length === 0) {
     return (
@@ -13,7 +15,7 @@ export default function CartPage() {
         <div className="w-24 h-24 bg-gray-100 text-gray-400 rounded-full flex items-center justify-center mb-6">
           <ShoppingBag size={48} />
         </div>
-        <h2 className="text-2xl font-bold mb-3 text-gray-800">Giỏ hàng của bạn đang trống</h2>
+        <h2 className="text-2xl font-bold mb-3 text-gray-800">Danh sách sản phẩm đang trống</h2>
         <p className="text-gray-500 mb-8">Hãy tìm thêm những sản phẩm công nghệ bạn yêu thích nhé.</p>
         <Link href="/" className="bg-primary text-white px-8 py-3 rounded-md font-bold hover:bg-red-700 transition-colors">
           TIẾP TỤC MUA SẮM
@@ -24,7 +26,7 @@ export default function CartPage() {
 
   return (
     <div className="container mx-auto px-4 py-12 max-w-6xl">
-      <h1 className="text-3xl font-black uppercase text-gray-800 mb-8">Giỏ hàng của bạn</h1>
+      <h1 className="text-3xl font-black uppercase text-gray-800 mb-8">Sản phẩm quan tâm</h1>
       
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2">
@@ -161,13 +163,81 @@ export default function CartPage() {
               <p className="text-xs text-right text-gray-500 mt-1">(Đã bao gồm VAT nếu có)</p>
             </div>
 
-            <Link href="/checkout" className="w-full bg-primary text-white font-bold text-lg py-4 rounded hover:bg-red-700 transition-colors flex items-center justify-center gap-2">
-              TIẾN HÀNH THANH TOÁN <ArrowRight size={20} />
-            </Link>
+            <button 
+              onClick={() => setShowContactModal(true)}
+              className="w-full bg-primary text-white font-bold text-lg py-4 rounded hover:bg-red-700 transition-colors flex items-center justify-center gap-2"
+            >
+              NHẬN BÁO GIÁ / ĐẶT HÀNG <ArrowRight size={20} />
+            </button>
           </div>
         </div>
       </div>
+
+      {/* Contact Modal */}
+      {showContactModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+          <div className="bg-white rounded-2xl w-full max-w-md overflow-hidden shadow-2xl animate-in fade-in zoom-in duration-200">
+            <div className="bg-primary p-5 flex items-center justify-between">
+              <h3 className="text-white font-bold text-xl uppercase">Liên hệ để mua hàng</h3>
+              <button 
+                onClick={() => setShowContactModal(false)}
+                className="text-white/80 hover:text-white transition-colors"
+              >
+                <X size={24} />
+              </button>
+            </div>
+            
+            <div className="p-6">
+              <p className="text-gray-600 mb-6 text-center">
+                Để mua hàng hoặc nhận báo giá chi tiết cho <strong className="text-primary">{items.length}</strong> sản phẩm bạn đã chọn, vui lòng liên hệ với chúng tôi qua các kênh sau:
+              </p>
+
+              <div className="flex flex-col gap-4">
+                <a 
+                  href="tel:0977334415" 
+                  className="flex items-center gap-4 bg-gray-50 hover:bg-red-50 p-4 rounded-xl border border-gray-100 transition-colors group"
+                >
+                  <div className="w-12 h-12 bg-red-100 text-primary rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
+                    <Phone size={24} />
+                  </div>
+                  <div>
+                    <div className="text-sm font-semibold text-gray-500 uppercase">Gọi Hotline</div>
+                    <div className="text-xl font-black text-gray-900">0977 334 415</div>
+                  </div>
+                </a>
+
+                <a 
+                  href={`https://zalo.me/0977334415?text=${encodeURIComponent(
+                    "Chào ZCOMPUTER, mình cần tư vấn báo giá các sản phẩm sau:\n" + 
+                    items.map((i, index) => `${index + 1}. ${i.name} (x${i.quantity}) - Giá: ${i.price.toLocaleString('vi-VN')}đ`).join('\n') +
+                    `\n\nTổng cộng: ${getTotalPrice().toLocaleString('vi-VN')}đ`
+                  )}`}
+                  target="_blank" 
+                  rel="noreferrer"
+                  className="flex items-center gap-4 bg-gray-50 hover:bg-blue-50 p-4 rounded-xl border border-gray-100 transition-colors group"
+                >
+                  <div className="w-12 h-12 bg-blue-100 text-[#0068FF] rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
+                    <MessageCircle size={24} />
+                  </div>
+                  <div>
+                    <div className="text-sm font-semibold text-gray-500 uppercase">Chat Zalo Nhận Báo Giá</div>
+                    <div className="text-xl font-black text-gray-900">Gửi Cấu Hình Ngay</div>
+                  </div>
+                </a>
+              </div>
+              
+              <div className="mt-6 text-center">
+                <button 
+                  onClick={() => setShowContactModal(false)}
+                  className="text-gray-500 hover:text-gray-800 font-medium underline"
+                >
+                  Đóng cửa sổ này
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
-import { Package } from "lucide-react";

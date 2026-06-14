@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Search, Save, AlertTriangle, CheckCircle, XCircle, Plus, Minus, Edit, Trash2 } from "lucide-react";
 import toast from "react-hot-toast";
+import { fetchApi } from "@/lib/api";
 
 interface Product {
   _id: string;
@@ -28,7 +29,7 @@ export default function AdminInventoryPage() {
 
   const fetchProducts = async () => {
     try {
-      const res = await fetch("http://127.0.0.1:5000/api/products?limit=100");
+      const res = await fetchApi("/products?limit=100");
       const data = await res.json();
       setProducts(data);
       
@@ -70,9 +71,8 @@ export default function AdminInventoryPage() {
         newStatus = "out_of_stock";
       }
 
-      const res = await fetch(`http://127.0.0.1:5000/api/products/${id}`, {
+      const res = await fetchApi(`/products/${id}`, {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ stock: newStock, status: newStatus }),
       });
 
@@ -99,7 +99,7 @@ export default function AdminInventoryPage() {
     }
 
     try {
-      const res = await fetch(`http://127.0.0.1:5000/api/products/${id}`, {
+      const res = await fetchApi(`/products/${id}`, {
         method: "DELETE",
       });
 
