@@ -21,6 +21,10 @@ jobs:
             cd /var/www/zcomputer
             git pull origin main
             
+            # Cố gắng tăng limit Nginx (Sẽ tự động bỏ qua nếu không có quyền root)
+            sudo sh -c 'echo "client_max_body_size 100M;" > /etc/nginx/conf.d/upload_limit.conf' || true
+            sudo systemctl reload nginx || true
+            
             echo "Deploying Backend..."
             cd be
             npm install
