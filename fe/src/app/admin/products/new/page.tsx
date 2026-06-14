@@ -140,7 +140,7 @@ export default function NewProductPage() {
 
         const data = await res.json();
         if (res.ok) {
-          const fullUrl = data.url.startsWith("http") ? data.url : `http://127.0.0.1:5000${data.url}`;
+          const fullUrl = data.url.startsWith("http") ? data.url : `${data.url}`;
           uploadedUrls.push(fullUrl);
         } else {
           toast.error(`Lỗi tải ảnh: ${data.message}`);
@@ -211,7 +211,7 @@ export default function NewProductPage() {
     setExtracting(true);
     try {
       // Gọi trực tiếp backend để tránh timeout 30s của Next.js Proxy
-      const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:5000";
+      const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || "";
       const res = await fetchApi(`${API_BASE}/api/products/smart-extract-bulk`, {
         method: "POST",
         body: JSON.stringify({ text: smartText })

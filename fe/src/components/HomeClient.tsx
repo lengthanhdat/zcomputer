@@ -266,7 +266,7 @@ export default function HomeClient() {
               <div className="flex flex-col lg:flex-row bg-white rounded-[2rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100/80 overflow-hidden">
                 {/* Vertical Category Banner */}
                 <div className="hidden lg:block w-1/4 xl:w-[280px] flex-shrink-0 relative group rounded-l-[2rem] overflow-hidden">
-                  <Image src={cat.image ? (cat.image.startsWith('http') || cat.image.startsWith('data:') ? cat.image : `http://localhost:5000${cat.image}`) : "https://images.unsplash.com/photo-1542393545-10f5cde2c810?w=400&q=80"} alt={cat.name} fill className="object-cover opacity-80 group-hover:scale-105 transition-transform duration-500" unoptimized />
+                  <Image src={cat.image ? (cat.image.startsWith('http') || cat.image.startsWith('data:') ? cat.image : `${cat.image}`) : "https://images.unsplash.com/photo-1542393545-10f5cde2c810?w=400&q=80"} alt={cat.name} fill className="object-cover opacity-80 group-hover:scale-105 transition-transform duration-500" unoptimized />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent flex flex-col justify-end p-8">
                     <h3 className="text-white font-black text-2xl uppercase leading-tight drop-shadow-lg">{cat.name}</h3>
                     <Link href={`/category/${cat.slug}`} className="text-white/80 font-medium text-sm mt-3 flex items-center gap-1 hover:text-white transition-colors">

@@ -365,7 +365,7 @@ export default function AdminOrdersPage() {
                     <div key={index} className="flex items-center gap-4 p-4 hover:bg-gray-50 transition-colors">
                       <div className="w-16 h-16 bg-gray-100 rounded-lg overflow-hidden shrink-0 flex items-center justify-center border border-gray-200">
                         {item.image ? (
-                          <img src={`http://127.0.0.1:5000${item.image}`} alt={item.name} className="w-full h-full object-cover" />
+                          <img src={`${item.image}`} alt={item.name} className="w-full h-full object-cover" />
                         ) : (
                           <Package className="text-gray-400" size={24} />
                         )}
