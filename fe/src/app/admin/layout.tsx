@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { Package, LayoutDashboard, Settings, LogOut, Users, Warehouse, ClipboardList, Menu, X, Tags, MessageCircle, BellRing, Play } from "lucide-react";
+import { Package, LayoutDashboard, Settings, LogOut, Users, Warehouse, ClipboardList, Menu, X, Tags, MessageCircle, BellRing, Play, Briefcase } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useAuthStore } from "@/store/useAuthStore";
 import toast from "react-hot-toast";
@@ -16,9 +16,9 @@ const menuItems = [
   { href: "/admin/users", label: "Khách hàng", icon: Users, allowedRoles: ['admin'] },
   { href: "/admin/banners", label: "Banners", icon: LayoutDashboard, allowedRoles: ['admin', 'staff'] },
   { href: "/admin/video-reviews", label: "Video Reviews", icon: Play, allowedRoles: ['admin', 'staff'] },
+  { href: "/admin/jobs", label: "Tuyển dụng", icon: Briefcase, allowedRoles: ['admin', 'staff'] },
   { href: "/admin/announcement", label: "Thông báo", icon: BellRing, allowedRoles: ['admin', 'staff'] },
   { href: "/admin/settings", label: "Cài đặt chung", icon: Settings, allowedRoles: ['admin', 'staff'] },
-  { href: "/admin/chat", label: "Chat / Hỗ trợ", icon: MessageCircle, allowedRoles: ['admin', 'staff'] },
 ];
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
@@ -138,10 +138,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           </div>
           <div className="flex items-center gap-3 shrink-0">
             <div className="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center font-bold text-sm uppercase">
-              {user.name.charAt(0)}
+              {user?.name?.charAt(0) || 'A'}
             </div>
             <span className="hidden sm:inline text-sm font-semibold text-gray-700 capitalize">
-              {user.role}
+              {user?.role || 'admin'}
             </span>
           </div>
         </header>

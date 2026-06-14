@@ -38,7 +38,8 @@ export const fetchApi = async (endpoint: string, options: FetchOptions = {}): Pr
   // Đảm bảo gửi kèm httpOnly cookie
   customOptions.credentials = 'include';
 
-  let response = await fetch(`${BASE_URL}${endpoint}`, {
+  const finalUrl = endpoint.startsWith('http') ? endpoint : `${BASE_URL}${endpoint}`;
+  let response = await fetch(finalUrl, {
     ...customOptions,
     headers,
   });
@@ -50,7 +51,7 @@ export const fetchApi = async (endpoint: string, options: FetchOptions = {}): Pr
           failedQueue.push({ resolve, reject });
         });
         headers.set('Authorization', `Bearer ${token}`);
-        return await fetch(`${BASE_URL}${endpoint}`, {
+        return await fetch(finalUrl, {
           ...customOptions,
           headers,
         });
@@ -75,10 +76,10 @@ export const fetchApi = async (endpoint: string, options: FetchOptions = {}): Pr
         processQueue(null, token);
         
         headers.set('Authorization', `Bearer ${token}`);
-        response = await fetch(`${BASE_URL}${endpoint}`, {
-          ...customOptions,
-          headers,
-        });
+        response = await fetch(finalUrl, {
+        ...customOptions,
+        headers,
+      });
       } else {
         processQueue(new Error('Refresh failed'));
         useAuthStore.getState().logout();

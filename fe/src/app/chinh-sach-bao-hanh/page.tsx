@@ -1,139 +1,132 @@
-import { ShieldCheck, AlertTriangle, RefreshCw, Phone, Mail } from "lucide-react";
+import { ShieldCheck, AlertTriangle, RefreshCw, FileText, CheckCircle, XCircle } from "lucide-react";
 
 export const metadata = {
-  title: "Chính sách bảo hành - ZCOMPUTER",
-  description: "Chính sách bảo hành, đổi trả sản phẩm tại ZCOMPUTER.",
+  title: "Quy định bảo hành - ZCOMPUTER",
+  description: "Chính sách và quy định bảo hành, đổi trả sản phẩm tại ZCOMPUTER.",
 };
 
 export default function WarrantyPolicyPage() {
   return (
-    <div className="bg-gray-50 min-h-screen py-12">
-      <div className="container mx-auto px-4 max-w-4xl">
-        {/* Header */}
-        <div className="bg-gradient-to-r from-primary to-red-700 text-white rounded-2xl p-8 mb-8 flex items-center gap-6">
-          <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center shrink-0">
-            <ShieldCheck size={32} />
-          </div>
-          <div>
-            <h1 className="text-3xl font-black uppercase">Chính sách bảo hành & đổi trả</h1>
-            <p className="text-red-100 mt-1">Cam kết bảo hành chính hãng từ ZCOMPUTER</p>
+    <div className="bg-[#f8f9fa] min-h-screen pb-20">
+      {/* Header Banner */}
+      <div className="bg-[#111] py-16 relative overflow-hidden">
+        <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-5 mix-blend-overlay"></div>
+        <div className="absolute top-0 right-0 w-96 h-96 bg-red-600/20 rounded-full blur-[100px] pointer-events-none"></div>
+        
+        <div className="container mx-auto px-4 relative z-10">
+          <div className="max-w-4xl mx-auto text-center">
+            <div className="w-20 h-20 bg-white/10 rounded-full flex items-center justify-center mx-auto mb-6">
+              <ShieldCheck size={40} className="text-white" />
+            </div>
+            <h1 className="text-3xl md:text-4xl font-black text-white uppercase tracking-tight mb-4">
+              QUY ĐỊNH BẢO HÀNH TẠI <span className="text-red-500">ZCOMPUTER</span>
+            </h1>
+            <p className="text-gray-400 text-lg">Đảm bảo quyền lợi tối đa cho khách hàng khi mua sắm tại ZComputer.</p>
           </div>
         </div>
+      </div>
 
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-          {/* Section 1 & 2: Warranty */}
-          <div className="p-8 border-b border-gray-100">
-            <h2 className="text-xl font-bold text-gray-900 mb-5 flex items-center gap-2">
-              <ShieldCheck className="text-primary" size={22} /> Chính sách bảo hành
-            </h2>
-            <div className="space-y-4">
-              <div className="p-4 bg-red-50 rounded-xl border-l-4 border-primary">
-                <p className="font-bold text-gray-800 mb-1">Thời gian bảo hành</p>
-                <p className="text-gray-600 text-sm">Tùy theo từng mặt hàng có thời gian bảo hành khác nhau. Vui lòng hỏi nhân viên tư vấn khi mua hàng.</p>
-              </div>
+      <div className="container mx-auto px-4 -mt-8 relative z-20">
+        <div className="bg-white rounded-2xl shadow-xl border border-gray-100 max-w-5xl mx-auto overflow-hidden">
+          
+          <div className="p-8 md:p-12 space-y-12">
 
-              <h3 className="font-bold text-gray-800 mt-5 mb-3">Điều kiện được bảo hành:</h3>
-              <div className="space-y-3">
-                <div className="flex gap-3 items-start">
-                  <span className="w-5 h-5 bg-green-500 text-white rounded-full flex items-center justify-center text-xs shrink-0 mt-0.5">✓</span>
-                  <p className="text-gray-600 leading-relaxed">Bảo hành tất cả sản phẩm đối với các lỗi thuộc về khâu <strong>sản xuất</strong>.</p>
+            {/* Mục I */}
+            <section>
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-10 h-10 bg-red-50 text-red-600 rounded-xl flex items-center justify-center shrink-0">
+                  <RefreshCw size={24} />
                 </div>
-                <div className="flex gap-3 items-start">
-                  <span className="w-5 h-5 bg-green-500 text-white rounded-full flex items-center justify-center text-xs shrink-0 mt-0.5">✓</span>
-                  <p className="text-gray-600 leading-relaxed">Hàng hóa bảo hành phải còn nguyên <strong>tem bảo hành, tem sản phẩm</strong> và giấy biên nhận chứng minh mua hàng tại ZCOMPUTER.</p>
+                <h2 className="text-2xl font-black text-gray-800 uppercase">I. THỜI GIAN VÀ PHẠM VI BẢO HÀNH</h2>
+              </div>
+              <ul className="space-y-4 text-gray-600 ml-[52px]">
+                <li className="flex items-start gap-2">
+                  <CheckCircle className="text-green-500 mt-1 shrink-0" size={18} />
+                  <span><strong className="text-gray-800">Bảo hành Toàn Diện (01 Tháng):</strong> Bảo hành toàn bộ linh kiện phần cứng bao gồm: Màn hình, bàn phím, touchpad, ổ cứng (SSD), RAM, loa, webcam, các cổng kết nối và pin.</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <CheckCircle className="text-green-500 mt-1 shrink-0" size={18} />
+                  <span><strong className="text-gray-800">Bảo hành Bo Mạch & Nguồn (03 Tháng):</strong> Bảo hành mainboard (bo mạch chủ), IC nguồn, và các lỗi phần cứng trên bo mạch khiến máy không lên nguồn.</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <CheckCircle className="text-green-500 mt-1 shrink-0" size={18} />
+                  <span><strong className="text-gray-800">Đặc quyền máy cũ:</strong> * Tặng 02 lần vệ sinh máy, tra keo tản nhiệt miễn phí (áp dụng trong vòng 12 tháng kể từ ngày mua).</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <CheckCircle className="text-green-500 mt-1 shrink-0" size={18} />
+                  <span><strong className="text-gray-800">Bao test đổi máy:</strong> Trong vòng 03 ngày đầu nếu không ưng ý (yêu cầu máy giữ nguyên tình trạng ngoại hình ban đầu). Khách hàng có thể đổi sang dòng máy khác bằng tiền hoặc cao tiền hơn và bù thêm khoản chênh lệch.</span>
+                </li>
+              </ul>
+            </section>
+
+            <hr className="border-gray-100" />
+
+            {/* Mục II */}
+            <section>
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-10 h-10 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center shrink-0">
+                  <FileText size={24} />
                 </div>
+                <h2 className="text-2xl font-black text-gray-800 uppercase">II. ĐIỀU KIỆN TIẾP NHẬN BẢO HÀNH</h2>
               </div>
+              <ul className="space-y-4 text-gray-600 ml-[52px]">
+                <li className="flex items-start gap-2">
+                  <div className="w-1.5 h-1.5 rounded-full bg-blue-500 mt-2 shrink-0"></div>
+                  <span>Máy còn nguyên vẹn tem bảo hành của cửa hàng, không có dấu hiệu bị rách, tẩy xóa, dán đè hoặc bong tróc.</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <div className="w-1.5 h-1.5 rounded-full bg-blue-500 mt-2 shrink-0"></div>
+                  <span>Số Serial / Tag máy trên phiếu bảo hành phải trùng khớp với số Serial hiển thị trên máy (hoặc trong BIOS).</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <div className="w-1.5 h-1.5 rounded-full bg-blue-500 mt-2 shrink-0"></div>
+                  <span>Máy được xác định lỗi do linh kiện, không có tác động phá hoại hay tai nạn từ bên ngoài.</span>
+                </li>
+              </ul>
+            </section>
 
-              <div className="p-4 bg-yellow-50 rounded-xl border border-yellow-200 mt-4">
-                <p className="font-bold text-gray-800 mb-2 flex items-center gap-2"><AlertTriangle size={16} className="text-yellow-600" /> Các trường hợp KHÔNG được bảo hành:</p>
-                <ul className="text-gray-600 text-sm space-y-1">
-                  <li>• Làm vỡ, làm hỏng, gây biến dạng</li>
-                  <li>• Để lửa gây hư hại</li>
-                  <li>• Rách tem bảo hành</li>
-                  <li>• Lỗi do người dùng và các trường hợp tương tự</li>
-                </ul>
-              </div>
+            <hr className="border-gray-100" />
 
-              <div className="p-4 bg-gray-50 rounded-xl border border-gray-200">
-                <p className="font-bold text-gray-800 mb-2">Yêu cầu bảo hành:</p>
-                <p className="text-gray-600 text-sm leading-relaxed">Liên hệ bộ phận chăm sóc khách hàng qua hotline <a href="tel:0977334415" className="text-primary font-bold hover:underline">0977 334 415</a>. Chúng tôi luôn sẵn sàng hỗ trợ bạn.</p>
+            {/* Mục III */}
+            <section>
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-10 h-10 bg-orange-50 text-orange-600 rounded-xl flex items-center justify-center shrink-0">
+                  <AlertTriangle size={24} />
+                </div>
+                <h2 className="text-2xl font-black text-gray-800 uppercase">III. CÁC TRƯỜNG HỢP TỪ CHỐI BẢO HÀNH</h2>
               </div>
-            </div>
+              <p className="text-gray-500 mb-6 ml-[52px] italic">(Khách hàng lưu ý) Z Computer xin phép từ chối bảo hành đối với các trường hợp:</p>
+              
+              <ul className="space-y-4 text-gray-600 ml-[52px]">
+                <li className="flex items-start gap-2">
+                  <XCircle className="text-red-500 mt-1 shrink-0" size={18} />
+                  <span><strong className="text-gray-800">Lỗi ngoại quan sau khi rời cửa hàng:</strong> Máy bị rơi rớt, va đập, cấn móp, nứt vỡ vỏ, trầy xước nặng so với tình trạng bàn giao ban đầu.</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <XCircle className="text-red-500 mt-1 shrink-0" size={18} />
+                  <span><strong className="text-gray-800">Sự cố màn hình do tác động lực:</strong> Màn hình bị vỡ, chảy mực, bị sọc màn hoặc đốm trắng/đen phát sinh sau khi mua (đây là lỗi do cấn đè hoặc ngoại lực trong quá trình di chuyển).</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <XCircle className="text-red-500 mt-1 shrink-0" size={18} />
+                  <span><strong className="text-gray-800">Vấn đề về Pin:</strong> Hao mòn tự nhiên (pin chai dần theo thời gian sử dụng). Cửa hàng chỉ bảo hành pin trong tháng đầu nếu pin chết hẳn, không sạc vào điện hoặc sụt nguồn đột ngột dưới 1 tiếng.</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <XCircle className="text-red-500 mt-1 shrink-0" size={18} />
+                  <span><strong className="text-gray-800">Sự cố chất lỏng & Môi trường:</strong> Máy bị đổ nước, bia, chất lỏng vào; máy bị ẩm rỉ mạch do môi trường hoặc có côn trùng (gián, kiến...) chui vào gây chập cháy.</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <XCircle className="text-red-500 mt-1 shrink-0" size={18} />
+                  <span><strong className="text-gray-800">Sử dụng sai cách & Can thiệp phần cứng:</strong> Chập cháy do dùng sai dòng điện, dùng sạc lô sai công suất; Khách hàng tự ý tháo máy, tự nâng cấp linh kiện hoặc rách tem niêm phong mà không có sự xác nhận của cửa hàng.</span>
+                </li>
+              </ul>
+            </section>
+
           </div>
 
-          {/* Section: Return Policy */}
-          <div className="p-8">
-            <h2 className="text-xl font-bold text-gray-900 mb-5 flex items-center gap-2">
-              <RefreshCw className="text-primary" size={22} /> Chính sách đổi trả
-            </h2>
-
-            <div className="space-y-5">
-              <div className="p-4 bg-red-50 rounded-xl border-l-4 border-primary">
-                <p className="font-bold text-gray-800 mb-1">Phạm vi áp dụng đổi trả</p>
-                <p className="text-gray-600 text-sm">Áp dụng đổi trả hàng trong vòng <strong>1 ngày</strong> đối với các sản phẩm bị hư hỏng do lỗi nhà sản xuất.</p>
-              </div>
-
-              <h3 className="font-bold text-gray-800 mb-3">Điều kiện đổi trả:</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                {[
-                  { text: "Thời gian đổi trả trong vòng 7 ngày kể từ ngày yêu cầu", ok: true },
-                  { text: "Giữ nguyên bao bì, tem mác của sản phẩm", ok: true },
-                  { text: "Số lần đổi trả cho 1 sản phẩm là 1 lần", ok: true },
-                  { text: "Sản phẩm đã hết thời gian đổi trả không được chấp nhận", ok: false },
-                ].map((item, idx) => (
-                  <div key={idx} className={`p-3 rounded-lg border flex items-start gap-2 ${item.ok ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200'}`}>
-                    <span className={`font-bold text-sm mt-0.5 ${item.ok ? 'text-green-600' : 'text-red-500'}`}>{item.ok ? '✓' : '✗'}</span>
-                    <p className="text-gray-700 text-sm leading-relaxed">{item.text}</p>
-                  </div>
-                ))}
-              </div>
-
-              <div className="space-y-4 mt-4">
-                <div className="p-4 bg-blue-50 rounded-xl border border-blue-200">
-                  <p className="font-bold text-gray-800 mb-2">Đối với hàng chưa giao:</p>
-                  <p className="text-gray-600 text-sm leading-relaxed">Khách hàng có thể gọi điện cho nhân viên kinh doanh để thỏa thuận chuyển sang mặt hàng khác.</p>
-                </div>
-
-                <div className="p-4 bg-gray-50 rounded-xl border border-gray-200">
-                  <p className="font-bold text-gray-800 mb-3">Đối với hàng đã giao:</p>
-                  <div className="space-y-3">
-                    <div>
-                      <p className="font-semibold text-green-700 text-sm mb-1">✓ Sản phẩm bị lỗi do nhà cung cấp:</p>
-                      <p className="text-gray-600 text-sm leading-relaxed ml-4">Quý khách có quyền yêu cầu đổi hàng mới. Toàn bộ chi phí do công ty chịu.</p>
-                    </div>
-                    <div>
-                      <p className="font-semibold text-red-600 text-sm mb-1">✗ Sản phẩm bị lỗi do khách hàng:</p>
-                      <p className="text-gray-600 text-sm leading-relaxed ml-4">Nhà cung cấp không chịu trách nhiệm đổi hàng.</p>
-                    </div>
-                    <div>
-                      <p className="font-semibold text-yellow-700 text-sm mb-1">↔ Khách muốn đổi sang sản phẩm khác (không lỗi):</p>
-                      <ul className="text-gray-600 text-sm leading-relaxed ml-4 space-y-1">
-                        <li>• Hàng vẫn phải nguyên đai nguyên kiện</li>
-                        <li>• Kiểm tra xem có phải hàng đặc chủng không</li>
-                        <li>• Mọi chi phí phát sinh (phí vận chuyển,...) khách hàng phải chịu</li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Contact */}
-              <div className="p-5 bg-primary/5 rounded-xl border border-primary/20 mt-6">
-                <p className="font-bold text-gray-800 mb-3">Mọi thắc mắc, yêu cầu hỗ trợ vui lòng liên hệ:</p>
-                <div className="flex flex-col sm:flex-row gap-4">
-                  <a href="tel:0977334415" className="flex items-center gap-2 px-4 py-3 bg-white rounded-lg border border-gray-200 hover:border-primary transition-colors text-gray-700">
-                    <Phone size={16} className="text-primary" />
-                    <span className="font-semibold">0977 334 415</span>
-                    <span className="text-xs text-gray-400">(giờ hành chính)</span>
-                  </a>
-                  <a href="mailto:truong.zvncomputer@gmail.com" className="flex items-center gap-2 px-4 py-3 bg-white rounded-lg border border-gray-200 hover:border-primary transition-colors text-gray-700">
-                    <Mail size={16} className="text-primary" />
-                    <span className="font-semibold">truong.zvncomputer@gmail.com</span>
-                  </a>
-                </div>
-              </div>
-            </div>
+          <div className="bg-gray-50 border-t border-gray-100 p-6 text-center text-gray-500 text-sm">
+            <i>(Vui lòng giữ phiếu này cẩn thận để đối chiếu khi đến bảo hành).</i>
           </div>
+
         </div>
       </div>
     </div>

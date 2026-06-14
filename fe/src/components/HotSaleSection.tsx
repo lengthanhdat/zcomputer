@@ -273,7 +273,7 @@ export default function HotSaleSection({
                       key={`${product._id}-${idx}`}
                       className={`flex-none w-[280px] bg-white rounded-2xl border border-red-100 overflow-hidden group shadow-[0_4px_15px_rgba(220,38,38,0.1)] flex flex-col relative transition-all duration-500 ${isOutOfStock ? 'opacity-80' : 'hover:shadow-[0_8px_30px_rgba(220,38,38,0.25)] hover:border-red-300 hover:-translate-y-2'}`}
                     >
-                      <Link href={`/product/${product.slug}`} className="absolute inset-0 z-10"></Link>
+                      <Link href={`/product/${product.slug}`} className="absolute inset-0 z-20"></Link>
                       <div className="relative aspect-[4/3] p-4 flex items-center justify-center bg-white overflow-hidden">
 
                         {isOutOfStock && (

@@ -231,25 +231,35 @@ export const smartExtractBulk = async (req: Request, res: Response) => {
         fetchUrl = `https://docs.google.com/document/d/${docMatch![1]}/export?format=txt`;
       }
 
-      try {
-        const response = await fetch(fetchUrl);
-        if (!response.ok) {
-           return res.status(400).json({ message: `Không thể truy cập link này (Lỗi ${response.status}). Có thể trang web chặn lấy dữ liệu hoặc file Google Docs chưa được mở quyền chia sẻ (Public).` });
+      let html = "";
+      let fetchSuccess = false;
+      for (let i = 0; i < 3; i++) {
+        try {
+          const response = await fetch(fetchUrl);
+          if (!response.ok) {
+             return res.status(400).json({ message: `Không thể truy cập link này (Lỗi ${response.status}). Có thể trang web chặn lấy dữ liệu hoặc file Google Docs chưa được mở quyền chia sẻ (Public).` });
+          }
+          html = await response.text();
+          fetchSuccess = true;
+          break;
+        } catch (err) {
+          console.error(`Fetch URL attempt ${i+1} failed:`, err);
+          await new Promise(resolve => setTimeout(resolve, 2000));
         }
-        const html = await response.text();
-        
-        // Nếu là Google Docs/Sheets export thì text đã là raw text/csv
-        if (sheetsMatch || fetchUrl.includes('export?format=')) {
-           text = html;
-        } else {
-           // Lấy đoạn text thô (bỏ tag HTML), bao gồm cả script và style
-           text = html.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, ' ')
-                      .replace(/<style\b[^<]*(?:(?!<\/style>)<[^<]*)*<\/style>/gi, ' ')
-                      .replace(/<[^>]*>?/gm, ' ');
-        }
-      } catch (err) {
-        console.error('Fetch URL error:', err);
-        return res.status(400).json({ message: 'Không thể đọc nội dung từ đường link này. Trang web có thể đang chặn hoặc không tồn tại.' });
+      }
+
+      if (!fetchSuccess) {
+        return res.status(400).json({ message: 'Không thể tải nội dung do mạng không ổn định (đã thử 3 lần). Vui lòng thử lại.' });
+      }
+      
+      // Nếu là Google Docs/Sheets export thì text đã là raw text/csv
+      if (sheetsMatch || fetchUrl.includes('export?format=')) {
+         text = html;
+      } else {
+         // Lấy đoạn text thô (bỏ tag HTML), bao gồm cả script và style
+         text = html.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, ' ')
+                    .replace(/<style\b[^<]*(?:(?!<\/style>)<[^<]*)*<\/style>/gi, ' ')
+                    .replace(/<[^>]*>?/gm, ' ');
       }
     }
 

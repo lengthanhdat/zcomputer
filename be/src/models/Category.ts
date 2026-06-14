@@ -5,6 +5,7 @@ export interface ICategory extends Document {
   slug: string;
   parent_id?: mongoose.Types.ObjectId;
   image?: string;
+  order?: number;
 }
 
 const CategorySchema = new Schema<ICategory>(
@@ -13,6 +14,7 @@ const CategorySchema = new Schema<ICategory>(
     slug: { type: String, required: true, unique: true },
     parent_id: { type: Schema.Types.ObjectId, ref: 'Category', default: null },
     image: { type: String },
+    order: { type: Number, default: 0 },
   },
   { timestamps: true }
 );

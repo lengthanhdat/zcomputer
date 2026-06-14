@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { Filter, Cpu, Monitor, Server, HardDrive, Maximize, ArrowRight, Eye, LayoutGrid, Check } from "lucide-react";
+import { Filter, Cpu, Monitor, Server, HardDrive, Maximize, ArrowRight, Eye, LayoutGrid, Check, ChevronDown } from "lucide-react";
 import { useState, useMemo, useEffect } from "react";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { motion } from "framer-motion";
@@ -31,9 +31,10 @@ export default function CategoryClient({
   initialProducts: Product[];
   categoryName: string;
 }) {
-  const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const [showMobileFilter, setShowMobileFilter] = useState(false);
 
   const brands = Array.from(new Set(initialProducts.map(p => p.brand).filter(Boolean))) as string[];
 
@@ -187,17 +188,24 @@ export default function CategoryClient({
             initial={{ opacity: 0, x: -30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.3 }}
-            className="w-full lg:w-72 bg-white p-6 rounded-2xl border border-gray-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] shrink-0 sticky top-24 max-h-[calc(100vh-6rem)] overflow-y-auto custom-scrollbar"
+            className="w-full lg:w-72 bg-white p-6 rounded-2xl border border-gray-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] shrink-0 lg:sticky lg:top-24 lg:max-h-[calc(100vh-6rem)] lg:overflow-y-auto custom-scrollbar"
           >
-            <div className="flex items-center gap-3 font-black text-lg mb-6 pb-4 border-b border-gray-100 text-gray-900 uppercase">
-              <div className="w-8 h-8 rounded-full bg-red-50 flex items-center justify-center">
-                <Filter size={16} className="text-primary" />
+            <div 
+              className="flex items-center justify-between font-black text-lg pb-4 border-b border-gray-100 text-gray-900 uppercase cursor-pointer lg:cursor-default"
+              onClick={() => setShowMobileFilter(!showMobileFilter)}
+            >
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-full bg-red-50 flex items-center justify-center">
+                  <Filter size={16} className="text-primary" />
+                </div>
+                Bộ lọc sản phẩm
               </div>
-              Bộ lọc sản phẩm
+              <ChevronDown size={20} className={`lg:hidden transition-transform duration-300 ${showMobileFilter ? 'rotate-180' : ''}`} />
             </div>
 
-            <div className="mb-8">
-              <h3 className="font-bold mb-4 text-gray-800 uppercase tracking-wider text-sm flex items-center gap-2">
+            <div className={`mt-6 transition-all duration-300 ${showMobileFilter ? 'block' : 'hidden lg:block'}`}>
+              <div className="mb-8">
+                <h3 className="font-bold mb-4 text-gray-800 uppercase tracking-wider text-sm flex items-center gap-2">
                 <span className="w-1 h-4 bg-red-500 rounded-full"></span>Tính năng nổi bật
               </h3>
               <div className="space-y-4">
@@ -301,6 +309,7 @@ export default function CategoryClient({
                   Áp dụng giá
                 </button>
               </div>
+              </div>
             </div>
           </motion.aside>
 
@@ -346,7 +355,7 @@ export default function CategoryClient({
                       key={product._id}
                       className={`bg-white rounded-2xl border border-gray-100 overflow-hidden group shadow-sm flex flex-col h-full relative transition-all duration-300 ${isOutOfStock ? 'opacity-80' : 'hover:shadow-[0_20px_40px_rgb(220,38,38,0.12)] hover:-translate-y-2'}`}
                     >
-                      <Link href={`/product/${product.slug}`} className="absolute inset-0 z-10"></Link>
+                      <Link href={`/product/${product.slug}`} className="absolute inset-0 z-20"></Link>
                       <div className="relative aspect-[4/3] p-4 flex items-center justify-center bg-white overflow-hidden">
 
                         {isOutOfStock && (

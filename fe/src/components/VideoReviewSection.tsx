@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { Play, ChevronRight, Pause } from "lucide-react";
+import { Play, ChevronRight, Pause, Volume2, VolumeX } from "lucide-react";
 import { useState, useRef } from "react";
 
 interface VideoReviewProps {
@@ -11,6 +11,7 @@ interface VideoReviewProps {
 
 const VideoCard = ({ video }: { video: any }) => {
   const [isPlaying, setIsPlaying] = useState(false);
+  const [isMuted, setIsMuted] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
 
   const togglePlay = (e: React.MouseEvent) => {
@@ -20,10 +21,19 @@ const VideoCard = ({ video }: { video: any }) => {
         videoRef.current.pause();
         setIsPlaying(false);
       } else {
-        videoRef.current.play();
-        videoRef.current.muted = false; // play with sound
+        videoRef.current.muted = isMuted;
+        videoRef.current.play().catch(err => console.error("Video play failed:", err));
         setIsPlaying(true);
       }
+    }
+  };
+
+  const toggleMute = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    e.preventDefault();
+    if (videoRef.current) {
+      videoRef.current.muted = !videoRef.current.muted;
+      setIsMuted(videoRef.current.muted);
     }
   };
 
@@ -57,9 +67,7 @@ const VideoCard = ({ video }: { video: any }) => {
       
       {/* Fake Channel Info */}
       <div className="absolute top-4 left-4 right-4 flex items-center gap-3 z-10 pointer-events-none">
-        <div className="w-10 h-10 rounded-full bg-red-600 text-white flex items-center justify-center font-bold text-xl shadow-lg border-2 border-white shrink-0">
-          Z
-        </div>
+        <Image src="/logo.png" alt="ZComputer" width={40} height={40} className="w-10 h-10 rounded-full object-cover shadow-lg border-2 border-white shrink-0 bg-white" />
         <div>
           <h3 className="text-white font-bold text-sm leading-tight drop-shadow-md line-clamp-1">ZComputer Short</h3>
         </div>
@@ -72,6 +80,16 @@ const VideoCard = ({ video }: { video: any }) => {
           className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 text-red-600 bg-white/90 backdrop-blur-sm w-16 h-16 rounded-3xl flex items-center justify-center shadow-2xl scale-90 group-hover:scale-110 transition-transform duration-300 cursor-pointer"
         >
           <Play fill="currentColor" size={32} className="ml-1" />
+        </div>
+      )}
+
+      {/* Mute/Unmute Button Overlay */}
+      {isPlaying && (
+        <div 
+          onClick={toggleMute}
+          className="absolute top-4 right-4 z-20 bg-black/40 hover:bg-black/60 text-white w-10 h-10 rounded-full flex items-center justify-center backdrop-blur-sm transition-colors cursor-pointer"
+        >
+          {isMuted ? <VolumeX size={20} /> : <Volume2 size={20} />}
         </div>
       )}
 

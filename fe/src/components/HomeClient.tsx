@@ -173,7 +173,7 @@ export default function HomeClient() {
           <CategorySkeleton />
         ) : categories.length > 0 ? (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4 lg:gap-6">
-            {(showAllCategories ? categories.filter(c => !c.parent_id) : categories.filter(c => !c.parent_id).slice(0, 6)).map((cat) => {
+            {(showAllCategories ? categories.filter(c => !c.parent_id) : categories.filter(c => !c.parent_id).slice(0, 5)).map((cat) => {
               const getIcon = (name: string) => {
                 const lower = name.toLowerCase();
                 if (lower.includes('màn hình')) return Monitor;
@@ -200,7 +200,7 @@ export default function HomeClient() {
               </Link>
             )})}
             
-            {!showAllCategories && categories.filter(c => !c.parent_id).length > 6 && (
+            {!showAllCategories && categories.filter(c => !c.parent_id).length > 5 && (
               <button
                 onClick={() => setShowAllCategories(true)}
                 className="flex flex-col items-center justify-center gap-4 p-6 rounded-[2rem] bg-red-50 border-2 border-red-100 shadow-sm hover:shadow-md hover:border-primary/30 text-primary transition-all duration-300 cursor-pointer font-bold group relative overflow-hidden hover:-translate-y-2"
@@ -208,10 +208,10 @@ export default function HomeClient() {
                 <div className="w-20 h-20 rounded-full bg-white flex items-center justify-center relative z-10 shadow-sm group-hover:shadow-[0_0_20px_rgb(220,38,38,0.2)] transition-shadow duration-500">
                   <ArrowRight size={32} strokeWidth={1.5} className="text-primary group-hover:translate-x-2 transition-transform duration-300" />
                 </div>
-                <span className="uppercase tracking-widest text-[12px] relative z-10 text-center leading-relaxed">Xem tất cả ({categories.filter(c => !c.parent_id).length - 6})</span>
+                <span className="uppercase tracking-widest text-[12px] relative z-10 text-center leading-relaxed">Xem tất cả ({categories.filter(c => !c.parent_id).length - 5})</span>
               </button>
             )}
-            {showAllCategories && categories.filter(c => !c.parent_id).length > 6 && (
+            {showAllCategories && categories.filter(c => !c.parent_id).length > 5 && (
               <button
                 onClick={() => setShowAllCategories(false)}
                 className="flex flex-col items-center justify-center gap-4 p-6 rounded-[2rem] bg-gray-50 border-2 border-gray-200 shadow-sm hover:shadow-md hover:border-gray-300 text-gray-600 transition-all duration-300 cursor-pointer font-bold group relative overflow-hidden hover:-translate-y-2"
@@ -320,23 +320,8 @@ export default function HomeClient() {
         </section>
       )}
 
-      {/* Features - Promax Design */}
-      <section className="bg-[#0a0a0a] text-white py-24 relative overflow-hidden mt-12 border-t border-gray-800">
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-red-600/10 rounded-full blur-[100px] pointer-events-none"></div>
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-blue-600/10 rounded-full blur-[100px] pointer-events-none"></div>
-        <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-5 mix-blend-overlay"></div>
-        
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8">
-            <Feature icon={<ShieldCheck size={36} />} title="Bảo Hành Tận Nơi" body="Cam kết bảo hành chính hãng. Hỗ trợ kỹ thuật tại nhà nhanh chóng trong 2h." />
-            <Feature icon={<Zap size={36} />} title="Cấu Hình Cực Đỉnh" body="Chỉ cung cấp những linh kiện hiệu năng cao nhất, đã qua kiểm tra nghiêm ngặt." bordered />
-            <Feature icon={<Truck size={36} />} title="Giao Hàng Hỏa Tốc" body="Miễn phí giao hàng toàn quốc. Đóng gói an toàn tuyệt đối chống sốc." />
-          </div>
-        </div>
-      </section>
-
       {/* Customer Testimonials / Gallery */}
-      <section className="bg-[#111111] py-16 border-t border-gray-800">
+      <section className="bg-[#111111] py-16 border-t border-gray-800 mt-12">
         <div className="container mx-auto px-4">
           <div className="text-center max-w-4xl mx-auto mb-14 px-4">
             <h2 className="text-3xl md:text-4xl font-black text-white uppercase tracking-tight mb-6">
@@ -361,6 +346,21 @@ export default function HomeClient() {
                 />
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Features - Promax Design */}
+      <section className="bg-[#0a0a0a] text-white py-24 relative overflow-hidden border-t border-gray-800">
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-red-600/10 rounded-full blur-[100px] pointer-events-none"></div>
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-blue-600/10 rounded-full blur-[100px] pointer-events-none"></div>
+        <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-5 mix-blend-overlay"></div>
+        
+        <div className="container mx-auto px-4 relative z-10">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8">
+            <Feature icon={<ShieldCheck size={36} />} title="Bảo Hành Tận Nơi" body="Cam kết bảo hành chính hãng. Hỗ trợ kỹ thuật tại nhà nhanh chóng trong 2h." />
+            <Feature icon={<Zap size={36} />} title="Cấu Hình Cực Đỉnh" body="Chỉ cung cấp những linh kiện hiệu năng cao nhất, đã qua kiểm tra nghiêm ngặt." bordered />
+            <Feature icon={<Truck size={36} />} title="Giao Hàng Hỏa Tốc" body="Miễn phí giao hàng toàn quốc. Đóng gói an toàn tuyệt đối chống sốc." />
           </div>
         </div>
       </section>
@@ -394,7 +394,7 @@ function ProductCard({ product }: { product: Product }) {
     <div
       className={`flex-none w-[280px] md:w-[280px] bg-white rounded-2xl border border-gray-100 overflow-hidden group shadow-md flex flex-col relative transition-all duration-500 ${isOutOfStock ? 'opacity-80' : 'hover:shadow-[0_8px_30px_rgb(220,38,38,0.15)] hover:border-red-200 hover:-translate-y-2'}`}
     >
-      <Link href={`/product/${product.slug}`} className="absolute inset-0 z-10"></Link>
+      <Link href={`/product/${product.slug}`} className="absolute inset-0 z-20"></Link>
       <div className="relative aspect-[4/3] p-4 flex items-center justify-center bg-white overflow-hidden">
 
         {isOutOfStock && (

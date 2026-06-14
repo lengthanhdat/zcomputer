@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Search, Save, AlertTriangle, CheckCircle, XCircle, Plus, Minus, Edit, Trash2 } from "lucide-react";
+import { Search, Save, AlertTriangle, CheckCircle, XCircle, Plus, Minus, Edit, Trash2, Loader2 } from "lucide-react";
 import toast from "react-hot-toast";
 import { fetchApi } from "@/lib/api";
 
@@ -26,6 +26,7 @@ export default function AdminInventoryPage() {
   const [stockFilter, setStockFilter] = useState<"all" | "out" | "low" | "ok">("all");
   const [editedStocks, setEditedStocks] = useState<Record<string, number>>({});
   const [savingId, setSavingId] = useState<string | null>(null);
+  const [isSavingAll, setIsSavingAll] = useState(false);
 
   const fetchProducts = async () => {
     try {
@@ -91,6 +92,58 @@ export default function AdminInventoryPage() {
     } finally {
       setSavingId(null);
     }
+  };
+
+  const handleSaveAllStock = async () => {
+    const modifiedProducts = products.filter(p => editedStocks[p._id] !== undefined && editedStocks[p._id] !== p.stock);
+    if (modifiedProducts.length === 0) return;
+
+    if (!confirm(`Bạn có muốn lưu thay đổi kho cho ${modifiedProducts.length} sản phẩm?`)) return;
+
+    setIsSavingAll(true);
+    let successCount = 0;
+
+    const promises = modifiedProducts.map(async (product) => {
+      const id = product._id;
+      const newStock = editedStocks[id];
+      let newStatus = product.status;
+      if (newStock > 0 && product.status === "out_of_stock") {
+        newStatus = "active";
+      } else if (newStock === 0) {
+        newStatus = "out_of_stock";
+      }
+
+      const res = await fetchApi(`/products/${id}`, {
+        method: "PUT",
+        body: JSON.stringify({ stock: newStock, status: newStatus }),
+      });
+
+      if (res.ok) {
+        successCount++;
+        return { id, newStock, newStatus };
+      }
+      return null;
+    });
+
+    const results = await Promise.all(promises);
+    
+    setProducts((prev) =>
+      prev.map((p) => {
+        const update = results.find(r => r && r.id === p._id);
+        if (update) {
+          return { ...p, stock: update.newStock, status: update.newStatus || p.status };
+        }
+        return p;
+      })
+    );
+
+    if (successCount === modifiedProducts.length) {
+      toast.success(`Đã lưu thành công ${successCount} sản phẩm!`);
+    } else {
+      toast.error(`Lưu thành công ${successCount}/${modifiedProducts.length} sản phẩm. Có lỗi xảy ra.`);
+    }
+    
+    setIsSavingAll(false);
   };
 
   const handleDelete = async (id: string, name: string) => {
@@ -194,6 +247,20 @@ export default function AdminInventoryPage() {
               }`}
             >
               <CheckCircle size={16} /> Còn hàng (&gt;5)
+            </button>
+          </div>
+
+          <div className="flex w-full md:w-auto mt-3 md:mt-0">
+            <button
+              onClick={handleSaveAllStock}
+              disabled={isSavingAll || products.filter(p => editedStocks[p._id] !== undefined && editedStocks[p._id] !== p.stock).length === 0}
+              className="flex items-center justify-center w-full md:w-auto gap-2 px-5 py-2.5 bg-blue-600 text-white text-sm font-bold rounded-lg hover:bg-blue-700 disabled:bg-gray-400 transition-all shadow-sm shadow-blue-600/20"
+            >
+              {isSavingAll ? (
+                <><Loader2 size={16} className="animate-spin" /> Đang lưu...</>
+              ) : (
+                <><Save size={16} /> Lưu tất cả thay đổi</>
+              )}
             </button>
           </div>
         </div>

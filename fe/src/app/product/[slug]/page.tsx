@@ -173,9 +173,16 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
         <div className="bg-white rounded-3xl border border-gray-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] overflow-hidden">
           <div className="flex flex-col lg:flex-row">
             
-            {/* Left: Gallery */}
-            <div className="w-full lg:w-5/12 p-6 lg:p-8 border-b lg:border-b-0 lg:border-r border-gray-100 bg-gray-50/30">
+            {/* Mobile Gallery */}
+            <div className="w-full p-6 border-b border-gray-100 bg-gray-50/30 lg:hidden">
               <ProductGallery images={product.images || []} altText={product.name} />
+            </div>
+
+            {/* Left: Gallery & Policies */}
+            <div className="w-full lg:w-5/12 p-6 lg:p-8 border-b lg:border-b-0 lg:border-r border-gray-100 bg-gray-50/30 order-2 lg:order-1">
+              <div className="hidden lg:block">
+                <ProductGallery images={product.images || []} altText={product.name} />
+              </div>
               
               {/* Policies & Services */}
               <div className="mt-8 flex flex-col gap-6 bg-[#f8f9fa] p-5 rounded-2xl">
@@ -216,7 +223,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
             </div>
 
             {/* Right: Info */}
-            <div className="w-full lg:w-7/12 p-6 lg:p-10 flex flex-col">
+            <div className="w-full lg:w-7/12 p-6 lg:p-10 flex flex-col order-1 lg:order-2">
               {product.condition && (
                 <div className="mb-4">
                   <span className="inline-flex items-center px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-black uppercase tracking-wider">

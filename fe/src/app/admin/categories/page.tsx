@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Edit, Trash2, X, Plus } from "lucide-react";
+import { Edit, Trash2, X, Plus, GripVertical } from "lucide-react";
+import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import toast from "react-hot-toast";
 import { fetchApi } from "@/lib/api";
 
@@ -41,6 +42,29 @@ export default function AdminCategoriesPage() {
   };
 
   useEffect(() => { fetchCategories(); }, []);
+
+  const onDragEnd = async (result: any) => {
+    if (!result.destination) return;
+    const items = Array.from(categories);
+    const [reorderedItem] = items.splice(result.source.index, 1);
+    items.splice(result.destination.index, 0, reorderedItem);
+
+    setCategories(items); // Optimistic UI update
+
+    const payload = items.map((cat, index) => ({ id: cat._id, order: index }));
+    try {
+      const res = await fetchApi('/categories/reorder', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ items: payload })
+      });
+      if (!res.ok) throw new Error();
+      toast.success("Đã lưu vị trí mới");
+    } catch {
+      toast.error("Lỗi khi lưu vị trí");
+      fetchCategories(); // Revert
+    }
+  };
 
   // Switch to edit mode for a category
   const startEdit = (cat: Category) => {
@@ -166,51 +190,74 @@ export default function AdminCategoriesPage() {
             <table className="w-full text-left border-collapse">
               <thead>
                 <tr className="bg-gray-50 text-gray-600 text-sm border-y border-gray-200">
+                  <th className="py-3 px-4 font-semibold w-10"></th>
                   <th className="py-3 px-4 font-semibold w-1/3">Tên danh mục</th>
                   <th className="py-3 px-4 font-semibold text-center">Danh mục cha</th>
                   <th className="py-3 px-4 font-semibold">Đường dẫn (Slug)</th>
                   <th className="py-3 px-4 font-semibold text-right">Thao tác</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-100">
-                {loading ? (
-                  <tr><td colSpan={3} className="py-8 text-center text-gray-400">Đang tải...</td></tr>
-                ) : categories.length === 0 ? (
-                  <tr><td colSpan={3} className="py-8 text-center text-gray-400">Chưa có danh mục.</td></tr>
-                ) : (
-                  categories.map((cat) => (
-                    <tr
-                      key={cat._id}
-                      className={`transition-colors ${editingId === cat._id ? "bg-red-50 border-l-2 border-primary" : "hover:bg-gray-50"}`}
+              <DragDropContext onDragEnd={onDragEnd}>
+                <Droppable droppableId="categories">
+                  {(provided) => (
+                    <tbody
+                      {...provided.droppableProps}
+                      ref={provided.innerRef}
+                      className="divide-y divide-gray-100"
                     >
-                      <td className="py-3 px-4 text-sm font-semibold text-gray-900">
-                        {cat.parent_id && <span className="text-gray-400 font-normal mr-2">|_</span>}
-                        {cat.name}
-                      </td>
-                      <td className="py-3 px-4 text-sm text-center text-gray-500">
-                        {cat.parent_id ? categories.find(c => c._id === cat.parent_id)?.name || "---" : "---"}
-                      </td>
-                      <td className="py-3 px-4 text-sm text-gray-500 font-mono">{cat.slug}</td>
-                      <td className="py-3 px-4 text-right flex items-center justify-end gap-1">
-                        <button
-                          onClick={() => startEdit(cat)}
-                          className={`p-1.5 rounded transition-colors ${editingId === cat._id ? "bg-primary text-white" : "text-blue-600 hover:bg-blue-50"}`}
-                          title="Chỉnh sửa"
-                        >
-                          <Edit size={15} />
-                        </button>
-                        <button
-                          onClick={() => handleDelete(cat._id, cat.name)}
-                          className="p-1.5 text-red-500 hover:bg-red-50 rounded transition-colors"
-                          title="Xóa"
-                        >
-                          <Trash2 size={15} />
-                        </button>
-                      </td>
-                    </tr>
-                  ))
-                )}
-              </tbody>
+                      {loading ? (
+                        <tr><td colSpan={5} className="py-8 text-center text-gray-400">Đang tải...</td></tr>
+                      ) : categories.length === 0 ? (
+                        <tr><td colSpan={5} className="py-8 text-center text-gray-400">Chưa có danh mục.</td></tr>
+                      ) : (
+                        categories.map((cat, index) => (
+                          <Draggable key={cat._id} draggableId={cat._id} index={index}>
+                            {(provided, snapshot) => (
+                              <tr
+                                ref={provided.innerRef}
+                                {...provided.draggableProps}
+                                className={`transition-colors ${editingId === cat._id ? "bg-red-50 border-l-2 border-primary" : "hover:bg-gray-50"} ${snapshot.isDragging ? "bg-blue-50 shadow-lg z-50 table" : ""}`}
+                                style={provided.draggableProps.style}
+                              >
+                                <td className="py-3 px-4 w-10">
+                                  <div {...provided.dragHandleProps} className="cursor-grab text-gray-400 hover:text-gray-600 active:cursor-grabbing outline-none">
+                                    <GripVertical size={16} />
+                                  </div>
+                                </td>
+                                <td className="py-3 px-4 text-sm font-semibold text-gray-900">
+                                  {cat.parent_id && <span className="text-gray-400 font-normal mr-2">|_</span>}
+                                  {cat.name}
+                                </td>
+                                <td className="py-3 px-4 text-sm text-center text-gray-500">
+                                  {cat.parent_id ? categories.find(c => c._id === cat.parent_id)?.name || "---" : "---"}
+                                </td>
+                                <td className="py-3 px-4 text-sm text-gray-500 font-mono">{cat.slug}</td>
+                                <td className="py-3 px-4 text-right flex items-center justify-end gap-1">
+                                  <button
+                                    onClick={() => startEdit(cat)}
+                                    className={`p-1.5 rounded transition-colors ${editingId === cat._id ? "bg-primary text-white" : "text-blue-600 hover:bg-blue-50"}`}
+                                    title="Chỉnh sửa"
+                                  >
+                                    <Edit size={15} />
+                                  </button>
+                                  <button
+                                    onClick={() => handleDelete(cat._id, cat.name)}
+                                    className="p-1.5 text-red-500 hover:bg-red-50 rounded transition-colors"
+                                    title="Xóa"
+                                  >
+                                    <Trash2 size={15} />
+                                  </button>
+                                </td>
+                              </tr>
+                            )}
+                          </Draggable>
+                        ))
+                      )}
+                      {provided.placeholder}
+                    </tbody>
+                  )}
+                </Droppable>
+              </DragDropContext>
             </table>
           </div>
         </div>

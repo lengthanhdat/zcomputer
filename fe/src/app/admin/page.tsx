@@ -18,8 +18,16 @@ export default function AdminDashboardPage() {
     const fetchStats = async () => {
       try {
         const res = await fetch("http://127.0.0.1:5000/api/stats");
-        const data = await res.json();
-        setStats(data);
+        if (res.ok) {
+          const data = await res.json();
+          setStats({
+            products: data.products || 0,
+            categories: data.categories || 0,
+            users: data.users || 0,
+            orders: data.orders || 0,
+            revenue: data.revenue || 0,
+          });
+        }
       } catch (error) {
         console.error("Failed to fetch stats", error);
       } finally {

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -9,6 +9,7 @@ import { Search, Menu, X, PhoneCall, MapPin } from "lucide-react";
 import HeaderAuth from "./HeaderAuth";
 import HeaderCart from "./HeaderCart";
 import HeaderNav from "./HeaderNav";
+import { fetchApi } from "@/lib/api";
 
 const montserrat = Montserrat({ subsets: ["latin", "vietnamese"], weight: ["700", "900"] });
 const playfair = Playfair_Display({ subsets: ["latin", "vietnamese"], weight: ["700", "900"] });
@@ -16,7 +17,15 @@ const playfair = Playfair_Display({ subsets: ["latin", "vietnamese"], weight: ["
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [categories, setCategories] = useState<any[]>([]);
   const router = useRouter();
+
+  useEffect(() => {
+    fetchApi('/categories', { requireAuth: false })
+      .then(r => r.ok ? r.json() : [])
+      .then(data => setCategories(data))
+      .catch(() => {});
+  }, []);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -139,29 +148,51 @@ export default function Header() {
           {/* Side Drawer */}
           <div 
             onClick={(e) => e.stopPropagation()}
-            className="bg-white w-72 h-full shadow-2xl p-6 flex flex-col justify-between"
+            className="bg-white w-72 h-full shadow-2xl flex flex-col"
           >
-            <div className="space-y-6">
+            <div className="flex-1 overflow-y-auto p-6 space-y-6">
               <div>
                 <h3 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">Danh mục chính</h3>
                 <ul className="space-y-4 font-bold text-sm text-gray-800">
                   <li>
                     <Link href="/" onClick={() => setMobileMenuOpen(false)} className="block py-1 hover:text-primary transition-colors">Trang chủ</Link>
                   </li>
+                  {categories.map((cat: any) => (
+                    <li key={cat._id}>
+                      <Link href={`/category/${cat.slug}`} onClick={() => setMobileMenuOpen(false)} className="block py-1 hover:text-primary transition-colors uppercase">
+                        {cat.name}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className="border-t pt-5">
+                <h3 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">Thông tin</h3>
+                <ul className="space-y-4 font-bold text-sm text-gray-800">
                   <li>
-                    <Link href="/category/laptop-cu" onClick={() => setMobileMenuOpen(false)} className="block py-1 hover:text-primary transition-colors">Laptop Cũ</Link>
+                    <Link href="/category/all" onClick={() => setMobileMenuOpen(false)} className="block py-1 hover:text-primary transition-colors">Tất cả sản phẩm</Link>
                   </li>
                   <li>
-                    <Link href="/category/pc-cu" onClick={() => setMobileMenuOpen(false)} className="block py-1 hover:text-primary transition-colors">PC Cũ</Link>
+                    <Link href="/chinh-sach-bao-hanh" onClick={() => setMobileMenuOpen(false)} className="block py-1 hover:text-primary transition-colors">Chính sách bảo hành</Link>
                   </li>
                   <li>
-                    <Link href="/category/man-hinh-cu" onClick={() => setMobileMenuOpen(false)} className="block py-1 hover:text-primary transition-colors">Màn hình Cũ</Link>
+                    <Link href="/ve-chung-toi" onClick={() => setMobileMenuOpen(false)} className="block py-1 hover:text-primary transition-colors">Về ZComputer</Link>
+                    <ul className="pl-4 mt-2 space-y-3 font-medium text-gray-600">
+                      <li><Link href="/ve-chung-toi" onClick={() => setMobileMenuOpen(false)} className="block hover:text-primary transition-colors">Giới thiệu về ZCOMPUTER</Link></li>
+                      <li><Link href="/lien-he" onClick={() => setMobileMenuOpen(false)} className="block hover:text-primary transition-colors">Liên hệ</Link></li>
+                      <li><Link href="/tuyen-dung" onClick={() => setMobileMenuOpen(false)} className="block hover:text-primary transition-colors">Tuyển dụng</Link></li>
+                    </ul>
                   </li>
                   <li>
-                    <Link href="/category/linh-kien-cu" onClick={() => setMobileMenuOpen(false)} className="block py-1 hover:text-primary transition-colors">Linh kiện Cũ</Link>
+                    <Link href="/thu-mua-cu" onClick={() => setMobileMenuOpen(false)} className="block py-1 hover:text-primary transition-colors">Thu cũ đổi mới</Link>
+                  </li>
+                  <li>
+                    <Link href="/gioi-thieu-ban-be" onClick={() => setMobileMenuOpen(false)} className="block py-1 hover:text-primary transition-colors">Giới thiệu bạn bè</Link>
                   </li>
                 </ul>
               </div>
+
               <div className="sm:hidden border-t pt-5">
                 <h3 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">Tài khoản</h3>
                 <div onClick={() => setMobileMenuOpen(false)}>
@@ -169,7 +200,7 @@ export default function Header() {
                 </div>
               </div>
             </div>
-            <div className="text-xs text-gray-400 text-center border-t pt-5">
+            <div className="p-4 shrink-0 text-xs text-gray-400 text-center border-t bg-white">
               ZCOMPUTER © {new Date().getFullYear()}
             </div>
           </div>

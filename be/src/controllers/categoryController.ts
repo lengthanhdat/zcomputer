@@ -5,7 +5,7 @@ import slugify from 'slugify';
 // Lấy danh sách danh mục
 export const getCategories = async (req: Request, res: Response) => {
   try {
-    const categories = await Category.find().select('name slug description parent_id image').lean();
+    const categories = await Category.find().sort({ order: 1, createdAt: 1 }).select('name slug description parent_id image order').lean();
     res.set('Cache-Control', 'public, max-age=120, stale-while-revalidate=60');
     res.json(categories);
   } catch (error) {
@@ -72,5 +72,27 @@ export const updateCategory = async (req: Request, res: Response) => {
     res.json(updated);
   } catch (error) {
     res.status(500).json({ message: 'Lỗi cập nhật danh mục', error });
+  }
+};
+
+// Reorder categories
+export const reorderCategories = async (req: Request, res: Response) => {
+  try {
+    const { items } = req.body; // Array of { id, order }
+    if (!Array.isArray(items)) {
+      return res.status(400).json({ message: 'Dữ liệu không hợp lệ' });
+    }
+
+    const bulkOps = items.map((item) => ({
+      updateOne: {
+        filter: { _id: item.id },
+        update: { order: item.order }
+      }
+    }));
+
+    await Category.bulkWrite(bulkOps);
+    res.json({ message: 'Cập nhật vị trí thành công' });
+  } catch (error) {
+    res.status(500).json({ message: 'Lỗi cập nhật vị trí', error });
   }
 };

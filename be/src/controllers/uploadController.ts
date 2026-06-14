@@ -52,12 +52,12 @@ export const uploadImage = (req: Request, res: Response) => {
 
 const uploadVideoMulter = multer({ 
   storage,
-  limits: { fileSize: 50 * 1024 * 1024 }, // 50MB limit for video
+  limits: { fileSize: 200 * 1024 * 1024 }, // 200MB limit for video
   fileFilter: (req, file, cb) => {
-    const allowedTypes = /mp4|mov|webm|avi/;
-    const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
-    const mimetype = allowedTypes.test(file.mimetype);
-    if (extname && mimetype) {
+    const allowedExt = /mp4|mov|webm|avi|mkv/;
+    const extname = allowedExt.test(path.extname(file.originalname).toLowerCase());
+    const mimetypeOk = file.mimetype.startsWith('video/');
+    if (extname && mimetypeOk) {
       return cb(null, true);
     } else {
       cb(new Error('Chỉ chấp nhận file video (mp4, mov, webm, avi)'));

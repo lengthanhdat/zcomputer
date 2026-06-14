@@ -68,8 +68,11 @@ export default function AdminVideoReviewsPage() {
     const toastId = toast.loading("Đang tải video lên (Vui lòng đợi)...");
 
     try {
-      const res = await fetchApi("/upload/video", {
+      // Upload thẳng tới backend để bypass giới hạn 10MB của Next.js proxy
+      const token = localStorage.getItem("token");
+      const res = await fetch("http://localhost:5000/api/upload/video", {
         method: "POST",
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
         body: data,
       });
       const result = await res.json();
