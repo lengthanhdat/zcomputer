@@ -16,10 +16,10 @@ export default function Footer() {
           <div className="space-y-6">
             <Link href="/" className="flex items-center gap-3 shrink-0 group">
               <div className="bg-transparent p-0 rounded-xl">
-                <Image src="/logo.webp" alt="ZCOMPUTER" width={80} height={80} className="h-14 w-14 sm:h-[68px] sm:w-[68px] object-contain drop-shadow-md" />
+                <Image src="/logo.png" alt="ZCOMPUTER" width={80} height={80} className="h-14 w-14 sm:h-[68px] sm:w-[68px] object-contain drop-shadow-md" />
               </div>
               <div className="flex flex-col items-start justify-center">
-                <div className={`${playfair.className} flex items-center select-none group-hover:scale-[1.02] transition-transform duration-300`}>
+                <div className={`${montserrat.className} flex items-center select-none group-hover:scale-[1.02] transition-transform duration-300`}>
                   <span className="text-[#CC0000] text-[28px] sm:text-[34px] font-black drop-shadow-sm leading-none">Z</span>
                   <span className="text-white text-[28px] sm:text-[34px] font-black uppercase drop-shadow-sm leading-none">COMPUTER</span>
                 </div>
@@ -120,11 +120,25 @@ export default function Footer() {
                 Kết nối với chúng tôi
                 <span className="absolute bottom-0 left-0 w-12 h-1 bg-primary rounded-full"></span>
               </h3>
-              <div className="flex gap-3">
-                <a href="#" className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-white hover:bg-[#1877F2] hover:-translate-y-1 transition-all duration-300 shadow-lg"><FaFacebookF size={16} /></a>
+              <div className="flex gap-3 mb-6">
+                <a href="https://www.facebook.com/pcgamingthuduc" target="_blank" rel="noreferrer" className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-white hover:bg-[#1877F2] hover:-translate-y-1 transition-all duration-300 shadow-lg"><FaFacebookF size={16} /></a>
                 <a href="#" className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-white hover:bg-[#E4405F] hover:-translate-y-1 transition-all duration-300 shadow-lg"><FaInstagram size={16} /></a>
-                <a href="#" className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-white hover:bg-black hover:-translate-y-1 transition-all duration-300 shadow-lg"><FaTiktok size={16} /></a>
+                <a href="https://www.tiktok.com/@zcomputertd" target="_blank" rel="noreferrer" className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-white hover:bg-black hover:-translate-y-1 transition-all duration-300 shadow-lg"><FaTiktok size={16} /></a>
                 <a href="#" className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-white hover:bg-[#FF0000] hover:-translate-y-1 transition-all duration-300 shadow-lg"><FaYoutube size={16} /></a>
+              </div>
+              
+              <div className="bg-white rounded-lg overflow-hidden w-fit shadow-md">
+                <iframe 
+                  src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2Fpcgamingthuduc&tabs=&width=270&height=130&small_header=false&adapt_container_width=true&hide_cover=false&show_facepile=false&appId" 
+                  width="270" 
+                  height="130" 
+                  style={{ border: "none", overflow: "hidden" }} 
+                  scrolling="no" 
+                  frameBorder="0" 
+                  allowFullScreen={true} 
+                  allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
+                  title="Facebook Fanpage ZCOMPUTER"
+                ></iframe>
               </div>
             </div>
           </div>

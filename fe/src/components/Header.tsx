@@ -49,9 +49,9 @@ export default function Header() {
             }
           }}
         >
-          <Image src="/logo.webp" alt="Z" width={80} height={80} priority className="h-14 w-14 sm:h-[68px] sm:w-[68px] object-contain group-hover:scale-105 transition-all duration-300 drop-shadow-md" />
+          <Image src="/logo.png" alt="Z" width={80} height={80} priority className="h-14 w-14 sm:h-[68px] sm:w-[68px] object-contain group-hover:scale-105 transition-all duration-300 drop-shadow-md" />
           <div className="flex flex-col items-start justify-center">
-            <div className={`${playfair.className} flex items-center select-none group-hover:scale-[1.02] transition-transform duration-300`}>
+            <div className={`${montserrat.className} flex items-center select-none group-hover:scale-[1.02] transition-transform duration-300`}>
               <span className="text-[#CC0000] text-[28px] sm:text-[34px] font-black drop-shadow-sm leading-none">Z</span>
               <span className="text-black text-[28px] sm:text-[34px] font-black uppercase drop-shadow-sm leading-none">COMPUTER</span>
             </div>
@@ -91,7 +91,7 @@ export default function Header() {
               </div>
             </div>
 
-            <div className="flex items-center gap-2 group cursor-pointer">
+            <Link href="/he-thong-cua-hang" className="flex items-center gap-2 group cursor-pointer">
               <div className="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center text-gray-600 group-hover:bg-gray-800 group-hover:text-white transition-colors duration-300">
                 <MapPin size={20} />
               </div>
@@ -99,7 +99,7 @@ export default function Header() {
                 <span className="text-[11px] text-gray-500 font-medium uppercase tracking-wide">Hệ thống 2 cơ sở</span>
                 <span className="text-[15px] font-black text-gray-800 leading-tight">Showroom</span>
               </div>
-            </div>
+            </Link>
           </div>
 
           <HeaderCart />

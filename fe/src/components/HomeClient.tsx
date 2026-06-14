@@ -129,7 +129,7 @@ export default function HomeClient() {
 
 
   return (
-    <div className="bg-[#f8f9fa] min-h-screen text-gray-900 selection:bg-primary selection:text-white pb-20">
+    <div className="bg-[#f8f9fa] min-h-screen text-gray-900 selection:bg-primary selection:text-white">
       {/* Banner */}
       <section className="container mx-auto px-4 pt-8 pb-12">
         {banners === null ? (
@@ -325,6 +325,36 @@ export default function HomeClient() {
             <Feature icon={<ShieldCheck size={36} />} title="Bảo Hành Tận Nơi" body="Cam kết bảo hành chính hãng. Hỗ trợ kỹ thuật tại nhà nhanh chóng trong 2h." />
             <Feature icon={<Zap size={36} />} title="Cấu Hình Cực Đỉnh" body="Chỉ cung cấp những linh kiện hiệu năng cao nhất, đã qua kiểm tra nghiêm ngặt." bordered />
             <Feature icon={<Truck size={36} />} title="Giao Hàng Hỏa Tốc" body="Miễn phí giao hàng toàn quốc. Đóng gói an toàn tuyệt đối chống sốc." />
+          </div>
+        </div>
+      </section>
+
+      {/* Customer Testimonials / Gallery */}
+      <section className="bg-[#111111] py-16 border-t border-gray-800">
+        <div className="container mx-auto px-4">
+          <div className="text-center max-w-4xl mx-auto mb-14 px-4">
+            <h2 className="text-3xl md:text-4xl font-black text-white uppercase tracking-tight mb-6">
+              LỜI CẢM ƠN TỪ <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-400">ZCOMPUTER</span>
+            </h2>
+            <div className="w-24 h-1 bg-gradient-to-r from-red-600 to-orange-500 mx-auto mb-8 rounded-full shadow-[0_0_10px_rgba(220,38,38,0.5)]"></div>
+            <p className="text-gray-300 text-base md:text-[17px] leading-8 md:leading-9 italic font-medium">
+              &quot;ZCOMPUTER trân trọng từng khoảnh khắc được đồng hành cùng quý khách. Sự tin tưởng và ủng hộ của bạn chính là động lực to lớn giúp chúng tôi không ngừng hoàn thiện, mang đến những sản phẩm và dịch vụ chất lượng nhất. Hy vọng ZCOMPUTER sẽ luôn là địa chỉ uy tín, gắn bó lâu dài cùng đam mê công nghệ của quý khách. Chân thành cảm ơn bạn đã lựa chọn chúng tôi!&quot;
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+            {Array.from({ length: 10 }).map((_, i) => (
+              <div key={i} className="relative aspect-[4/3] rounded-xl overflow-hidden group shadow-lg border border-gray-800">
+                <img 
+                  src={`/images/customers/customer-${i + 1}.jpg`} 
+                  alt={`ZComputer Customer ${i + 1}`}
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                  onError={(e) => {
+                    e.currentTarget.src = `https://placehold.co/400x300/222222/666666?text=Customer+${i + 1}`;
+                  }}
+                />
+              </div>
+            ))}
           </div>
         </div>
       </section>
