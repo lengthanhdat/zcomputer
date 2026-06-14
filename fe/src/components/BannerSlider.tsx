@@ -59,7 +59,7 @@ export default function BannerSlider({ banners, apiBase }: BannerSliderProps) {
       >
         {banners.map((banner) => {
           const imageUrl = banner.image
-            ? banner.image.startsWith("http") || banner.image.startsWith("data:")
+            ? banner.image.startsWith("http") || banner.image.startsWith("data:") || banner.image.startsWith("/uploads")
               ? banner.image
               : `${apiBase}${banner.image}`
             : null;

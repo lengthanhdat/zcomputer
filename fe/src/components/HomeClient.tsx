@@ -149,7 +149,7 @@ export default function HomeClient() {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-2 lg:mt-0">
                 {banners.filter(b => b.position === 'sub').slice(0, 3).map((banner) => (
                   <Link key={banner._id} href={banner.link || "#"} className="block relative w-full rounded-2xl overflow-hidden group shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
-                    <img src={(banner.image || "").startsWith('http') || (banner.image || "").startsWith('data:') ? banner.image : `${API_BASE}${banner.image}`} alt={banner.title} className="w-full h-auto object-contain group-hover:scale-105 transition-transform duration-500" />
+                    <img src={(banner.image || "").startsWith('http') || (banner.image || "").startsWith('data:') || (banner.image || "").startsWith('/uploads') ? banner.image : `${API_BASE}${banner.image}`} alt={banner.title} className="w-full h-auto object-contain group-hover:scale-105 transition-transform duration-500" />
                   </Link>
                 ))}
               </div>
