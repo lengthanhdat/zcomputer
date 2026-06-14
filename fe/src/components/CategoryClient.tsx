@@ -2,10 +2,11 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { Filter, Cpu, Monitor, Server, HardDrive, Maximize, ArrowRight, Eye, LayoutGrid, Check, ChevronDown } from "lucide-react";
+import { Filter, Cpu, Monitor, Server, HardDrive, Maximize, ArrowRight, Eye, LayoutGrid, Check, ChevronDown, Heart } from "lucide-react";
 import { useState, useMemo, useEffect } from "react";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { motion } from "framer-motion";
+import LikeButton from "./LikeButton";
 
 type Product = {
   _id: string;
@@ -377,6 +378,24 @@ export default function CategoryClient({
                           />
                         )}
                         
+                        {/* ZCOMPUTER Overlay Frame */}
+                        <div className="absolute inset-0 pointer-events-none z-[15] p-2 opacity-80">
+                          <div className="w-full h-full border border-primary/10 rounded-xl relative">
+                            <div className="absolute -top-[1px] -left-[1px] w-5 h-5 border-t-2 border-l-2 border-primary/60 rounded-tl-xl"></div>
+                            <div className="absolute -top-[1px] -right-[1px] w-5 h-5 border-t-2 border-r-2 border-primary/60 rounded-tr-xl"></div>
+                            <div className="absolute -bottom-[1px] -left-[1px] w-5 h-5 border-b-2 border-l-2 border-primary/60 rounded-bl-xl"></div>
+                            <div className="absolute -bottom-[1px] -right-[1px] w-5 h-5 border-b-2 border-r-2 border-primary/60 rounded-br-xl"></div>
+                            
+                            <div className="absolute bottom-2 right-2 flex items-center gap-1 opacity-50 mix-blend-multiply">
+                              <Image src="/logo.png" alt="ZCOMPUTER" width={20} height={20} className="w-4 h-4 object-contain" unoptimized />
+                              <div className="flex items-baseline select-none tracking-tighter">
+                                <span className="text-red-600 font-black text-[11px] drop-shadow-sm">Z</span>
+                                <span className="text-slate-800 font-black text-[10px] uppercase drop-shadow-sm">COMPUTER</span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        
                         {/* Badges */}
                         <div className="absolute top-4 left-4 z-20 flex flex-col gap-1.5">
                           {product.isHotSale && (
@@ -400,7 +419,7 @@ export default function CategoryClient({
 
                         {/* Hover Action */}
                         {!isOutOfStock && (
-                          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 translate-y-8 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-300 z-30">
+                          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 translate-y-8 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-300 z-30 pointer-events-none">
                             <div className="bg-white/95 backdrop-blur-sm text-primary text-sm font-bold px-6 py-2 rounded-full shadow-lg border border-primary/20 flex items-center gap-2 whitespace-nowrap">
                               Xem chi tiết <ArrowRight size={16} />
                             </div>
@@ -408,9 +427,10 @@ export default function CategoryClient({
                         )}
                       </div>
                       
-                      <div className="p-4 flex flex-col flex-1 bg-white relative z-10 border-t border-gray-50/50">
+                      <div className="p-4 flex flex-col flex-1 bg-white border-t border-gray-50/50">
                         <div className="flex items-center justify-between mb-2">
                           <div className="text-[11px] font-bold text-gray-500 uppercase">{product.brand || "KHÁC"}</div>
+                          <LikeButton product={product} />
                         </div>
                         <Link href={`/product/${product.slug}`} className="hover:text-red-600 transition-colors mb-3 z-30 relative">
                           <h3 className="text-gray-700 text-[13px] font-medium leading-relaxed line-clamp-2">{product.name}</h3>

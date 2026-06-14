@@ -4,155 +4,130 @@ import { Playfair_Display, Montserrat } from "next/font/google";
 import { FaFacebookF, FaInstagram, FaTiktok, FaYoutube, FaMapMarkerAlt, FaPhoneAlt, FaEnvelope, FaChevronRight } from "react-icons/fa";
 
 const montserrat = Montserrat({ subsets: ["latin", "vietnamese"], weight: ["700", "900"] });
-const playfair = Playfair_Display({ subsets: ["latin", "vietnamese"], weight: ["700", "900"] });
 
 export default function Footer() {
   return (
-    <footer className="bg-[#0f1115] text-gray-400 font-sans mt-20 border-t border-gray-800">
-      <div className="container mx-auto px-4 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 lg:gap-8">
+    <footer className="relative bg-[#0b0f19] text-white/80 font-sans mt-20 border-t border-white/10 overflow-hidden">
+      {/* Ambient Glowing Backgrounds */}
+      <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-red-600/10 rounded-full blur-[120px] pointer-events-none"></div>
+      <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-blue-600/10 rounded-full blur-[100px] pointer-events-none"></div>
+      
+      <div className="container mx-auto px-4 py-12 relative z-10">
+        
+        {/* TOP ADDRESS BLOCK (Liquid Glass Card) */}
+        <div className="mb-12 bg-white/5 backdrop-blur-lg border border-white/10 rounded-3xl p-8 lg:p-10 shadow-2xl relative overflow-hidden group">
+          <div className="absolute inset-0 bg-gradient-to-r from-red-600/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"></div>
           
-          {/* Column 1: Về ZCOMPUTER */}
-          <div className="space-y-6">
-            <Link href="/" className="flex items-center gap-3 shrink-0 group">
-              <div className="bg-transparent p-0 rounded-xl">
-                <Image src="/logo.png" alt="ZCOMPUTER" width={80} height={80} className="h-14 w-14 sm:h-[68px] sm:w-[68px] object-contain drop-shadow-md" />
-              </div>
-              <div className="flex flex-col items-start justify-center">
-                <div className={`${montserrat.className} flex items-center select-none group-hover:scale-[1.02] transition-transform duration-300`}>
-                  <span className="text-[#CC0000] text-[28px] sm:text-[34px] font-black drop-shadow-sm leading-none">Z</span>
-                  <span className="text-white text-[28px] sm:text-[34px] font-black uppercase drop-shadow-sm leading-none">COMPUTER</span>
-                </div>
-                <span className={`${montserrat.className} text-[#CC0000] text-[8px] sm:text-[9.5px] font-black uppercase tracking-widest mt-1`}>
-                  PC GAMING - LAPTOP - WORKSTATION
-                </span>
-              </div>
-            </Link>
-            
-            <div className="text-sm leading-relaxed space-y-2">
-              <p className="font-bold text-gray-200 text-base">CÔNG TY TNHH TM DV ZCOM</p>
-              <p>MST: 0317130199 - Sở KHĐT TP.HCM (18/01/2022)</p>
-              <p>Chuyên cung cấp linh kiện PC, Laptop & thiết bị hi-end chính hãng.</p>
-            </div>
-            
-            <div className="space-y-4 pt-2">
-              <a href="tel:0977334415" className="flex items-center gap-4 group">
-                <div className="w-10 h-10 rounded-full bg-gray-800/50 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-all">
-                  <FaPhoneAlt size={14} />
-                </div>
-                <div>
-                  <p className="text-xs text-gray-500 font-medium">Hotline 24/7</p>
-                  <p className="font-bold text-white group-hover:text-primary transition-colors">0977 334 415</p>
-                </div>
-              </a>
-              <a href="mailto:truong.zvncomputer@gmail.com" className="flex items-center gap-4 group">
-                <div className="w-10 h-10 rounded-full bg-gray-800/50 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-all">
-                  <FaEnvelope size={14} />
-                </div>
-                <div>
-                  <p className="text-xs text-gray-500 font-medium">Email liên hệ</p>
-                  <p className="font-bold text-white group-hover:text-primary transition-colors">truong.zvncomputer@gmail.com</p>
-                </div>
-              </a>
-            </div>
-          </div>
-
-          {/* Column 2: Hệ thống chi nhánh */}
-          <div className="space-y-6">
-            <h3 className="text-white font-bold text-lg uppercase tracking-widest relative pb-4 inline-block">
-              Hệ thống cửa hàng
-              <span className="absolute bottom-0 left-0 w-12 h-1 bg-primary rounded-full"></span>
-            </h3>
-            
-            <div className="space-y-5">
-              <div className="group">
-                <h4 className="text-gray-200 font-bold text-sm mb-2 flex items-center gap-2">
-                  <FaMapMarkerAlt className="text-primary" /> Chi nhánh Thủ Đức
-                </h4>
-                <p className="text-sm leading-relaxed mb-3 group-hover:text-gray-300 transition-colors">
-                  23 Đường số 1, Khu phố 61, Phường Linh Xuân, 23 Đ. số 1, Linh Xuân, Hồ Chí Minh, Việt Nam
-                </p>
-                <a href="https://www.google.com/maps/place/Z+Computer-+Pc+Gaming-Laptop-Workstation/@10.8522646,106.7537944,20z/data=!4m14!1m7!3m6!1s0x31752722e4c10833:0x6ac88810b4b7dee!2sZ+Computer-+Pc+Gaming-Laptop-Workstation!8m2!3d10.8521273!4d106.7538518!16s%2Fg%2F11lbjb7txf!3m5!1s0x31752722e4c10833:0x6ac88810b4b7dee!8m2!3d10.8521273!4d106.7538518!16s%2Fg%2F11lbjb7txf?entry=ttu&g_ep=EgoyMDI2MDYxMC4wIKXMDSoASAFQAw%3D%3D" target="_blank" rel="noreferrer" className="text-xs font-bold text-primary hover:text-red-400 uppercase tracking-wider flex items-center gap-1 mb-3">
-                  Chỉ đường tới shop <FaChevronRight size={10} />
-                </a>
-                <iframe 
-                  src="https://maps.google.com/maps?q=Z+Computer-+Pc+Gaming-Laptop-Workstation&t=&z=16&ie=UTF8&iwloc=&output=embed" 
-                  width="100%" 
-                  height="120" 
-                  style={{ border: 0, borderRadius: '8px' }} 
-                  allowFullScreen 
-                  loading="lazy" 
-                  referrerPolicy="no-referrer-when-downgrade"
-                  className="shadow-sm mt-1"
-                ></iframe>
-              </div>
-
-              <div className="w-full h-px bg-gray-800/50 my-4"></div>
-
-              <div className="group">
-                <h4 className="text-gray-200 font-bold text-sm mb-2 flex items-center gap-2">
-                  <FaMapMarkerAlt className="text-primary" /> Chi nhánh Bình Thạnh
-                </h4>
-                <p className="text-sm leading-relaxed mb-3 group-hover:text-gray-300 transition-colors">
-                  47/86B Bùi Đình Tuý, Phường 14, Q. Bình Thạnh, TP. Hồ Chí Minh
-                </p>
-                <a href="https://maps.google.com/?q=ZCOMPUTER+BÌNH+THẠNH" target="_blank" rel="noreferrer" className="text-xs font-bold text-primary hover:text-red-400 uppercase tracking-wider flex items-center gap-1 mb-3">
-                  Chỉ đường tới shop <FaChevronRight size={10} />
-                </a>
-                <iframe 
-                  src="https://maps.google.com/maps?q=47/86B+Bùi+Đình+Tuý,+Phường+14,+Bình+Thạnh,+TP.+Hồ+Chí+Minh&t=&z=15&ie=UTF8&iwloc=&output=embed" 
-                  width="100%" 
-                  height="120" 
-                  style={{ border: 0, borderRadius: '8px' }} 
-                  allowFullScreen 
-                  loading="lazy" 
-                  referrerPolicy="no-referrer-when-downgrade"
-                  className="shadow-sm mt-1"
-                ></iframe>
-              </div>
-            </div>
-          </div>
-
-          {/* Column 3: Kết nối & Thanh toán */}
-          <div className="space-y-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center relative z-10">
             <div>
-              <h3 className="text-white font-bold text-lg uppercase tracking-widest relative pb-4 inline-block mb-4">
-                Kết nối với chúng tôi
-                <span className="absolute bottom-0 left-0 w-12 h-1 bg-primary rounded-full"></span>
+              <h3 className="text-xl md:text-2xl font-black text-white uppercase mb-6 flex items-center gap-3">
+                HỆ THỐNG CỬA HÀNG ZCOMPUTER 
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none" className="text-red-500 transform rotate-45"><path d="M2 21L23 12L2 3V10L17 12L2 14V21Z"/></svg>
               </h3>
-              <div className="flex gap-3 mb-6">
-                <a href="https://www.facebook.com/pcgamingthuduc" target="_blank" rel="noreferrer" className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-white hover:bg-[#1877F2] hover:-translate-y-1 transition-all duration-300 shadow-lg"><FaFacebookF size={16} /></a>
-                <a href="#" className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-white hover:bg-[#E4405F] hover:-translate-y-1 transition-all duration-300 shadow-lg"><FaInstagram size={16} /></a>
-                <a href="https://vt.tiktok.com/ZSQxHwj4q/" target="_blank" rel="noreferrer" className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-white hover:bg-black hover:-translate-y-1 transition-all duration-300 shadow-lg"><FaTiktok size={16} /></a>
-                <a href="#" className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-white hover:bg-[#FF0000] hover:-translate-y-1 transition-all duration-300 shadow-lg"><FaYoutube size={16} /></a>
-              </div>
-              
-              <div className="bg-white rounded-lg overflow-hidden w-fit shadow-md">
-                <iframe 
-                  src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2Fpcgamingthuduc&tabs=&width=270&height=130&small_header=false&adapt_container_width=true&hide_cover=false&show_facepile=false&appId" 
-                  width="270" 
-                  height="130" 
-                  style={{ border: "none", overflow: "hidden" }} 
-                  scrolling="no" 
-                  frameBorder="0" 
-                  allowFullScreen={true} 
-                  allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
-                  title="Facebook Fanpage ZCOMPUTER"
-                ></iframe>
+              <div className="text-[15px] space-y-3.5 text-white/70">
+                <p className="flex items-start gap-3">
+                  <FaMapMarkerAlt className="text-red-500 mt-1 shrink-0" />
+                  <span><strong className="text-white">Showroom 1:</strong> 23 Đường số 1, Khu phố 61, Phường Linh Xuân, TP. Thủ Đức, TP.HCM</span>
+                </p>
+                <p className="flex items-start gap-3">
+                  <FaMapMarkerAlt className="text-red-500 mt-1 shrink-0" />
+                  <span><strong className="text-white">Showroom 2:</strong> 47/86B Bùi Đình Tuý, Phường 14, Q. Bình Thạnh, TP.HCM</span>
+                </p>
+                <p className="flex items-center gap-3"><FaChevronRight className="text-red-500 text-[10px]" /> Làm việc từ 8:30 - 18:00 tất cả các ngày trong tuần.</p>
+                <p className="flex items-center gap-3"><FaPhoneAlt className="text-red-500" /> Hotline Hỗ Trợ: <strong className="text-red-400 font-bold text-lg">0977.334.415</strong></p>
+                <p className="flex items-center gap-3"><FaEnvelope className="text-red-500" /> Email: <strong className="text-white">truong.zvncomputer@gmail.com</strong></p>
               </div>
             </div>
+            
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+               <div className="group/map">
+                  <p className="text-sm font-bold text-white mb-3 flex items-center gap-2"><div className="w-2 h-2 rounded-full bg-red-500 animate-pulse"></div> Chi nhánh Thủ Đức</p>
+                  <div className="rounded-2xl overflow-hidden border border-white/10 group-hover/map:border-red-500/50 transition-colors relative">
+                    <div className="absolute inset-0 bg-red-500/0 opacity-0 group-hover/map:opacity-100 transition-opacity pointer-events-none z-10 mix-blend-overlay"></div>
+                    <iframe src="https://maps.google.com/maps?q=Z+Computer-+Pc+Gaming-Laptop-Workstation&t=&z=16&ie=UTF8&iwloc=&output=embed" width="100%" height="160" style={{ border: 0 }} allowFullScreen loading="lazy" referrerPolicy="no-referrer-when-downgrade" className="transition-all duration-500 group-hover/map:scale-105"></iframe>
+                  </div>
+               </div>
+               <div className="group/map">
+                  <p className="text-sm font-bold text-white mb-3 flex items-center gap-2"><div className="w-2 h-2 rounded-full bg-red-500 animate-pulse"></div> Chi nhánh Bình Thạnh</p>
+                  <div className="rounded-2xl overflow-hidden border border-white/10 group-hover/map:border-red-500/50 transition-colors relative">
+                    <div className="absolute inset-0 bg-red-500/0 opacity-0 group-hover/map:opacity-100 transition-opacity pointer-events-none z-10 mix-blend-overlay"></div>
+                    <iframe src="https://maps.google.com/maps?q=47/86B+Bùi+Đình+Tuý,+Phường+14,+Bình+Thạnh,+TP.+Hồ+Chí+Minh&t=&z=15&ie=UTF8&iwloc=&output=embed" width="100%" height="160" style={{ border: 0 }} allowFullScreen loading="lazy" referrerPolicy="no-referrer-when-downgrade" className="transition-all duration-500 group-hover/map:scale-105"></iframe>
+                  </div>
+               </div>
+            </div>
           </div>
+        </div>
+
+        {/* 3 COLUMNS BLOCK */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 lg:gap-8 relative z-10 pt-4">
+          
+          {/* Col 1: Logo & Info */}
+          <div className="col-span-1 pr-4">
+             <Link href="/" className="flex items-center gap-3 shrink-0 group mb-6">
+               <div className="bg-white p-1 rounded-xl shadow-[0_0_15px_rgba(255,255,255,0.2)] group-hover:shadow-[0_0_20px_rgba(220,38,38,0.4)] transition-shadow">
+                 <Image src="/logo.png" alt="ZCOMPUTER" width={60} height={60} className="h-10 w-10 object-contain" />
+               </div>
+               <div className="flex flex-col items-start justify-center">
+                 <div className={`${montserrat.className} flex items-center select-none group-hover:scale-[1.02] transition-transform duration-300`}>
+                   <span className="text-red-500 text-3xl font-black drop-shadow-[0_0_10px_rgba(220,38,38,0.5)] leading-none">Z</span>
+                   <span className="text-white text-3xl font-black uppercase drop-shadow-[0_0_10px_rgba(255,255,255,0.2)] leading-none">COMPUTER</span>
+                 </div>
+                 <span className={`${montserrat.className} text-red-400 text-[9px] font-black uppercase tracking-[0.2em] mt-1.5`}>
+                   PC GAMING - LAPTOP - WORKSTATION
+                 </span>
+               </div>
+             </Link>
+             <p className="text-[14px] text-white/60 leading-relaxed mb-8 font-medium">
+               Build PC Like New Giá Cực Tốt tại ZCOMPUTER - PC Gaming, PC Đồ Họa, Linh Kiện PC với đa dạng mẫu mã và chất lượng đỉnh cao!
+             </p>
+             <div>
+               <p className="font-bold uppercase text-[12px] tracking-widest text-white/80 mb-4">Kết nối với chúng tôi</p>
+               <div className="flex gap-3">
+                 <a href="https://www.facebook.com/pcgamingthuduc" target="_blank" rel="noreferrer" className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white/80 hover:bg-[#3b5998] hover:text-white hover:border-[#3b5998] hover:-translate-y-1 hover:shadow-[0_10px_20px_rgba(59,89,152,0.4)] transition-all duration-300"><FaFacebookF size={16} /></a>
+                 <a href="#" className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white/80 hover:bg-[#cd486b] hover:text-white hover:border-[#cd486b] hover:-translate-y-1 hover:shadow-[0_10px_20px_rgba(205,72,107,0.4)] transition-all duration-300"><FaInstagram size={16} /></a>
+                 <a href="https://vt.tiktok.com/ZSQxHwj4q/" target="_blank" rel="noreferrer" className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white/80 hover:bg-black hover:text-white hover:border-white/20 hover:-translate-y-1 hover:shadow-[0_10px_20px_rgba(0,0,0,0.4)] transition-all duration-300"><FaTiktok size={16} /></a>
+                 <a href="#" className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white/80 hover:bg-[#ff0000] hover:text-white hover:border-[#ff0000] hover:-translate-y-1 hover:shadow-[0_10px_20px_rgba(255,0,0,0.4)] transition-all duration-300"><FaYoutube size={16} /></a>
+               </div>
+             </div>
+          </div>
+
+          {/* Col 2: CHÍNH SÁCH KHÁCH HÀNG */}
+          <div className="lg:pl-8">
+            <h4 className="font-black uppercase mb-6 text-[15px] text-white tracking-widest flex items-center gap-2">
+              <div className="w-1.5 h-4 bg-red-500 rounded-full"></div>
+              Chính sách tổng hợp
+            </h4>
+            <ul className="space-y-4 text-[14px] text-white/60 font-medium uppercase">
+              <li><Link href="/chinh-sach-bao-mat" className="hover:text-red-400 hover:translate-x-2 transition-all duration-300 flex items-center gap-2"><FaChevronRight className="text-[10px] text-red-500/50" /> CHÍNH SÁCH BẢO MẬT</Link></li>
+              <li><Link href="/chinh-sach-van-chuyen" className="hover:text-red-400 hover:translate-x-2 transition-all duration-300 flex items-center gap-2"><FaChevronRight className="text-[10px] text-red-500/50" /> CHÍNH SÁCH VẬN CHUYỂN</Link></li>
+              <li><Link href="/chinh-sach-bao-hanh" className="hover:text-red-400 hover:translate-x-2 transition-all duration-300 flex items-center gap-2"><FaChevronRight className="text-[10px] text-red-500/50" /> CHÍNH SÁCH BẢO HÀNH</Link></li>
+              <li><Link href="/chinh-sach-doi-tra" className="hover:text-red-400 hover:translate-x-2 transition-all duration-300 flex items-center gap-2"><FaChevronRight className="text-[10px] text-red-500/50" /> CHÍNH SÁCH ĐỔI TRẢ</Link></li>
+              <li><Link href="/chinh-sach-thanh-toan" className="hover:text-red-400 hover:translate-x-2 transition-all duration-300 flex items-center gap-2"><FaChevronRight className="text-[10px] text-red-500/50" /> CHÍNH SÁCH THANH TOÁN</Link></li>
+            </ul>
+          </div>
+
+          {/* Col 3: CÔNG TY TNHH */}
+          <div>
+            <h4 className="font-black uppercase mb-6 text-[15px] text-white tracking-widest flex items-center gap-2">
+              <div className="w-1.5 h-4 bg-blue-500 rounded-full"></div>
+              Thông tin công ty
+            </h4>
+            <div className="text-[14px] text-white/60 space-y-4 leading-relaxed font-medium">
+              <p className="bg-white/5 p-4 rounded-xl border border-white/5 backdrop-blur-sm">
+                <strong className="text-white block mb-1">CÔNG TY TNHH TM DV ZCOM</strong>
+                MST: 0317130199 <br/>
+                Sở KHĐT TP.HCM cấp ngày 18/01/2022
+              </p>
+            </div>
+          </div>
+
         </div>
       </div>
 
       {/* Bottom Bar */}
-      <div className="bg-[#08090b] border-t border-gray-800/60 py-6">
-        <div className="container mx-auto px-4 flex flex-col md:flex-row items-center justify-between text-xs text-gray-500">
-          <p>© 2024 CÔNG TY TNHH TM DV ZCOM. MST: 0317130199. Tất cả quyền được bảo lưu.</p>
-          <div className="flex gap-6 mt-4 md:mt-0 font-medium uppercase tracking-wider">
-            <Link href="/dieu-khoan-su-dung" className="hover:text-primary transition-colors">Điều khoản sử dụng</Link>
-            <Link href="/chinh-sach-bao-mat" className="hover:text-primary transition-colors">Bảo mật thông tin</Link>
-          </div>
+      <div className="relative border-t border-white/10 bg-black/50 backdrop-blur-lg py-5 z-10">
+        <div className="container mx-auto px-4 text-center text-[13px] font-medium text-white/40 tracking-wide">
+           © 2026 <strong className="text-white/60">ZCOMPUTER</strong>. Tất cả quyền được bảo lưu. Thiết kế với <span className="text-red-500">♥</span> tại Việt Nam.
         </div>
       </div>
     </footer>

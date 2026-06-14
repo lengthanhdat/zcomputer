@@ -36,13 +36,13 @@ export default function Header() {
   };
 
   return (
-    <header className="bg-white sticky top-0 z-50 shadow-sm border-b">
+    <header className="bg-white/85 backdrop-blur-xl sticky top-0 z-50 shadow-[0_4px_30px_rgba(0,0,0,0.05)] border-b border-gray-200/50">
       {/* Top Header Row */}
       <div className="container mx-auto px-4 py-3 flex items-center justify-between gap-4">
         {/* Mobile Hamburger Menu Icon */}
         <button
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="lg:hidden p-2 text-gray-700 hover:text-primary transition-colors focus:outline-none"
+          className="lg:hidden p-2 text-gray-700 hover:text-red-600 transition-colors focus:outline-none"
           aria-label="Toggle menu"
         >
           {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
@@ -50,7 +50,7 @@ export default function Header() {
 
         <Link 
           href="/" 
-          className="flex items-center gap-3 shrink-0 group"
+          className="flex items-center gap-3 shrink-0 group relative"
           onClick={(e) => {
             if (window.location.pathname === "/") {
               e.preventDefault();
@@ -58,11 +58,12 @@ export default function Header() {
             }
           }}
         >
-          <Image src="/logo.png" alt="Z" width={80} height={80} priority className="h-14 w-14 sm:h-[68px] sm:w-[68px] object-contain group-hover:scale-105 transition-all duration-300 drop-shadow-md" />
-          <div className="flex flex-col items-start justify-center">
+          <div className="absolute inset-0 bg-red-500/10 blur-[20px] rounded-full group-hover:bg-red-500/20 transition-all duration-500 pointer-events-none"></div>
+          <Image src="/logo.png" alt="Z" width={80} height={80} priority className="h-14 w-14 sm:h-[68px] sm:w-[68px] object-contain group-hover:scale-105 transition-all duration-300 drop-shadow-md relative z-10" />
+          <div className="flex flex-col items-start justify-center relative z-10">
             <div className={`${montserrat.className} flex items-center select-none group-hover:scale-[1.02] transition-transform duration-300`}>
               <span className="text-[#CC0000] text-[28px] sm:text-[34px] font-black drop-shadow-sm leading-none">Z</span>
-              <span className="text-black text-[28px] sm:text-[34px] font-black uppercase drop-shadow-sm leading-none">COMPUTER</span>
+              <span className="text-gray-900 text-[28px] sm:text-[34px] font-black uppercase drop-shadow-sm leading-none">COMPUTER</span>
             </div>
             <span className={`${montserrat.className} text-[#CC0000] text-[8px] sm:text-[9.5px] font-black uppercase tracking-widest mt-1`}>
               PC GAMING - LAPTOP - WORKSTATION
@@ -72,15 +73,15 @@ export default function Header() {
 
         {/* Desktop Search Bar (Hidden on Mobile) */}
         <div className="flex-1 max-w-xl hidden md:flex mx-6">
-          <form onSubmit={handleSearch} className="relative w-full">
+          <form onSubmit={handleSearch} className="relative w-full group/search">
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Bạn cần tìm linh kiện, PC hay Laptop..."
-              className="w-full border-2 border-primary rounded-full py-2 px-4 pr-12 text-sm focus:outline-none focus:ring-1 focus:ring-primary"
+              className="w-full border-2 border-red-100 bg-white/60 backdrop-blur-md rounded-full py-2.5 px-5 pr-12 text-sm focus:outline-none focus:border-red-400 focus:bg-white shadow-inner transition-all duration-300 text-gray-800 placeholder-gray-400 group-hover/search:shadow-[0_0_15px_rgba(239,68,68,0.1)]"
             />
-            <button type="submit" className="absolute right-0 top-0 h-full w-12 bg-primary rounded-r-full text-white flex items-center justify-center hover:bg-red-700 transition-colors" aria-label="Tìm kiếm">
+            <button type="submit" className="absolute right-0 top-0 h-full w-14 bg-gradient-to-r from-red-600 to-red-500 rounded-r-full text-white flex items-center justify-center hover:shadow-[0_0_15px_rgba(239,68,68,0.5)] transition-all duration-300" aria-label="Tìm kiếm">
               <Search size={18} />
             </button>
           </form>

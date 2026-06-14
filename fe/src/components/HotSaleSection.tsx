@@ -167,28 +167,31 @@ export default function HotSaleSection({
         .neon-border {
           box-shadow: inset 0 0 10px rgba(239, 68, 68, 0.3), 0 0 10px rgba(239, 68, 68, 0.3);
         }
-        .lightning-clip {
-          clip-path: polygon(100% 0, 100% 85%, 95% 100%, 0 100%, 0 0);
-        }
       `}</style>
       
-      <div className="bg-[#0b0f19] rounded-2xl shadow-2xl overflow-hidden border border-gray-800 lightning-clip relative">
-        {/* Background ambient glow */}
-        <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
-          <div className="absolute top-[-50%] left-[-10%] w-[60%] h-[150%] bg-red-600/10 blur-[100px] rounded-full mix-blend-screen"></div>
-          <div className="absolute top-[-20%] right-[-10%] w-[40%] h-[100%] bg-blue-600/10 blur-[100px] rounded-full mix-blend-screen"></div>
-        </div>
+      <div className="relative rounded-2xl shadow-[0_0_40px_rgba(239,68,68,0.2)] p-[3px] overflow-hidden group/led">
+        {/* Animated LED Border Background */}
+        <div className="absolute inset-0 bg-gray-800 z-0"></div>
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[4000px] h-[4000px] bg-[conic-gradient(from_0deg,transparent_0_300deg,#ff0000_360deg)] animate-[spin_6s_linear_infinite] z-0 opacity-100"></div>
 
-        {/* Tabs - Dark sleek design */}
-        <div className="flex flex-wrap bg-[#131b2c] border-b border-gray-800 relative z-10">
+        {/* Inner Content Container - LIQUID GLASS */}
+        <div className="bg-[#0b0f19]/70 backdrop-blur-3xl rounded-[13px] overflow-hidden relative z-10 h-full w-full border border-white/5">
+          {/* Background ambient glow inside the glass */}
+          <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
+            <div className="absolute top-[-50%] left-[-10%] w-[60%] h-[150%] bg-red-600/20 blur-[120px] rounded-full mix-blend-screen"></div>
+            <div className="absolute top-[-20%] right-[-10%] w-[40%] h-[100%] bg-blue-600/20 blur-[120px] rounded-full mix-blend-screen"></div>
+          </div>
+
+        {/* Tabs - Glass sleek design */}
+        <div className="flex flex-wrap bg-white/5 backdrop-blur-md border-b border-white/10 relative z-10">
           {tabs.map(tab => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
               className={`flex-1 py-4 px-2 text-center font-black uppercase transition-all duration-300 text-sm md:text-base relative group ${
                 activeTab === tab 
-                  ? 'text-white' 
-                  : 'text-gray-400 hover:text-gray-200 hover:bg-white/5'
+                  ? 'text-white bg-white/10 shadow-[inset_0_-2px_15px_rgba(255,255,255,0.05)]' 
+                  : 'text-gray-400 hover:text-white hover:bg-white/5'
               }`}
             >
               {tab}
@@ -200,18 +203,18 @@ export default function HotSaleSection({
         </div>
 
         {/* Info Strip */}
-        <div className="bg-gradient-to-r from-red-900/40 via-red-800/20 to-transparent text-gray-300 text-xs md:text-sm font-medium flex items-center justify-center py-2 border-b border-red-900/30 relative z-10">
-          <span className="text-red-400 mr-2">⚡</span> Giới hạn 01 sản phẩm/ 1 khách hàng trong chương trình ưu đãi
+        <div className="bg-red-500/10 backdrop-blur-md text-red-100 text-xs md:text-sm font-medium flex items-center justify-center py-2 border-b border-white/10 relative z-10">
+          <span className="text-red-400 mr-2 drop-shadow-[0_0_8px_rgba(239,68,68,0.8)]">⚡</span> Giới hạn 01 sản phẩm/ 1 khách hàng trong chương trình ưu đãi
         </div>
 
         {/* Content Body */}
         <div className="flex flex-col xl:flex-row relative z-10">
           
           {/* Left Sidebar - Cyberpunk / Gaming Vibe */}
-          <div className="xl:w-[280px] shrink-0 p-8 flex flex-col items-center justify-center border-b xl:border-b-0 xl:border-r border-gray-800 relative overflow-hidden bg-[#0f1523]/80 backdrop-blur-sm">
-            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-red-500 to-transparent opacity-50"></div>
+          <div className="xl:w-[280px] shrink-0 p-8 flex flex-col items-center justify-center border-b xl:border-b-0 xl:border-r border-white/10 relative overflow-hidden bg-white/5 backdrop-blur-xl">
+            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-red-500/50 to-transparent"></div>
             
-            <div className="flex items-center gap-0 mb-1">
+            <div className="flex items-center gap-0 mb-4">
               <Zap size={56} className="text-yellow-400 fill-yellow-400 drop-shadow-[0_0_15px_rgba(250,204,21,0.6)] animate-pulse -ml-4" />
               <div className="flex flex-col">
                 <h2 className="text-[36px] font-black uppercase italic tracking-tighter text-white leading-none drop-shadow-md">
@@ -223,40 +226,45 @@ export default function HotSaleSection({
               </div>
             </div>
             
-
-            <div className="text-gray-400 text-sm font-bold mb-4 uppercase tracking-widest flex items-center gap-2">
-              <Timer size={16} className="text-red-500" />
-              Kết thúc sau: <span className="text-white font-black">{timeLeft.d} Ngày</span>
+            <div className="flex items-center justify-center gap-3 bg-white/10 backdrop-blur-md px-5 py-3 rounded-xl border border-white/20 mb-8 w-full shadow-[0_4px_30px_rgba(0,0,0,0.1)]">
+              <Timer size={24} className="text-red-500 animate-pulse shrink-0 drop-shadow-[0_0_5px_rgba(239,68,68,0.5)]" />
+              <div className="flex flex-col">
+                <span className="text-gray-300 text-[11px] font-bold uppercase tracking-widest leading-none mb-1">Kết thúc sau</span>
+                <span className="text-white text-[18px] font-black leading-none">{timeLeft.d} <span className="text-red-400 text-[14px]">NGÀY</span></span>
+              </div>
             </div>
             
-            {/* Timer boxes - Digital Clock Style */}
+            {/* Timer boxes - Liquid Glass Style */}
             <div className="flex gap-3 text-center mb-10">
               <div className="flex flex-col items-center">
-                <div className="bg-[#1a2333] text-white text-3xl font-black rounded-lg w-14 h-16 flex items-center justify-center border border-gray-700 neon-border font-mono shadow-inner">
-                  {timeLeft.h.toString().padStart(2, '0')}
+                <div className="bg-white/10 backdrop-blur-md text-white text-3xl font-black rounded-lg w-14 h-16 flex items-center justify-center border border-white/20 shadow-[0_4px_30px_rgba(0,0,0,0.1)] font-mono relative overflow-hidden">
+                  <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-white/20 to-transparent opacity-50"></div>
+                  <span className="relative z-10">{timeLeft.h.toString().padStart(2, '0')}</span>
                 </div>
-                <span className="text-[10px] text-gray-500 font-bold mt-2 uppercase tracking-wider">Giờ</span>
+                <span className="text-[10px] text-gray-400 font-bold mt-2 uppercase tracking-wider drop-shadow-sm">Giờ</span>
               </div>
-              <div className="text-gray-600 font-black text-3xl mt-3 animate-pulse">:</div>
+              <div className="text-gray-400 font-black text-3xl mt-3 animate-pulse">:</div>
               <div className="flex flex-col items-center">
-                <div className="bg-[#1a2333] text-white text-3xl font-black rounded-lg w-14 h-16 flex items-center justify-center border border-gray-700 neon-border font-mono shadow-inner">
-                  {timeLeft.m.toString().padStart(2, '0')}
+                <div className="bg-white/10 backdrop-blur-md text-white text-3xl font-black rounded-lg w-14 h-16 flex items-center justify-center border border-white/20 shadow-[0_4px_30px_rgba(0,0,0,0.1)] font-mono relative overflow-hidden">
+                  <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-white/20 to-transparent opacity-50"></div>
+                  <span className="relative z-10">{timeLeft.m.toString().padStart(2, '0')}</span>
                 </div>
-                <span className="text-[10px] text-gray-500 font-bold mt-2 uppercase tracking-wider">Phút</span>
+                <span className="text-[10px] text-gray-400 font-bold mt-2 uppercase tracking-wider drop-shadow-sm">Phút</span>
               </div>
-              <div className="text-gray-600 font-black text-3xl mt-3 animate-pulse">:</div>
+              <div className="text-gray-400 font-black text-3xl mt-3 animate-pulse">:</div>
               <div className="flex flex-col items-center">
-                <div className="bg-[#1a2333] text-red-500 text-3xl font-black rounded-lg w-14 h-16 flex items-center justify-center border border-red-900/50 neon-border font-mono shadow-inner">
-                  {timeLeft.s.toString().padStart(2, '0')}
+                <div className="bg-red-500/10 backdrop-blur-md text-red-500 text-3xl font-black rounded-lg w-14 h-16 flex items-center justify-center border border-red-500/30 shadow-[0_0_15px_rgba(239,68,68,0.2)] font-mono relative overflow-hidden">
+                  <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-red-500/20 to-transparent opacity-50"></div>
+                  <span className="relative z-10 drop-shadow-[0_0_8px_rgba(239,68,68,0.6)]">{timeLeft.s.toString().padStart(2, '0')}</span>
                 </div>
-                <span className="text-[10px] text-red-500/70 font-bold mt-2 uppercase tracking-wider">Giây</span>
+                <span className="text-[10px] text-red-400 font-bold mt-2 uppercase tracking-wider drop-shadow-sm">Giây</span>
               </div>
             </div>
 
           </div>
 
-          {/* Right Slider - Dark Cards */}
-          <div className="relative z-10 overflow-hidden w-full flex-1 py-6 xl:py-10 flex items-center bg-[#0b0f19]">
+          {/* Right Slider - Glass Cards */}
+          <div className="relative z-10 overflow-hidden w-full flex-1 py-6 xl:py-10 flex items-center">
             {activeProducts.length > 0 ? (
               <div id="hotsale-slider" className="flex w-full overflow-x-auto px-6 pb-4 scrollbar-hide relative z-10">
                 <div id="hotsale-slider-inner" className="flex gap-5 shrink-0">
@@ -271,10 +279,29 @@ export default function HotSaleSection({
                     return (
                     <div
                       key={`${product._id}-${idx}`}
-                      className={`flex-none w-[280px] bg-white rounded-2xl border border-red-100 overflow-hidden group shadow-[0_4px_15px_rgba(220,38,38,0.1)] flex flex-col relative transition-all duration-500 ${isOutOfStock ? 'opacity-80' : 'hover:shadow-[0_8px_30px_rgba(220,38,38,0.25)] hover:border-red-300 hover:-translate-y-2'}`}
+                      className={`flex-none w-[280px] bg-white rounded-2xl border border-gray-100 overflow-hidden group hover:shadow-[0_20px_40px_rgb(220,38,38,0.12)] hover:border-red-200 hover:-translate-y-2 transition-all duration-500 flex flex-col relative ${isOutOfStock ? 'opacity-80' : ''}`}
                     >
                       <Link href={`/product/${product.slug}`} className="absolute inset-0 z-20"></Link>
-                      <div className="relative aspect-[4/3] p-4 flex items-center justify-center bg-white overflow-hidden">
+                      
+                      <div className="relative aspect-[4/3] p-6 flex items-center justify-center bg-gradient-to-b from-gray-50 to-white overflow-hidden">
+                        
+                        {/* ZCOMPUTER Overlay Frame */}
+                        <div className="absolute inset-0 pointer-events-none z-[15] p-2 opacity-80">
+                          <div className="w-full h-full border border-primary/10 rounded-xl relative">
+                            <div className="absolute -top-[1px] -left-[1px] w-5 h-5 border-t-2 border-l-2 border-primary/60 rounded-tl-xl"></div>
+                            <div className="absolute -top-[1px] -right-[1px] w-5 h-5 border-t-2 border-r-2 border-primary/60 rounded-tr-xl"></div>
+                            <div className="absolute -bottom-[1px] -left-[1px] w-5 h-5 border-b-2 border-l-2 border-primary/60 rounded-bl-xl"></div>
+                            <div className="absolute -bottom-[1px] -right-[1px] w-5 h-5 border-b-2 border-r-2 border-primary/60 rounded-br-xl"></div>
+                            
+                            <div className="absolute bottom-2 right-2 flex items-center gap-1 opacity-50 mix-blend-multiply">
+                              <Image src="/logo.png" alt="ZCOMPUTER" width={20} height={20} className="w-4 h-4 object-contain" unoptimized />
+                              <div className="flex items-baseline select-none tracking-tighter">
+                                <span className="text-red-600 font-black text-[11px] drop-shadow-sm">Z</span>
+                                <span className="text-slate-800 font-black text-[10px] uppercase drop-shadow-sm">COMPUTER</span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
 
                         {isOutOfStock && (
                           <div className="absolute inset-0 bg-white/60 z-30 flex items-center justify-center backdrop-blur-[1px]">
@@ -290,79 +317,73 @@ export default function HotSaleSection({
                             alt={product.name}
                             fill
                             sizes="(min-width: 1024px) 25vw, (min-width: 768px) 50vw, 100vw"
-                            className="object-contain p-4 group-hover:scale-110 transition-transform duration-700 relative z-10 drop-shadow-2xl"
+                            className="object-contain p-8 mix-blend-multiply group-hover:scale-110 group-hover:-translate-y-2 transition-all duration-500 relative z-10"
                             unoptimized
                           />
                         )}
                         
-                        {/* Glow effect behind image */}
-                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-24 h-24 bg-white/10 blur-[40px] rounded-full group-hover:bg-red-500/20 transition-colors duration-500"></div>
+                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 bg-red-500/5 blur-[40px] rounded-full group-hover:bg-red-500/10 transition-colors duration-500"></div>
                         
                         {/* Badges */}
-                        <div className="absolute top-3 left-3 z-20 flex flex-col shadow-lg rounded overflow-hidden transform group-hover:scale-110 origin-top-left transition-transform duration-300">
+                        <div className="absolute top-4 left-4 z-20 flex flex-col gap-1.5">
                           {saveAmount > 0 && (
-                            <>
-                              <div className="bg-gradient-to-r from-red-600 to-orange-500 text-white text-[10px] font-black px-2 py-1 text-center uppercase tracking-widest">
-                                GIẢM SỐC
+                            <div className="shadow-lg rounded-md overflow-hidden transform -rotate-3 origin-top-left group-hover:rotate-0 transition-transform duration-300">
+                              <div className="bg-gradient-to-r from-red-600 to-red-500 text-white text-[10px] font-black px-2 py-1 text-center uppercase tracking-widest">
+                                FLASH SALE -{discountPercent}%
                               </div>
-                              <div className="bg-[#0b0f19] text-red-400 text-[12px] font-black px-2 py-1 text-center border-t border-red-500/30">
-                                -{discountPercent}%
-                              </div>
-                            </>
+                            </div>
                           )}
                         </div>
-
-                        {/* Hover Action */}
-                        {!isOutOfStock && (
-                          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 translate-y-8 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-300 z-30">
-                            <div className="bg-white/95 backdrop-blur-sm text-red-600 text-sm font-bold px-6 py-2 rounded-full shadow-lg border border-red-200 flex items-center gap-2 whitespace-nowrap">
-                              Mua ngay <ArrowRight size={16} />
-                            </div>
-                          </div>
-                        )}
                       </div>
                       
-                      <div className="p-5 flex flex-col flex-1 relative z-10 border-t border-gray-800/50 bg-[#151e32]">
-                        <div className="flex items-center justify-between mb-2">
-                          <div className="text-[11px] font-bold text-gray-500 uppercase tracking-wider">{product.brand || "GAMING GEAR"}</div>
+                      <div className="p-5 flex flex-col flex-1 bg-white relative z-10">
+                        <div className="flex items-center justify-between mb-3">
+                          <div className="text-[10px] font-black text-gray-500 tracking-widest uppercase bg-gray-100 px-2.5 py-1 rounded-md">{product.brand || "KHÁC"}</div>
+                          <div className="flex items-center gap-2">
+                            {product.condition && (
+                              <div className="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-1 rounded-md">{product.condition}</div>
+                            )}
+                          </div>
                         </div>
-                        <Link href={`/product/${product.slug}`} className="hover:text-red-400 transition-colors mb-4 z-30 relative">
-                          <h3 className="text-gray-200 text-[14px] font-medium leading-relaxed line-clamp-2">{product.name}</h3>
+
+                        <Link href={`/product/${product.slug}`} className="hover:text-red-600 transition-colors mb-3 z-30 relative">
+                          <h3 className="text-gray-800 text-[14px] font-bold leading-snug line-clamp-2">{product.name}</h3>
                         </Link>
                         
                         <div className="flex flex-col mb-4">
                           {isOutOfStock ? (
-                             <div className="h-full flex items-end">
-                               <span className="text-[15px] font-bold text-gray-500">Liên hệ</span>
+                             <div className="h-[46px] flex items-end">
+                               <span className="text-[15px] font-bold text-gray-400">Liên hệ</span>
                              </div>
                           ) : saveAmount > 0 ? (
                             <>
-                              <span className="text-gray-500 text-[12px] line-through mb-0.5">{originalPrice.toLocaleString('vi-VN')}₫</span>
+                              <div className="flex items-center gap-2 mb-0.5">
+                                <span className="text-gray-400 text-[12px] line-through">{originalPrice.toLocaleString('vi-VN')}₫</span>
+                              </div>
                               <div className="flex items-center gap-2">
-                                <span className="text-[18px] font-black text-red-500">{currentPrice.toLocaleString('vi-VN')}₫</span>
-                                <span className="text-white bg-red-600 rounded text-[10px] font-black px-1.5 py-[2px] leading-none">-{discountPercent}%</span>
+                                <span className="text-[20px] font-black text-red-600">{currentPrice.toLocaleString('vi-VN')}₫</span>
                               </div>
                             </>
                           ) : (
                             <>
                                <div className="h-[18px] mb-0.5"></div>
-                               <span className="text-[18px] font-black text-red-500">{currentPrice.toLocaleString('vi-VN')}₫</span>
+                               <span className="text-[20px] font-black text-red-600">{currentPrice.toLocaleString('vi-VN')}₫</span>
                              </>
                           )}
                         </div>
                         
-                        <div className="relative z-30">
+                        <div className="mt-auto pt-4 border-t border-gray-100 flex items-center justify-between">
+                          <div className="text-gray-500 text-[12px] flex items-center gap-1.5">
+                            <Eye size={14} className="text-gray-400" />
+                            {(product.views || 0).toLocaleString('vi-VN')}
+                          </div>
                           <Link 
                             href={`/product/${product.slug}`}
-                            className="flex items-center justify-center gap-2 w-full py-2.5 bg-gray-800 hover:bg-red-600 text-gray-300 hover:text-white rounded border border-gray-700 hover:border-red-500 font-bold text-[13px] transition-all duration-300 group/btn"
+                            className="relative z-30 flex items-center justify-center gap-1.5 px-4 py-1.5 bg-red-50 text-red-600 hover:bg-red-600 hover:text-white rounded-lg font-bold text-[12px] transition-all duration-300 group/btn"
                           >
-                            <span>XEM CHI TIẾT</span>
-                            <ShoppingCart size={14} className="group-hover/btn:animate-bounce" />
+                            <span>Mua ngay</span>
+                            <ArrowRight size={14} className="group-hover/btn:translate-x-1 transition-transform" />
                           </Link>
-                        </div>
-                        
-                        <div className="mt-4 mb-2 flex justify-center text-gray-400 text-[13px] items-center gap-1.5">
-                          <Eye size={15} /> {(product.views || 0).toLocaleString('vi-VN')} lượt xem
                         </div>
                       </div>
                     </div>
@@ -377,6 +398,7 @@ export default function HotSaleSection({
               </div>
             )}
           </div>
+        </div>
         </div>
       </div>
     </section>

@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, Laptop, ShieldCheck, Truck, Zap, ChevronLeft, ChevronRight, Monitor, Cpu, Server, Mouse, Keyboard, Headphones, HardDrive, Maximize, Heart, Eye, type LucideIcon } from "lucide-react";
+import LikeButton from "./LikeButton";
 import BannerSlider from "@/components/BannerSlider";
 import CategoryMenu from "@/components/CategoryMenu";
 import VideoReviewSection from "@/components/VideoReviewSection";
@@ -93,11 +94,17 @@ function ProductSkeleton() {
   );
 }
 
+// Simple module-level cache to prevent scroll jumps on back navigation
+let cachedProducts: Product[] | null = null;
+let cachedCategories: Category[] | null = null;
+let cachedBanners: any[] | null = null;
+let cachedVideoReviews: any[] | null = null;
+
 export default function HomeClient() {
-  const [products, setProducts] = useState<Product[] | null>(null);
-  const [categories, setCategories] = useState<Category[] | null>(null);
-  const [banners, setBanners] = useState<any[] | null>(null);
-  const [videoReviews, setVideoReviews] = useState<any[]>([]);
+  const [products, setProducts] = useState<Product[] | null>(cachedProducts);
+  const [categories, setCategories] = useState<Category[] | null>(cachedCategories);
+  const [banners, setBanners] = useState<any[] | null>(cachedBanners);
+  const [videoReviews, setVideoReviews] = useState<any[]>(cachedVideoReviews || []);
   const [showAllCategories, setShowAllCategories] = useState(false);
 
   useEffect(() => {
@@ -117,17 +124,29 @@ export default function HomeClient() {
           bannerRes.ok ? bannerRes.json() : [],
           videoRes.ok ? videoRes.json() : []
         ]);
-        setCategories(catData);
-        setProducts(prodData.products || prodData);
-        setBanners(bannerData.filter((b: any) => b.isActive).sort((a: any, b: any) => a.order - b.order));
-        setVideoReviews(videoData);
+        
+        cachedCategories = catData;
+        cachedProducts = prodData.products || prodData;
+        cachedBanners = bannerData.filter((b: any) => b.isActive).sort((a: any, b: any) => a.order - b.order);
+        cachedVideoReviews = videoData;
+
+        setCategories(cachedCategories);
+        setProducts(cachedProducts);
+        setBanners(cachedBanners);
+        setVideoReviews(cachedVideoReviews || []);
       } catch (err: any) {
         if (err.name !== 'AbortError') {
           console.error("Lỗi khi tải dữ liệu trang chủ:", err);
         }
       }
     }
-    fetchData();
+    
+    if (!cachedProducts || !cachedCategories) {
+      fetchData();
+    } else {
+      // Re-fetch in background to update cache without showing skeleton
+      fetchData();
+    }
 
     return () => controller.abort();
   }, []);
@@ -172,56 +191,70 @@ export default function HomeClient() {
         {categories === null ? (
           <CategorySkeleton />
         ) : categories.length > 0 ? (
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4 lg:gap-6">
-            {(showAllCategories ? categories.filter(c => !c.parent_id) : categories.filter(c => !c.parent_id).slice(0, 5)).map((cat) => {
-              const getIcon = (name: string) => {
-                const lower = name.toLowerCase();
-                if (lower.includes('màn hình')) return Monitor;
-                if (lower.includes('pc') || lower.includes('máy tính')) return Server;
-                if (lower.includes('linh kiện') || lower.includes('cpu') || lower.includes('vga')) return Cpu;
-                if (lower.includes('chuột')) return Mouse;
-                if (lower.includes('phím')) return Keyboard;
-                if (lower.includes('tai nghe')) return Headphones;
-                return Laptop;
-              };
-              const Icon = getIcon(cat.name);
+          <div className="relative">
+            {/* Decorative Background Blobs for Glassmorphism */}
+            <div className="absolute top-10 left-1/4 w-72 h-72 bg-red-400/20 rounded-full blur-[80px] pointer-events-none -z-10"></div>
+            <div className="absolute bottom-10 right-1/4 w-72 h-72 bg-blue-400/20 rounded-full blur-[80px] pointer-events-none -z-10"></div>
+
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4 lg:gap-6">
+              {(showAllCategories ? categories.filter(c => !c.parent_id) : categories.filter(c => !c.parent_id).slice(0, 5)).map((cat) => {
+                const getIcon = (name: string) => {
+                  const lower = name.toLowerCase();
+                  if (lower.includes('màn hình')) return Monitor;
+                  if (lower.includes('pc') || lower.includes('máy tính')) return Server;
+                  if (lower.includes('linh kiện') || lower.includes('cpu') || lower.includes('vga')) return Cpu;
+                  if (lower.includes('chuột')) return Mouse;
+                  if (lower.includes('phím')) return Keyboard;
+                  if (lower.includes('tai nghe')) return Headphones;
+                  return Laptop;
+                };
+                const Icon = getIcon(cat.name);
+                
+                return (
+                <Link
+                  key={cat._id}
+                  href={`/category/${cat.slug}`}
+                  className="flex flex-col items-center justify-center gap-4 p-6 rounded-[2rem] bg-white/40 backdrop-blur-xl border border-white/60 shadow-[0_8px_32px_rgba(0,0,0,0.04)] hover:shadow-[0_8px_32px_rgba(220,38,38,0.15)] hover:-translate-y-2 hover:border-white/80 hover:bg-white/60 transition-all duration-500 cursor-pointer group text-gray-700 font-bold relative overflow-hidden"
+                >
+                  <div className="absolute inset-0 bg-gradient-to-br from-red-500/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 mix-blend-multiply"></div>
+                  <div className="absolute -top-24 -right-24 w-48 h-48 bg-gradient-to-br from-white/40 to-transparent rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"></div>
+
+                  <div className="w-20 h-20 rounded-full bg-white/50 backdrop-blur-md border border-white/80 group-hover:bg-white flex items-center justify-center relative z-10 transition-all duration-500 shadow-inner group-hover:shadow-[0_0_20px_rgb(220,38,38,0.15)]">
+                    <Icon size={32} strokeWidth={1.5} className="text-gray-400 group-hover:text-primary transition-all duration-500 group-hover:scale-110" />
+                  </div>
+                  <span className="uppercase tracking-widest text-[12px] relative z-10 text-center leading-relaxed group-hover:text-primary transition-colors">{cat.name}</span>
+                </Link>
+              )})}
               
-              return (
-              <Link
-                key={cat._id}
-                href={`/category/${cat.slug}`}
-                className="flex flex-col items-center justify-center gap-4 p-6 rounded-[2rem] bg-white border-2 border-transparent hover:border-primary/10 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(220,38,38,0.1)] hover:-translate-y-2 transition-all duration-300 cursor-pointer group text-gray-700 font-bold relative overflow-hidden"
-              >
-                <div className="absolute inset-0 bg-gradient-to-br from-red-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                <div className="w-20 h-20 rounded-full bg-gray-50 group-hover:bg-white flex items-center justify-center relative z-10 transition-colors duration-500 shadow-inner group-hover:shadow-[0_0_20px_rgb(220,38,38,0.15)]">
-                  <Icon size={32} strokeWidth={1.5} className="text-gray-400 group-hover:text-primary transition-colors duration-500 group-hover:scale-110" />
-                </div>
-                <span className="uppercase tracking-widest text-[12px] relative z-10 text-center leading-relaxed">{cat.name}</span>
-              </Link>
-            )})}
-            
-            {!showAllCategories && categories.filter(c => !c.parent_id).length > 5 && (
-              <button
-                onClick={() => setShowAllCategories(true)}
-                className="flex flex-col items-center justify-center gap-4 p-6 rounded-[2rem] bg-red-50 border-2 border-red-100 shadow-sm hover:shadow-md hover:border-primary/30 text-primary transition-all duration-300 cursor-pointer font-bold group relative overflow-hidden hover:-translate-y-2"
-              >
-                <div className="w-20 h-20 rounded-full bg-white flex items-center justify-center relative z-10 shadow-sm group-hover:shadow-[0_0_20px_rgb(220,38,38,0.2)] transition-shadow duration-500">
-                  <ArrowRight size={32} strokeWidth={1.5} className="text-primary group-hover:translate-x-2 transition-transform duration-300" />
-                </div>
-                <span className="uppercase tracking-widest text-[12px] relative z-10 text-center leading-relaxed">Xem tất cả ({categories.filter(c => !c.parent_id).length - 5})</span>
-              </button>
-            )}
-            {showAllCategories && categories.filter(c => !c.parent_id).length > 5 && (
-              <button
-                onClick={() => setShowAllCategories(false)}
-                className="flex flex-col items-center justify-center gap-4 p-6 rounded-[2rem] bg-gray-50 border-2 border-gray-200 shadow-sm hover:shadow-md hover:border-gray-300 text-gray-600 transition-all duration-300 cursor-pointer font-bold group relative overflow-hidden hover:-translate-y-2"
-              >
-                <div className="w-20 h-20 rounded-full bg-white flex items-center justify-center relative z-10 shadow-sm transition-shadow duration-500">
-                  <ArrowRight size={32} strokeWidth={1.5} className="text-gray-400 group-hover:-translate-x-2 transition-transform duration-300 rotate-180" />
-                </div>
-                <span className="uppercase tracking-widest text-[12px] relative z-10 text-center leading-relaxed">Thu gọn</span>
-              </button>
-            )}
+              {!showAllCategories && categories.filter(c => !c.parent_id).length > 5 && (
+                <button
+                  onClick={() => setShowAllCategories(true)}
+                  className="flex flex-col items-center justify-center gap-4 p-6 rounded-[2rem] bg-red-50/40 backdrop-blur-xl border border-white/60 shadow-[0_8px_32px_rgba(0,0,0,0.04)] hover:shadow-[0_8px_32px_rgba(220,38,38,0.15)] hover:-translate-y-2 hover:border-red-100 hover:bg-red-50/80 transition-all duration-500 cursor-pointer group text-primary font-bold relative overflow-hidden"
+                >
+                  <div className="absolute inset-0 bg-gradient-to-br from-red-500/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 mix-blend-multiply"></div>
+                  <div className="absolute -top-24 -right-24 w-48 h-48 bg-gradient-to-br from-white/40 to-transparent rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"></div>
+
+                  <div className="w-20 h-20 rounded-full bg-white/50 backdrop-blur-md border border-white/80 group-hover:bg-white flex items-center justify-center relative z-10 transition-all duration-500 shadow-inner group-hover:shadow-[0_0_20px_rgb(220,38,38,0.15)]">
+                    <ArrowRight size={32} strokeWidth={1.5} className="text-primary group-hover:translate-x-2 transition-transform duration-300" />
+                  </div>
+                  <span className="uppercase tracking-widest text-[12px] relative z-10 text-center leading-relaxed group-hover:text-red-700 transition-colors">Xem tất cả ({categories.filter(c => !c.parent_id).length - 5})</span>
+                </button>
+              )}
+              {showAllCategories && categories.filter(c => !c.parent_id).length > 5 && (
+                <button
+                  onClick={() => setShowAllCategories(false)}
+                  className="flex flex-col items-center justify-center gap-4 p-6 rounded-[2rem] bg-gray-50/40 backdrop-blur-xl border border-white/60 shadow-[0_8px_32px_rgba(0,0,0,0.04)] hover:shadow-[0_8px_32px_rgba(0,0,0,0.08)] hover:-translate-y-2 hover:border-gray-200 hover:bg-gray-50/80 transition-all duration-500 cursor-pointer group text-gray-600 font-bold relative overflow-hidden"
+                >
+                  <div className="absolute inset-0 bg-gradient-to-br from-gray-500/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 mix-blend-multiply"></div>
+                  <div className="absolute -top-24 -right-24 w-48 h-48 bg-gradient-to-br from-white/40 to-transparent rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"></div>
+
+                  <div className="w-20 h-20 rounded-full bg-white/50 backdrop-blur-md border border-white/80 group-hover:bg-white flex items-center justify-center relative z-10 transition-all duration-500 shadow-inner group-hover:shadow-[0_0_20px_rgb(0,0,0,0.1)]">
+                    <ArrowRight size={32} strokeWidth={1.5} className="text-gray-400 group-hover:-translate-x-2 transition-transform duration-300 rotate-180" />
+                  </div>
+                  <span className="uppercase tracking-widest text-[12px] relative z-10 text-center leading-relaxed group-hover:text-gray-800 transition-colors">Thu gọn</span>
+                </button>
+              )}
+            </div>
           </div>
         ) : (
           <p className="text-gray-400 text-sm italic text-center">Hệ thống chưa có danh mục sản phẩm nào.</p>
@@ -266,11 +299,23 @@ export default function HomeClient() {
               <div className="flex flex-col lg:flex-row bg-white rounded-[2rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100/80 overflow-hidden">
                 {/* Vertical Category Banner */}
                 <div className="hidden lg:block w-1/4 xl:w-[280px] flex-shrink-0 relative group rounded-l-[2rem] overflow-hidden">
-                  <Image src={cat.image ? (cat.image.startsWith('http') || cat.image.startsWith('data:') ? cat.image : `${cat.image}`) : "https://images.unsplash.com/photo-1542393545-10f5cde2c810?w=400&q=80"} alt={cat.name} fill className="object-cover opacity-80 group-hover:scale-105 transition-transform duration-500" unoptimized />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent flex flex-col justify-end p-8">
-                    <h3 className="text-white font-black text-2xl uppercase leading-tight drop-shadow-lg">{cat.name}</h3>
-                    <Link href={`/category/${cat.slug}`} className="text-white/80 font-medium text-sm mt-3 flex items-center gap-1 hover:text-white transition-colors">
-                      XEM TẤT CẢ <ChevronRight size={16} />
+                  <Image 
+                    src={cat.image ? ((cat.image.startsWith('http') || cat.image.startsWith('data:') || cat.image.startsWith('/uploads')) ? cat.image : `${cat.image}`) : "https://images.unsplash.com/photo-1542393545-10f5cde2c810?w=1000&q=100"} 
+                    alt={cat.name} 
+                    fill 
+                    sizes="(min-width: 1024px) 25vw, 100vw" 
+                    className="object-cover group-hover:scale-110 transition-transform duration-700" 
+                    unoptimized 
+                  />
+                  {/* Vibrant Liquid Glass Overlays */}
+                  <div className="absolute inset-0 bg-gradient-to-tr from-red-600/50 via-purple-600/40 to-transparent mix-blend-multiply opacity-80 group-hover:opacity-100 transition-opacity duration-500"></div>
+                  <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/10 to-black/90"></div>
+                  
+                  {/* Glassmorphism content area */}
+                  <div className="absolute bottom-4 left-4 right-4 bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-6 transform translate-y-2 group-hover:translate-y-0 transition-all duration-500 shadow-[0_8px_32px_rgba(0,0,0,0.3)]">
+                    <h3 className="text-white font-black text-2xl uppercase leading-tight drop-shadow-md">{cat.name}</h3>
+                    <Link href={`/category/${cat.slug}`} className="inline-flex items-center gap-2 mt-4 text-xs font-bold text-white bg-white/20 hover:bg-white/30 backdrop-blur-sm border border-white/30 rounded-full px-4 py-2 transition-all">
+                      XEM TẤT CẢ <ChevronRight size={14} />
                     </Link>
                   </div>
                 </div>
@@ -285,7 +330,7 @@ export default function HomeClient() {
                         const slider = document.getElementById(`slider-${cat._id}`);
                         if (slider) slider.scrollBy({ left: -340, behavior: 'smooth' });
                       }}
-                      className="absolute -left-5 top-1/2 -translate-y-1/2 w-12 h-12 bg-white border border-gray-100 rounded-full shadow-lg flex items-center justify-center text-gray-600 hover:text-primary hover:scale-110 z-50 opacity-0 group-hover/slider:opacity-100 transition-all focus:outline-none"
+                      className="absolute -left-5 top-1/2 -translate-y-1/2 w-12 h-12 bg-white border border-gray-100 rounded-full shadow-lg flex items-center justify-center text-gray-600 hover:text-primary hover:scale-110 z-40 opacity-0 group-hover/slider:opacity-100 transition-all focus:outline-none"
                     >
                       <ChevronLeft size={24} />
                     </button>
@@ -302,7 +347,7 @@ export default function HomeClient() {
                         const slider = document.getElementById(`slider-${cat._id}`);
                         if (slider) slider.scrollBy({ left: 340, behavior: 'smooth' });
                       }}
-                      className="absolute -right-5 top-1/2 -translate-y-1/2 w-12 h-12 bg-white border border-gray-100 rounded-full shadow-lg flex items-center justify-center text-gray-600 hover:text-primary hover:scale-110 z-50 opacity-0 group-hover/slider:opacity-100 transition-all focus:outline-none"
+                      className="absolute -right-5 top-1/2 -translate-y-1/2 w-12 h-12 bg-white border border-gray-100 rounded-full shadow-lg flex items-center justify-center text-gray-600 hover:text-primary hover:scale-110 z-40 opacity-0 group-hover/slider:opacity-100 transition-all focus:outline-none"
                     >
                       <ChevronRight size={24} />
                     </button>
@@ -416,6 +461,24 @@ function ProductCard({ product }: { product: Product }) {
           />
         )}
         
+        {/* ZCOMPUTER Overlay Frame */}
+        <div className="absolute inset-0 pointer-events-none z-[15] p-2 opacity-80">
+          <div className="w-full h-full border border-primary/10 rounded-xl relative">
+            <div className="absolute -top-[1px] -left-[1px] w-5 h-5 border-t-2 border-l-2 border-primary/60 rounded-tl-xl"></div>
+            <div className="absolute -top-[1px] -right-[1px] w-5 h-5 border-t-2 border-r-2 border-primary/60 rounded-tr-xl"></div>
+            <div className="absolute -bottom-[1px] -left-[1px] w-5 h-5 border-b-2 border-l-2 border-primary/60 rounded-bl-xl"></div>
+            <div className="absolute -bottom-[1px] -right-[1px] w-5 h-5 border-b-2 border-r-2 border-primary/60 rounded-br-xl"></div>
+            
+            <div className="absolute bottom-2 right-2 flex items-center gap-1 opacity-50 mix-blend-multiply">
+              <Image src="/logo.png" alt="ZCOMPUTER" width={20} height={20} className="w-4 h-4 object-contain" unoptimized />
+              <div className="flex items-baseline select-none tracking-tighter">
+                <span className="text-red-600 font-black text-[11px] drop-shadow-sm">Z</span>
+                <span className="text-slate-800 font-black text-[10px] uppercase drop-shadow-sm">COMPUTER</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        
         {/* Badges */}
         <div className="absolute top-4 left-4 z-20 flex flex-col gap-1.5">
           {product.isHotSale && (
@@ -439,7 +502,7 @@ function ProductCard({ product }: { product: Product }) {
 
         {/* Hover Action */}
         {!isOutOfStock && (
-          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 translate-y-8 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-300 z-30">
+          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 translate-y-8 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-300 z-30 pointer-events-none">
             <div className="bg-white/95 backdrop-blur-sm text-primary text-sm font-bold px-6 py-2 rounded-full shadow-lg border border-primary/20 flex items-center gap-2 whitespace-nowrap">
               Xem chi tiết <ArrowRight size={16} />
             </div>
@@ -447,10 +510,10 @@ function ProductCard({ product }: { product: Product }) {
         )}
       </div>
       
-      <div className="p-4 flex flex-col flex-1 bg-white relative z-10">
+      <div className="p-4 flex flex-col flex-1 bg-white">
         <div className="flex items-center justify-between mb-2">
           <div className="text-[11px] font-bold text-gray-500 uppercase">{product.brand || "KHÁC"}</div>
-          <Heart size={16} className="text-red-600 cursor-pointer relative z-30" />
+          <LikeButton product={product} />
         </div>
         <Link href={`/product/${product.slug}`} className="hover:text-red-600 transition-colors mb-3 z-30 relative">
           <h3 className="text-gray-700 text-[13px] leading-relaxed line-clamp-2">{product.name}</h3>

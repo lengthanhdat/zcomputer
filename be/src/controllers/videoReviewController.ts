@@ -12,9 +12,13 @@ export const getVideoReviews = async (req: Request, res: Response) => {
 
 export const createVideoReview = async (req: Request, res: Response) => {
   try {
-    const { videoFileUrl, redirectLink } = req.body;
+    const { videoFileUrl, redirectLink, product_id } = req.body;
 
-    const newReview = new VideoReview({ videoFileUrl, redirectLink });
+    const newReview = new VideoReview({ 
+      videoFileUrl, 
+      redirectLink: redirectLink || "", 
+      product_id: product_id || undefined 
+    });
     const saved = await newReview.save();
     res.status(201).json(saved);
   } catch (error) {
@@ -25,8 +29,12 @@ export const createVideoReview = async (req: Request, res: Response) => {
 export const updateVideoReview = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-    const { videoFileUrl, redirectLink } = req.body;
-    let updateData: any = { videoFileUrl, redirectLink };
+    const { videoFileUrl, redirectLink, product_id } = req.body;
+    let updateData: any = { 
+      videoFileUrl, 
+      redirectLink: redirectLink || "", 
+      product_id: product_id || null 
+    };
 
     const updated = await VideoReview.findByIdAndUpdate(
       id,

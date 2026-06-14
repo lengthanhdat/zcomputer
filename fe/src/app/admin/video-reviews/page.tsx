@@ -1,14 +1,16 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Plus, Trash2, Edit, Play } from "lucide-react";
+import { Plus, Trash2, Edit, Play, Link as LinkIcon, Box } from "lucide-react";
 import toast from "react-hot-toast";
 import { fetchApi } from "@/lib/api";
+import Image from "next/image";
 
 interface VideoReview {
   _id: string;
   videoFileUrl: string;
   redirectLink: string;
+  product_id?: any;
 }
 
 export default function AdminVideoReviewsPage() {
@@ -18,10 +20,15 @@ export default function AdminVideoReviewsPage() {
   const [showModal, setShowModal] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   
+  const [linkType, setLinkType] = useState<"product" | "custom">("product");
   const [formData, setFormData] = useState({ 
     videoFileUrl: "",
-    redirectLink: ""
+    redirectLink: "",
+    product_id: ""
   });
+  
+  const [searchTerm, setSearchTerm] = useState("");
+  const [showDropdown, setShowDropdown] = useState(false);
 
   const fetchData = async () => {
     try {
@@ -46,15 +53,25 @@ export default function AdminVideoReviewsPage() {
 
   const openAddModal = () => {
     setEditingId(null);
-    setFormData({ videoFileUrl: "", redirectLink: "" });
+    setLinkType("product");
+    setFormData({ videoFileUrl: "", redirectLink: "", product_id: "" });
+    setSearchTerm("");
     setShowModal(true);
   };
 
   const openEditModal = (review: VideoReview) => {
     setEditingId(review._id);
+    if (review.product_id) {
+      setLinkType("product");
+      setSearchTerm(review.product_id.name || "");
+    } else {
+      setLinkType("custom");
+      setSearchTerm("");
+    }
     setFormData({
       videoFileUrl: review.videoFileUrl || "",
-      redirectLink: review.redirectLink || ""
+      redirectLink: review.redirectLink || "",
+      product_id: review.product_id?._id || ""
     });
     setShowModal(true);
   };
@@ -93,9 +110,15 @@ export default function AdminVideoReviewsPage() {
       const url = editingId ? `/video-reviews/${editingId}` : "/video-reviews";
       const method = editingId ? "PUT" : "POST";
 
+      const payload = {
+        videoFileUrl: formData.videoFileUrl,
+        redirectLink: linkType === "custom" ? formData.redirectLink : "",
+        product_id: linkType === "product" ? formData.product_id : null
+      };
+
       const res = await fetchApi(url, {
         method,
-        body: JSON.stringify(formData)
+        body: JSON.stringify(payload)
       });
       if (res.ok) {
         toast.success(editingId ? "Cập nhật thành công" : "Thêm thành công");
@@ -119,6 +142,8 @@ export default function AdminVideoReviewsPage() {
       }
     } catch (error) {}
   };
+
+  const filteredProducts = products.filter(p => p.name.toLowerCase().includes(searchTerm.toLowerCase()));
 
   return (
     <div className="bg-white rounded-lg shadow-sm border border-gray-200 min-h-full">
@@ -144,7 +169,17 @@ export default function AdminVideoReviewsPage() {
             </div>
             <div className="p-4 space-y-3">
               <div>
-                <p className="text-xs text-blue-600 mt-1 line-clamp-1">{review.redirectLink ? `Link: ${review.redirectLink}` : "Không có link đính kèm"}</p>
+                {review.product_id ? (
+                  <div className="flex items-start gap-2">
+                    <Box size={14} className="text-blue-600 mt-1 flex-shrink-0" />
+                    <p className="text-xs text-blue-600 font-medium line-clamp-2">{review.product_id.name}</p>
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-2">
+                    <LinkIcon size={14} className="text-gray-500 flex-shrink-0" />
+                    <p className="text-xs text-gray-500 truncate" title={review.redirectLink}>{review.redirectLink || "Không có liên kết"}</p>
+                  </div>
+                )}
               </div>
               <div className="flex justify-end gap-1 pt-3 border-t border-gray-100">
                 <button onClick={() => openEditModal(review)} className="p-1.5 text-blue-600 hover:bg-blue-50 rounded" title="Sửa">
@@ -161,7 +196,7 @@ export default function AdminVideoReviewsPage() {
 
       {showModal && (
         <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-lg max-w-md w-full p-6 max-h-[90vh] overflow-y-auto">
+          <div className="bg-white rounded-lg max-w-md w-full p-6 max-h-[90vh] overflow-y-visible">
             <h2 className="text-xl font-bold mb-4">{editingId ? "Sửa Video Review" : "Thêm Video Review"}</h2>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
@@ -173,14 +208,69 @@ export default function AdminVideoReviewsPage() {
                   )}
                 </div>
               </div>
+
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Link Đích (Chuyển hướng khi click)</label>
-                <input className="w-full border p-2 rounded" value={formData.redirectLink} onChange={e => setFormData({...formData, redirectLink: e.target.value})} placeholder="https://..." />
+                <label className="block text-sm font-medium text-gray-700 mb-3">Hành động khi click (Link Đích)</label>
+                <div className="flex gap-4 mb-3">
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input type="radio" name="linkType" checked={linkType === "product"} onChange={() => setLinkType("product")} className="text-primary focus:ring-primary h-4 w-4" />
+                    <span className="text-sm font-medium">Gắn Sản Phẩm</span>
+                  </label>
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input type="radio" name="linkType" checked={linkType === "custom"} onChange={() => setLinkType("custom")} className="text-primary focus:ring-primary h-4 w-4" />
+                    <span className="text-sm font-medium">Liên Kết Tự Do</span>
+                  </label>
+                </div>
+
+                {linkType === "product" ? (
+                  <div className="relative">
+                    <input 
+                      type="text" 
+                      placeholder="-- Nhập tên để tìm & chọn sản phẩm --" 
+                      className="w-full border p-2 rounded text-sm bg-white focus:outline-none focus:ring-2 focus:ring-primary/50"
+                      value={searchTerm}
+                      onChange={e => {
+                        setSearchTerm(e.target.value);
+                        setShowDropdown(true);
+                        setFormData({...formData, product_id: ""});
+                      }}
+                      onFocus={() => setShowDropdown(true)}
+                    />
+                    {showDropdown && (
+                      <div className="absolute z-50 w-full mt-1 bg-white border border-gray-200 rounded-md shadow-lg max-h-52 overflow-y-auto">
+                        {filteredProducts.length > 0 ? (
+                          filteredProducts.map(p => (
+                            <div 
+                              key={p._id} 
+                              className={`p-2 hover:bg-red-50 cursor-pointer text-sm border-b border-gray-50 last:border-0 ${formData.product_id === p._id ? 'bg-red-50 font-medium text-primary' : ''}`}
+                              onClick={() => {
+                                setFormData({...formData, product_id: p._id});
+                                setSearchTerm(p.name);
+                                setShowDropdown(false);
+                              }}
+                            >
+                              {p.name}
+                            </div>
+                          ))
+                        ) : (
+                          <div className="p-3 text-sm text-gray-500 text-center">Không tìm thấy sản phẩm nào</div>
+                        )}
+                      </div>
+                    )}
+                    {showDropdown && (
+                      <div className="fixed inset-0 z-40" onClick={() => setShowDropdown(false)}></div>
+                    )}
+                  </div>
+                ) : (
+                  <div>
+                    <input className="w-full border p-2 rounded text-sm" value={formData.redirectLink} onChange={e => setFormData({...formData, redirectLink: e.target.value})} placeholder="https://..." />
+                  </div>
+                )}
               </div>
               
-              <div className="flex gap-4 mt-6">
-                <button type="button" onClick={() => setShowModal(false)} className="flex-1 bg-gray-100 text-gray-700 py-2 rounded font-semibold">Hủy</button>
-                <button type="submit" className="flex-1 bg-primary text-white py-2 rounded font-semibold">Lưu lại</button>
+              <div className="flex gap-4 mt-6 pt-2">
+                <button type="button" onClick={() => setShowModal(false)} className="flex-1 bg-gray-100 hover:bg-gray-200 transition-colors text-gray-700 py-2 rounded font-semibold">Hủy</button>
+                <button type="submit" className="flex-1 bg-primary hover:bg-red-700 transition-colors text-white py-2 rounded font-semibold">Lưu lại</button>
               </div>
             </form>
           </div>

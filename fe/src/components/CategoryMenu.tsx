@@ -29,7 +29,7 @@ export default function CategoryMenu({ categories }: { categories: Category[] })
   const mainCategories = categories.filter(c => !c.parent_id);
 
   return (
-    <div className="relative bg-white shadow-md border border-gray-100 py-2 w-full z-30 flex flex-col rounded-b-md">
+    <div className="relative bg-white/95 backdrop-blur-2xl shadow-[0_20px_40px_rgba(0,0,0,0.15)] border-l border-r border-b border-gray-200/50 py-3 w-full z-30 flex flex-col rounded-b-xl">
       {mainCategories.map(cat => {
         const Icon = getIcon(cat.name);
         const subCategories = categories.filter(c => c.parent_id === cat._id);
@@ -39,29 +39,31 @@ export default function CategoryMenu({ categories }: { categories: Category[] })
         return (
           <div
             key={cat._id}
-            className="group"
+            className="group relative"
             onMouseEnter={() => setHoveredCategory(cat._id)}
             onMouseLeave={() => setHoveredCategory(null)}
           >
-            <Link
-              href={`/category/${cat.slug}`}
-              className={`flex items-center justify-between px-5 py-2.5 transition-colors ${isHovered ? 'bg-[#eebd53] text-white' : 'text-gray-700 hover:bg-gray-50'}`}
-            >
-              <div className="flex items-center gap-3">
-                <Icon size={18} className={isHovered ? 'text-white' : 'text-gray-500'} />
-                <span className={`text-sm font-semibold ${isHovered ? 'text-white' : ''}`}>{cat.name}</span>
-              </div>
-              {hasSub && <ChevronRight size={16} className={isHovered ? 'text-white' : 'text-gray-400'} />}
-            </Link>
+            <div className="px-2 py-0.5">
+              <Link
+                href={`/category/${cat.slug}`}
+                className={`flex items-center justify-between px-4 py-2 transition-all duration-300 rounded-lg ${isHovered ? 'bg-gradient-to-r from-red-600 to-red-500 text-white shadow-[0_4px_15px_rgba(239,68,68,0.3)] scale-[1.02]' : 'text-gray-700 hover:bg-red-50/50'}`}
+              >
+                <div className="flex items-center gap-3">
+                  <Icon size={18} className={isHovered ? 'text-white' : 'text-gray-500 group-hover:text-red-500 transition-colors'} />
+                  <span className={`text-sm font-semibold ${isHovered ? 'text-white' : ''}`}>{cat.name}</span>
+                </div>
+                {hasSub && <ChevronRight size={16} className={isHovered ? 'text-white' : 'text-gray-400 group-hover:text-red-400 transition-colors'} />}
+              </Link>
+            </div>
 
             {/* Flyout Submenu */}
             {hasSub && isHovered && (
-              <div className="absolute top-0 left-full w-[260px] bg-white shadow-xl border border-gray-100 py-2 z-40 animate-in fade-in zoom-in-95 duration-200 min-h-full">
+              <div className="absolute top-[-10px] left-[calc(100%-4px)] w-[280px] bg-white/95 backdrop-blur-2xl shadow-[0_20px_40px_rgba(0,0,0,0.15)] border border-gray-200/50 py-3 z-40 rounded-xl animate-in fade-in slide-in-from-left-2 duration-200 min-h-[calc(100%+20px)]">
                 {subCategories.map(sub => (
                   <Link
                     key={sub._id}
                     href={`/category/${sub.slug}`}
-                    className="block px-6 py-2.5 text-sm font-medium text-gray-700 hover:text-primary hover:bg-red-50/50 transition-colors"
+                    className="block px-6 py-2.5 text-sm font-medium text-gray-700 hover:text-red-600 hover:bg-red-50/80 hover:pl-8 transition-all duration-300"
                   >
                     {sub.name}
                   </Link>
