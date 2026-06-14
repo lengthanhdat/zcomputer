@@ -20,7 +20,7 @@ export default function PopupAnnouncement() {
 
   useEffect(() => {
     // Fetch announcement data
-    fetch('http://127.0.0.1:5000/api/settings/popup_announcement')
+    fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:5000/api"}/settings/popup_announcement`)
       .then(res => {
         if (!res.ok) throw new Error("Failed to fetch");
         return res.json();

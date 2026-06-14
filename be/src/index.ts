@@ -12,11 +12,12 @@ import rateLimit from 'express-rate-limit';
 dotenv.config();
 
 const app = express();
+
 const PORT = process.env.PORT || 5000;
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/zcomputer';
 
 app.use(cors({
-  origin: ['http://localhost:3000', 'http://127.0.0.1:3000', 'http://192.168.50.213:3000'],
+  origin: true,
   credentials: true
 }));
 app.use(compression()); 

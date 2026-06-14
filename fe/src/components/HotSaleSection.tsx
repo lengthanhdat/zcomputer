@@ -42,7 +42,7 @@ export default function HotSaleSection({
   const [timeLeft, setTimeLeft] = useState({ d: 0, h: 0, m: 0, s: 0 });
 
   useEffect(() => {
-    fetch('http://127.0.0.1:5000/api/settings/flash_sale_end_time')
+    fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:5000/api"}/settings/flash_sale_end_time`)
       .then(res => res.json())
       .then(data => {
         if (data && data.value) {
