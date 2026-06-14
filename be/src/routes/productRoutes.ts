@@ -1,5 +1,5 @@
 import express from 'express';
-import { getProducts, getProductBySlug, createProduct, updateProduct, deleteProduct, smartExtract, smartExtractBulk } from '../controllers/productController';
+import { getProducts, getProductBySlug, createProduct, updateProduct, deleteProduct, deleteBulkProducts, smartExtract, smartExtractBulk, incrementViews } from '../controllers/productController';
 import { authenticate, requirePermission } from '../middlewares/authorize';
 
 const router = express.Router();
@@ -11,5 +11,7 @@ router.post('/', authenticate, requirePermission('CREATE_PRODUCT'), createProduc
 router.get('/:slug', getProductBySlug);
 router.put('/:id', authenticate, requirePermission('EDIT_PRODUCT'), updateProduct);
 router.delete('/:id', authenticate, requirePermission('DELETE_PRODUCT'), deleteProduct);
+router.post('/bulk-delete', authenticate, requirePermission('DELETE_PRODUCT'), deleteBulkProducts);
+router.post('/:slug/view', incrementViews);
 
 export default router;

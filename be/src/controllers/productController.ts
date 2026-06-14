@@ -129,6 +129,22 @@ export const deleteProduct = async (req: Request, res: Response) => {
   }
 };
 
+// Xóa nhiều sản phẩm
+export const deleteBulkProducts = async (req: Request, res: Response) => {
+  try {
+    const { ids } = req.body;
+    if (!Array.isArray(ids) || ids.length === 0) {
+      return res.status(400).json({ message: 'Vui lòng cung cấp danh sách ID sản phẩm cần xóa' });
+    }
+    
+    const result = await Product.deleteMany({ _id: { $in: ids } });
+    
+    res.json({ message: `Đã xóa ${result.deletedCount} sản phẩm thành công`, deletedCount: result.deletedCount });
+  } catch (error) {
+    res.status(500).json({ message: 'Lỗi khi xóa nhiều sản phẩm', error });
+  }
+};
+
 // Trích xuất thông minh từ text bằng Gemini
 export const smartExtract = async (req: Request, res: Response) => {
   try {
@@ -298,5 +314,16 @@ ${text.substring(0, 50000)}
     if (!res.headersSent) {
       res.status(500).json({ message: 'Hệ thống AI đang quá tải hoặc phản hồi chậm. Vui lòng thử lại sau.', error: error?.message || 'Unknown error' });
     }
+  }
+};
+
+// Tăng lượt xem sản phẩm
+export const incrementViews = async (req: Request, res: Response) => {
+  try {
+    const { slug } = req.params;
+    await Product.updateOne({ slug }, { $inc: { views: 1 } });
+    res.json({ success: true });
+  } catch (error) {
+    res.status(500).json({ message: 'Lỗi server', error });
   }
 };

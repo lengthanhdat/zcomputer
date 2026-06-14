@@ -27,8 +27,15 @@ export const updateUserRole = async (req: Request, res: Response) => {
     if (req.user?.userId === req.params.id) {
       return res.status(403).json({ message: 'Bạn không thể tự thay đổi quyền của chính mình' });
     }
-    const { role } = req.body;
-    const user = await User.findByIdAndUpdate(req.params.id, { role }, { new: true }).select('-password');
+    const { role, permissions } = req.body;
+    
+    // Xây dựng object update
+    const updateData: any = { role };
+    if (permissions !== undefined) {
+      updateData.permissions = permissions;
+    }
+
+    const user = await User.findByIdAndUpdate(req.params.id, updateData, { new: true }).select('-password');
     if (!user) return res.status(404).json({ message: 'Không tìm thấy user' });
 
     res.json(user);

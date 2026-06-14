@@ -13,6 +13,7 @@ export interface IUser extends Document {
   role: string;
   address?: string;
   phone?: string;
+  permissions?: string[];
 }
 
 const UserSchema = new Schema<IUser>(
@@ -23,6 +24,7 @@ const UserSchema = new Schema<IUser>(
     role: { type: String, enum: Object.values(ROLES), default: ROLES.CUSTOMER },
     address: { type: String },
     phone: { type: String },
+    permissions: { type: [String], default: [] }
   },
   { timestamps: true }
 );
