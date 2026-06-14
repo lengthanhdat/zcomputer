@@ -143,7 +143,7 @@ export default function AdminBannersPage() {
         {loading ? <p>Đang tải...</p> : banners.map(banner => (
           <div key={banner._id} className="border rounded-lg overflow-hidden bg-white shadow-sm hover:shadow transition-shadow">
             <div className="aspect-[21/9] bg-gray-100 relative">
-              <img src={banner.image.startsWith('http') || banner.image.startsWith('data:') ? banner.image : `http://localhost:5000${banner.image}`} alt={banner.title} className="w-full h-full object-cover" />
+              <img src={banner.image.startsWith('http') || banner.image.startsWith('data:') ? banner.image : `${banner.image}`} alt={banner.title} className="w-full h-full object-cover" />
             </div>
             <div className="p-4 space-y-4">
               <div>
@@ -187,7 +187,7 @@ export default function AdminBannersPage() {
                   <input type="file" accept="image/*" onChange={handleImageUpload} className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" />
                   <div className="flex items-center gap-3 mt-2">
                     {formData.image && (
-                      <img src={formData.image.startsWith('http') || formData.image.startsWith('data:') ? formData.image : `http://localhost:5000${formData.image}`} alt="Preview" className="h-12 w-24 object-cover rounded border flex-shrink-0" />
+                      <img src={formData.image.startsWith('http') || formData.image.startsWith('data:') ? formData.image : `${formData.image}`} alt="Preview" className="h-12 w-24 object-cover rounded border flex-shrink-0" />
                     )}
                     <input className="flex-1 border p-2 rounded text-sm" value={formData.image} onChange={e => setFormData({...formData, image: e.target.value})} placeholder="Hoặc dán URL ảnh trực tiếp (https://...)" />
                   </div>

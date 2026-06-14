@@ -34,7 +34,7 @@ export default function AdminJobsPage() {
 
   const fetchJobs = async () => {
     try {
-      const res = await fetch("http://localhost:5000/api/jobs");
+      const res = await fetch("/api/jobs");
       if (res.ok) {
         const data = await res.json();
         setJobs(data);
@@ -54,8 +54,8 @@ export default function AdminJobsPage() {
     e.preventDefault();
     try {
       const url = editingJob 
-        ? `http://localhost:5000/api/jobs/${editingJob._id}` 
-        : "http://localhost:5000/api/jobs";
+        ? `/api/jobs/${editingJob._id}` 
+        : "/api/jobs";
       const method = editingJob ? "PUT" : "POST";
 
       const res = await fetch(url, {
@@ -79,7 +79,7 @@ export default function AdminJobsPage() {
   const handleDelete = async (id: string) => {
     if (confirm("Bạn có chắc chắn muốn xóa tin tuyển dụng này?")) {
       try {
-        const res = await fetch(`http://localhost:5000/api/jobs/${id}`, {
+        const res = await fetch(`/api/jobs/${id}`, {
           method: "DELETE"
         });
         if (res.ok) {

@@ -70,7 +70,7 @@ export default function AdminVideoReviewsPage() {
     try {
       // Upload thẳng tới backend để bypass giới hạn 10MB của Next.js proxy
       const token = localStorage.getItem("token");
-      const res = await fetch("http://localhost:5000/api/upload/video", {
+      const res = await fetch("/api/upload/video", {
         method: "POST",
         headers: token ? { Authorization: `Bearer ${token}` } : {},
         body: data,
@@ -137,7 +137,7 @@ export default function AdminVideoReviewsPage() {
           <div key={review._id} className="border rounded-lg overflow-hidden bg-white shadow-sm hover:shadow transition-shadow">
             <div className="aspect-[9/16] bg-gray-100 relative group">
               {review.videoFileUrl ? (
-                <video src={`http://localhost:5000${review.videoFileUrl}`} className="w-full h-full object-cover" muted />
+                <video src={`${review.videoFileUrl}`} className="w-full h-full object-cover" muted />
               ) : (
                 <div className="w-full h-full flex items-center justify-center text-gray-400">Không có video</div>
               )}
@@ -169,7 +169,7 @@ export default function AdminVideoReviewsPage() {
                 <div className="flex flex-col gap-2">
                   <input type="file" accept="video/*" onChange={handleVideoUpload} className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700" />
                   {formData.videoFileUrl && (
-                    <video src={`http://localhost:5000${formData.videoFileUrl}`} className="h-32 w-24 object-cover rounded border flex-shrink-0" controls />
+                    <video src={`${formData.videoFileUrl}`} className="h-32 w-24 object-cover rounded border flex-shrink-0" controls />
                   )}
                 </div>
               </div>

@@ -43,7 +43,7 @@ const VideoCard = ({ video }: { video: any }) => {
       {video.videoFileUrl ? (
         <video 
           ref={videoRef}
-          src={`http://localhost:5000${video.videoFileUrl}`} 
+          src={`${video.videoFileUrl}`} 
           className="w-full h-full object-cover cursor-pointer" 
           loop 
           playsInline 
@@ -52,7 +52,7 @@ const VideoCard = ({ video }: { video: any }) => {
       ) : (
         <div className="w-full h-full relative cursor-pointer" onClick={togglePlay}>
           <Image 
-            src={video.videoThumbnail?.startsWith('http') || video.videoThumbnail?.startsWith('data:') ? video.videoThumbnail : `http://localhost:5000${video.videoThumbnail}`} 
+            src={video.videoThumbnail?.startsWith('http') || video.videoThumbnail?.startsWith('data:') ? video.videoThumbnail : `${video.videoThumbnail}`} 
             alt={video.title || "Video"} 
             fill 
             className="object-cover"

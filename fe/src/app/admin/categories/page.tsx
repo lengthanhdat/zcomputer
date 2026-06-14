@@ -15,7 +15,7 @@ interface Category {
   image?: string;
 }
 
-const API = "http://127.0.0.1:5000/api/categories";
+const API = "/api/categories";
 
 export default function AdminCategoriesPage() {
   const [categories, setCategories] = useState<Category[]>([]);
@@ -332,7 +332,7 @@ export default function AdminCategoriesPage() {
                 <input type="file" accept="image/*" onChange={handleImageUpload} className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" />
                 <div className="flex items-center gap-3 mt-1">
                   {image && (
-                    <img src={image.startsWith('http') || image.startsWith('data:') ? image : `http://localhost:5000${image}`} alt="Preview" className="h-12 w-12 object-cover rounded border flex-shrink-0" />
+                    <img src={image.startsWith('http') || image.startsWith('data:') ? image : `${image}`} alt="Preview" className="h-12 w-12 object-cover rounded border flex-shrink-0" />
                   )}
                   <input className="flex-1 border border-gray-300 px-4 py-2 rounded-md text-sm outline-none focus:border-primary" value={image} onChange={e => setImage(e.target.value)} placeholder="Hoặc dán URL ảnh trực tiếp..." />
                 </div>

@@ -168,7 +168,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
 
         const data = await res.json();
         if (res.ok) {
-          const fullUrl = data.url.startsWith("http") ? data.url : `http://127.0.0.1:5000${data.url}`;
+          const fullUrl = data.url.startsWith("http") ? data.url : `${data.url}`;
           uploadedUrls.push(fullUrl);
         } else {
           toast.error(`Lỗi tải ảnh: ${data.message}`);
