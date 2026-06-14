@@ -191,6 +191,7 @@ export default function AdminCategoriesPage() {
               <thead>
                 <tr className="bg-gray-50 text-gray-600 text-sm border-y border-gray-200">
                   <th className="py-3 px-4 font-semibold w-10"></th>
+                  <th className="py-3 px-4 font-semibold w-16 text-center">Ảnh</th>
                   <th className="py-3 px-4 font-semibold w-1/3">Tên danh mục</th>
                   <th className="py-3 px-4 font-semibold text-center">Danh mục cha</th>
                   <th className="py-3 px-4 font-semibold">Đường dẫn (Slug)</th>
@@ -206,9 +207,9 @@ export default function AdminCategoriesPage() {
                       className="divide-y divide-gray-100"
                     >
                       {loading ? (
-                        <tr><td colSpan={5} className="py-8 text-center text-gray-400">Đang tải...</td></tr>
+                        <tr><td colSpan={6} className="py-8 text-center text-gray-400">Đang tải...</td></tr>
                       ) : categories.length === 0 ? (
-                        <tr><td colSpan={5} className="py-8 text-center text-gray-400">Chưa có danh mục.</td></tr>
+                        <tr><td colSpan={6} className="py-8 text-center text-gray-400">Chưa có danh mục.</td></tr>
                       ) : (
                         categories.map((cat, index) => (
                           <Draggable key={cat._id} draggableId={cat._id} index={index}>
@@ -223,6 +224,15 @@ export default function AdminCategoriesPage() {
                                   <div {...provided.dragHandleProps} className="cursor-grab text-gray-400 hover:text-gray-600 active:cursor-grabbing outline-none">
                                     <GripVertical size={16} />
                                   </div>
+                                </td>
+                                <td className="py-3 px-4 text-center">
+                                  {cat.image ? (
+                                    <div className="w-10 h-10 mx-auto">
+                                      <img src={(cat.image || "").startsWith('http') || (cat.image || "").startsWith('data:') || (cat.image || "").startsWith('/uploads') ? cat.image : `${cat.image}`} alt={cat.name} className="w-full h-full object-cover rounded shadow-sm border border-gray-200 bg-white" />
+                                    </div>
+                                  ) : (
+                                    <div className="w-10 h-10 mx-auto rounded bg-gray-100 border border-gray-200 flex items-center justify-center text-gray-400 text-[10px] font-medium">Trống</div>
+                                  )}
                                 </td>
                                 <td className="py-3 px-4 text-sm font-semibold text-gray-900">
                                   {cat.parent_id && <span className="text-gray-400 font-normal mr-2">|_</span>}

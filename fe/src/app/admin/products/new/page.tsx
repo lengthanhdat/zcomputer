@@ -211,7 +211,7 @@ export default function NewProductPage() {
     setExtracting(true);
     try {
       // Gọi trực tiếp backend để tránh timeout 30s của Next.js Proxy
-      const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || "";
+      const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:5000";
       const res = await fetchApi(`${API_BASE}/api/products/smart-extract-bulk`, {
         method: "POST",
         body: JSON.stringify({ text: smartText })
