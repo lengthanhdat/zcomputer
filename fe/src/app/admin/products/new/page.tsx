@@ -226,7 +226,10 @@ export default function NewProductPage() {
       const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:5000";
       const res = await fetchApi(`${API_BASE}/api/products/smart-extract-bulk`, {
         method: "POST",
-        body: JSON.stringify({ text: smartText })
+        body: JSON.stringify({ 
+          text: smartText,
+          categories: categories.map(c => c.name)
+        })
       });
       
       const dataArray = await res.json();
@@ -244,12 +247,24 @@ export default function NewProductPage() {
             Screen: data.specs.screen || ''
           } : {};
           
+          let matchedCategory = formData.category_id;
+          if (data.category_name) {
+            const found = categories.find(c => 
+              c.name.toLowerCase().includes(data.category_name.toLowerCase()) || 
+              data.category_name.toLowerCase().includes(c.name.toLowerCase()) ||
+              c.slug.includes(data.category_name.toLowerCase())
+            );
+            if (found) matchedCategory = found._id;
+          }
+
           setFormData((prev) => ({
             ...prev,
             name: data.name || prev.name,
             price: data.price ? data.price.toString() : prev.price,
             brand: data.brand || prev.brand,
             condition: data.condition || prev.condition,
+            stock: data.stock !== undefined ? data.stock.toString() : prev.stock,
+            category_id: matchedCategory,
             description: prev.description, // Dữ liệu cũ giữ nguyên
             specs: { ...prev.specs, ...mappedSpecs }
           }));
@@ -282,7 +297,7 @@ export default function NewProductPage() {
               brand: data.brand || "",
               price: Number(data.price) || 0,
               discountPrice: 0,
-              stock: 10,
+              stock: data.stock !== undefined ? Number(data.stock) : 10,
               sku: "",
               description: "Đang cập nhật...",
               images: [],
