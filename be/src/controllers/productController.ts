@@ -148,7 +148,7 @@ export const deleteBulkProducts = async (req: Request, res: Response) => {
 // Trích xuất thông minh từ text bằng Gemini
 export const smartExtract = async (req: Request, res: Response) => {
   try {
-    const { text } = req.body;
+    const { text, categories } = req.body;
     if (!text) {
       return res.status(400).json({ message: 'Vui lòng cung cấp văn bản cần trích xuất' });
     }
@@ -161,6 +161,10 @@ export const smartExtract = async (req: Request, res: Response) => {
     const genAI = new GoogleGenerativeAI(apiKey);
     const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
+    const categoryInstruction = categories && Array.isArray(categories) && categories.length > 0
+      ? `Tên danh mục CHÍNH XÁC (Hãy CHỌN MỘT trong các danh mục sau: ${categories.join(', ')}. Ưu tiên chọn danh mục con chi tiết nhất. Ví dụ: Nếu là Laptop Dell, hãy chọn "Laptop Dell Cũ" thay vì "Laptop Cũ". Nếu không thấy cái nào phù hợp thì để trống)`
+      : `Tên danh mục (ví dụ: Laptop, PC, Màn Hình... Cố gắng phân loại dựa vào tên sản phẩm)`;
+
     const prompt = `
 Bạn là chuyên gia phân tích dữ liệu máy tính. Hãy đọc đoạn text sau và trích xuất thành định dạng JSON CHÍNH XÁC.
 Chỉ trả về chuỗi JSON hợp lệ, KHÔNG giải thích, KHÔNG thêm markdown (không \`\`\`json).
@@ -170,6 +174,8 @@ Cấu trúc JSON bắt buộc:
   "name": "Tên sản phẩm đầy đủ",
   "price": "Giá bán dạng SỐ (ví dụ: 15500000. Nếu text không nói rõ hoặc dùng từ như 'ib', 'liên hệ', hãy để 0)",
   "brand": "Tên hãng sản xuất (ví dụ: Dell, HP, ASUS, Apple, Lenovo... Cố gắng đoán từ tên nếu có thể)",
+  "category_name": "${categoryInstruction}",
+  "stock": "Số lượng tồn kho dạng SỐ (nếu không rõ thì để 10)",
   "specs": {
     "cpu": "Thông tin CPU",
     "ram": "Thông tin RAM",
@@ -208,7 +214,7 @@ ${text}
 // Trích xuất hàng loạt từ text/excel bằng Gemini
 export const smartExtractBulk = async (req: Request, res: Response) => {
   try {
-    let { text } = req.body;
+    let { text, categories } = req.body;
     if (!text) {
       return res.status(400).json({ message: 'Vui lòng cung cấp nội dung cần trích xuất' });
     }
@@ -271,6 +277,10 @@ export const smartExtractBulk = async (req: Request, res: Response) => {
     const genAI = new GoogleGenerativeAI(apiKey);
     const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
+    const categoryInstruction = categories && Array.isArray(categories) && categories.length > 0
+      ? `Tên danh mục CHÍNH XÁC (Hãy CHỌN MỘT trong các danh mục sau: ${categories.join(', ')}. Ưu tiên chọn danh mục con chi tiết nhất. Ví dụ: Nếu là Laptop Dell, hãy chọn "Laptop Dell Cũ" thay vì "Laptop Cũ". Nếu không thấy cái nào phù hợp thì để trống)`
+      : `Tên danh mục (nếu có trong dữ liệu, ví dụ: Laptop, PC, Màn Hình... Hoặc tự dự đoán)`;
+
     const prompt = `
 Bạn là chuyên gia phân tích dữ liệu máy tính. Hãy đọc đoạn nội dung sau (có thể là văn bản hoặc HTML thô) và trích xuất TẤT CẢ các sản phẩm tìm thấy thành một MẢNG JSON (Array of Objects).
 Chỉ trả về MẢNG JSON hợp lệ. Nếu không tìm thấy bất kỳ sản phẩm nào, hãy trả về mảng rỗng [].
@@ -281,7 +291,8 @@ Cấu trúc MẢNG JSON bắt buộc:
     "name": "Tên sản phẩm đầy đủ",
     "price": "Giá bán dạng SỐ (ví dụ: 15500000. Nếu không rõ, để 0)",
     "brand": "Tên hãng sản xuất",
-    "category_name": "Tên danh mục (nếu có trong dữ liệu, ví dụ: Laptop, PC, Màn Hình...)",
+    "category_name": "${categoryInstruction}",
+    "stock": "Số lượng tồn kho dạng SỐ (nếu không nói rõ thì để 10)",
     "specs": {
       "cpu": "Thông tin CPU",
       "ram": "Thông tin RAM",
