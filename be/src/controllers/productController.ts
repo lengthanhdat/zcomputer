@@ -8,7 +8,8 @@ import { GoogleGenerativeAI } from '@google/generative-ai';
 // Lấy danh sách sản phẩm
 export const getProducts = async (req: Request, res: Response) => {
   try {
-    const limit = parseInt(req.query.limit as string) || 50;
+    // Tăng giới hạn mặc định lên 1000 để admin và trang chủ có thể xem đầy đủ sản phẩm
+    const limit = parseInt(req.query.limit as string) || 1000;
     const categoryQuery = req.query.category as string;
     
     let filter: any = { status: { $in: ['active', 'out_of_stock'] } };
