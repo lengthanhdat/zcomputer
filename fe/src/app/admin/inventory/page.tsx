@@ -15,7 +15,8 @@ interface Product {
   brand: string;
   images?: string[];
   category_id?: {
-    name?: string;
+    _id: string;
+    name: string;
   };
 }
 
@@ -24,6 +25,7 @@ export default function AdminInventoryPage() {
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [stockFilter, setStockFilter] = useState<"all" | "out" | "low" | "ok">("all");
+  const [categoryFilter, setCategoryFilter] = useState("");
   const [editedStocks, setEditedStocks] = useState<Record<string, number>>({});
   const [savingId, setSavingId] = useState<string | null>(null);
   const [isSavingAll, setIsSavingAll] = useState(false);
@@ -178,13 +180,24 @@ export default function AdminInventoryPage() {
       return matchesSearch && currentStock === 0;
     }
     if (stockFilter === "low") {
-      return matchesSearch && currentStock > 0 && currentStock <= 5;
+      return matchesSearch && currentStock > 0 && currentStock <= 5 && (categoryFilter ? product.category_id?._id === categoryFilter : true);
     }
     if (stockFilter === "ok") {
-      return matchesSearch && currentStock > 5;
+      return matchesSearch && currentStock > 5 && (categoryFilter ? product.category_id?._id === categoryFilter : true);
     }
-    return matchesSearch;
+    return matchesSearch && (categoryFilter ? product.category_id?._id === categoryFilter : true);
   });
+
+  const uniqueCategories = Array.from(new Map(
+    products.filter(p => p.category_id).map(p => [p.category_id?._id, p.category_id?.name])
+  ).entries());
+
+  const groupedProducts = filteredProducts.reduce((acc, product) => {
+    const catName = product.category_id?.name || "Khác";
+    if (!acc[catName]) acc[catName] = [];
+    acc[catName].push(product);
+    return acc;
+  }, {} as Record<string, Product[]>);
 
   return (
     <div className="space-y-6">
@@ -208,6 +221,16 @@ export default function AdminInventoryPage() {
           </div>
 
           <div className="flex gap-2 w-full md:w-auto overflow-x-auto pb-1 md:pb-0">
+            <select 
+              className="px-4 py-2 text-sm font-semibold rounded-md border bg-white text-gray-700 border-gray-300 hover:bg-gray-50 focus:outline-none focus:border-primary transition-all mr-2"
+              value={categoryFilter}
+              onChange={(e) => setCategoryFilter(e.target.value)}
+            >
+              <option value="">Tất cả danh mục</option>
+              {uniqueCategories.map(([id, name]) => (
+                <option key={id as string} value={id as string}>{name as string}</option>
+              ))}
+            </select>
             <button
               onClick={() => setStockFilter("all")}
               className={`px-4 py-2 text-sm font-semibold rounded-md border transition-all ${
@@ -271,140 +294,145 @@ export default function AdminInventoryPage() {
             <thead>
               <tr className="bg-gray-50 border-b border-gray-200 text-gray-600 text-sm font-semibold">
                 <th className="py-4 px-6">Sản phẩm</th>
-                <th className="py-4 px-6">Danh mục</th>
                 <th className="py-4 px-6 text-center w-48">Số lượng tồn</th>
                 <th className="py-4 px-6">Đơn giá</th>
                 <th className="py-4 px-6">Trạng thái</th>
                 <th className="py-4 px-6 text-center w-48">Thao tác</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-100">
-              {loading ? (
+            {loading ? (
+              <tbody>
                 <tr>
-                  <td colSpan={6} className="py-8 text-center text-gray-500">
+                  <td colSpan={5} className="py-8 text-center text-gray-500">
                     Đang tải dữ liệu sản phẩm...
                   </td>
                 </tr>
-              ) : filteredProducts.length === 0 ? (
+              </tbody>
+            ) : filteredProducts.length === 0 ? (
+              <tbody>
                 <tr>
-                  <td colSpan={6} className="py-8 text-center text-gray-500">
+                  <td colSpan={5} className="py-8 text-center text-gray-500">
                     Không tìm thấy sản phẩm nào phù hợp với bộ lọc.
                   </td>
                 </tr>
-              ) : (
-                filteredProducts.map((product) => {
-                  const currentStock = editedStocks[product._id] ?? product.stock;
-                  const isStockModified = currentStock !== product.stock;
-                  
-                  let statusBadge = (
-                    <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-green-100 text-green-700">
-                      Còn hàng
-                    </span>
-                  );
-                  if (currentStock === 0) {
-                    statusBadge = (
-                      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-red-100 text-red-700">
-                        Hết hàng
+              </tbody>
+            ) : (
+              Object.entries(groupedProducts).map(([categoryName, prods]) => (
+                <tbody key={categoryName} className="divide-y divide-gray-100">
+                  <tr className="bg-gray-100/80 border-t-2 border-gray-200">
+                    <td colSpan={5} className="py-2.5 px-6 font-bold text-gray-700 uppercase text-xs tracking-widest">{categoryName} ({prods.length})</td>
+                  </tr>
+                  {prods.map((product) => {
+                    const currentStock = editedStocks[product._id] ?? product.stock;
+                    const isStockModified = currentStock !== product.stock;
+                    
+                    let statusBadge = (
+                      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-green-100 text-green-700">
+                        Còn hàng
                       </span>
                     );
-                  } else if (currentStock <= 5) {
-                    statusBadge = (
-                      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-yellow-100 text-yellow-700">
-                        Sắp hết hàng
-                      </span>
-                    );
-                  }
+                    if (currentStock === 0) {
+                      statusBadge = (
+                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-red-100 text-red-700">
+                          Hết hàng
+                        </span>
+                      );
+                    } else if (currentStock <= 5) {
+                      statusBadge = (
+                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-yellow-100 text-yellow-700">
+                          Sắp hết hàng
+                        </span>
+                      );
+                    }
 
-                  return (
-                    <tr key={product._id} className="hover:bg-gray-50 transition-colors">
-                      <td className="py-4 px-6">
-                        <div className="flex items-center gap-3">
-                          <div className="w-12 h-12 rounded bg-gray-50 border p-1 shrink-0 flex items-center justify-center">
-                            {product.images?.[0] ? (
-                              <img
-                                src={product.images[0]}
-                                alt={product.name}
-                                className="w-full h-full object-contain"
-                              />
-                            ) : (
-                              <span className="text-gray-300 text-[10px]">No Image</span>
-                            )}
-                          </div>
-                          <div>
-                            <div className="font-bold text-gray-800 text-sm line-clamp-2 leading-relaxed">
-                              {product.name}
+                    return (
+                      <tr key={product._id} className="hover:bg-gray-50 transition-colors">
+                        <td className="py-4 px-6">
+                          <div className="flex items-center gap-3">
+                            <div className="w-12 h-12 rounded bg-gray-50 border p-1 shrink-0 flex items-center justify-center">
+                              {product.images?.[0] ? (
+                                <img
+                                  src={product.images[0]}
+                                  alt={product.name}
+                                  className="w-full h-full object-contain"
+                                />
+                              ) : (
+                                <span className="text-gray-300 text-[10px]">No Image</span>
+                              )}
                             </div>
-                            <div className="text-xs text-gray-400 mt-0.5">Hãng: {product.brand}</div>
+                            <div>
+                              <div className="font-bold text-gray-800 text-sm line-clamp-2 leading-relaxed">
+                                {product.name}
+                              </div>
+                              <div className="text-xs text-gray-400 mt-0.5">Hãng: {product.brand}</div>
+                            </div>
                           </div>
-                        </div>
-                      </td>
-                      <td className="py-4 px-6 text-sm text-gray-600">
-                        {product.category_id?.name || "Chưa phân loại"}
-                      </td>
-                      <td className="py-4 px-6">
-                        <div className="flex items-center justify-center gap-2">
-                          <button
-                            onClick={() => handleStockChange(product._id, currentStock - 1)}
-                            className="w-8 h-8 rounded border bg-white text-gray-600 flex items-center justify-center hover:bg-gray-50 hover:text-primary active:bg-gray-100"
-                          >
-                            <Minus size={14} />
-                          </button>
-                          <input
-                            type="number"
-                            value={currentStock}
-                            onChange={(e) => handleStockChange(product._id, parseInt(e.target.value) || 0)}
-                            className="w-16 h-8 text-center border rounded-md font-semibold text-gray-800 focus:outline-none focus:border-primary"
-                          />
-                          <button
-                            onClick={() => handleStockChange(product._id, currentStock + 1)}
-                            className="w-8 h-8 rounded border bg-white text-gray-600 flex items-center justify-center hover:bg-gray-50 hover:text-primary active:bg-gray-100"
-                          >
-                            <Plus size={14} />
-                          </button>
-                        </div>
-                      </td>
-                      <td className="py-4 px-6 font-bold text-gray-800 text-sm">
-                        {product.price.toLocaleString("vi-VN")}đ
-                      </td>
-                      <td className="py-4 px-6">{statusBadge}</td>
-                      <td className="py-4 px-6">
-                        <div className="flex items-center justify-center gap-2">
-                          <button
-                            onClick={() => handleSaveStock(product._id)}
-                            disabled={!isStockModified || savingId === product._id}
-                            className={`inline-flex items-center gap-1 px-3 py-1.5 rounded-md text-xs font-bold transition-all ${
-                              isStockModified
-                                ? "bg-green-600 hover:bg-green-700 text-white shadow-sm shadow-green-600/20 cursor-pointer"
-                                : "bg-gray-100 text-gray-400 cursor-not-allowed"
-                            }`}
-                            title="Lưu số lượng"
-                          >
-                            <Save size={14} />
-                            {savingId === product._id ? "..." : "Lưu"}
-                          </button>
-                          
-                          <Link
-                            href={`/admin/products/${product._id}`}
-                            className="p-1.5 text-blue-600 hover:bg-blue-50 rounded transition-colors border border-transparent hover:border-blue-200"
-                            title="Chỉnh sửa chi tiết"
-                          >
-                            <Edit size={16} />
-                          </Link>
-                          
-                          <button
-                            onClick={() => handleDelete(product._id, product.name)}
-                            className="p-1.5 text-red-500 hover:bg-red-50 rounded transition-colors border border-transparent hover:border-red-200"
-                            title="Xóa sản phẩm"
-                          >
-                            <Trash2 size={16} />
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  );
-                })
-              )}
-            </tbody>
+                        </td>
+                        <td className="py-4 px-6">
+                          <div className="flex items-center justify-center gap-2">
+                            <button
+                              onClick={() => handleStockChange(product._id, currentStock - 1)}
+                              className="w-8 h-8 rounded border bg-white text-gray-600 flex items-center justify-center hover:bg-gray-50 hover:text-primary active:bg-gray-100"
+                            >
+                              <Minus size={14} />
+                            </button>
+                            <input
+                              type="number"
+                              value={currentStock}
+                              onChange={(e) => handleStockChange(product._id, parseInt(e.target.value) || 0)}
+                              className="w-16 h-8 text-center border rounded-md font-semibold text-gray-800 focus:outline-none focus:border-primary"
+                            />
+                            <button
+                              onClick={() => handleStockChange(product._id, currentStock + 1)}
+                              className="w-8 h-8 rounded border bg-white text-gray-600 flex items-center justify-center hover:bg-gray-50 hover:text-primary active:bg-gray-100"
+                            >
+                              <Plus size={14} />
+                            </button>
+                          </div>
+                        </td>
+                        <td className="py-4 px-6 font-bold text-gray-800 text-sm">
+                          {product.price.toLocaleString("vi-VN")}đ
+                        </td>
+                        <td className="py-4 px-6">{statusBadge}</td>
+                        <td className="py-4 px-6">
+                          <div className="flex items-center justify-center gap-2">
+                            <button
+                              onClick={() => handleSaveStock(product._id)}
+                              disabled={!isStockModified || savingId === product._id}
+                              className={`inline-flex items-center gap-1 px-3 py-1.5 rounded-md text-xs font-bold transition-all ${
+                                isStockModified
+                                  ? "bg-green-600 hover:bg-green-700 text-white shadow-sm shadow-green-600/20 cursor-pointer"
+                                  : "bg-gray-100 text-gray-400 cursor-not-allowed"
+                              }`}
+                              title="Lưu số lượng"
+                            >
+                              <Save size={14} />
+                              {savingId === product._id ? "..." : "Lưu"}
+                            </button>
+                            
+                            <Link
+                              href={`/admin/products/${product._id}`}
+                              className="p-1.5 text-blue-600 hover:bg-blue-50 rounded transition-colors border border-transparent hover:border-blue-200"
+                              title="Chỉnh sửa chi tiết"
+                            >
+                              <Edit size={16} />
+                            </Link>
+                            
+                            <button
+                              onClick={() => handleDelete(product._id, product.name)}
+                              className="p-1.5 text-red-500 hover:bg-red-50 rounded transition-colors border border-transparent hover:border-red-200"
+                              title="Xóa sản phẩm"
+                            >
+                              <Trash2 size={16} />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              ))
+            )}
           </table>
         </div>
       </div>
