@@ -73,6 +73,7 @@ export default function NewProductPage() {
   const [showSmartModal, setShowSmartModal] = useState(false);
   const [smartText, setSmartText] = useState("");
   const [extracting, setExtracting] = useState(false);
+  const [extractProgress, setExtractProgress] = useState(0);
   const [bulkPreviewData, setBulkPreviewData] = useState<any[]>([]);
   const [isPreviewMode, setIsPreviewMode] = useState(false);
   const [isSavingBulk, setIsSavingBulk] = useState(false);
@@ -209,6 +210,17 @@ export default function NewProductPage() {
     }
     
     setExtracting(true);
+    setExtractProgress(0);
+    
+    // Giả lập phần trăm tiến trình để người dùng không tưởng bị lag
+    const progressInterval = setInterval(() => {
+      setExtractProgress(prev => {
+        if (prev >= 95) return 95;
+        const increment = Math.max(1, Math.floor((95 - prev) * 0.15));
+        return prev + increment;
+      });
+    }, 500);
+
     try {
       // Gọi trực tiếp backend để tránh timeout 30s của Next.js Proxy
       const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:5000";
@@ -294,7 +306,12 @@ export default function NewProductPage() {
       console.error(error);
       toast.error("Không thể kết nối đến AI");
     } finally {
-      setExtracting(false);
+      clearInterval(progressInterval);
+      setExtractProgress(100);
+      setTimeout(() => {
+        setExtracting(false);
+        setExtractProgress(0);
+      }, 500);
     }
   };
 
@@ -1064,24 +1081,40 @@ export default function NewProductPage() {
                 </div>
               </div>
               
-              <div className="mt-6 flex justify-end gap-3">
-                <button
-                  onClick={() => setShowSmartModal(false)}
-                  className="px-5 py-2.5 text-sm font-semibold text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
-                >
-                  Hủy bỏ
-                </button>
-                <button
-                  onClick={handleSmartExtract}
-                  disabled={extracting || !smartText.trim()}
-                  className="flex items-center gap-2 px-6 py-2.5 text-sm font-bold text-white bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 rounded-xl transition-all shadow-md shadow-purple-500/30 disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  {extracting ? (
-                    <>Đang phân tích AI...</>
-                  ) : (
-                    <><Sparkles size={16} /> Bắt đầu trích xuất</>
-                  )}
-                </button>
+              <div className="mt-6">
+                {extracting && (
+                  <div className="w-full mb-4">
+                    <div className="flex justify-between text-xs font-bold text-purple-700 mb-1.5">
+                      <span>Đang phân tích dữ liệu...</span>
+                      <span>{extractProgress}%</span>
+                    </div>
+                    <div className="w-full bg-purple-100 rounded-full h-2.5 overflow-hidden">
+                      <div 
+                        className="bg-gradient-to-r from-purple-500 to-blue-500 h-2.5 rounded-full transition-all duration-300 ease-out" 
+                        style={{ width: `${extractProgress}%` }}
+                      ></div>
+                    </div>
+                  </div>
+                )}
+                <div className="flex justify-end gap-3">
+                  <button
+                    onClick={() => setShowSmartModal(false)}
+                    className="px-5 py-2.5 text-sm font-semibold text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
+                  >
+                    Hủy bỏ
+                  </button>
+                  <button
+                    onClick={handleSmartExtract}
+                    disabled={extracting || !smartText.trim()}
+                    className="flex items-center gap-2 px-6 py-2.5 text-sm font-bold text-white bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 rounded-xl transition-all shadow-md shadow-purple-500/30 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {extracting ? (
+                      <>Đang phân tích AI...</>
+                    ) : (
+                      <><Sparkles size={16} /> Bắt đầu trích xuất</>
+                    )}
+                  </button>
+                </div>
               </div>
             </div>
           </div>

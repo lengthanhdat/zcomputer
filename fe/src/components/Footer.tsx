@@ -127,7 +127,7 @@ export default function Footer() {
       {/* Bottom Bar */}
       <div className="relative border-t border-white/10 bg-black/50 backdrop-blur-lg py-5 z-10">
         <div className="container mx-auto px-4 text-center text-[13px] font-medium text-white/40 tracking-wide">
-           © 2026 <strong className="text-white/60">ZCOMPUTER</strong>. Tất cả quyền được bảo lưu. Thiết kế với <span className="text-red-500">♥</span> tại Việt Nam.
+           © 2026 <strong className="text-white/60">ZCOMPUTER</strong>. Tất cả quyền được bảo lưu.
         </div>
       </div>
     </footer>
