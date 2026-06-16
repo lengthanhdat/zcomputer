@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { Filter, Cpu, Monitor, Server, HardDrive, Maximize, ArrowRight, Eye, LayoutGrid, Check, ChevronDown, Heart } from "lucide-react";
+import { Filter, Cpu, Monitor, Server, HardDrive, Maximize, ArrowRight, Eye, LayoutGrid, Check, ChevronDown, Heart, X } from "lucide-react";
 import { useState, useMemo, useEffect } from "react";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { motion } from "framer-motion";
@@ -189,22 +189,21 @@ export default function CategoryClient({
             initial={{ opacity: 0, x: -30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.3 }}
-            className="w-full lg:w-72 bg-white p-6 rounded-2xl border border-gray-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] shrink-0 lg:sticky lg:top-24 lg:max-h-[calc(100vh-6rem)] lg:overflow-y-auto custom-scrollbar"
+            className={`lg:w-72 bg-white p-6 rounded-2xl border border-gray-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] shrink-0 lg:sticky lg:top-24 lg:max-h-[calc(100vh-6rem)] lg:overflow-y-auto custom-scrollbar ${showMobileFilter ? 'fixed inset-0 z-50 m-0 rounded-none w-full overflow-y-auto' : 'hidden lg:block w-full'}`}
           >
-            <div 
-              className="flex items-center justify-between font-black text-lg pb-4 border-b border-gray-100 text-gray-900 uppercase cursor-pointer lg:cursor-default"
-              onClick={() => setShowMobileFilter(!showMobileFilter)}
-            >
+            <div className="flex items-center justify-between font-black text-lg pb-4 border-b border-gray-100 text-gray-900 uppercase">
               <div className="flex items-center gap-3">
                 <div className="w-8 h-8 rounded-full bg-red-50 flex items-center justify-center">
                   <Filter size={16} className="text-primary" />
                 </div>
                 Bộ lọc sản phẩm
               </div>
-              <ChevronDown size={20} className={`lg:hidden transition-transform duration-300 ${showMobileFilter ? 'rotate-180' : ''}`} />
+              <button onClick={() => setShowMobileFilter(false)} className="lg:hidden p-2 text-gray-500">
+                 <X size={24} />
+              </button>
             </div>
 
-            <div className={`mt-6 transition-all duration-300 ${showMobileFilter ? 'block' : 'hidden lg:block'}`}>
+            <div className="mt-6">
               <div className="mb-8">
                 <h3 className="font-bold mb-4 text-gray-800 uppercase tracking-wider text-sm flex items-center gap-2">
                 <span className="w-1 h-4 bg-red-500 rounded-full"></span>Tính năng nổi bật
@@ -322,8 +321,17 @@ export default function CategoryClient({
               className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 mb-6 flex flex-col sm:flex-row justify-between items-center gap-4 relative overflow-hidden"
             >
               <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-red-500 to-purple-500"></div>
-              <div className="text-gray-600 font-medium ml-2">
-                Đang hiển thị <span className="text-gray-900 font-black">{filteredProducts.length}</span> sản phẩm 
+              
+              <div className="flex items-center justify-between w-full sm:w-auto">
+                <div className="text-gray-600 font-medium ml-2">
+                  <span className="text-gray-900 font-black">{filteredProducts.length}</span> sản phẩm 
+                </div>
+                <button 
+                  className="lg:hidden flex items-center gap-2 bg-gray-100 px-3 py-1.5 rounded-lg text-sm font-bold text-gray-700"
+                  onClick={() => setShowMobileFilter(true)}
+                >
+                  <Filter size={16} /> Lọc
+                </button>
               </div>
               <select 
                 className="border border-gray-200 rounded-xl px-5 py-2.5 text-sm outline-none focus:border-primary font-bold text-gray-700 bg-gray-50 hover:bg-gray-100 transition-colors cursor-pointer shadow-sm"

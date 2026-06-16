@@ -27,7 +27,11 @@ export const getProducts = async (req: Request, res: Response) => {
         ]
       });
       if (category) {
-        filter.category_id = category._id;
+        // Tìm các danh mục con (để khi chọn danh mục cha, nó hiện cả sản phẩm của danh mục con)
+        const childCategories = await Category.find({ parent_id: category._id });
+        const categoryIds = [category._id, ...childCategories.map(c => c._id)];
+        
+        filter.category_id = { $in: categoryIds };
       } else {
         return res.json([]);
       }

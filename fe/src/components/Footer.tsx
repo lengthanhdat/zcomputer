@@ -7,7 +7,7 @@ const montserrat = Montserrat({ subsets: ["latin", "vietnamese"], weight: ["700"
 
 export default function Footer() {
   return (
-    <footer className="relative bg-[#0b0f19] text-white/80 font-sans mt-20 border-t border-white/10 overflow-hidden">
+    <footer className="relative bg-[#0b0f19] text-white/80 font-sans mt-0 border-t border-white/10 overflow-hidden pb-24 sm:pb-0">
       {/* Ambient Glowing Backgrounds */}
       <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-red-600/10 rounded-full blur-[120px] pointer-events-none"></div>
       <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-blue-600/10 rounded-full blur-[100px] pointer-events-none"></div>
@@ -33,7 +33,7 @@ export default function Footer() {
                   <FaMapMarkerAlt className="text-red-500 mt-1 shrink-0" />
                   <span><strong className="text-white">Showroom 2:</strong> 47/86B Bùi Đình Tuý, Phường 14, Q. Bình Thạnh, TP.HCM</span>
                 </p>
-                <p className="flex items-center gap-3"><FaChevronRight className="text-red-500 text-[10px]" /> Làm việc từ 8:30 - 18:00 tất cả các ngày trong tuần.</p>
+                <p className="flex items-center gap-3"><FaChevronRight className="text-red-500 text-[10px]" /> Làm việc từ 9:00 - 19:00 tất cả các ngày trong tuần.</p>
                 <p className="flex items-center gap-3"><FaPhoneAlt className="text-red-500" /> Hotline Hỗ Trợ: <strong className="text-red-400 font-bold text-lg">0977.334.415</strong></p>
                 <p className="flex items-center gap-3"><FaEnvelope className="text-red-500" /> Email: <strong className="text-white">truong.zvncomputer@gmail.com</strong></p>
               </div>
@@ -41,14 +41,14 @@ export default function Footer() {
             
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                <div className="group/map">
-                  <p className="text-sm font-bold text-white mb-3 flex items-center gap-2"><div className="w-2 h-2 rounded-full bg-red-500 animate-pulse"></div> Chi nhánh Thủ Đức</p>
+                  <div className="text-sm font-bold text-white mb-3 flex items-center gap-2"><div className="w-2 h-2 rounded-full bg-red-500 animate-pulse"></div> Chi nhánh Thủ Đức</div>
                   <div className="rounded-2xl overflow-hidden border border-white/10 group-hover/map:border-red-500/50 transition-colors relative">
                     <div className="absolute inset-0 bg-red-500/0 opacity-0 group-hover/map:opacity-100 transition-opacity pointer-events-none z-10 mix-blend-overlay"></div>
                     <iframe src="https://maps.google.com/maps?q=Z+Computer-+Pc+Gaming-Laptop-Workstation&t=&z=16&ie=UTF8&iwloc=&output=embed" width="100%" height="160" style={{ border: 0 }} allowFullScreen loading="lazy" referrerPolicy="no-referrer-when-downgrade" className="transition-all duration-500 group-hover/map:scale-105"></iframe>
                   </div>
                </div>
                <div className="group/map">
-                  <p className="text-sm font-bold text-white mb-3 flex items-center gap-2"><div className="w-2 h-2 rounded-full bg-red-500 animate-pulse"></div> Chi nhánh Bình Thạnh</p>
+                  <div className="text-sm font-bold text-white mb-3 flex items-center gap-2"><div className="w-2 h-2 rounded-full bg-red-500 animate-pulse"></div> Chi nhánh Bình Thạnh</div>
                   <div className="rounded-2xl overflow-hidden border border-white/10 group-hover/map:border-red-500/50 transition-colors relative">
                     <div className="absolute inset-0 bg-red-500/0 opacity-0 group-hover/map:opacity-100 transition-opacity pointer-events-none z-10 mix-blend-overlay"></div>
                     <iframe src="https://maps.google.com/maps?q=47/86B+Bùi+Đình+Tuý,+Phường+14,+Bình+Thạnh,+TP.+Hồ+Chí+Minh&t=&z=15&ie=UTF8&iwloc=&output=embed" width="100%" height="160" style={{ border: 0 }} allowFullScreen loading="lazy" referrerPolicy="no-referrer-when-downgrade" className="transition-all duration-500 group-hover/map:scale-105"></iframe>
@@ -78,7 +78,7 @@ export default function Footer() {
                </div>
              </Link>
              <p className="text-[14px] text-white/60 leading-relaxed mb-8 font-medium">
-               Build PC Like New Giá Cực Tốt tại ZCOMPUTER - PC Gaming, PC Đồ Họa, Linh Kiện PC với đa dạng mẫu mã và chất lượng đỉnh cao!
+               Laptop, PC Gaming Cũ Giá Tốt tại ZCOMPUTER - PC Gaming, PC Đồ Họa, Linh Kiện PC với đa dạng mẫu mã và chất lượng đỉnh cao!
              </p>
              <div>
                <p className="font-bold uppercase text-[12px] tracking-widest text-white/80 mb-4">Kết nối với chúng tôi</p>

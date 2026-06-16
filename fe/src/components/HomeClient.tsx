@@ -57,7 +57,7 @@ const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || "";
 function BannerSkeleton() {
   return (
     <div className="w-full flex flex-col lg:flex-row gap-4">
-      <div className="w-full lg:w-2/3 rounded-2xl bg-gray-200 animate-pulse h-[400px] lg:h-[450px]" />
+      <div className="w-full lg:w-2/3 rounded-2xl bg-gray-200 animate-pulse h-[200px] md:h-[300px] lg:h-[450px]" />
       <div className="hidden lg:flex lg:w-1/3 flex-col gap-4">
         <div className="w-full flex-1 rounded-2xl bg-gray-200 animate-pulse" />
         <div className="w-full flex-1 rounded-2xl bg-gray-200 animate-pulse" />
@@ -196,7 +196,7 @@ export default function HomeClient() {
             <div className="absolute top-10 left-1/4 w-72 h-72 bg-red-400/20 rounded-full blur-[80px] pointer-events-none -z-10"></div>
             <div className="absolute bottom-10 right-1/4 w-72 h-72 bg-blue-400/20 rounded-full blur-[80px] pointer-events-none -z-10"></div>
 
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4 lg:gap-6">
+            <div className="grid grid-cols-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-3 lg:gap-6">
               {(showAllCategories ? categories.filter(c => !c.parent_id) : categories.filter(c => !c.parent_id).slice(0, 5)).map((cat) => {
                 const getIcon = (name: string) => {
                   const lower = name.toLowerCase();
@@ -214,15 +214,15 @@ export default function HomeClient() {
                 <Link
                   key={cat._id}
                   href={`/category/${cat.slug}`}
-                  className="flex flex-col items-center justify-center gap-4 p-6 rounded-[2rem] bg-white/40 backdrop-blur-xl border border-white/60 shadow-[0_8px_32px_rgba(0,0,0,0.04)] hover:shadow-[0_8px_32px_rgba(220,38,38,0.15)] hover:-translate-y-2 hover:border-white/80 hover:bg-white/60 transition-all duration-500 cursor-pointer group text-gray-700 font-bold relative overflow-hidden"
+                  className="flex flex-col items-center justify-center gap-3 p-4 md:p-6 rounded-[1.5rem] md:rounded-[2rem] bg-white/40 backdrop-blur-xl border border-white/60 shadow-[0_8px_32px_rgba(0,0,0,0.04)] hover:shadow-[0_8px_32px_rgba(220,38,38,0.15)] hover:-translate-y-2 hover:border-white/80 hover:bg-white/60 transition-all duration-500 cursor-pointer group text-gray-700 font-bold relative overflow-hidden"
                 >
                   <div className="absolute inset-0 bg-gradient-to-br from-red-500/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 mix-blend-multiply"></div>
                   <div className="absolute -top-24 -right-24 w-48 h-48 bg-gradient-to-br from-white/40 to-transparent rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"></div>
 
-                  <div className="w-20 h-20 rounded-full bg-white/50 backdrop-blur-md border border-white/80 group-hover:bg-white flex items-center justify-center relative z-10 transition-all duration-500 shadow-inner group-hover:shadow-[0_0_20px_rgb(220,38,38,0.15)]">
-                    <Icon size={32} strokeWidth={1.5} className="text-gray-400 group-hover:text-primary transition-all duration-500 group-hover:scale-110" />
+                  <div className="w-14 h-14 md:w-20 md:h-20 rounded-full bg-white/50 backdrop-blur-md border border-white/80 group-hover:bg-white flex items-center justify-center relative z-10 transition-all duration-500 shadow-inner group-hover:shadow-[0_0_20px_rgb(220,38,38,0.15)]">
+                    <Icon size={24} strokeWidth={1.5} className="text-gray-400 group-hover:text-primary transition-all duration-500 group-hover:scale-110 md:w-[32px] md:h-[32px]" />
                   </div>
-                  <span className="uppercase tracking-widest text-[12px] relative z-10 text-center leading-relaxed group-hover:text-primary transition-colors">{cat.name}</span>
+                  <span className="uppercase tracking-widest text-[10px] md:text-[12px] relative z-10 text-center leading-relaxed group-hover:text-primary transition-colors">{cat.name}</span>
                 </Link>
               )})}
               
@@ -234,10 +234,10 @@ export default function HomeClient() {
                   <div className="absolute inset-0 bg-gradient-to-br from-red-500/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 mix-blend-multiply"></div>
                   <div className="absolute -top-24 -right-24 w-48 h-48 bg-gradient-to-br from-white/40 to-transparent rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"></div>
 
-                  <div className="w-20 h-20 rounded-full bg-white/50 backdrop-blur-md border border-white/80 group-hover:bg-white flex items-center justify-center relative z-10 transition-all duration-500 shadow-inner group-hover:shadow-[0_0_20px_rgb(220,38,38,0.15)]">
-                    <ArrowRight size={32} strokeWidth={1.5} className="text-primary group-hover:translate-x-2 transition-transform duration-300" />
+                  <div className="w-14 h-14 md:w-20 md:h-20 rounded-full bg-white/50 backdrop-blur-md border border-white/80 group-hover:bg-white flex items-center justify-center relative z-10 transition-all duration-500 shadow-inner group-hover:shadow-[0_0_20px_rgb(220,38,38,0.15)]">
+                    <ArrowRight size={24} strokeWidth={1.5} className="text-primary group-hover:translate-x-2 transition-transform duration-300 md:w-[32px] md:h-[32px]" />
                   </div>
-                  <span className="uppercase tracking-widest text-[12px] relative z-10 text-center leading-relaxed group-hover:text-red-700 transition-colors">Xem tất cả ({categories.filter(c => !c.parent_id).length - 5})</span>
+                  <span className="uppercase tracking-widest text-[10px] md:text-[12px] relative z-10 text-center leading-relaxed group-hover:text-red-700 transition-colors">Xem tất cả ({categories.filter(c => !c.parent_id).length - 5})</span>
                 </button>
               )}
               {showAllCategories && categories.filter(c => !c.parent_id).length > 5 && (
@@ -437,7 +437,7 @@ function ProductCard({ product }: { product: Product }) {
 
   return (
     <div
-      className={`flex-none w-[280px] md:w-[280px] bg-white rounded-2xl border border-gray-100 overflow-hidden group shadow-md flex flex-col relative transition-all duration-500 ${isOutOfStock ? 'opacity-80' : 'hover:shadow-[0_8px_30px_rgb(220,38,38,0.15)] hover:border-red-200 hover:-translate-y-2'}`}
+      className={`flex-none w-[170px] md:w-[280px] bg-white rounded-2xl border border-gray-100 overflow-hidden group shadow-md flex flex-col relative transition-all duration-500 ${isOutOfStock ? 'opacity-80' : 'hover:shadow-[0_8px_30px_rgb(220,38,38,0.15)] hover:border-red-200 hover:-translate-y-2'}`}
     >
       <Link href={`/product/${product.slug}`} className="absolute inset-0 z-20"></Link>
       <div className="relative aspect-[4/3] p-4 flex items-center justify-center bg-white overflow-hidden">
@@ -511,12 +511,12 @@ function ProductCard({ product }: { product: Product }) {
       </div>
       
       <div className="p-4 flex flex-col flex-1 bg-white">
-        <div className="flex items-center justify-between mb-2">
-          <div className="text-[11px] font-bold text-gray-500 uppercase">{product.brand || "KHÁC"}</div>
+        <div className="flex items-center justify-between mb-1.5 md:mb-2">
+          <div className="text-[10px] md:text-[11px] font-bold text-gray-500 uppercase">{product.brand || "KHÁC"}</div>
           <LikeButton product={product} />
         </div>
-        <Link href={`/product/${product.slug}`} className="hover:text-red-600 transition-colors mb-3 z-30 relative">
-          <h3 className="text-gray-700 text-[13px] leading-relaxed line-clamp-2">{product.name}</h3>
+        <Link href={`/product/${product.slug}`} className="hover:text-red-600 transition-colors mb-2 md:mb-3 z-30 relative">
+          <h3 className="text-gray-700 text-[12px] md:text-[13px] leading-relaxed line-clamp-2">{product.name}</h3>
         </Link>
         
         <div className="flex flex-col mb-4">
@@ -541,7 +541,7 @@ function ProductCard({ product }: { product: Product }) {
         </div>
 
         {product.specs && Object.keys(product.specs).length > 0 && (
-          <div className="bg-[#f8f9fa] rounded-lg p-3 text-[10px] text-gray-600 grid grid-cols-2 gap-y-2 gap-x-3 mt-auto">
+          <div className="hidden md:grid bg-[#f8f9fa] rounded-lg p-3 text-[10px] text-gray-600 grid-cols-2 gap-y-2 gap-x-3 mt-auto">
             {Object.entries(product.specs).slice(0, 5).map(([key, value], index) => {
               const lowerKey = key.toLowerCase();
               let Icon = Maximize;
