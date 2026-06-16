@@ -2,7 +2,7 @@
 
 import { useCartStore } from "@/store/useCartStore";
 import { useState } from "react";
-import { Heart, MessageCircle } from "lucide-react";
+import { Heart, MessageCircle, ShoppingCart, CreditCard } from "lucide-react";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 
@@ -82,37 +82,51 @@ export default function ProductActions({ product }: ProductActionsProps) {
         </span>
       </div>
 
-      <div className="flex flex-col sm:flex-row gap-4">
+      {/* Desktop Buttons */}
+      <div className="hidden sm:flex gap-4">
         <button
-          onClick={() => {
-            addItem({
-              _id: product._id,
-              name: product.name,
-              price: product.price,
-              discountPrice: product.discountPrice,
-              image: product.image,
-              quantity: 1,
-            });
-            toast.success("Đã lưu sản phẩm vào mục yêu thích!");
-          }}
-          className="flex-1 border-2 border-primary text-primary hover:bg-red-50 py-4 rounded-lg font-bold text-lg uppercase transition-all flex items-center justify-center gap-2 cursor-pointer"
+          onClick={handleAddToCart}
+          disabled={isOutOfStock}
+          className="flex-1 border-2 border-primary text-primary hover:bg-red-50 py-4 rounded-lg font-bold text-lg uppercase transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
         >
-          <Heart size={20} />
-          Thêm vào yêu thích
+          <ShoppingCart size={20} />
+          Thêm vào giỏ hàng
         </button>
 
+        <button
+          onClick={handleBuyNow}
+          disabled={isOutOfStock}
+          className="flex-1 bg-primary text-white hover:bg-red-600 py-4 rounded-lg font-bold text-lg uppercase transition-all shadow-lg shadow-red-500/20 flex flex-center items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+        >
+          <CreditCard size={20} />
+          Mua ngay
+        </button>
+      </div>
+
+      {/* Mobile Sticky Bottom Bar */}
+      <div className="sm:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-3 flex gap-3 z-50 shadow-[0_-4px_20px_rgba(0,0,0,0.1)] pb-safe">
         <a
           href="https://zalo.me/0977334415"
           target="_blank"
           rel="noreferrer"
-          className="flex-1 bg-[#0068FF] text-white hover:bg-[#005AE0] py-4 rounded-lg font-bold text-lg uppercase transition-all shadow-lg shadow-blue-500/20 flex flex-col items-center justify-center cursor-pointer"
+          className="w-14 bg-[#0068FF] text-white rounded-xl flex flex-col items-center justify-center shadow-lg shadow-blue-500/20"
         >
-          <div className="flex items-center gap-2">
-            <MessageCircle size={20} />
-            Liên hệ ngay
-          </div>
-          <span className="text-xs font-normal text-blue-100 normal-case mt-0.5">Tư vấn trực tiếp qua Zalo</span>
+          <MessageCircle size={24} />
         </a>
+        <button
+          onClick={handleAddToCart}
+          disabled={isOutOfStock}
+          className="flex-1 border border-primary text-primary rounded-xl font-bold text-[13px] uppercase flex flex-col items-center justify-center gap-1 disabled:opacity-50 bg-red-50/50"
+        >
+          Thêm giỏ hàng
+        </button>
+        <button
+          onClick={handleBuyNow}
+          disabled={isOutOfStock}
+          className="flex-1 bg-primary text-white rounded-xl font-bold text-[13px] uppercase flex flex-col items-center justify-center gap-1 shadow-lg shadow-red-500/20 disabled:opacity-50"
+        >
+          Mua ngay
+        </button>
       </div>
     </div>
   );

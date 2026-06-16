@@ -25,7 +25,7 @@ export default function CartPage() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-12 max-w-6xl">
+    <div className="container mx-auto px-4 pt-12 pb-32 lg:pb-12 max-w-6xl">
       <h1 className="text-3xl font-black uppercase text-gray-800 mb-8">Sản phẩm quan tâm</h1>
       
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -173,9 +173,9 @@ export default function CartPage() {
         </div>
       </div>
 
-      {/* Contact Modal */}
+        {/* Contact Modal */}
       {showContactModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
           <div className="bg-white rounded-2xl w-full max-w-md overflow-hidden shadow-2xl animate-in fade-in zoom-in duration-200">
             <div className="bg-primary p-5 flex items-center justify-between">
               <h3 className="text-white font-bold text-xl uppercase">Liên hệ để mua hàng</h3>
@@ -238,6 +238,20 @@ export default function CartPage() {
           </div>
         </div>
       )}
+
+      {/* Mobile Sticky Checkout Bar */}
+      <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4 pb-safe z-40 shadow-[0_-4px_20px_rgba(0,0,0,0.1)] flex items-center justify-between">
+        <div>
+          <div className="text-xs text-gray-500 uppercase font-bold mb-0.5">Tổng cộng:</div>
+          <div className="text-xl font-black text-primary leading-none">{getTotalPrice().toLocaleString('vi-VN')}đ</div>
+        </div>
+        <button 
+          onClick={() => setShowContactModal(true)}
+          className="bg-primary text-white font-bold px-6 py-3.5 rounded-xl hover:bg-red-700 transition-colors shadow-lg shadow-red-500/20 text-sm uppercase"
+        >
+          Đặt Hàng Ngay
+        </button>
+      </div>
     </div>
   );
 }

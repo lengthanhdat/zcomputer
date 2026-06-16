@@ -26,13 +26,13 @@ const getIcon = (name: string) => {
 export default function CategoryMenu({ categories }: { categories: Category[] }) {
   const [hoveredCategory, setHoveredCategory] = useState<string | null>(null);
 
-  const mainCategories = categories.filter(c => !c.parent_id);
+  const mainCategories = Array.isArray(categories) ? categories.filter(c => c && !c.parent_id) : [];
 
   return (
     <div className="relative bg-white/95 backdrop-blur-2xl shadow-[0_20px_40px_rgba(0,0,0,0.15)] border-l border-r border-b border-gray-200/50 py-3 w-full z-30 flex flex-col rounded-b-xl">
       {mainCategories.map(cat => {
         const Icon = getIcon(cat.name);
-        const subCategories = categories.filter(c => c.parent_id === cat._id);
+        const subCategories = Array.isArray(categories) ? categories.filter(c => c && c.parent_id === cat._id) : [];
         const hasSub = subCategories.length > 0;
         const isHovered = hoveredCategory === cat._id;
 

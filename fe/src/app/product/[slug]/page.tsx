@@ -153,7 +153,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
   const similarProducts = await getSimilarProducts(categoryId as string | null, product._id);
 
   return (
-    <div className="bg-[#f8f9fa] min-h-screen pb-20">
+    <div className="bg-[#f8f9fa] min-h-screen pb-32 sm:pb-20">
       {/* Breadcrumb */}
       <div className="bg-white border-b border-gray-200 py-3">
         <div className="container mx-auto px-4 text-sm text-gray-500 flex gap-2 items-center">
