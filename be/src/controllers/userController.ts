@@ -43,3 +43,25 @@ export const updateUserRole = async (req: Request, res: Response) => {
     res.status(500).json({ message: 'Lỗi server khi cập nhật quyền' });
   }
 };
+
+export const updateProfile = async (req: Request, res: Response) => {
+  try {
+    const { name, phone } = req.body;
+    const userId = req.user?.userId;
+
+    if (!userId) {
+      return res.status(401).json({ message: 'Chưa xác thực' });
+    }
+
+    const updateData: any = {};
+    if (name !== undefined) updateData.name = name;
+    if (phone !== undefined) updateData.phone = phone;
+
+    const user = await User.findByIdAndUpdate(userId, updateData, { new: true }).select('-password');
+    if (!user) return res.status(404).json({ message: 'Không tìm thấy user' });
+
+    res.json(user);
+  } catch (error) {
+    res.status(500).json({ message: 'Lỗi server khi cập nhật profile' });
+  }
+};

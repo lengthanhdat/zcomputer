@@ -178,16 +178,18 @@ export default function Header() {
                           )}
                         </div>
                         {children.length > 0 && (
-                          <div className={`overflow-hidden transition-all duration-300 ${isExpanded ? 'max-h-96 opacity-100 mt-2' : 'max-h-0 opacity-0'}`}>
-                            <ul className="pl-4 border-l-2 border-red-100 space-y-3 py-2 text-sm font-medium text-gray-600">
-                              {children.map((child: any) => (
-                                <li key={child._id || Math.random()}>
-                                  <Link href={`/category/${child.slug || ''}`} onClick={() => setMobileMenuOpen(false)} className="block hover:text-primary transition-colors">
-                                    {child.name || 'Subcategory'}
-                                  </Link>
-                                </li>
-                              ))}
-                            </ul>
+                          <div className={`grid transition-all duration-300 ease-out ${isExpanded ? 'grid-rows-[1fr] opacity-100 mt-2' : 'grid-rows-[0fr] opacity-0'}`}>
+                            <div className="overflow-hidden">
+                              <ul className="pl-4 border-l-2 border-red-100 space-y-3 py-2 text-sm font-medium text-gray-600">
+                                {children.map((child: any) => (
+                                  <li key={child._id || Math.random()}>
+                                    <Link href={`/category/${child.slug || ''}`} onClick={() => setMobileMenuOpen(false)} className="block hover:text-primary transition-colors">
+                                      {child.name || 'Subcategory'}
+                                    </Link>
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
                           </div>
                         )}
                       </li>

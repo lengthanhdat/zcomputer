@@ -142,10 +142,12 @@ export default function VideoReviewSection({ videos }: VideoReviewProps) {
         <p className="text-gray-500 mt-2 font-medium">Trải nghiệm thực tế - Đánh giá chân thực</p>
       </div>
 
-      {/* Videos Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+      {/* Videos Grid/Slider */}
+      <div className="flex overflow-x-auto pb-6 snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] md:grid md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6 px-4 md:px-0 -mx-4 md:mx-0">
         {videos.map((video) => (
-          <VideoCard key={video._id} video={video} />
+          <div key={video._id} className="min-w-[260px] w-[75vw] sm:w-[45vw] md:w-auto md:min-w-0 shrink-0 snap-center md:snap-align-none">
+            <VideoCard video={video} />
+          </div>
         ))}
       </div>
     </section>
