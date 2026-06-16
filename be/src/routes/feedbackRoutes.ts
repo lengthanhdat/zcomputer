@@ -1,12 +1,11 @@
 import express from 'express';
+import jwt from 'jsonwebtoken';
 import { createFeedback, getFeedbacks, updateFeedbackStatus, deleteFeedback } from '../controllers/feedbackController';
 import { authenticate, authorize } from '../middlewares/authorize';
 
 const router = express.Router();
 
 // Public (or authenticated) route to submit feedback
-import jwt from 'jsonwebtoken';
-
 const optionalAuth = (req: any, res: any, next: any) => {
   const authHeader = req.headers.authorization;
   if (authHeader && authHeader.startsWith('Bearer ')) {
