@@ -151,24 +151,88 @@ export default function HomeClient() {
     return () => controller.abort();
   }, []);
 
+  useEffect(() => {
+    if (!categories || categories.length === 0) return;
+    
+    const cleanupFns: Array<() => void> = [];
 
+    categories.filter(c => !c.parent_id).forEach(cat => {
+      const slider = document.getElementById(`slider-${cat._id}`);
+      if (!slider) return;
+
+      let isDown = false;
+      let startX: number;
+      let scrollLeft: number;
+      let dragged = false;
+
+      const mouseDown = (e: MouseEvent) => {
+        isDown = true;
+        dragged = false;
+        slider.classList.add('cursor-grabbing');
+        startX = e.pageX - slider.offsetLeft;
+        scrollLeft = slider.scrollLeft;
+      };
+      
+      const mouseUp = () => {
+        isDown = false;
+        slider.classList.remove('cursor-grabbing');
+      };
+      
+      const mouseMove = (e: MouseEvent) => {
+        if (!isDown) return;
+        e.preventDefault();
+        const x = e.pageX - slider.offsetLeft;
+        const walk = (x - startX) * 1.5;
+        if (Math.abs(walk) > 5) dragged = true;
+        slider.scrollLeft = scrollLeft - walk;
+      };
+
+      const preventClick = (e: MouseEvent) => {
+        if (dragged) {
+          e.preventDefault();
+          e.stopPropagation();
+        }
+      };
+      
+      slider.addEventListener('mousedown', mouseDown);
+      slider.addEventListener('mouseleave', mouseUp);
+      slider.addEventListener('mouseup', mouseUp);
+      slider.addEventListener('mousemove', mouseMove);
+      slider.addEventListener('click', preventClick, true);
+
+      cleanupFns.push(() => {
+        slider.removeEventListener('mousedown', mouseDown);
+        slider.removeEventListener('mouseleave', mouseUp);
+        slider.removeEventListener('mouseup', mouseUp);
+        slider.removeEventListener('mousemove', mouseMove);
+        slider.removeEventListener('click', preventClick, true);
+      });
+    });
+
+    return () => {
+      cleanupFns.forEach(fn => fn());
+    };
+  }, [categories, products]);
 
   return (
     <div className="bg-[#f8f9fa] min-h-screen text-gray-900 selection:bg-primary selection:text-white">
       {/* Banner */}
-      <section className="container mx-auto px-4 pt-8 pb-12">
+      <section className="container mx-auto px-2 md:px-4 pt-4 pb-6 md:pt-8 md:pb-12">
         {banners === null ? (
           <BannerSkeleton />
         ) : (
-          <div className="flex flex-col gap-4">
-            <div className="w-full">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-2 md:gap-4">
+            {/* Main Slider (2/3 width on PC) */}
+            <div className="lg:col-span-2 w-full">
               <BannerSlider banners={banners.filter(b => b.position !== 'sub')} apiBase={API_BASE} />
             </div>
+
+            {/* Sub Banners (1/3 width on PC, 2 rows) */}
             {banners.filter(b => b.position === 'sub').length > 0 && (
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-2 lg:mt-0">
-                {banners.filter(b => b.position === 'sub').slice(0, 3).map((banner) => (
-                  <Link key={banner._id} href={banner.link || "#"} className="block relative w-full rounded-2xl overflow-hidden group shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
-                    <img src={(banner.image || "").startsWith('http') || (banner.image || "").startsWith('data:') || (banner.image || "").startsWith('/uploads') ? banner.image : `${API_BASE}${banner.image}`} alt={banner.title} className="w-full h-auto object-contain group-hover:scale-105 transition-transform duration-500" />
+              <div className="grid grid-cols-2 lg:grid-cols-1 lg:grid-rows-2 gap-2 md:gap-4 mt-2 lg:mt-0">
+                {banners.filter(b => b.position === 'sub').slice(0, 2).map((banner) => (
+                  <Link key={banner._id} href={banner.link || "#"} className="block relative w-full h-full aspect-[16/9] lg:aspect-auto rounded-xl md:rounded-2xl overflow-hidden group shadow-sm hover:shadow-xl lg:hover:-translate-y-1 transition-all duration-300">
+                    <img src={(banner.image || "").startsWith('http') || (banner.image || "").startsWith('data:') || (banner.image || "").startsWith('/uploads') ? banner.image : `${API_BASE}${banner.image}`} alt={banner.title} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                   </Link>
                 ))}
               </div>
@@ -279,7 +343,18 @@ export default function HomeClient() {
           
           let catProducts = products.filter((p: any) => 
             relevantIds.includes(p.category_id?._id) || relevantIds.includes(p.category_id)
-          ).slice(0, 8);
+          );
+          
+          const subCategoriesWithCounts = categories
+            .filter(c => c.parent_id === cat._id)
+            .map(subCat => {
+              const count = products.filter((p: any) => p.category_id?._id === subCat._id || p.category_id === subCat._id).length;
+              return { ...subCat, productCount: count };
+            })
+            .filter(subCat => subCat.productCount > 0)
+            .sort((a, b) => b.productCount - a.productCount);
+
+          const topSubCategories = subCategoriesWithCounts.slice(0, 5);
           
           if (catProducts.length === 0) return null; // Ẩn danh mục nếu không có sản phẩm nào
 
@@ -307,9 +382,9 @@ export default function HomeClient() {
                     className="object-cover group-hover:scale-110 transition-transform duration-700" 
                     unoptimized 
                   />
-                  {/* Vibrant Liquid Glass Overlays */}
-                  <div className="absolute inset-0 bg-gradient-to-tr from-red-600/50 via-purple-600/40 to-transparent mix-blend-multiply opacity-80 group-hover:opacity-100 transition-opacity duration-500"></div>
-                  <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/10 to-black/90"></div>
+                  {/* Clean Dark Overlay for Text Readability */}
+                  <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors duration-500"></div>
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent opacity-90"></div>
                   
                   {/* Glassmorphism content area */}
                   <div className="absolute bottom-4 left-4 right-4 bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-6 transform translate-y-2 group-hover:translate-y-0 transition-all duration-500 shadow-[0_8px_32px_rgba(0,0,0,0.3)]">
@@ -321,10 +396,36 @@ export default function HomeClient() {
                 </div>
 
                 {/* Slider Container */}
-                <div className="w-full lg:w-3/4 xl:w-[calc(100%-280px)] bg-transparent p-6 md:p-8 relative flex-1">
+                <div className="w-full lg:w-3/4 xl:w-[calc(100%-280px)] bg-transparent p-6 md:p-8 relative flex-1 flex flex-col">
                   <div className="absolute -top-32 -right-32 w-64 h-64 bg-red-600/10 rounded-full blur-3xl pointer-events-none"></div>
                   <div className="absolute -bottom-32 -left-32 w-64 h-64 bg-blue-600/10 rounded-full blur-3xl pointer-events-none"></div>
-                  <div className="relative group/slider">
+                  
+                  {/* Top Subcategories Bar */}
+                  {topSubCategories.length > 0 && (
+                    <div className="flex flex-wrap items-center gap-2 md:gap-3 mb-6 relative z-10 bg-gradient-to-r from-red-500/10 via-orange-400/5 to-transparent p-2.5 rounded-2xl border border-red-500/10">
+                      <div className="hidden sm:flex text-red-600 font-black text-[11px] uppercase tracking-widest px-3 border-r border-red-500/20 mr-1 items-center gap-1.5">
+                        <Zap size={14} className="text-orange-500 fill-orange-500" />
+                        Nổi bật
+                      </div>
+                      {topSubCategories.map(subCat => (
+                        <Link 
+                          key={subCat._id} 
+                          href={`/category/${subCat.slug}`}
+                          className="px-4 py-1.5 bg-white/60 hover:bg-white backdrop-blur-md rounded-xl text-[12px] font-bold text-gray-700 hover:text-red-600 transition-all duration-300 shadow-[0_2px_10px_rgba(0,0,0,0.02)] hover:shadow-[0_5px_15px_rgba(220,38,38,0.1)] border border-white/50 hover:border-red-200"
+                        >
+                          {subCat.name}
+                        </Link>
+                      ))}
+                      <Link 
+                        href={`/category/${cat.slug}`}
+                        className="ml-auto text-[12px] font-bold text-red-600 hover:text-red-700 flex items-center gap-1 transition-all duration-300 hover:translate-x-1 px-2"
+                      >
+                        Xem tất cả <ChevronRight size={14} />
+                      </Link>
+                    </div>
+                  )}
+
+                  <div className="relative group/slider mt-auto">
                     <button 
                       onClick={(e) => {
                         const slider = document.getElementById(`slider-${cat._id}`);
@@ -403,9 +504,9 @@ export default function HomeClient() {
         
         <div className="container mx-auto px-4 relative z-10">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8">
-            <Feature icon={<ShieldCheck size={36} />} title="Bảo Hành Tận Nơi" body="Cam kết bảo hành chính hãng. Hỗ trợ kỹ thuật tại nhà nhanh chóng trong 2h." />
+            <Feature icon={<ShieldCheck size={36} />} title="Bảo Hành Tận Nơi" body="Cam kết bảo hành chính hãng. Hỗ trợ kỹ thuật tại nhà nhanh chóng." />
             <Feature icon={<Zap size={36} />} title="Cấu Hình Cực Đỉnh" body="Chỉ cung cấp những linh kiện hiệu năng cao nhất, đã qua kiểm tra nghiêm ngặt." bordered />
-            <Feature icon={<Truck size={36} />} title="Giao Hàng Hỏa Tốc" body="Miễn phí giao hàng toàn quốc. Đóng gói an toàn tuyệt đối chống sốc." />
+            <Feature icon={<Truck size={36} />} title="Giao Hàng Hỏa Tốc" body="Giao hàng tận nơi. Đóng gói an toàn tuyệt đối chống sốc." />
           </div>
         </div>
       </section>
@@ -510,38 +611,38 @@ function ProductCard({ product }: { product: Product }) {
         )}
       </div>
       
-      <div className="p-4 flex flex-col flex-1 bg-white">
-        <div className="flex items-center justify-between mb-1.5 md:mb-2">
-          <div className="text-[10px] md:text-[11px] font-bold text-gray-500 uppercase">{product.brand || "KHÁC"}</div>
+      <div className="p-3 md:p-5 flex flex-col flex-1 bg-white">
+        <div className="flex items-center justify-between mb-2">
+          <div className="text-[10px] md:text-[12px] font-extrabold text-gray-400 uppercase tracking-wider">{product.brand || "KHÁC"}</div>
           <LikeButton product={product} />
         </div>
-        <Link href={`/product/${product.slug}`} className="hover:text-red-600 transition-colors mb-2 md:mb-3 z-30 relative">
-          <h3 className="text-gray-700 text-[12px] md:text-[13px] leading-relaxed line-clamp-2">{product.name}</h3>
+        <Link href={`/product/${product.slug}`} className="hover:text-primary transition-colors mb-2 md:mb-4 z-30 relative">
+          <h3 className="text-gray-800 text-[13px] md:text-[15px] font-medium leading-snug line-clamp-2 group-hover:text-primary transition-colors duration-300">{product.name}</h3>
         </Link>
         
-        <div className="flex flex-col mb-4">
+        <div className="flex flex-col mt-auto mb-4">
           {isOutOfStock ? (
              <div className="h-full flex items-end">
-               <span className="text-[15px] font-bold text-gray-500">Liên hệ</span>
+               <span className="text-[16px] md:text-[18px] font-black text-gray-500">LIÊN HỆ</span>
              </div>
           ) : saveAmount > 0 ? (
             <>
-              <span className="text-gray-400 text-[13px] line-through mb-0.5">{originalPrice.toLocaleString('vi-VN')}₫</span>
-              <div className="flex items-center gap-2">
-                <span className="text-[16px] font-bold text-red-600">{currentPrice.toLocaleString('vi-VN')}₫</span>
-                <span className="text-red-500 border border-red-500 rounded text-[10px] font-bold px-1 py-[1px] leading-none">-{discountPercent}%</span>
+              <span className="text-gray-400 text-[12px] md:text-[13px] line-through mb-0.5 decoration-gray-300">{originalPrice.toLocaleString('vi-VN')}₫</span>
+              <div className="flex items-end gap-2">
+                <span className="text-[16px] md:text-[18px] font-black text-red-600 leading-none">{currentPrice.toLocaleString('vi-VN')}₫</span>
+                <span className="bg-red-50 text-red-600 border border-red-200 rounded text-[10px] md:text-[11px] font-bold px-1.5 py-[2px] leading-none">-{discountPercent}%</span>
               </div>
             </>
           ) : (
              <>
-               <div className="h-[19.5px] mb-0.5"></div>
-               <span className="text-[16px] font-bold text-red-600">{currentPrice.toLocaleString('vi-VN')}₫</span>
+               <div className="h-[18px] md:h-[20px] mb-0.5"></div>
+               <span className="text-[16px] md:text-[18px] font-black text-red-600 leading-none">{currentPrice.toLocaleString('vi-VN')}₫</span>
              </>
           )}
         </div>
 
         {product.specs && Object.keys(product.specs).length > 0 && (
-          <div className="hidden md:grid bg-[#f8f9fa] rounded-lg p-3 text-[10px] text-gray-600 grid-cols-2 gap-y-2 gap-x-3 mt-auto">
+          <div className="hidden md:grid bg-[#f8f9fa] rounded-xl p-3.5 text-[11px] text-gray-600 grid-cols-2 gap-y-2.5 gap-x-3 mt-auto border border-gray-100">
             {Object.entries(product.specs).slice(0, 5).map(([key, value], index) => {
               const lowerKey = key.toLowerCase();
               let Icon = Maximize;
@@ -551,8 +652,8 @@ function ProductCard({ product }: { product: Product }) {
               else if (lowerKey.includes('ổ') || lowerKey.includes('ssd') || lowerKey.includes('hdd') || lowerKey.includes('storage')) Icon = HardDrive;
               
               return (
-                <div key={key} className={`flex items-center gap-1.5 truncate ${index === 4 ? 'col-span-2' : ''}`} title={`${key}: ${value}`}>
-                  <Icon size={12} className="text-gray-400 shrink-0"/> 
+                <div key={key} className={`flex items-center gap-2 truncate ${index === 4 ? 'col-span-2' : ''}`} title={`${key}: ${value}`}>
+                  <Icon size={14} className="text-gray-400 shrink-0"/> 
                   <span className="truncate">{value as string}</span>
                 </div>
               );
@@ -560,8 +661,8 @@ function ProductCard({ product }: { product: Product }) {
           </div>
         )}
 
-        <div className="mt-4 mb-2 flex justify-center text-gray-900 text-[13px] items-center gap-1.5">
-          <Eye size={15} /> {(product.views || 0).toLocaleString('vi-VN')} lượt xem
+        <div className="mt-4 mb-1 flex justify-center text-gray-400 text-[11px] md:text-[12px] items-center gap-1.5 font-medium">
+          <Eye size={14} /> {(product.views || 0).toLocaleString('vi-VN')} lượt xem
         </div>
       </div>
     </div>

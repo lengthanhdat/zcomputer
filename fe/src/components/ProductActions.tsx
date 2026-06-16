@@ -58,9 +58,9 @@ export default function ProductActions({ product }: ProductActionsProps) {
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="flex items-center gap-3">
-        <span className="font-semibold text-gray-700">Số lượng:</span>
-        <div className="flex items-center border rounded-md bg-white overflow-hidden shadow-sm">
+      <div className="flex items-center gap-3 flex-wrap">
+        <span className="font-semibold text-gray-700 whitespace-nowrap">Số lượng:</span>
+        <div className="flex items-center border rounded-md bg-white overflow-hidden shadow-sm shrink-0">
           <button
             onClick={() => setQty((q) => Math.max(1, q - 1))}
             disabled={isOutOfStock}
@@ -77,7 +77,7 @@ export default function ProductActions({ product }: ProductActionsProps) {
             +
           </button>
         </div>
-        <span className="text-sm text-gray-500">
+        <span className="text-sm text-gray-500 whitespace-nowrap">
           {isOutOfStock ? "(Hết hàng)" : `(Còn lại ${product.stock} sản phẩm)`}
         </span>
       </div>
@@ -103,28 +103,34 @@ export default function ProductActions({ product }: ProductActionsProps) {
         </button>
       </div>
 
-      {/* Mobile Sticky Bottom Bar */}
-      <div className="sm:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-3 flex gap-3 z-50 shadow-[0_-4px_20px_rgba(0,0,0,0.1)] pb-safe">
-        <a
-          href="https://zalo.me/0977334415"
-          target="_blank"
-          rel="noreferrer"
-          className="w-14 bg-[#0068FF] text-white rounded-xl flex flex-col items-center justify-center shadow-lg shadow-blue-500/20"
-        >
-          <MessageCircle size={24} />
-        </a>
+      {/* Mobile Sticky Bottom Bar (Liquid Glass Design) */}
+      <div className="sm:hidden fixed bottom-0 left-0 right-0 bg-white/70 backdrop-blur-xl border-t border-white/40 p-3 pb-safe flex items-center gap-3 z-50 shadow-[0_-8px_30px_rgba(0,0,0,0.12)]">
+        
+        {/* Price Section */}
+        <div className="flex-1 flex flex-col justify-center min-w-0">
+           {(product.discountPrice ?? 0) > product.price && (
+             <div className="text-[11px] text-gray-500 line-through mb-0.5 truncate">{product.discountPrice?.toLocaleString("vi-VN")}đ</div>
+           )}
+           <div className="text-[17px] font-black text-red-600 leading-none truncate">{product.price.toLocaleString("vi-VN")}đ</div>
+        </div>
+
+        {/* Favorite Button (Replaces Add to Cart) */}
         <button
           onClick={handleAddToCart}
           disabled={isOutOfStock}
-          className="flex-1 border border-primary text-primary rounded-xl font-bold text-[13px] uppercase flex flex-col items-center justify-center gap-1 disabled:opacity-50 bg-red-50/50"
+          className="w-11 h-11 shrink-0 rounded-xl flex items-center justify-center bg-white/50 border border-white/60 shadow-sm backdrop-blur-md text-red-500 hover:bg-red-50 active:scale-95 transition-all"
+          aria-label="Thêm vào ưa thích"
         >
-          Thêm giỏ hàng
+          <Heart size={22} className="fill-red-500 text-red-500" />
         </button>
+
+        {/* Buy Now Button */}
         <button
           onClick={handleBuyNow}
           disabled={isOutOfStock}
-          className="flex-1 bg-primary text-white rounded-xl font-bold text-[13px] uppercase flex flex-col items-center justify-center gap-1 shadow-lg shadow-red-500/20 disabled:opacity-50"
+          className="flex-[1.2] h-11 bg-gradient-to-r from-red-600 to-primary text-white rounded-xl font-bold text-[14px] uppercase flex items-center justify-center gap-1.5 shadow-[0_4px_15px_rgba(220,38,38,0.3)] disabled:opacity-50 active:scale-95 transition-transform"
         >
+          <CreditCard size={18} />
           Mua ngay
         </button>
       </div>

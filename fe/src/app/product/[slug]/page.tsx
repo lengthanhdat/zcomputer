@@ -4,7 +4,8 @@ import Link from "next/link";
 import ProductActions from "@/components/ProductActions";
 import ProductGallery from "@/components/ProductGallery";
 import ViewIncrementer from "@/components/ViewIncrementer";
-import { CheckCircle2, ShieldCheck, Truck, Zap, Gift, ArrowRight, RefreshCcw, Settings, Eye } from "lucide-react";
+import LikeButton from "@/components/LikeButton";
+import { CheckCircle2, ShieldCheck, Truck, Zap, Gift, ArrowRight, RefreshCcw, Settings, Eye, Maximize, Cpu, Monitor, Server, HardDrive } from "lucide-react";
 
 export const revalidate = 0;
 
@@ -232,7 +233,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
                 </div>
               )}
 
-              <h1 className="text-3xl lg:text-4xl font-black text-gray-900 mb-4 leading-tight tracking-tight">
+              <h1 className="text-2xl md:text-3xl lg:text-4xl font-black text-gray-900 mb-3 md:mb-4 leading-tight tracking-tight">
                 {product.name}
               </h1>
 
@@ -385,54 +386,148 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
               Sản phẩm tương tự
               <div className="absolute -bottom-3 left-0 w-1/2 h-1 bg-primary rounded-full"></div>
             </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {similarProducts.map((p) => (
-                <div
-                  key={p._id}
-                  className="bg-white rounded-xl border border-gray-100 overflow-hidden group hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] hover:border-primary/30 transition-all duration-300 flex flex-col h-full"
-                >
-                  <div className="relative aspect-[4/3] p-6 flex items-center justify-center bg-gray-50">
-                    <Link href={`/product/${p.slug}`} className="absolute inset-0 z-10"></Link>
-                    {p.images?.[0] && (
-                      <Image
-                        src={p.images[0]}
-                        alt={p.name}
-                        fill
-                        sizes="(min-width: 1024px) 25vw, (min-width: 768px) 50vw, 100vw"
-                        className="object-contain p-6 mix-blend-multiply group-hover:scale-110 transition-transform duration-500"
-                        unoptimized
-                      />
-                    )}
-                  </div>
-                  <div className="p-6 flex flex-col flex-grow">
-                    {p.condition && (
-                      <span className="text-[10px] font-bold bg-gray-100 text-gray-600 px-2 py-0.5 rounded border border-gray-200 w-fit mb-2.5 uppercase tracking-wide">
-                        {p.condition}
-                      </span>
-                    )}
-                    <Link href={`/product/${p.slug}`} className="font-bold text-gray-800 text-sm mb-3 line-clamp-2 leading-relaxed group-hover:text-primary transition-colors">
-                      {p.name}
-                    </Link>
-                    <div className="mt-auto pt-4 border-t border-gray-100 flex items-end justify-between">
-                      <div>
-                        <div className="text-xl font-black text-primary">{p.price?.toLocaleString("vi-VN")}đ</div>
-                        {(p.discountPrice ?? 0) > 0 && (
-                          <div className="text-xs font-medium text-gray-400 line-through mt-1">
-                            {(p.discountPrice || 0).toLocaleString("vi-VN")}đ
+            <div className="flex overflow-x-auto gap-4 pb-6 snap-x hide-scrollbar scroll-smooth">
+              {similarProducts.map((p) => {
+                const isHotSaleActive = !!(p.isHotSale && p.flashSalePrice && p.flashSalePrice < p.price);
+                const originalPrice = (p.discountPrice && p.discountPrice > p.price) ? p.discountPrice : p.price;
+                const currentPrice = isHotSaleActive ? p.flashSalePrice! : p.price;
+                const saveAmount = originalPrice - currentPrice;
+                const discountPercent = originalPrice > currentPrice ? Math.round((saveAmount / originalPrice) * 100) : 0;
+                const isOutOfStock = p.status === 'out_of_stock' || p.stock === 0;
+
+                return (
+                  <div
+                    key={p._id}
+                    className={`snap-start shrink-0 w-[170px] md:w-[280px] bg-white rounded-2xl border border-gray-100 overflow-hidden group shadow-md flex flex-col relative transition-all duration-500 ${isOutOfStock ? 'opacity-80' : 'hover:shadow-[0_8px_30px_rgb(220,38,38,0.15)] hover:border-red-200 hover:-translate-y-2'}`}
+                  >
+                    <Link href={`/product/${p.slug}`} className="absolute inset-0 z-20"></Link>
+                    <div className="relative aspect-[4/3] p-4 flex items-center justify-center bg-white overflow-hidden">
+
+                      {isOutOfStock && (
+                        <div className="absolute inset-0 bg-white/60 z-30 flex items-center justify-center backdrop-blur-[1px]">
+                          <div className="bg-gray-800/90 backdrop-blur-sm text-white font-black px-6 py-2 rounded-lg -rotate-12 shadow-2xl border border-gray-600/50 tracking-widest text-lg">
+                            HẾT HÀNG
+                          </div>
+                        </div>
+                      )}
+
+                      {p.images?.[0] && (
+                        <Image
+                          src={p.images[0]}
+                          alt={p.name}
+                          fill
+                          sizes="(min-width: 1024px) 25vw, (min-width: 768px) 50vw, 100vw"
+                          className="object-contain p-8 mix-blend-multiply group-hover:scale-110 group-hover:-translate-y-2 transition-all duration-500 relative z-10"
+                          unoptimized
+                        />
+                      )}
+                      
+                      {/* ZCOMPUTER Overlay Frame */}
+                      <div className="absolute inset-0 pointer-events-none z-[15] p-2 opacity-80">
+                        <div className="w-full h-full border border-primary/10 rounded-xl relative">
+                          <div className="absolute -top-[1px] -left-[1px] w-5 h-5 border-t-2 border-l-2 border-primary/60 rounded-tl-xl"></div>
+                          <div className="absolute -top-[1px] -right-[1px] w-5 h-5 border-t-2 border-r-2 border-primary/60 rounded-tr-xl"></div>
+                          <div className="absolute -bottom-[1px] -left-[1px] w-5 h-5 border-b-2 border-l-2 border-primary/60 rounded-bl-xl"></div>
+                          <div className="absolute -bottom-[1px] -right-[1px] w-5 h-5 border-b-2 border-r-2 border-primary/60 rounded-br-xl"></div>
+                          
+                          <div className="absolute bottom-2 right-2 flex items-center gap-1 opacity-50 mix-blend-multiply">
+                            <Image src="/logo.png" alt="ZCOMPUTER" width={20} height={20} className="w-4 h-4 object-contain" unoptimized />
+                            <div className="flex items-baseline select-none tracking-tighter">
+                              <span className="text-red-600 font-black text-[11px] drop-shadow-sm">Z</span>
+                              <span className="text-slate-800 font-black text-[10px] uppercase drop-shadow-sm">COMPUTER</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      {/* Badges */}
+                      <div className="absolute top-4 left-4 z-20 flex flex-col gap-1.5">
+                        {p.isHotSale && (
+                          <div className="shadow-lg rounded-md overflow-hidden transform -rotate-3 origin-top-left group-hover:rotate-0 transition-transform duration-300">
+                            <div className="bg-gradient-to-r from-orange-500 to-red-600 text-white text-[10px] font-black px-2 py-1 text-center uppercase tracking-widest">
+                              🔥 HOT SALE
+                            </div>
+                          </div>
+                        )}
+                        {saveAmount > 0 && (
+                          <div className="shadow-lg rounded-md overflow-hidden transform -rotate-3 origin-top-left group-hover:rotate-0 transition-transform duration-300">
+                            <div className="bg-gradient-to-r from-red-600 to-red-500 text-white text-[10px] font-black px-2 py-1 text-center uppercase tracking-widest">
+                              TIẾT KIỆM
+                            </div>
+                            <div className="bg-red-700 text-white text-[12px] font-black px-2 py-1 text-center border-t border-red-500">
+                              {saveAmount.toLocaleString('vi-VN')} đ
+                            </div>
                           </div>
                         )}
                       </div>
-                      <Link
-                        href={`/product/${p.slug}`}
-                        className="w-10 h-10 rounded-full bg-red-50 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors"
-                        aria-label={`Xem ${p.name}`}
-                      >
-                        <ArrowRight size={18} />
+
+                      {/* Hover Action */}
+                      {!isOutOfStock && (
+                        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 translate-y-8 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-300 z-30 pointer-events-none">
+                          <div className="bg-white/95 backdrop-blur-sm text-primary text-sm font-bold px-6 py-2 rounded-full shadow-lg border border-primary/20 flex items-center gap-2 whitespace-nowrap">
+                            Xem chi tiết <ArrowRight size={16} />
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                    
+                    <div className="p-3 md:p-5 flex flex-col flex-1 bg-white">
+                      <div className="flex items-center justify-between mb-2">
+                        <div className="text-[10px] md:text-[12px] font-extrabold text-gray-400 uppercase tracking-wider">{p.brand || "KHÁC"}</div>
+                        <LikeButton product={p as any} />
+                      </div>
+                      <Link href={`/product/${p.slug}`} className="hover:text-primary transition-colors mb-2 md:mb-4 z-30 relative">
+                        <h3 className="text-gray-800 text-[13px] md:text-[15px] font-medium leading-snug line-clamp-2 group-hover:text-primary transition-colors duration-300">{p.name}</h3>
                       </Link>
+                      
+                      <div className="flex flex-col mt-auto mb-4">
+                        {isOutOfStock ? (
+                          <div className="h-full flex items-end">
+                            <span className="text-[16px] md:text-[18px] font-black text-gray-500">LIÊN HỆ</span>
+                          </div>
+                        ) : saveAmount > 0 ? (
+                          <>
+                            <span className="text-gray-400 text-[12px] md:text-[13px] line-through mb-0.5 decoration-gray-300">{originalPrice.toLocaleString('vi-VN')}₫</span>
+                            <div className="flex items-end gap-2">
+                              <span className="text-[16px] md:text-[18px] font-black text-red-600 leading-none">{currentPrice.toLocaleString('vi-VN')}₫</span>
+                              <span className="bg-red-50 text-red-600 border border-red-200 rounded text-[10px] md:text-[11px] font-bold px-1.5 py-[2px] leading-none">-{discountPercent}%</span>
+                            </div>
+                          </>
+                        ) : (
+                          <>
+                            <div className="h-[18px] md:h-[20px] mb-0.5"></div>
+                            <span className="text-[16px] md:text-[18px] font-black text-red-600 leading-none">{currentPrice.toLocaleString('vi-VN')}₫</span>
+                          </>
+                        )}
+                      </div>
+
+                      {p.specs && Object.keys(p.specs).length > 0 && (
+                        <div className="hidden md:grid bg-[#f8f9fa] rounded-xl p-3.5 text-[11px] text-gray-600 grid-cols-2 gap-y-2.5 gap-x-3 mt-auto border border-gray-100">
+                          {Object.entries(p.specs).slice(0, 5).map(([key, value], index) => {
+                            const lowerKey = key.toLowerCase();
+                            let Icon = Maximize;
+                            if (lowerKey.includes('cpu') || lowerKey.includes('chip') || lowerKey.includes('vi xử lý')) Icon = Cpu;
+                            else if (lowerKey.includes('vga') || lowerKey.includes('card') || lowerKey.includes('đồ họa')) Icon = Monitor;
+                            else if (lowerKey.includes('ram')) Icon = Server;
+                            else if (lowerKey.includes('ổ') || lowerKey.includes('ssd') || lowerKey.includes('hdd') || lowerKey.includes('storage')) Icon = HardDrive;
+                            
+                            return (
+                              <div key={key} className={`flex items-center gap-2 truncate ${index === 4 ? 'col-span-2' : ''}`} title={`${key}: ${value}`}>
+                                <Icon size={14} className="text-gray-400 shrink-0"/> 
+                                <span className="truncate">{value as string}</span>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      )}
+
+                      <div className="mt-4 mb-1 flex justify-center text-gray-400 text-[11px] md:text-[12px] items-center gap-1.5 font-medium">
+                        <Eye size={14} /> {(p.views || 0).toLocaleString('vi-VN')} lượt xem
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         )}

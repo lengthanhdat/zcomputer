@@ -7,6 +7,7 @@ interface User {
   name: string;
   email: string;
   role: string;
+  phone?: string;
   permissions: string[];
 }
 
@@ -15,6 +16,7 @@ interface AuthState {
   token: string | null;
   login: (user: User, token: string) => void;
   logout: () => void;
+  updateUser: (data: Partial<User>) => void;
   isAuthenticated: () => boolean;
 }
 
@@ -30,6 +32,12 @@ export const useAuthStore = create<AuthState>()(
       logout: () => {
         set({ user: null, token: null });
         useCartStore.getState().setActiveUser('guest');
+      },
+      updateUser: (data) => {
+        const currentUser = get().user;
+        if (currentUser) {
+          set({ user: { ...currentUser, ...data } });
+        }
       },
       isAuthenticated: () => !!get().token,
     }),

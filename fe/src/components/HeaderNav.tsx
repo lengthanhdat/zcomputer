@@ -132,9 +132,8 @@ export default function HeaderNav() {
             </svg>
           </div>
           <div className="flex flex-col justify-center">
-            <span className="text-white text-[14px] font-black uppercase tracking-wide leading-none mb-1">Giao hàng cả nước</span>
             <div className="flex flex-col">
-              <span className="text-white text-[15px] font-bold leading-none mb-[2px] uppercase">FREESHIP HCM</span>
+              <span className="text-white text-[15px] font-black uppercase tracking-wide leading-none mb-[4px]">GIAO HÀNG TẬN NƠI</span>
               <div className="w-full h-[2.5px] bg-[#d90467]"></div>
             </div>
           </div>

@@ -14,6 +14,7 @@ const menuItems = [
   { href: "/admin/orders", label: "Đơn hàng", icon: ClipboardList, allowedRoles: ['admin', 'staff'] },
   { href: "/admin/categories", label: "Danh mục", icon: Tags, allowedRoles: ['admin', 'staff'] },
   { href: "/admin/users", label: "Khách hàng", icon: Users, allowedRoles: ['admin'] },
+  { href: "/admin/feedbacks", label: "Góp ý", icon: MessageCircle, allowedRoles: ['admin', 'staff'] },
   { href: "/admin/banners", label: "Banners", icon: LayoutDashboard, allowedRoles: ['admin', 'staff'] },
   { href: "/admin/video-reviews", label: "Video Reviews", icon: Play, allowedRoles: ['admin', 'staff'] },
   { href: "/admin/jobs", label: "Tuyển dụng", icon: Briefcase, allowedRoles: ['admin', 'staff'] },

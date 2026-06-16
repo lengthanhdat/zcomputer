@@ -176,7 +176,7 @@ export default function CartPage() {
         {/* Contact Modal */}
       {showContactModal && (
         <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-          <div className="bg-white rounded-2xl w-full max-w-md overflow-hidden shadow-2xl animate-in fade-in zoom-in duration-200">
+          <div className="bg-white rounded-2xl w-full max-w-xl overflow-hidden shadow-2xl animate-in fade-in zoom-in duration-200">
             <div className="bg-primary p-5 flex items-center justify-between">
               <h3 className="text-white font-bold text-xl uppercase">Liên hệ để mua hàng</h3>
               <button 
@@ -188,48 +188,84 @@ export default function CartPage() {
             </div>
             
             <div className="p-6">
-              <p className="text-gray-600 mb-6 text-center">
+              <p className="text-gray-600 mb-6 text-center text-[15px]">
                 Để mua hàng hoặc nhận báo giá chi tiết cho <strong className="text-primary">{items.length}</strong> sản phẩm bạn đã chọn, vui lòng liên hệ với chúng tôi qua các kênh sau:
               </p>
 
-              <div className="flex flex-col gap-4">
-                <a 
-                  href="tel:0977334415" 
-                  className="flex items-center gap-4 bg-gray-50 hover:bg-red-50 p-4 rounded-xl border border-gray-100 transition-colors group"
-                >
-                  <div className="w-12 h-12 bg-red-100 text-primary rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
-                    <Phone size={24} />
-                  </div>
-                  <div>
-                    <div className="text-sm font-semibold text-gray-500 uppercase">Gọi Hotline</div>
-                    <div className="text-xl font-black text-gray-900">0977 334 415</div>
-                  </div>
-                </a>
+              <div className="flex flex-col md:flex-row gap-5 items-stretch">
+                <div className="flex flex-col gap-4 w-full md:w-[55%]">
+                  <a 
+                    href="tel:0977334415" 
+                    className="flex items-center gap-4 bg-gray-50 hover:bg-red-50 p-4 rounded-xl border border-gray-100 transition-colors group h-full"
+                  >
+                    <div className="w-12 h-12 bg-red-100 text-primary rounded-full flex items-center justify-center group-hover:scale-110 transition-transform shrink-0">
+                      <Phone size={24} />
+                    </div>
+                    <div>
+                      <div className="text-sm font-semibold text-gray-500 uppercase">Gọi Hotline</div>
+                      <div className="text-xl font-black text-gray-900">0977 334 415</div>
+                    </div>
+                  </a>
 
-                <a 
-                  href={`https://zalo.me/0977334415?text=${encodeURIComponent(
-                    "Chào ZCOMPUTER, mình cần tư vấn báo giá các sản phẩm sau:\n" + 
-                    items.map((i, index) => `${index + 1}. ${i.name} (x${i.quantity}) - Giá: ${i.price.toLocaleString('vi-VN')}đ`).join('\n') +
-                    `\n\nTổng cộng: ${getTotalPrice().toLocaleString('vi-VN')}đ`
-                  )}`}
-                  target="_blank" 
-                  rel="noreferrer"
-                  className="flex items-center gap-4 bg-gray-50 hover:bg-blue-50 p-4 rounded-xl border border-gray-100 transition-colors group"
-                >
-                  <div className="w-12 h-12 bg-blue-100 text-[#0068FF] rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
-                    <MessageCircle size={24} />
+                  <a 
+                    href={`https://zalo.me/0977334415?text=${encodeURIComponent(
+                      "Chào ZCOMPUTER, mình cần tư vấn báo giá các sản phẩm sau:\n" + 
+                      items.map((i, index) => `${index + 1}. ${i.name} (x${i.quantity}) - Giá: ${i.price.toLocaleString('vi-VN')}đ`).join('\n') +
+                      `\n\nTổng cộng: ${getTotalPrice().toLocaleString('vi-VN')}đ`
+                    )}`}
+                    target="_blank" 
+                    rel="noreferrer"
+                    className="flex items-center gap-4 bg-gray-50 hover:bg-blue-50 p-4 rounded-xl border border-gray-100 transition-colors group h-full"
+                  >
+                    <div className="w-12 h-12 bg-blue-100 text-[#0068FF] rounded-full flex items-center justify-center group-hover:scale-110 transition-transform shrink-0">
+                      <MessageCircle size={24} />
+                    </div>
+                    <div>
+                      <div className="text-[13px] font-semibold text-gray-500 uppercase">Chat Zalo Nhận Báo Giá</div>
+                      <div className="text-[17px] font-black text-gray-900">Gửi Cấu Hình</div>
+                    </div>
+                  </a>
+
+                  <a 
+                    href="https://m.me/pcgamingthuduc"
+                    target="_blank" 
+                    rel="noreferrer"
+                    className="flex items-center gap-4 bg-gray-50 hover:bg-[#EBF5FF] p-4 rounded-xl border border-gray-100 transition-colors group h-full"
+                  >
+                    <div className="w-12 h-12 bg-[#EBF5FF] text-[#0084FF] rounded-full flex items-center justify-center group-hover:scale-110 transition-transform shrink-0">
+                      <svg viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
+                        <path d="M12 2C6.477 2 2 6.145 2 11.259c0 2.922 1.503 5.516 3.844 7.234v3.507c0 .445.511.693.864.417l3.226-2.52c1.037.288 2.13.441 3.266.441 5.523 0 10-4.145 10-9.259S17.523 2 12 2zm1.189 12.392l-2.48-2.656-4.839 2.656 5.3-5.632 2.502 2.673 4.818-2.673-5.301 5.632z"/>
+                      </svg>
+                    </div>
+                    <div>
+                      <div className="text-[13px] font-semibold text-gray-500 uppercase">Nhắn tin Messenger</div>
+                      <div className="text-[17px] font-black text-gray-900">Fanpage Facebook</div>
+                    </div>
+                  </a>
+                </div>
+
+                {/* QR Code Section */}
+                <div className="w-full md:w-[45%] flex flex-col items-center justify-center bg-gray-50 rounded-xl border border-gray-100 p-5">
+                  <div className="relative w-44 h-44 mb-3 bg-white rounded-xl shadow-sm border border-gray-150 overflow-hidden">
+                    <img 
+                      src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=https://zalo.me/0977334415" 
+                      alt="Zalo QR" 
+                      className="w-full h-full object-contain p-2" 
+                    />
+                    <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                      <div className="bg-white p-1 rounded-full">
+                        <div className="bg-black text-white w-10 h-10 rounded-full flex items-center justify-center font-bold text-[12px]">Zalo</div>
+                      </div>
+                    </div>
                   </div>
-                  <div>
-                    <div className="text-sm font-semibold text-gray-500 uppercase">Chat Zalo Nhận Báo Giá</div>
-                    <div className="text-xl font-black text-gray-900">Gửi Cấu Hình Ngay</div>
-                  </div>
-                </a>
+                  <p className="text-[13px] text-gray-500 font-bold text-center uppercase tracking-widest">Quét mã Zalo</p>
+                </div>
               </div>
               
-              <div className="mt-6 text-center">
+              <div className="mt-8 text-center">
                 <button 
                   onClick={() => setShowContactModal(false)}
-                  className="text-gray-500 hover:text-gray-800 font-medium underline"
+                  className="text-gray-500 hover:text-gray-800 font-medium underline transition-colors"
                 >
                   Đóng cửa sổ này
                 </button>

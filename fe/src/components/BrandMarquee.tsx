@@ -16,21 +16,21 @@ const brands = [
 
 export default function BrandMarquee() {
   return (
-    <div className="bg-transparent py-10 overflow-hidden relative flex items-center mt-4 mb-16">
+    <div className="bg-transparent py-6 md:py-10 overflow-hidden relative flex items-center mb-8 md:mb-16">
       {/* Fading edges for smooth enter/exit */}
-      <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-[#f8f9fa] to-transparent z-10 pointer-events-none"></div>
-      <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-[#f8f9fa] to-transparent z-10 pointer-events-none"></div>
+      <div className="absolute left-0 top-0 bottom-0 w-12 md:w-32 bg-gradient-to-r from-[#f8f9fa] to-transparent z-10 pointer-events-none"></div>
+      <div className="absolute right-0 top-0 bottom-0 w-12 md:w-32 bg-gradient-to-l from-[#f8f9fa] to-transparent z-10 pointer-events-none"></div>
       
       <div className="flex w-max animate-marquee">
         {/* We duplicate the list to make the infinite loop seamless. 
             The animation translates the container from 0 to -50%. 
             Because there are two exact copies, when it reaches -50%, it snaps back to 0 perfectly. */}
         {[...brands, ...brands].map((brand, i) => (
-          <div key={i} className="flex items-center px-12 group cursor-pointer w-[250px] justify-center gap-4" style={{ '--brand-color': brand.color } as React.CSSProperties}>
+          <div key={i} className="flex items-center px-6 md:px-12 group cursor-pointer w-[120px] md:w-[250px] justify-center gap-4" style={{ '--brand-color': brand.color } as React.CSSProperties}>
             <img 
               src={`https://cdn.simpleicons.org/${brand.slug}`} 
               alt={brand.name} 
-              className="h-14 w-auto grayscale opacity-60 group-hover:grayscale-0 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500 drop-shadow-sm group-hover:drop-shadow-md"
+              className="h-8 md:h-14 w-auto grayscale opacity-60 group-hover:grayscale-0 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500 drop-shadow-sm group-hover:drop-shadow-md"
             />
             <span className="text-gray-400 font-bold tracking-widest uppercase opacity-0 -translate-x-4 group-hover:translate-x-0 group-hover:opacity-100 group-hover:text-[color:var(--brand-color)] transition-all duration-500 hidden md:block">
               {brand.name}
