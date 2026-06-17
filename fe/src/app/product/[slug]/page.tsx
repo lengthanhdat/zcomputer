@@ -160,14 +160,14 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
     <div className="bg-[#f8f9fa] min-h-screen pb-32 sm:pb-20">
       {/* Breadcrumb */}
       <div className="bg-white border-b border-gray-200 py-3">
-        <div className="container mx-auto px-4 text-sm text-gray-500 flex gap-2 items-center">
-          <Link href="/" className="hover:text-primary transition-colors">Trang chủ</Link>
-          <span>/</span>
-          <Link href={`/category/${product.category_id?.slug || "all"}`} className="hover:text-primary transition-colors uppercase">
+        <div className="container mx-auto px-4 text-sm text-gray-500 flex gap-2 items-center overflow-x-auto hide-scrollbar whitespace-nowrap">
+          <Link href="/" className="shrink-0 hover:text-primary transition-colors">Trang chủ</Link>
+          <span className="shrink-0">/</span>
+          <Link href={`/category/${product.category_id?.slug || "all"}`} className="shrink-0 hover:text-primary transition-colors uppercase">
             {product.category_id?.name || "Sản phẩm"}
           </Link>
-          <span>/</span>
-          <span className="text-gray-900 font-bold truncate max-w-[200px] sm:max-w-md">{product.name}</span>
+          <span className="shrink-0">/</span>
+          <span className="shrink-0 text-gray-900 font-bold truncate">{product.name}</span>
         </div>
       </div>
 
@@ -506,7 +506,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
 
                       {p.specs && Object.keys(p.specs).length > 0 && (
                         <div className="hidden md:grid bg-[#f8f9fa] rounded-xl p-3.5 text-[11px] text-gray-600 grid-cols-2 gap-y-2.5 gap-x-3 mt-auto border border-gray-100">
-                          {Object.entries(p.specs).slice(0, 5).map(([key, value], index) => {
+                          {Object.entries(p.specs).filter(([_, v]) => v && String(v).trim() !== '').slice(0, 5).map(([key, value], index) => {
                             const lowerKey = key.toLowerCase();
                             let Icon = Maximize;
                             if (lowerKey.includes('cpu') || lowerKey.includes('chip') || lowerKey.includes('vi xử lý')) Icon = Cpu;

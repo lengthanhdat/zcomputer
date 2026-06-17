@@ -44,7 +44,7 @@ export default function Footer() {
                   <div className="text-sm font-bold text-white mb-3 flex items-center gap-2"><div className="w-2 h-2 rounded-full bg-red-500 animate-pulse"></div> Chi nhánh Thủ Đức</div>
                   <div className="rounded-2xl overflow-hidden border border-white/10 group-hover/map:border-red-500/50 transition-colors relative">
                     <div className="absolute inset-0 bg-red-500/0 opacity-0 group-hover/map:opacity-100 transition-opacity pointer-events-none z-10 mix-blend-overlay"></div>
-                    <iframe src="https://maps.google.com/maps?q=Z+Computer-+Pc+Gaming-Laptop-Workstation&t=&z=16&ie=UTF8&iwloc=&output=embed" width="100%" height="160" style={{ border: 0 }} allowFullScreen loading="lazy" referrerPolicy="no-referrer-when-downgrade" className="transition-all duration-500 group-hover/map:scale-105"></iframe>
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3918.4658576162583!2d106.74981366590865!3d10.852128230492767!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31752722e4c10833%3A0x6ac88810b4b7dee!2sZ%20Computer-%20Pc%20Gaming-Laptop-Workstation!5e0!3m2!1svi!2sus!4v1781670020621!5m2!1svi!2sus" width="100%" height="160" style={{ border: 0 }} allowFullScreen loading="lazy" referrerPolicy="no-referrer-when-downgrade" className="transition-all duration-500 group-hover/map:scale-105"></iframe>
                   </div>
                </div>
                <div className="group/map">
@@ -58,8 +58,8 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* 3 COLUMNS BLOCK */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 lg:gap-8 relative z-10 pt-4">
+        {/* 4 COLUMNS BLOCK */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-8 relative z-10 pt-4">
           
           {/* Col 1: Logo & Info */}
           <div className="col-span-1 pr-4">
@@ -95,7 +95,7 @@ export default function Footer() {
           <div className="lg:pl-8">
             <h4 className="font-black uppercase mb-6 text-[15px] text-white tracking-widest flex items-center gap-2">
               <div className="w-1.5 h-4 bg-red-500 rounded-full"></div>
-              Chính sách tổng hợp
+              Chính sách
             </h4>
             <ul className="space-y-4 text-[14px] text-white/60 font-medium uppercase">
               <li><Link href="/chinh-sach-bao-mat" className="hover:text-red-400 hover:translate-x-2 transition-all duration-300 flex items-center gap-2"><FaChevronRight className="text-[10px] text-red-500/50" /> CHÍNH SÁCH BẢO MẬT</Link></li>
@@ -110,14 +110,33 @@ export default function Footer() {
           <div>
             <h4 className="font-black uppercase mb-6 text-[15px] text-white tracking-widest flex items-center gap-2">
               <div className="w-1.5 h-4 bg-blue-500 rounded-full"></div>
-              Thông tin công ty
+              Công ty
             </h4>
             <div className="text-[14px] text-white/60 space-y-4 leading-relaxed font-medium">
-              <p className="bg-white/5 p-4 rounded-xl border border-white/5 backdrop-blur-sm">
+              <p className="bg-white/5 p-4 rounded-xl border border-white/5 backdrop-blur-sm hover:bg-white/10 transition-colors">
                 <strong className="text-white block mb-1">CÔNG TY TNHH TM DV ZCOM</strong>
                 MST: 0317130199 <br/>
                 Sở KHĐT TP.HCM cấp ngày 18/01/2022
               </p>
+            </div>
+          </div>
+
+          {/* Col 4: FANPAGE */}
+          <div>
+            <h4 className="font-black uppercase mb-6 text-[15px] text-white tracking-widest flex items-center gap-2">
+              <div className="w-1.5 h-4 bg-[#1877F2] rounded-full"></div>
+              Fanpage Facebook
+            </h4>
+            <div className="rounded-xl overflow-hidden border border-white/10 bg-white/5 h-[130px]">
+              <iframe 
+                src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2Fpcgamingthuduc&tabs=&width=340&height=130&small_header=false&adapt_container_width=true&hide_cover=false&show_facepile=true&appId" 
+                width="100%" 
+                height="130" 
+                style={{border:"none",overflow:"hidden"}} 
+                scrolling="no" 
+                allowFullScreen={true} 
+                allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
+              ></iframe>
             </div>
           </div>
 
@@ -127,7 +146,7 @@ export default function Footer() {
       {/* Bottom Bar */}
       <div className="relative border-t border-white/10 bg-black/50 backdrop-blur-lg py-5 z-10">
         <div className="container mx-auto px-4 text-center text-[13px] font-medium text-white/40 tracking-wide">
-           © 2026 <strong className="text-white/60">ZCOMPUTER</strong>. Tất cả quyền được bảo lưu.
+           © 2026 <strong className="text-white/60">ZCOMPUTER</strong>.
         </div>
       </div>
     </footer>
