@@ -295,7 +295,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
 
                         {product.specs && Object.keys(product.specs).length > 0 && (
                           <div className="bg-gray-50/80 border border-gray-100 rounded-lg p-2.5 text-[10px] text-gray-600 grid grid-cols-2 gap-y-2 gap-x-2 mt-auto">
-                            {Object.entries(product.specs).slice(0, 5).map(([key, value], index) => {
+                            {Object.entries(product.specs).filter(([_, v]) => v && String(v).trim() !== '').slice(0, 5).map(([key, value], index) => {
                               const lowerKey = key.toLowerCase();
                               let Icon = Maximize;
                               if (lowerKey.includes('cpu') || lowerKey.includes('chip') || lowerKey.includes('vi xử lý')) Icon = Cpu;

@@ -20,12 +20,28 @@ const registerLimiter = rateLimit({
   legacyHeaders: false,
 });
 
+const forgotPasswordLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000, // 1 giờ
+  max: 3, // Giới hạn 3 lần yêu cầu quên mật khẩu mỗi giờ
+  message: { message: 'Quá nhiều yêu cầu quên mật khẩu, vui lòng thử lại sau 1 giờ' },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+const resetPasswordLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 phút
+  max: 5, // Giới hạn 5 lần nhập sai OTP
+  message: { message: 'Quá nhiều lần nhập sai OTP, vui lòng thử lại sau 15 phút' },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
 router.post('/register', registerLimiter, register);
 router.post('/login', loginLimiter, login);
 router.post('/refresh', refreshToken);
 router.post('/logout', logout);
 router.post('/google', googleLogin);
-router.post('/forgot-password', forgotPassword);
-router.post('/reset-password', resetPassword);
+router.post('/forgot-password', forgotPasswordLimiter, forgotPassword);
+router.post('/reset-password', resetPasswordLimiter, resetPassword);
 
 export default router;

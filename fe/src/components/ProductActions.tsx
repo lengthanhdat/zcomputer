@@ -77,9 +77,11 @@ export default function ProductActions({ product }: ProductActionsProps) {
             +
           </button>
         </div>
-        <span className="text-sm text-gray-500 whitespace-nowrap">
-          {isOutOfStock ? "(Hết hàng)" : `(Còn lại ${product.stock} sản phẩm)`}
-        </span>
+        {isOutOfStock && (
+          <span className="text-sm text-red-500 whitespace-nowrap font-medium">
+            (Hết hàng)
+          </span>
+        )}
       </div>
 
       {/* Desktop Buttons */}

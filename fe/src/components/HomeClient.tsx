@@ -643,7 +643,7 @@ function ProductCard({ product }: { product: Product }) {
 
         {product.specs && Object.keys(product.specs).length > 0 && (
           <div className="hidden md:grid bg-[#f8f9fa] rounded-xl p-3.5 text-[11px] text-gray-600 grid-cols-2 gap-y-2.5 gap-x-3 mt-auto border border-gray-100">
-            {Object.entries(product.specs).slice(0, 5).map(([key, value], index) => {
+            {Object.entries(product.specs).filter(([_, v]) => v && String(v).trim() !== '').slice(0, 5).map(([key, value], index) => {
               const lowerKey = key.toLowerCase();
               let Icon = Maximize;
               if (lowerKey.includes('cpu') || lowerKey.includes('chip') || lowerKey.includes('vi xử lý')) Icon = Cpu;

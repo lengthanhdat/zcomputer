@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { Zap, Timer, ShoppingCart, ArrowRight, Eye } from "lucide-react";
+import { Zap, Timer, ShoppingCart, ArrowRight, Eye, Maximize, Cpu, Database, MonitorPlay, HardDrive, Monitor, Battery, Weight } from "lucide-react";
 import { useState, useEffect } from "react";
 
 export default function HotSaleSection({ 
@@ -11,7 +11,6 @@ export default function HotSaleSection({
   products: any[]
 }) {
   const hotProducts = products.filter(p => p.isHotSale);
-  if (hotProducts.length === 0) return null;
 
   // Group hot products by category
   const getGroup = (p: any) => {
@@ -32,6 +31,12 @@ export default function HotSaleSection({
 
   const tabs = Object.keys(grouped);
   const [activeTab, setActiveTab] = useState(tabs[0] || "");
+
+  useEffect(() => {
+    if (!activeTab && tabs.length > 0) {
+      setActiveTab(tabs[0]);
+    }
+  }, [activeTab, tabs]);
 
   const activeProducts = grouped[activeTab] || [];
 
@@ -149,6 +154,7 @@ export default function HotSaleSection({
     return () => clearInterval(timer);
   }, [endTime]);
 
+  if (hotProducts.length === 0) return null;
   if (tabs.length === 0) return null;
 
   return (
@@ -349,6 +355,29 @@ export default function HotSaleSection({
                         <Link href={`/product/${product.slug}`} className="hover:text-red-600 transition-colors mb-3 z-30 relative">
                           <h3 className="text-gray-800 text-[14px] font-bold leading-snug line-clamp-2">{product.name}</h3>
                         </Link>
+
+                        <div className="grid grid-cols-2 gap-1.5 mb-3">
+                          {product.specs && typeof product.specs === 'object' && (
+                            Object.entries(product.specs).filter(([_, v]) => v && String(v).trim() !== '').map(([key, value], index) => {
+                              const lowerKey = key.toLowerCase();
+                              let Icon = Maximize;
+                              if (lowerKey.includes('cpu') || lowerKey.includes('chip')) Icon = Cpu;
+                              else if (lowerKey.includes('ram')) Icon = Database;
+                              else if (lowerKey.includes('vga') || lowerKey.includes('card')) Icon = MonitorPlay;
+                              else if (lowerKey.includes('ổ cứng') || lowerKey.includes('ssd') || lowerKey.includes('hdd')) Icon = HardDrive;
+                              else if (lowerKey.includes('màn') || lowerKey.includes('lcd')) Icon = Monitor;
+                              else if (lowerKey.includes('pin') || lowerKey.includes('battery')) Icon = Battery;
+                              else if (lowerKey.includes('trọng lượng') || lowerKey.includes('weight')) Icon = Weight;
+                              
+                              return (
+                                <div key={index} className="flex items-center gap-2 text-xs text-gray-500 bg-gray-50/50 p-1.5 rounded-lg border border-gray-100">
+                                  <Icon size={14} className="text-gray-400 shrink-0" />
+                                  <span className="truncate" title={`${value}`}>{value as React.ReactNode}</span>
+                                </div>
+                              );
+                            })
+                          )}
+                        </div>
                         
                         <div className="flex flex-col mb-4">
                           {isOutOfStock ? (
