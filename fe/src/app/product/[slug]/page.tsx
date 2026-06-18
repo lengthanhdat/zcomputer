@@ -98,14 +98,28 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     ? product.description.replace(/<[^>]+>/g, '').substring(0, 160) + '...'
     : `Mua ${product.name} chính hãng tại ZCOMPUTER với giá tốt nhất, bảo hành uy tín.`;
 
+  const siteUrl = process.env.NEXT_PUBLIC_FRONTEND_URL || 'http://localhost:3000';
+  const currentUrl = `${siteUrl}/product/${product.slug}`;
+
   return {
     title: `${product.name} | ZCOMPUTER`,
     description: plainTextDescription,
+    alternates: {
+      canonical: currentUrl,
+    },
     openGraph: {
       title: product.name,
       description: plainTextDescription,
+      url: currentUrl,
       images: product.images?.[0] ? [{ url: product.images[0] }] : [],
+      type: 'article',
     },
+    twitter: {
+      card: 'summary_large_image',
+      title: product.name,
+      description: plainTextDescription,
+      images: product.images?.[0] ? [product.images[0]] : [],
+    }
   };
 }
 
@@ -156,8 +170,35 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
   const categoryId = product.category_id?._id || (typeof product.category_id === 'string' ? product.category_id : null);
   const similarProducts = await getSimilarProducts(categoryId as string | null, product._id);
 
+  const siteUrl = process.env.NEXT_PUBLIC_FRONTEND_URL || 'http://localhost:3000';
+  const schemaMarkup = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: product.name,
+    image: product.images || [],
+    description: cleanDescription ? cleanDescription.substring(0, 160) : `Mua ${product.name} chính hãng tại ZCOMPUTER`,
+    sku: product.sku || product._id,
+    brand: {
+      "@type": "Brand",
+      name: product.brand || "ZComputer",
+    },
+    offers: {
+      "@type": "Offer",
+      url: `${siteUrl}/product/${product.slug}`,
+      priceCurrency: "VND",
+      price: product.price,
+      itemCondition: "https://schema.org/NewCondition",
+      availability: product.stock && product.stock > 0 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
+      seller: {
+        "@type": "Organization",
+        name: "ZComputer"
+      }
+    }
+  };
+
   return (
     <div className="bg-[#f8f9fa] min-h-screen pb-32 sm:pb-20">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaMarkup) }} />
       {/* Breadcrumb */}
       <div className="bg-white border-b border-gray-200 py-3">
         <div className="container mx-auto px-4 text-sm text-gray-500 flex gap-2 items-center overflow-x-auto hide-scrollbar whitespace-nowrap">
