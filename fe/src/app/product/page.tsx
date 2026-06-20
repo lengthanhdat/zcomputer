@@ -1,5 +1,12 @@
 import CategoryClient from "@/components/CategoryClient";
 
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Tất cả sản phẩm | ZCOMPUTER",
+  description: "Tổng hợp tất cả sản phẩm PC Gaming, Laptop, linh kiện máy tính cao cấp chính hãng tại ZCOMPUTER.",
+};
+
 export const revalidate = 0;
 
 type Product = {

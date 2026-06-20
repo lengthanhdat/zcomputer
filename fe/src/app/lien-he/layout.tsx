@@ -1,0 +1,1 @@
+export const metadata = { title: 'Liên hệ ZCOMPUTER', description: 'Liên hệ với ZCOMPUTER để được tư vấn cấu hình PC Gaming, Laptop, Workstation.' }; export default function Layout({ children }) { return <>{children}</>; }

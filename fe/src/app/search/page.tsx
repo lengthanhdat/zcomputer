@@ -3,6 +3,8 @@ import Link from "next/link";
 import { Filter, Search, Eye, Cpu, Monitor, Server, HardDrive, Maximize, ArrowRight } from "lucide-react";
 import LikeButton from "@/components/LikeButton";
 
+import { Metadata } from "next";
+
 export const revalidate = 0;
 
 type Product = {
@@ -41,6 +43,21 @@ async function searchProducts(query: string): Promise<Product[]> {
   } finally {
     clearTimeout(timeout);
   }
+}
+
+export async function generateMetadata({ searchParams }: { searchParams: Promise<{ [key: string]: string | string[] | undefined }> }): Promise<Metadata> {
+  const resolvedParams = await searchParams;
+  const q = resolvedParams.q;
+  const query = typeof q === 'string' ? q : '';
+
+  return {
+    title: query ? `Kết quả tìm kiếm cho "${query}" | ZCOMPUTER` : "Tìm kiếm sản phẩm | ZCOMPUTER",
+    description: query ? `Tìm kiếm các sản phẩm PC Gaming, Laptop, linh kiện máy tính liên quan đến "${query}" tại ZCOMPUTER.` : "Tìm kiếm hàng ngàn sản phẩm PC Gaming, Laptop, linh kiện máy tính chính hãng tại ZCOMPUTER.",
+    robots: {
+      index: false,
+      follow: true,
+    }
+  };
 }
 
 export default async function SearchPage({ searchParams }: { searchParams: Promise<{ [key: string]: string | string[] | undefined }> }) {

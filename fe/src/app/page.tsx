@@ -6,5 +6,23 @@ export const metadata = {
 };
 
 export default function Home() {
-  return <HomeClient />;
+  const schemaMarkup = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "ZCOMPUTER",
+    "url": "https://zcomputer.com",
+    "logo": "https://zcomputer.com/logo.png",
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "telephone": "+84-977-334-415",
+      "contactType": "customer service"
+    }
+  };
+
+  return (
+    <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaMarkup) }} />
+      <HomeClient />
+    </>
+  );
 }

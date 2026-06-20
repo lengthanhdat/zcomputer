@@ -1,0 +1,1 @@
+export const metadata = { title: 'Công cụ Test Thiết Bị Online | ZCOMPUTER', description: 'Test bàn phím, màn hình, webcam, micro online miễn phí.' }; export default function Layout({ children }) { return <>{children}</>; }

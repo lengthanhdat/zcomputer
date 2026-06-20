@@ -52,7 +52,7 @@ export default function Header() {
 
           <Link 
             href="/" 
-            className="flex items-center gap-3 shrink-0 group relative"
+            className="flex items-center gap-1.5 shrink-0 group relative"
             onClick={(e) => {
               if (window.location.pathname === "/") {
                 e.preventDefault();
@@ -62,14 +62,20 @@ export default function Header() {
           >
             <div className="absolute inset-0 bg-red-500/10 blur-[20px] rounded-full group-hover:bg-red-500/20 transition-all duration-500 pointer-events-none"></div>
             <Image src="/logo.png" alt="Z" width={80} height={80} priority className="h-14 w-14 sm:h-[68px] sm:w-[68px] object-contain group-hover:scale-105 transition-all duration-300 drop-shadow-md relative z-10" />
-            <div className="flex flex-col items-start justify-center relative z-10">
-              <div className={`${montserrat.className} flex items-center select-none group-hover:scale-[1.02] transition-transform duration-300`}>
-                <span className="text-[#CC0000] text-[28px] sm:text-[34px] font-black drop-shadow-sm leading-none">Z</span>
-                <span className="text-gray-900 text-[28px] sm:text-[34px] font-black uppercase drop-shadow-sm leading-none">COMPUTER</span>
-              </div>
-              <span className={`${montserrat.className} text-[#CC0000] text-[8px] sm:text-[9.5px] font-black uppercase tracking-widest mt-1`}>
-                PC GAMING - LAPTOP - WORKSTATION
+            
+            {/* New Storefront-style Text Logo */}
+            <div className="flex items-center gap-0.5 group-hover:scale-[1.02] transition-transform duration-300 select-none relative z-10 font-serif">
+              <span className="text-[#cc0000] text-[58px] font-bold leading-none">
+                Z
               </span>
+              <div className="flex flex-col justify-center pt-1">
+                <span className="text-gray-900 text-[28px] font-bold uppercase tracking-[0.02em] leading-none mb-0.5">
+                  COMPUTER
+                </span>
+                <span className={`${montserrat.className} text-[#cc0000] font-black text-[8.5px] uppercase tracking-[0.05em] leading-none`}>
+                  PC GAMING - LAPTOP - WORKSTATION
+                </span>
+              </div>
             </div>
           </Link>
 

@@ -4,6 +4,7 @@ import { Playfair_Display, Montserrat } from "next/font/google";
 import { FaFacebookF, FaInstagram, FaTiktok, FaYoutube, FaMapMarkerAlt, FaPhoneAlt, FaEnvelope, FaChevronRight } from "react-icons/fa";
 
 const montserrat = Montserrat({ subsets: ["latin", "vietnamese"], weight: ["700", "900"] });
+const playfair = Playfair_Display({ subsets: ["latin", "vietnamese"], weight: ["700", "900"] });
 
 export default function Footer() {
   return (
@@ -58,42 +59,50 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* 6 COLUMNS BLOCK */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 relative z-10 pt-8 border-t border-white/10">
+        {/* 5 COLUMNS BLOCK */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-12 gap-8 relative z-10 pt-10 border-t border-white/10">
           
           {/* Col 1: Logo & Info */}
-          <div className="col-span-1 lg:col-span-1 pr-0">
-             <Link href="/" className="flex flex-col items-start shrink-0 group mb-4">
-               <div className="flex items-center gap-2">
-                 <div className="bg-white p-1 rounded-xl shadow-[0_0_15px_rgba(255,255,255,0.2)] group-hover:shadow-[0_0_20px_rgba(220,38,38,0.4)] transition-shadow">
-                   <Image src="/logo.png" alt="ZCOMPUTER" width={40} height={40} className="h-8 w-8 object-contain" />
+          <div className="md:col-span-6 lg:col-span-3 pr-0 lg:pr-4">
+             <Link href="/" className="flex flex-col items-start shrink-0 group mb-6">
+               <div className="flex items-center gap-1.5">
+                 <div className="bg-white p-1.5 rounded-xl shadow-[0_0_15px_rgba(255,255,255,0.2)] group-hover:shadow-[0_0_20px_rgba(220,38,38,0.4)] transition-shadow">
+                   <Image src="/logo.png" alt="ZCOMPUTER" width={50} height={50} className="h-10 w-10 object-contain" />
                  </div>
-                 <div className={`${montserrat.className} flex items-center select-none group-hover:scale-[1.02] transition-transform duration-300`}>
-                   <span className="text-red-500 text-xl font-black drop-shadow-[0_0_10px_rgba(220,38,38,0.5)] leading-none">Z</span>
-                   <span className="text-white text-xl font-black uppercase drop-shadow-[0_0_10px_rgba(255,255,255,0.2)] leading-none">COMPUTER</span>
+                 <div className="flex items-center gap-0.5 group-hover:scale-[1.02] transition-transform duration-300 select-none font-serif">
+                   <span className="text-[#cc0000] text-[58px] font-bold leading-none drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
+                     Z
+                   </span>
+                   <div className="flex flex-col justify-center pt-1">
+                     <span className="text-white text-[28px] font-bold uppercase tracking-[0.02em] leading-none drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)] mb-0.5">
+                       COMPUTER
+                     </span>
+                     <span className={`${montserrat.className} text-[#cc0000] font-black text-[8.5px] uppercase tracking-[0.05em] leading-none`}>
+                       PC GAMING - LAPTOP - WORKSTATION
+                     </span>
+                   </div>
                  </div>
                </div>
-               <span className={`${montserrat.className} text-red-400 text-[8px] font-black uppercase tracking-[0.1em] mt-1.5 ml-11`}>
-                 PC GAMING - LAPTOP
-               </span>
              </Link>
              
-             <p className="text-[13px] text-white/60 leading-relaxed mb-6 font-medium">
-               Build PC Like New Giá Cực Tốt tại ZCOMPUTER - PC Gaming, PC Đồ Họa, Linh Kiện PC với đa dạng mẫu mã và chất lượng tốt!
+             <p className="text-[13px] text-white/70 leading-relaxed mb-6 font-medium text-justify">
+               ZCOMPUTER - Hệ thống chuyên cung cấp PC, Laptop Cũ / Like New uy tín, chất lượng cao với mức giá tốt nhất tại khu vực TP.HCM.
              </p>
              
              <div>
                <p className="font-bold uppercase text-[12px] tracking-widest text-white/80 mb-3">THEO DÕI ZCOMPUTER TẠI</p>
                <div className="flex gap-2">
                  <a href="https://www.facebook.com/pcgamingthuduc" target="_blank" rel="noreferrer" className="w-8 h-8 rounded-full bg-[#3b5998] flex items-center justify-center text-white hover:-translate-y-1 hover:shadow-[0_5px_15px_rgba(59,89,152,0.4)] transition-all duration-300"><FaFacebookF size={14} /></a>
-                 <a href="#" className="w-8 h-8 rounded-full bg-[#ff0000] flex items-center justify-center text-white hover:-translate-y-1 hover:shadow-[0_5px_15px_rgba(255,0,0,0.4)] transition-all duration-300"><FaYoutube size={14} /></a>
+                 <a href="https://zalo.me/0977334415" target="_blank" rel="noreferrer" className="w-8 h-8 rounded-full bg-[#0068FF] flex items-center justify-center text-white hover:-translate-y-1 hover:shadow-[0_5px_15px_rgba(0,104,255,0.4)] transition-all duration-300">
+                   <span className="text-[11px] font-black tracking-wide mt-0.5">Zalo</span>
+                 </a>
                  <a href="https://vt.tiktok.com/ZSQxHwj4q/" target="_blank" rel="noreferrer" className="w-8 h-8 rounded-full bg-black border border-white/20 flex items-center justify-center text-white hover:-translate-y-1 hover:shadow-[0_5px_15px_rgba(0,0,0,0.4)] transition-all duration-300"><FaTiktok size={14} /></a>
                </div>
              </div>
           </div>
 
           {/* Col 2: DANH MỤC CŨ / LIKE NEW */}
-          <div>
+          <div className="md:col-span-3 lg:col-span-2">
             <h4 className="font-black uppercase mb-5 text-[14px] text-white tracking-wider">
               DANH MỤC CŨ/ LIKE NEW
             </h4>
@@ -105,36 +114,24 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Col 3: DANH MỤC NEW */}
-          <div>
-            <h4 className="font-black uppercase mb-5 text-[14px] text-white tracking-wider">
-              DANH MỤC NEW
-            </h4>
-            <ul className="space-y-3 text-[13px] text-white/60 font-medium">
-              <li><Link href="/category/pc-gaming-new" className="hover:text-red-400 transition-colors">PC Gaming New</Link></li>
-              <li><Link href="/category/pc-do-hoa" className="hover:text-red-400 transition-colors">PC Đồ Họa</Link></li>
-              <li><Link href="/category/linh-kien-pc-new" className="hover:text-red-400 transition-colors">Linh Kiện PC New</Link></li>
-              <li><Link href="/category/man-hinh-pc" className="hover:text-red-400 transition-colors">Màn Hình PC</Link></li>
-              <li><Link href="/category/vga-new" className="hover:text-red-400 transition-colors">VGA New</Link></li>
-            </ul>
-          </div>
 
-          {/* Col 4: CHÍNH SÁCH KHÁCH HÀNG */}
-          <div>
+
+          {/* Col 3: CHÍNH SÁCH TỔNG HỢP */}
+          <div className="md:col-span-3 lg:col-span-2">
             <h4 className="font-black uppercase mb-5 text-[14px] text-white tracking-wider">
-              CHÍNH SÁCH KHÁCH HÀNG
+              CHÍNH SÁCH TỔNG HỢP
             </h4>
             <ul className="space-y-3 text-[13px] text-white/60 font-medium">
-              <li><Link href="/tin-tuc/khuyen-mai" className="hover:text-red-400 transition-colors">Khuyến Mãi</Link></li>
-              <li><Link href="/chinh-sach-tra-gop" className="hover:text-red-400 transition-colors">Chính sách hỗ trợ trả góp</Link></li>
+              <li><Link href="/chinh-sach-bao-mat" className="hover:text-red-400 transition-colors">Chính sách bảo mật</Link></li>
               <li><Link href="/chinh-sach-van-chuyen" className="hover:text-red-400 transition-colors">Chính sách vận chuyển</Link></li>
               <li><Link href="/chinh-sach-bao-hanh" className="hover:text-red-400 transition-colors">Chính sách bảo hành</Link></li>
-              <li><Link href="/chinh-sach-bao-mat" className="hover:text-red-400 transition-colors">Chính sách bảo mật & điều khoản sử dụng</Link></li>
+              <li><Link href="/chinh-sach-doi-tra" className="hover:text-red-400 transition-colors">Chính sách đổi trả</Link></li>
+              <li><Link href="/chinh-sach-thanh-toan" className="hover:text-red-400 transition-colors">Chính sách thanh toán</Link></li>
             </ul>
           </div>
 
-          {/* Col 5: LIÊN HỆ */}
-          <div>
+          {/* Col 4: LIÊN HỆ */}
+          <div className="md:col-span-4 lg:col-span-2">
             <h4 className="font-black uppercase mb-5 text-[14px] text-white tracking-wider">
               LIÊN HỆ ZCOMPUTER
             </h4>
@@ -146,8 +143,8 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Col 6: CÔNG TY TNHH */}
-          <div className="lg:col-span-1">
+          {/* Col 5: CÔNG TY TNHH */}
+          <div className="md:col-span-8 lg:col-span-3 lg:pl-4">
             <h4 className="font-black uppercase mb-5 text-[14px] text-white tracking-wider">
               CÔNG TY TNHH TM DV ZCOM
             </h4>
@@ -157,10 +154,6 @@ export default function Footer() {
               <p>Máy tính chơi Game - Máy Tính Đồ Họa - Máy Tính Văn Phòng</p>
             </div>
             
-            <div className="flex flex-col gap-3">
-              <img src="https://theme.hstatic.net/1000026716/1000440777/14/logo-bct.png?v=296" alt="Đã thông báo bộ công thương" className="h-10 object-contain w-fit opacity-80 hover:opacity-100 transition-opacity" />
-              <img src="https://images.dmca.com/Badges/dmca_protected_sml_120n.png?ID=wp" alt="DMCA.com Protection Status" className="h-6 object-contain w-fit opacity-80 hover:opacity-100 transition-opacity" />
-            </div>
           </div>
 
         </div>
