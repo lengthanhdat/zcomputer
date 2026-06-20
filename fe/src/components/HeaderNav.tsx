@@ -47,7 +47,7 @@ export default function HeaderNav() {
           
           {/* SẢN PHẨM Link */}
           <li>
-            <Link href="/category/all" className="flex items-center gap-1 py-4 hover:text-red-400 hover:drop-shadow-[0_0_8px_rgba(239,68,68,0.5)] transition-all duration-300">
+            <Link href="/all" className="flex items-center gap-1 py-4 hover:text-red-400 hover:drop-shadow-[0_0_8px_rgba(239,68,68,0.5)] transition-all duration-300">
               <span className="uppercase relative inline-block">
                 Tất Cả Sản Phẩm
                 {/* Badge */}

@@ -171,7 +171,7 @@ export default function Header() {
                     return (
                       <li key={cat._id || Math.random()} className="border-b border-gray-100 pb-2">
                         <div className="flex items-center justify-between">
-                          <Link href={`/category/${cat.slug || ''}`} onClick={() => setMobileMenuOpen(false)} className="block py-1 flex-1 hover:text-primary transition-colors uppercase text-gray-800">
+                          <Link href={`/${cat.slug || ''}`} onClick={() => setMobileMenuOpen(false)} className="block py-1 flex-1 hover:text-primary transition-colors uppercase text-gray-800">
                             {cat.name || 'Category'}
                           </Link>
                           {children.length > 0 && (
@@ -189,7 +189,7 @@ export default function Header() {
                               <ul className="pl-4 border-l-2 border-red-100 space-y-3 py-2 text-sm font-medium text-gray-600">
                                 {children.map((child: any) => (
                                   <li key={child._id || Math.random()}>
-                                    <Link href={`/category/${child.slug || ''}`} onClick={() => setMobileMenuOpen(false)} className="block hover:text-primary transition-colors">
+                                    <Link href={`/${child.slug || ''}`} onClick={() => setMobileMenuOpen(false)} className="block hover:text-primary transition-colors">
                                       {child.name || 'Subcategory'}
                                     </Link>
                                   </li>
@@ -208,7 +208,7 @@ export default function Header() {
                 <h3 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">Thông tin</h3>
                 <ul className="space-y-4 font-bold text-sm text-gray-800">
                   <li>
-                    <Link href="/category/all" onClick={() => setMobileMenuOpen(false)} className="block py-1 hover:text-primary transition-colors">Tất cả sản phẩm</Link>
+                    <Link href="/all" onClick={() => setMobileMenuOpen(false)} className="block py-1 hover:text-primary transition-colors">Tất cả sản phẩm</Link>
                   </li>
                   <li>
                     <Link href="/chinh-sach-bao-hanh" onClick={() => setMobileMenuOpen(false)} className="block py-1 hover:text-primary transition-colors">Chính sách bảo hành</Link>

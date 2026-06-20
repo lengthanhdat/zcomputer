@@ -187,7 +187,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
               </div>
               <h2 className="text-2xl font-black text-gray-800 mb-2 uppercase tracking-wide">Không tìm thấy sản phẩm</h2>
               <p className="text-gray-500 text-lg">Rất tiếc, chúng tôi không tìm thấy sản phẩm nào phù hợp với từ khóa <span className="font-bold text-gray-800">"{query}"</span>.</p>
-              <Link href="/category/all" className="mt-6 px-6 py-2 bg-gray-100 hover:bg-gray-200 text-gray-800 font-bold rounded-lg transition-colors">Xóa bộ lọc</Link>
+              <Link href="/all" className="mt-6 px-6 py-2 bg-gray-100 hover:bg-gray-200 text-gray-800 font-bold rounded-lg transition-colors">Xóa bộ lọc</Link>
             </div>
           ) : (
             <>

@@ -107,10 +107,10 @@ export default function Footer() {
               DANH MỤC CŨ/ LIKE NEW
             </h4>
             <ul className="space-y-3 text-[13px] text-white/60 font-medium">
-              <li><Link href="/category/pc-gaming-cu" className="hover:text-red-400 transition-colors">PC Gaming Cũ</Link></li>
-              <li><Link href="/category/linh-kien-pc-cu" className="hover:text-red-400 transition-colors">Linh Kiện PC Cũ</Link></li>
-              <li><Link href="/category/vga-cu" className="hover:text-red-400 transition-colors">VGA Cũ</Link></li>
-              <li><Link href="/category/cpu-cu" className="hover:text-red-400 transition-colors">CPU Cũ</Link></li>
+              <li><Link href="/pc-gaming-cu" className="hover:text-red-400 transition-colors">PC Gaming Cũ</Link></li>
+              <li><Link href="/linh-kien-pc-cu" className="hover:text-red-400 transition-colors">Linh Kiện PC Cũ</Link></li>
+              <li><Link href="/vga-cu" className="hover:text-red-400 transition-colors">VGA Cũ</Link></li>
+              <li><Link href="/cpu-cu" className="hover:text-red-400 transition-colors">CPU Cũ</Link></li>
             </ul>
           </div>
 

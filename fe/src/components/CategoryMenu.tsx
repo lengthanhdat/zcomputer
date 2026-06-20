@@ -45,7 +45,7 @@ export default function CategoryMenu({ categories }: { categories: Category[] })
           >
             <div className="px-2 py-0.5">
               <Link
-                href={`/category/${cat.slug}`}
+                href={`/${cat.slug}`}
                 className={`flex items-center justify-between px-4 py-2 transition-all duration-300 rounded-lg ${isHovered ? 'bg-gradient-to-r from-red-600 to-red-500 text-white shadow-[0_4px_15px_rgba(239,68,68,0.3)] scale-[1.02]' : 'text-gray-700 hover:bg-red-50/50'}`}
               >
                 <div className="flex items-center gap-3">
@@ -62,7 +62,7 @@ export default function CategoryMenu({ categories }: { categories: Category[] })
                 {subCategories.map(sub => (
                   <Link
                     key={sub._id}
-                    href={`/category/${sub.slug}`}
+                    href={`/${sub.slug}`}
                     className="block px-6 py-2.5 text-sm font-medium text-gray-700 hover:text-red-600 hover:bg-red-50/80 hover:pl-8 transition-all duration-300"
                   >
                     {sub.name}

@@ -204,7 +204,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
         <div className="container mx-auto px-4 text-sm text-gray-500 flex gap-2 items-center overflow-x-auto hide-scrollbar whitespace-nowrap">
           <Link href="/" className="shrink-0 hover:text-primary transition-colors">Trang chủ</Link>
           <span className="shrink-0">/</span>
-          <Link href={`/category/${product.category_id?.slug || "all"}`} className="shrink-0 hover:text-primary transition-colors uppercase">
+          <Link href={`/${product.category_id?.slug || "all"}`} className="shrink-0 hover:text-primary transition-colors uppercase">
             {product.category_id?.name || "Sản phẩm"}
           </Link>
           <span className="shrink-0">/</span>
