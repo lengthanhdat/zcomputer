@@ -112,6 +112,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
     category_id: "",
     condition: "Đã qua sử dụng (Đẹp 99%)",
     isHotSale: false,
+    flashSalePrice: "",
     specs: { CPU: "", RAM: "", Storage: "", VGA: "", Screen: "" }
   });
 
@@ -163,6 +164,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
               category_id: product.category_id?._id || product.category_id || "",
               condition: product.condition || "Đã qua sử dụng (Đẹp 99%)",
               isHotSale: product.isHotSale || false,
+              flashSalePrice: product.flashSalePrice?.toString() || "",
               specs: {
                 CPU: product.specs?.CPU || product.specs?.cpu || "",
                 RAM: product.specs?.RAM || product.specs?.ram || "",
@@ -306,6 +308,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
         category_id: formData.category_id,
         condition: formData.condition,
         isHotSale: formData.isHotSale,
+        flashSalePrice: Number(formData.flashSalePrice) || 0,
         specs: formData.specs
       };
 
@@ -662,6 +665,23 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
                   <span className="text-sm font-bold text-gray-700">Hiển thị trong HOT SALE</span>
                 </label>
               </div>
+
+              {formData.isHotSale && (
+                <div className="mt-4 pt-4 border-t border-gray-100 animate-in fade-in slide-in-from-top-2">
+                  <label className="block text-sm font-bold text-orange-600 mb-2">Giá HOT SALE (VNĐ)</label>
+                  <div className="relative">
+                    <input 
+                      type="text" 
+                      name="flashSalePrice" 
+                      value={formData.flashSalePrice ? Number(formData.flashSalePrice).toLocaleString('vi-VN') : ""} 
+                      onChange={(e) => setFormData({...formData, flashSalePrice: e.target.value.replace(/\D/g, '')})}
+                      className="w-full pl-4 pr-12 py-3 bg-orange-50/50 border border-orange-200 rounded-xl outline-none focus:border-orange-500 focus:ring-4 focus:ring-orange-500/20 transition-all text-orange-700 font-bold"
+                      placeholder="Nhập giá khuyến mãi sốc..."
+                    />
+                    <span className="absolute right-4 top-1/2 -translate-y-1/2 text-orange-400 font-bold">đ</span>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
 
