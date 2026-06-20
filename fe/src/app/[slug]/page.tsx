@@ -195,7 +195,32 @@ export default async function DynamicRoutePage({ params }: { params: Promise<{ s
   if (categoryName || slug === 'all') {
     const products = await getCategoryProducts(slug);
     const finalCatName = categoryName || "Sản phẩm";
-    return <CategoryClient initialProducts={products} categoryName={finalCatName} />;
+    
+    const breadcrumbData = {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Trang chủ",
+          "item": process.env.NEXT_PUBLIC_FRONTEND_URL || "https://zcomputer.site"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": finalCatName,
+          "item": `${process.env.NEXT_PUBLIC_FRONTEND_URL || "https://zcomputer.site"}/${slug}`
+        }
+      ]
+    };
+
+    return (
+      <>
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbData) }} />
+        <CategoryClient initialProducts={products} categoryName={finalCatName} />
+      </>
+    );
   }
   
   // If neither product nor category, show 404
