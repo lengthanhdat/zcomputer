@@ -497,37 +497,12 @@ export default function HomeClient() {
         </div>
       </section>
 
-      {/* Features - Promax Design */}
-      <section className="bg-[#0a0a0a] text-white py-24 relative overflow-hidden border-t border-gray-800">
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-red-600/10 rounded-full blur-[100px] pointer-events-none"></div>
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-blue-600/10 rounded-full blur-[100px] pointer-events-none"></div>
-        <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-5 mix-blend-overlay"></div>
-        
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8">
-            <Feature icon={<ShieldCheck size={36} />} title="Bảo Hành Tận Nơi" body="Cam kết bảo hành chính hãng. Hỗ trợ kỹ thuật tại nhà nhanh chóng." />
-            <Feature icon={<Zap size={36} />} title="Cấu Hình Cực Đỉnh" body="Chỉ cung cấp những linh kiện hiệu năng cao nhất, đã qua kiểm tra nghiêm ngặt." bordered />
-            <Feature icon={<Truck size={36} />} title="Giao Hàng Hỏa Tốc" body="Giao hàng tận nơi. Đóng gói an toàn tuyệt đối chống sốc." />
-          </div>
-        </div>
-      </section>
+
     </div>
   );
 }
 
-function Feature({ icon, title, body, bordered = false }: { icon: ReactNode; title: string; body: string; bordered?: boolean }) {
-  return (
-    <div className={`flex flex-col items-center text-center px-4 group ${bordered ? "md:border-x border-gray-800" : ""}`}>
-      <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-gray-800 to-gray-900 border border-gray-700/50 text-white flex items-center justify-center mb-6 group-hover:scale-110 group-hover:border-red-500/50 group-hover:shadow-[0_0_30px_rgb(220,38,38,0.2)] transition-all duration-500">
-        <div className="group-hover:text-red-500 transition-colors duration-500">
-          {icon}
-        </div>
-      </div>
-      <h4 className="text-xl font-black text-white mb-3 uppercase tracking-widest">{title}</h4>
-      <p className="text-gray-400 text-sm leading-relaxed max-w-sm">{body}</p>
-    </div>
-  );
-}
+
 
 function ProductCard({ product }: { product: Product }) {
   const isHotSaleActive = !!(product.isHotSale && product.flashSalePrice && product.flashSalePrice < product.price);
