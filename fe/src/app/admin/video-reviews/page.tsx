@@ -5,6 +5,7 @@ import { Plus, Trash2, Edit, Play, Link as LinkIcon, Box } from "lucide-react";
 import toast from "react-hot-toast";
 import { fetchApi } from "@/lib/api";
 import Image from "next/image";
+import { useAuthStore } from "@/store/useAuthStore";
 
 interface VideoReview {
   _id: string;
@@ -86,8 +87,9 @@ export default function AdminVideoReviewsPage() {
 
     try {
       // Upload thẳng tới backend để bypass giới hạn 10MB của Next.js proxy
-      const token = localStorage.getItem("token");
-      const res = await fetch("/api/upload/video", {
+      const token = useAuthStore.getState().token;
+      const apiBase = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:5000";
+      const res = await fetch(`${apiBase}/api/upload/video`, {
         method: "POST",
         headers: token ? { Authorization: `Bearer ${token}` } : {},
         body: data,
