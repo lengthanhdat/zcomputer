@@ -61,21 +61,21 @@ export default function Header() {
             }}
           >
             <div className="absolute inset-0 bg-red-500/10 blur-[20px] rounded-full group-hover:bg-red-500/20 transition-all duration-500 pointer-events-none"></div>
-            <Image src="/logo.png" alt="Z" width={80} height={80} priority className="h-14 w-14 sm:h-[68px] sm:w-[68px] object-contain group-hover:scale-105 transition-all duration-300 drop-shadow-md relative z-10" />
+            <Image src="/logo.png" alt="Z" width={80} height={80} priority className="h-10 w-10 sm:h-[68px] sm:w-[68px] object-contain group-hover:scale-105 transition-all duration-300 drop-shadow-md relative z-10" />
             
             {/* New Storefront-style Text Logo */}
             <div className="flex items-center gap-0.5 group-hover:scale-[1.02] transition-transform duration-300 select-none relative z-10 font-serif">
-              <span className="text-[#cc0000] text-[40px] sm:text-[50px] md:text-[58px] font-bold leading-none">
+              <span className="text-[#cc0000] text-[28px] sm:text-[50px] md:text-[58px] font-bold leading-none">
                 Z
               </span>
-              <div className="flex flex-col justify-center pt-1">
-                <span className="text-gray-900 text-[20px] sm:text-[24px] md:text-[28px] font-bold uppercase tracking-[0.02em] leading-none mb-0.5">
+              <div className="flex flex-col justify-center pt-0.5 sm:pt-1">
+                <span className="text-gray-900 text-[14px] sm:text-[24px] md:text-[28px] font-bold uppercase tracking-[0.02em] leading-none mb-0.5">
                   COMPUTER
                 </span>
-                <span className={`${montserrat.className} text-[#cc0000] font-black text-[6px] sm:text-[7.5px] md:text-[8.5px] uppercase tracking-[0.05em] leading-none hidden sm:block`}>
+                <span className={`${montserrat.className} text-[#cc0000] font-black text-[5px] sm:text-[7.5px] md:text-[8.5px] uppercase tracking-[0.05em] leading-none hidden sm:block`}>
                   PC GAMING - LAPTOP - WORKSTATION
                 </span>
-                <span className={`${montserrat.className} text-[#cc0000] font-black text-[6px] uppercase tracking-[0.05em] leading-none sm:hidden`}>
+                <span className={`${montserrat.className} text-[#cc0000] font-black text-[4.5px] uppercase tracking-[0.05em] leading-none sm:hidden`}>
                   PC GAMING - LAPTOP
                 </span>
               </div>
