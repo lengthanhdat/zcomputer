@@ -7,49 +7,7 @@ import { fetchApi } from "@/lib/api";
 
 const CATEGORIES = ["Tất cả", "Tin công nghệ", "Khuyến mãi", "Đánh giá sản phẩm", "Thủ thuật"];
 
-// Mock data to show beautiful design when backend has no data yet
-const MOCK_NEWS = [
-  {
-    _id: "1",
-    slug: "danh-gia-laptop-gaming-acer-nitro-5-2026",
-    title: "Đánh Giá Acer Nitro 5 2026: Vua Laptop Gaming Phân Khúc Dưới 25 Triệu",
-    summary: "Acer Nitro 5 phiên bản 2026 mang đến một diện mạo hoàn toàn mới với thiết kế hầm hố, tản nhiệt nâng cấp và card đồ họa RTX 4050 siêu mạnh mẽ cho sinh viên và game thủ.",
-    thumbnail: "https://images.unsplash.com/photo-1593640408182-31c70c8268f5?q=80&w=1000&auto=format&fit=crop",
-    category: "Đánh giá sản phẩm",
-    views: 1250,
-    createdAt: new Date().toISOString(),
-  },
-  {
-    _id: "2",
-    slug: "huong-dan-toi-uu-hoa-windows-11-de-choi-game-muot-ma-hon",
-    title: "Hướng Dẫn Tối Ưu Hóa Windows 11 Để Chơi Game Mượt Mà Không Bị Tụt FPS",
-    summary: "Chỉ với 5 bước đơn giản, bạn có thể giải phóng RAM, vô hiệu hóa các dịch vụ không cần thiết và tối ưu hóa Windows 11 để mang lại trải nghiệm chiến game mượt mà nhất.",
-    thumbnail: "https://images.unsplash.com/photo-1626218174358-7769486c4b79?q=80&w=1000&auto=format&fit=crop",
-    category: "Thủ thuật",
-    views: 890,
-    createdAt: new Date(Date.now() - 86400000 * 2).toISOString(),
-  },
-  {
-    _id: "3",
-    slug: "nvidia-ra-mat-rtx-5090-suc-manh-khung-khiep",
-    title: "NVIDIA Chính Thức Ra Mắt RTX 5090: Sức Mạnh Đồ Họa Vượt Xa Mọi Giới Hạn",
-    summary: "Kiến trúc Blackwell mới của NVIDIA đã chính thức ra mắt với siêu phẩm RTX 5090, hứa hẹn hiệu năng chơi game 4K 144Hz hoàn hảo và khả năng xử lý AI vô song.",
-    thumbnail: "https://images.unsplash.com/photo-1587202372634-32705e3bf49c?q=80&w=1000&auto=format&fit=crop",
-    category: "Tin công nghệ",
-    views: 3400,
-    createdAt: new Date(Date.now() - 86400000 * 5).toISOString(),
-  },
-  {
-    _id: "4",
-    slug: "chuong-trinh-khuyen-mai-back-to-school-2026",
-    title: "Khuyến Mãi Back To School 2026: Giảm Giá Laptop Lên Đến 5 Triệu Đồng",
-    summary: "Hòa cùng không khí tựu trường, ZCOMPUTER tung ra hàng ngàn deal sốc dành cho học sinh, sinh viên. Mua laptop tặng ngay balo, chuột gaming và voucher cực giá trị.",
-    thumbnail: "https://images.unsplash.com/photo-1512756290469-ec264b7fbf87?q=80&w=1000&auto=format&fit=crop",
-    category: "Khuyến mãi",
-    views: 5210,
-    createdAt: new Date(Date.now() - 86400000 * 10).toISOString(),
-  }
-];
+
 
 export default function NewsClient() {
   const [news, setNews] = useState<any[]>([]);
@@ -64,17 +22,16 @@ export default function NewsClient() {
         const res = await fetchApi(`/news${query}`);
         if (res.ok) {
           const data = await res.json();
-          // Fallback to MOCK_NEWS if DB is empty to show the design
           if (data.data && data.data.length > 0) {
             setNews(data.data);
           } else {
-            setNews(activeCategory === "Tất cả" ? MOCK_NEWS : MOCK_NEWS.filter(n => n.category === activeCategory));
+            setNews([]);
           }
         } else {
-          setNews(activeCategory === "Tất cả" ? MOCK_NEWS : MOCK_NEWS.filter(n => n.category === activeCategory));
+          setNews([]);
         }
       } catch (error) {
-        setNews(activeCategory === "Tất cả" ? MOCK_NEWS : MOCK_NEWS.filter(n => n.category === activeCategory));
+        setNews([]);
       } finally {
         setLoading(false);
       }

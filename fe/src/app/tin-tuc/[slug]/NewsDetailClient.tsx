@@ -6,40 +6,8 @@ import { Calendar, Eye, User, ArrowLeft, Share2, Link as LinkIcon, TrendingUp } 
 import Link from "next/link";
 import toast from "react-hot-toast";
 
-// Giả lập mock data để demo (Giống bên ngoài)
-const MOCK_NEWS_DETAIL = {
-  _id: "1",
-  slug: "danh-gia-laptop-gaming-acer-nitro-5-2026",
-  title: "Đánh Giá Acer Nitro 5 2026: Vua Laptop Gaming Phân Khúc Dưới 25 Triệu",
-  summary: "Acer Nitro 5 phiên bản 2026 mang đến một diện mạo hoàn toàn mới với thiết kế hầm hố, tản nhiệt nâng cấp và card đồ họa RTX 4050 siêu mạnh mẽ cho sinh viên và game thủ.",
-  content: `
-    <p>Acer Nitro 5 từ lâu đã được mệnh danh là "chiếc laptop quốc dân" dành cho game thủ học sinh, sinh viên nhờ cấu hình cao trên mức giá cực kỳ phải chăng. Phiên bản 2026 mới nhất đã cập bến ZCOMPUTER với vô số những nâng cấp đáng giá, đặc biệt là sự xuất hiện của dòng card đồ họa RTX 40 Series mới nhất từ NVIDIA.</p>
-    
-    <br/>
-    <h2>1. Thiết kế mới: Hầm hố hơn, tản nhiệt xịn hơn</h2>
-    <p>Không còn những đường cắt xẻ màu đỏ quá lòe loẹt như thế hệ cũ, Acer Nitro 5 2026 mang trên mình một lớp áo đen tuyền bí ẩn với các đường vát chéo đậm chất khoa học viễn tưởng. Đặc biệt, hệ thống tản nhiệt phía sau đã được mở rộng đáng kể.</p>
-    <img src="https://images.unsplash.com/photo-1593640408182-31c70c8268f5?q=80&w=1000" alt="Acer Nitro 5 Design" style="border-radius: 12px; margin: 20px 0; width: 100%;" />
-    
-    <h2>2. Hiệu năng vượt rào với RTX 4050</h2>
-    <p>Sức mạnh thực sự của chiếc máy này nằm ở bộ vi xử lý Intel Core i5 Gen 13/14 kết hợp cùng NVIDIA GeForce RTX 4050 6GB. Nhờ công nghệ DLSS 3 và Frame Generation, các tựa game AAA nặng đô như Cyberpunk 2077 hay Hogwarts Legacy đều có thể chơi mượt mà ở mức High Setting (60+ FPS).</p>
-    
-    <blockquote style="border-left: 4px solid #ef4444; padding-left: 16px; margin: 24px 0; font-style: italic; color: #4b5563; background: #fef2f2; padding: 16px;">
-      "Trong bài test của ZCOMPUTER, nhiệt độ CPU khi full load chỉ dừng ở mức 82 độ C, một con số cực kỳ ấn tượng so với các thế hệ trước."
-    </blockquote>
-    
-    <h2>3. Màn hình 144Hz chuẩn E-Sport</h2>
-    <p>Sẽ là một thiếu sót lớn nếu không nhắc đến chiếc màn hình 15.6 inch FHD IPS 144Hz. Mặc dù độ phủ màu sRGB chỉ dừng ở mức 65% (chưa thật sự phù hợp cho dân thiết kế đồ họa chuyên nghiệp), nhưng đối với game thủ FPS (CS2, Valorant), tần số quét 144Hz mang lại lợi thế quá rõ rệt.</p>
-    
-    <h2>4. Tổng kết</h2>
-    <p>Trong tầm giá dưới 25 triệu đồng, Acer Nitro 5 2026 hiện đang là đối thủ đáng gờm nhất. Nó cân bằng hoàn hảo giữa hiệu năng đỉnh cao, hệ thống tản nhiệt tuyệt vời và một thiết kế đã trưởng thành hơn rất nhiều.</p>
-    <p><strong>Nhanh tay đến ZCOMPUTER để trải nghiệm trực tiếp siêu phẩm này nhé!</strong></p>
-  `,
-  thumbnail: "https://images.unsplash.com/photo-1593640408182-31c70c8268f5?q=80&w=1000&auto=format&fit=crop",
-  category: "Đánh giá sản phẩm",
-  views: 1250,
-  createdAt: new Date().toISOString(),
-  author: { name: "Admin ZComputer" }
-};
+
+
 
 export default function NewsDetailClient({ slug }: { slug: string }) {
   const [article, setArticle] = useState<any>(null);
@@ -69,11 +37,10 @@ export default function NewsDetailClient({ slug }: { slug: string }) {
           const data = await res.json();
           setArticle(data);
         } else {
-          // Fallback to mock data for presentation
-          setArticle({...MOCK_NEWS_DETAIL, title: `Chi tiết tin tức: ${slug.replace(/-/g, ' ')}`});
+          setArticle(null);
         }
       } catch (error) {
-        setArticle({...MOCK_NEWS_DETAIL, title: `Chi tiết tin tức: ${slug.replace(/-/g, ' ')}`});
+        setArticle(null);
       } finally {
         setLoading(false);
       }
