@@ -292,7 +292,6 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
     // Khởi tạo các giá trị mới
     const newSpecs = { ...formData.specs };
     let newBrand = formData.brand;
-    let newCategoryId = formData.category_id;
     let extractedCount = 0;
     
     const upperName = formData.name.toUpperCase();
@@ -306,30 +305,8 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
         break;
       }
     }
-    
-    // 2. Nhận diện Danh mục (Category)
-    if (categories.length > 0) {
-      const sortedCategories = [...categories].sort((a, b) => b.name.length - a.name.length);
-      
-      const directMatch = sortedCategories.find(c => upperName.includes(c.name.toUpperCase()));
-      if (directMatch) {
-        newCategoryId = directMatch._id;
-        extractedCount++;
-      } else {
-        if (upperName.includes("BỘ MÁY TÍNH") || upperName.includes("PC")) {
-          const pcCat = sortedCategories.find(c => c.name.toUpperCase().includes("PC") || c.name.toUpperCase().includes("MÁY TÍNH"));
-          if (pcCat) { newCategoryId = pcCat._id; extractedCount++; }
-        } else if (upperName.includes("LAPTOP")) {
-          const lapCat = sortedCategories.find(c => c.name.toUpperCase().includes("LAPTOP"));
-          if (lapCat) { newCategoryId = lapCat._id; extractedCount++; }
-        } else if (upperName.includes("MÀN HÌNH")) {
-          const monCat = sortedCategories.find(c => c.name.toUpperCase().includes("MÀN HÌNH"));
-          if (monCat) { newCategoryId = monCat._id; extractedCount++; }
-        }
-      }
-    }
 
-    // 3. Nhận diện Thông số kỹ thuật (Specs)
+    // 2. Nhận diện Thông số kỹ thuật (Specs)
     const parts = formData.name.split('/').map(p => p.trim());
     parts.forEach(part => {
       const upperPart = part.toUpperCase();
@@ -364,8 +341,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
       setFormData(prev => ({ 
         ...prev, 
         specs: newSpecs,
-        brand: newBrand,
-        category_id: newCategoryId
+        brand: newBrand
       }));
       toast.success(`Đã tự động điền ${extractedCount} thông tin từ tên sản phẩm!`);
     } else {
