@@ -216,6 +216,7 @@ export default function HomeClient() {
 
   return (
     <div className="bg-[#f8f9fa] min-h-screen text-gray-900 selection:bg-primary selection:text-white">
+      <h1 suppressHydrationWarning className="sr-only">ZCOMPUTER - PC Gaming, Laptop, Workstation</h1>
       {/* Banner */}
       <section className="container mx-auto px-2 md:px-4 pt-4 pb-6 md:pt-8 md:pb-12">
         {banners === null ? (

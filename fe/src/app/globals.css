@@ -35,3 +35,127 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* === VIETNAMESE TRANSLATION FOR REACT-QUILL === */
+.ql-snow .ql-picker.ql-size .ql-picker-label[data-value="small"]::before,
+.ql-snow .ql-picker.ql-size .ql-picker-item[data-value="small"]::before {
+  content: 'Nhỏ' !important;
+}
+.ql-snow .ql-picker.ql-size .ql-picker-label::before,
+.ql-snow .ql-picker.ql-size .ql-picker-item::before {
+  content: 'Bình thường' !important;
+}
+.ql-snow .ql-picker.ql-size .ql-picker-label[data-value="large"]::before,
+.ql-snow .ql-picker.ql-size .ql-picker-item[data-value="large"]::before {
+  content: 'Lớn' !important;
+}
+.ql-snow .ql-picker.ql-size .ql-picker-label[data-value="huge"]::before,
+.ql-snow .ql-picker.ql-size .ql-picker-item[data-value="huge"]::before {
+  content: 'Rất lớn' !important;
+}
+
+.ql-snow .ql-picker.ql-header .ql-picker-label::before,
+.ql-snow .ql-picker.ql-header .ql-picker-item::before {
+  content: 'Đoạn văn' !important;
+}
+.ql-snow .ql-picker.ql-header .ql-picker-label[data-value="1"]::before,
+.ql-snow .ql-picker.ql-header .ql-picker-item[data-value="1"]::before {
+  content: 'Tiêu đề 1' !important;
+}
+.ql-snow .ql-picker.ql-header .ql-picker-label[data-value="2"]::before,
+.ql-snow .ql-picker.ql-header .ql-picker-item[data-value="2"]::before {
+  content: 'Tiêu đề 2' !important;
+}
+.ql-snow .ql-picker.ql-header .ql-picker-label[data-value="3"]::before,
+.ql-snow .ql-picker.ql-header .ql-picker-item[data-value="3"]::before {
+  content: 'Tiêu đề 3' !important;
+}
+.ql-snow .ql-picker.ql-header .ql-picker-label[data-value="4"]::before,
+.ql-snow .ql-picker.ql-header .ql-picker-item[data-value="4"]::before {
+  content: 'Tiêu đề 4' !important;
+}
+.ql-snow .ql-picker.ql-header .ql-picker-label[data-value="5"]::before,
+.ql-snow .ql-picker.ql-header .ql-picker-item[data-value="5"]::before {
+  content: 'Tiêu đề 5' !important;
+}
+.ql-snow .ql-picker.ql-header .ql-picker-label[data-value="6"]::before,
+.ql-snow .ql-picker.ql-header .ql-picker-item[data-value="6"]::before {
+  content: 'Tiêu đề 6' !important;
+}
+
+.ql-snow .ql-picker.ql-font .ql-picker-label::before,
+.ql-snow .ql-picker.ql-font .ql-picker-item::before {
+  content: 'Phông mặc định' !important;
+}
+
+/* Custom Fonts */
+.ql-font-arial { font-family: Arial, sans-serif; }
+.ql-snow .ql-picker.ql-font .ql-picker-label[data-value="arial"]::before,
+.ql-snow .ql-picker.ql-font .ql-picker-item[data-value="arial"]::before {
+  content: 'Arial' !important;
+  font-family: Arial, sans-serif;
+}
+
+.ql-font-times-new-roman { font-family: 'Times New Roman', serif; }
+.ql-snow .ql-picker.ql-font .ql-picker-label[data-value="times-new-roman"]::before,
+.ql-snow .ql-picker.ql-font .ql-picker-item[data-value="times-new-roman"]::before {
+  content: 'Times New Roman' !important;
+  font-family: 'Times New Roman', serif;
+}
+
+.ql-font-tahoma { font-family: Tahoma, sans-serif; }
+.ql-snow .ql-picker.ql-font .ql-picker-label[data-value="tahoma"]::before,
+.ql-snow .ql-picker.ql-font .ql-picker-item[data-value="tahoma"]::before {
+  content: 'Tahoma' !important;
+  font-family: Tahoma, sans-serif;
+}
+
+.ql-font-verdana { font-family: Verdana, sans-serif; }
+.ql-snow .ql-picker.ql-font .ql-picker-label[data-value="verdana"]::before,
+.ql-snow .ql-picker.ql-font .ql-picker-item[data-value="verdana"]::before {
+  content: 'Verdana' !important;
+  font-family: Verdana, sans-serif;
+}
+
+.ql-font-courier-new { font-family: 'Courier New', monospace; }
+.ql-snow .ql-picker.ql-font .ql-picker-label[data-value="courier-new"]::before,
+.ql-snow .ql-picker.ql-font .ql-picker-item[data-value="courier-new"]::before {
+  content: 'Courier New' !important;
+  font-family: 'Courier New', monospace;
+}
+
+.ql-snow .ql-tooltip[data-mode="link"]::before {
+  content: "Nhập đường dẫn:" !important;
+}
+.ql-snow .ql-tooltip.ql-editing a.ql-action::after {
+  border-right: 0px !important;
+  content: 'Lưu' !important;
+  padding-right: 0px !important;
+}
+.ql-snow .ql-tooltip[data-mode="video"]::before {
+  content: "Nhập link video:" !important;
+}
+.ql-snow .ql-tooltip[data-mode="formula"]::before {
+  content: "Nhập công thức toán:" !important;
+}
+.ql-snow .ql-tooltip a.ql-action::after {
+  content: 'Sửa' !important;
+}
+.ql-snow .ql-tooltip a.ql-remove::before {
+  content: 'Xóa' !important;
+}
+
+/* Fix squished toolbar dropdowns */
+.ql-toolbar.ql-snow .ql-picker.ql-font {
+  width: 170px !important;
+}
+.ql-toolbar.ql-snow .ql-picker.ql-header {
+  width: 130px !important;
+}
+.ql-toolbar.ql-snow .ql-picker.ql-size {
+  width: 120px !important;
+}
+.ql-toolbar.ql-snow .ql-picker-label {
+  padding-right: 18px !important;
+  white-space: nowrap !important;
+}
