@@ -1,0 +1,302 @@
+"use client";
+
+import { useState, useEffect } from "react";
+import { fetchApi } from "@/lib/api";
+import { Calendar, Eye, User, ArrowLeft, Share2, Link as LinkIcon, TrendingUp } from "lucide-react";
+import Link from "next/link";
+import toast from "react-hot-toast";
+
+// Giả lập mock data để demo (Giống bên ngoài)
+const MOCK_NEWS_DETAIL = {
+  _id: "1",
+  slug: "danh-gia-laptop-gaming-acer-nitro-5-2026",
+  title: "Đánh Giá Acer Nitro 5 2026: Vua Laptop Gaming Phân Khúc Dưới 25 Triệu",
+  summary: "Acer Nitro 5 phiên bản 2026 mang đến một diện mạo hoàn toàn mới với thiết kế hầm hố, tản nhiệt nâng cấp và card đồ họa RTX 4050 siêu mạnh mẽ cho sinh viên và game thủ.",
+  content: `
+    <p>Acer Nitro 5 từ lâu đã được mệnh danh là "chiếc laptop quốc dân" dành cho game thủ học sinh, sinh viên nhờ cấu hình cao trên mức giá cực kỳ phải chăng. Phiên bản 2026 mới nhất đã cập bến ZCOMPUTER với vô số những nâng cấp đáng giá, đặc biệt là sự xuất hiện của dòng card đồ họa RTX 40 Series mới nhất từ NVIDIA.</p>
+    
+    <br/>
+    <h2>1. Thiết kế mới: Hầm hố hơn, tản nhiệt xịn hơn</h2>
+    <p>Không còn những đường cắt xẻ màu đỏ quá lòe loẹt như thế hệ cũ, Acer Nitro 5 2026 mang trên mình một lớp áo đen tuyền bí ẩn với các đường vát chéo đậm chất khoa học viễn tưởng. Đặc biệt, hệ thống tản nhiệt phía sau đã được mở rộng đáng kể.</p>
+    <img src="https://images.unsplash.com/photo-1593640408182-31c70c8268f5?q=80&w=1000" alt="Acer Nitro 5 Design" style="border-radius: 12px; margin: 20px 0; width: 100%;" />
+    
+    <h2>2. Hiệu năng vượt rào với RTX 4050</h2>
+    <p>Sức mạnh thực sự của chiếc máy này nằm ở bộ vi xử lý Intel Core i5 Gen 13/14 kết hợp cùng NVIDIA GeForce RTX 4050 6GB. Nhờ công nghệ DLSS 3 và Frame Generation, các tựa game AAA nặng đô như Cyberpunk 2077 hay Hogwarts Legacy đều có thể chơi mượt mà ở mức High Setting (60+ FPS).</p>
+    
+    <blockquote style="border-left: 4px solid #ef4444; padding-left: 16px; margin: 24px 0; font-style: italic; color: #4b5563; background: #fef2f2; padding: 16px;">
+      "Trong bài test của ZCOMPUTER, nhiệt độ CPU khi full load chỉ dừng ở mức 82 độ C, một con số cực kỳ ấn tượng so với các thế hệ trước."
+    </blockquote>
+    
+    <h2>3. Màn hình 144Hz chuẩn E-Sport</h2>
+    <p>Sẽ là một thiếu sót lớn nếu không nhắc đến chiếc màn hình 15.6 inch FHD IPS 144Hz. Mặc dù độ phủ màu sRGB chỉ dừng ở mức 65% (chưa thật sự phù hợp cho dân thiết kế đồ họa chuyên nghiệp), nhưng đối với game thủ FPS (CS2, Valorant), tần số quét 144Hz mang lại lợi thế quá rõ rệt.</p>
+    
+    <h2>4. Tổng kết</h2>
+    <p>Trong tầm giá dưới 25 triệu đồng, Acer Nitro 5 2026 hiện đang là đối thủ đáng gờm nhất. Nó cân bằng hoàn hảo giữa hiệu năng đỉnh cao, hệ thống tản nhiệt tuyệt vời và một thiết kế đã trưởng thành hơn rất nhiều.</p>
+    <p><strong>Nhanh tay đến ZCOMPUTER để trải nghiệm trực tiếp siêu phẩm này nhé!</strong></p>
+  `,
+  thumbnail: "https://images.unsplash.com/photo-1593640408182-31c70c8268f5?q=80&w=1000&auto=format&fit=crop",
+  category: "Đánh giá sản phẩm",
+  views: 1250,
+  createdAt: new Date().toISOString(),
+  author: { name: "Admin ZComputer" }
+};
+
+export default function NewsDetailClient({ slug }: { slug: string }) {
+  const [article, setArticle] = useState<any>(null);
+  const [recentNews, setRecentNews] = useState<any[]>([]);
+  const [email, setEmail] = useState("");
+  const [subscribing, setSubscribing] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const loadNewsDetail = async () => {
+      setLoading(true);
+      
+      if (slug === "preview") {
+        const previewData = localStorage.getItem("news_preview");
+        if (previewData) {
+          try {
+            setArticle(JSON.parse(previewData));
+          } catch (error) {}
+        }
+        setLoading(false);
+        return;
+      }
+
+      try {
+        const res = await fetchApi(`/news/${slug}`);
+        if (res.ok) {
+          const data = await res.json();
+          setArticle(data);
+        } else {
+          // Fallback to mock data for presentation
+          setArticle({...MOCK_NEWS_DETAIL, title: `Chi tiết tin tức: ${slug.replace(/-/g, ' ')}`});
+        }
+      } catch (error) {
+        setArticle({...MOCK_NEWS_DETAIL, title: `Chi tiết tin tức: ${slug.replace(/-/g, ' ')}`});
+      } finally {
+        setLoading(false);
+      }
+
+      // Fetch related/recent news
+      try {
+        const recentRes = await fetchApi(`/news?limit=5`);
+        if (recentRes.ok) {
+          const recentData = await recentRes.json();
+          if (recentData.data) {
+            setRecentNews(recentData.data.filter((n: any) => n.slug !== slug).slice(0, 4));
+          }
+        }
+      } catch (error) {}
+    };
+    loadNewsDetail();
+  }, [slug]);
+
+  const copyLink = () => {
+    navigator.clipboard.writeText(window.location.href);
+    toast.success('Đã sao chép đường dẫn bài viết!');
+  };
+
+  const formatDate = (dateString: string) => {
+    const d = new Date(dateString);
+    return new Intl.DateTimeFormat('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' }).format(d);
+  };
+
+  const handleSubscribe = async () => {
+    if (!email || !/\S+@\S+\.\S+/.test(email)) {
+      return toast.error("Vui lòng nhập một địa chỉ email hợp lệ!");
+    }
+    setSubscribing(true);
+    try {
+      const res = await fetchApi('/subscribers', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email })
+      });
+      const data = await res.json();
+      if (res.ok) {
+        toast.success(data.message || "Đăng ký nhận tin thành công!");
+        setEmail("");
+      } else {
+        toast.error(data.message || "Đăng ký thất bại");
+      }
+    } catch (error) {
+      toast.error("Lỗi khi kết nối đến máy chủ");
+    } finally {
+      setSubscribing(false);
+    }
+  };
+
+  const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:5000";
+  const getImageUrl = (url: string) => {
+    if (!url) return "https://via.placeholder.com/800x450?text=No+Image";
+    if (url.startsWith('http') || url.startsWith('data:')) return url;
+    return `${API_BASE}${url}`;
+  };
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center py-40 min-h-[60vh]">
+        <div className="w-12 h-12 border-4 border-red-500/30 border-t-red-600 rounded-full animate-spin"></div>
+      </div>
+    );
+  }
+
+  if (!article) {
+    return (
+      <div className="container mx-auto px-4 py-20 text-center min-h-[60vh] flex flex-col justify-center items-center">
+        <h2 className="text-3xl font-bold mb-4">Không tìm thấy bài viết!</h2>
+        <p className="text-gray-500 mb-8">Bài viết bạn đang tìm có thể đã bị xóa hoặc đường dẫn không đúng.</p>
+        <Link href="/tin-tuc" className="bg-red-600 text-white px-6 py-3 rounded-lg font-bold hover:bg-red-700 transition">
+          Về trang tin tức
+        </Link>
+      </div>
+    );
+  }
+
+  return (
+    <div className="bg-[#f8f9fa] min-h-screen pb-20">
+      {slug === "preview" && (
+        <div className="bg-yellow-500 text-black text-center font-bold py-2 shadow-lg fixed top-0 w-full z-50 flex items-center justify-center gap-2">
+          <Eye size={20} /> CHẾ ĐỘ XEM TRƯỚC (PREVIEW MODE)
+        </div>
+      )}
+      {/* Hero Section */}
+      <div className={`relative h-[40vh] md:h-[50vh] lg:h-[60vh] w-full bg-black ${slug === "preview" ? 'mt-10' : ''}`}>
+        <div className="absolute inset-0 z-0">
+          <img 
+            src={getImageUrl(article.thumbnail)} 
+            alt={article.title} 
+            className="w-full h-full object-cover opacity-40"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#f8f9fa] via-black/50 to-transparent"></div>
+        </div>
+        
+        <div className="container mx-auto px-4 h-full flex flex-col justify-end pb-12 md:pb-20 relative z-10">
+          <Link href="/tin-tuc" className="inline-flex items-center text-white/80 hover:text-white mb-6 font-medium text-sm transition-colors w-max">
+            <ArrowLeft size={16} className="mr-2" /> Trở về danh sách
+          </Link>
+          
+          <div className="inline-flex mb-4">
+            <span className="bg-red-600 text-white font-bold text-xs uppercase px-3 py-1.5 rounded shadow-lg">
+              {article.category}
+            </span>
+          </div>
+          
+          <h1 className="text-3xl md:text-5xl lg:text-6xl font-black text-white leading-tight mb-6 max-w-4xl drop-shadow-md">
+            {article.title}
+          </h1>
+          
+          <div className="flex flex-wrap items-center gap-6 text-gray-300 text-sm font-medium">
+            <div className="flex items-center gap-2">
+              <User size={16} /> {article.authorName || article.author?.name || "ZComputer"}
+            </div>
+            <div className="flex items-center gap-2">
+              <Calendar size={16} /> {formatDate(article.createdAt)}
+            </div>
+            <div className="flex items-center gap-2">
+              <Eye size={16} /> {article.views} lượt xem
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <div className="container mx-auto px-4 relative z-20 -mt-8 md:-mt-12">
+        <div className="flex flex-col lg:flex-row gap-8 lg:gap-12">
+          
+          {/* Article Body */}
+          <div className="lg:w-8/12 xl:w-9/12 min-w-0 bg-white rounded-2xl md:rounded-[2rem] p-6 md:p-10 lg:p-16 shadow-[0_10px_40px_rgba(0,0,0,0.05)]">
+            {/* Summary Box */}
+            <div className="bg-red-50 border-l-4 border-red-500 p-6 rounded-r-xl mb-10 text-gray-800 text-lg font-medium italic break-words">
+              {article.summary}
+            </div>
+            
+            {/* Rich Text Content */}
+            <div 
+              className="prose prose-lg md:prose-xl max-w-none break-words [overflow-wrap:anywhere] prose-headings:font-black prose-headings:text-gray-900 prose-h2:text-3xl prose-h2:mt-12 prose-h2:mb-6 prose-p:text-gray-600 prose-p:leading-relaxed prose-a:text-red-600 hover:prose-a:text-red-700 prose-img:rounded-2xl prose-img:shadow-md"
+              dangerouslySetInnerHTML={{ __html: article.content }}
+            />
+
+            {/* Tags */}
+            {article.tags && article.tags.length > 0 && (
+              <div className="mt-12 pt-8 border-t border-gray-100 flex items-center gap-3 flex-wrap">
+                <span className="font-bold text-gray-900 mr-2">Tags:</span>
+                {(Array.isArray(article.tags) ? article.tags : article.tags.split(",")).map((tag: string, index: number) => (
+                  <span key={index} className="bg-gray-100 text-gray-600 px-3 py-1 rounded-md text-sm font-medium hover:bg-red-50 hover:text-red-600 cursor-pointer transition">
+                    #{typeof tag === 'string' ? tag.trim() : tag}
+                  </span>
+                ))}
+              </div>
+            )}
+            
+            {/* Share Section */}
+            <div className="mt-8 pt-8 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-4">
+              <h4 className="font-bold text-lg text-gray-900">Chia sẻ bài viết này:</h4>
+              <div className="flex items-center gap-3">
+                <button onClick={copyLink} className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 hover:bg-red-600 hover:text-white transition-colors">
+                  <LinkIcon size={18} />
+                </button>
+                <a href={`https://www.facebook.com/sharer/sharer.php?u=${typeof window !== 'undefined' ? window.location.href : ''}`} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-[#1877F2]/10 flex items-center justify-center text-[#1877F2] hover:bg-[#1877F2] hover:text-white transition-colors">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.469h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.469h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                </a>
+                <a href={`https://twitter.com/intent/tweet?url=${typeof window !== 'undefined' ? window.location.href : ''}&text=${article.title}`} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-[#1DA1F2]/10 flex items-center justify-center text-[#1DA1F2] hover:bg-[#1DA1F2] hover:text-white transition-colors">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M23.954 4.569c-.885.389-1.83.654-2.825.775 1.014-.611 1.794-1.574 2.163-2.723-.951.555-2.005.959-3.127 1.184-.896-.959-2.173-1.559-3.591-1.559-2.717 0-4.92 2.203-4.92 4.917 0 .39.045.765.127 1.124C7.691 8.094 4.066 6.13 1.64 3.161c-.427.722-.666 1.561-.666 2.475 0 1.71.87 3.213 2.188 4.096-.807-.026-1.566-.248-2.228-.616v.061c0 2.385 1.693 4.374 3.946 4.827-.413.111-.849.171-1.296.171-.314 0-.615-.03-.916-.086.631 1.953 2.445 3.377 4.604 3.417-1.68 1.319-3.809 2.105-6.102 2.105-.39 0-.779-.023-1.17-.067 2.189 1.394 4.768 2.209 7.557 2.209 9.054 0 13.999-7.496 13.999-13.986 0-.209 0-.42-.015-.63.961-.689 1.8-1.56 2.46-2.548l-.047-.02z"/></svg>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          {/* Sidebar */}
+          <div className="lg:w-4/12 xl:w-3/12 hidden lg:block">
+            <div className="sticky top-28 bg-white rounded-3xl p-6 shadow-sm border border-gray-100">
+              <h3 className="text-xl font-black text-gray-900 mb-6 flex items-center gap-2">
+                <TrendingUp className="text-red-600" /> Các tin tức khác
+              </h3>
+              
+              <div className="flex flex-col gap-6">
+                {recentNews.length > 0 ? (
+                  recentNews.map((item) => (
+                    <Link href={`/tin-tuc/${item.slug}`} key={item._id} className="group flex gap-4 items-start">
+                      <div className="w-20 h-20 rounded-xl overflow-hidden flex-shrink-0 bg-gray-200">
+                        <img src={getImageUrl(item.thumbnail)} alt="Thumbnail" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                      </div>
+                      <div>
+                        <h4 className="font-bold text-gray-800 text-sm line-clamp-2 mb-1 group-hover:text-red-600 transition-colors">{item.title}</h4>
+                        <p className="text-xs text-gray-500 flex items-center gap-1"><Eye size={12} /> {item.views} lượt xem</p>
+                      </div>
+                    </Link>
+                  ))
+                ) : (
+                  <p className="text-sm text-gray-500 italic">Chưa có tin tức nào khác.</p>
+                )}
+              </div>
+
+              <div className="mt-8 pt-8 border-t border-gray-100">
+                <div className="bg-gradient-to-br from-red-600 to-red-500 rounded-2xl p-6 text-white text-center shadow-lg shadow-red-500/30">
+                  <h4 className="font-black text-lg mb-2">Đăng ký nhận tin</h4>
+                  <p className="text-sm text-red-100 mb-4">Nhận ngay thông báo về siêu khuyến mãi và mã giảm giá độc quyền.</p>
+                  <input 
+                    type="email" 
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="Email của bạn" 
+                    className="w-full bg-white/20 border border-white/30 rounded-lg px-4 py-2 text-white placeholder:text-white/60 focus:outline-none focus:border-white mb-3 text-sm" 
+                  />
+                  <button 
+                    onClick={handleSubscribe}
+                    disabled={subscribing}
+                    className="w-full bg-white text-red-600 font-bold py-2.5 rounded-lg text-sm hover:shadow-lg transition disabled:opacity-70 disabled:hover:shadow-none"
+                  >
+                    {subscribing ? "Đang xử lý..." : "Đăng ký ngay"}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+    </div>
+  );
+}

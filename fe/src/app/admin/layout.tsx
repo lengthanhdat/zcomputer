@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { Package, LayoutDashboard, Settings, LogOut, Users, Warehouse, ClipboardList, Menu, X, Tags, MessageCircle, BellRing, Play, Briefcase } from "lucide-react";
+import { Package, LayoutDashboard, Settings, LogOut, Users, Warehouse, ClipboardList, Menu, X, Tags, MessageCircle, BellRing, Play, Briefcase, Newspaper } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useAuthStore } from "@/store/useAuthStore";
 import toast from "react-hot-toast";
@@ -13,6 +13,8 @@ const menuItems = [
   { href: "/admin/inventory", label: "Quản lý kho", icon: Warehouse, allowedRoles: ['admin', 'staff'] },
   { href: "/admin/orders", label: "Đơn hàng", icon: ClipboardList, allowedRoles: ['admin', 'staff'] },
   { href: "/admin/categories", label: "Danh mục", icon: Tags, allowedRoles: ['admin', 'staff'] },
+  { href: "/admin/news", label: "Tin tức", icon: Newspaper, allowedRoles: ['admin', 'staff'] },
+  { href: "/admin/subscribers", label: "Khách Đăng ký", icon: Newspaper, allowedRoles: ['admin', 'staff'] },
   { href: "/admin/users", label: "Khách hàng", icon: Users, allowedRoles: ['admin'] },
   { href: "/admin/feedbacks", label: "Góp ý", icon: MessageCircle, allowedRoles: ['admin', 'staff'] },
   { href: "/admin/banners", label: "Banners", icon: LayoutDashboard, allowedRoles: ['admin', 'staff'] },

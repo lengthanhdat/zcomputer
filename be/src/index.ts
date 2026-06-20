@@ -26,7 +26,8 @@ app.use(helmet({
   hsts: false // Not using HTTPS locally
 }));
 app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
-app.use(express.json({ limit: '1mb' }));
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ limit: '50mb', extended: true }));
 app.use(cookieParser());
 app.use(mongoSanitize());
 
@@ -100,6 +101,7 @@ import settingRoutes from './routes/settingRoutes';
 import videoReviewRoutes from './routes/videoReviewRoutes';
 import jobRoutes from './routes/jobRoutes';
 import feedbackRoutes from './routes/feedbackRoutes';
+import newsRoutes from './routes/newsRoutes';
 
 app.use('/api/users', userRoutes);
 app.use('/api/orders', orderRoutes);
@@ -113,7 +115,45 @@ app.use('/api/categories', categoryRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/jobs', jobRoutes);
 app.use('/api/feedbacks', feedbackRoutes);
+app.use('/api/news', newsRoutes);
 
+import { Subscriber } from './models/Subscriber';
+
+app.post('/api/subscribers', async (req, res): Promise<any> => {
+  try {
+    const { email } = req.body;
+    if (!email || !/\S+@\S+\.\S+/.test(email)) {
+      return res.status(400).json({ message: 'Email không hợp lệ' });
+    }
+    const exists = await Subscriber.findOne({ email });
+    if (exists) {
+      return res.status(400).json({ message: 'Email này đã được đăng ký' });
+    }
+    await Subscriber.create({ email });
+    return res.status(201).json({ message: 'Đăng ký thành công' });
+  } catch (error) {
+    return res.status(500).json({ message: 'Lỗi server' });
+  }
+});
+
+app.get('/api/subscribers', async (req, res): Promise<any> => {
+  try {
+    const subscribers = await Subscriber.find().sort({ createdAt: -1 });
+    return res.json(subscribers);
+  } catch (error) {
+    return res.status(500).json({ message: 'Lỗi server' });
+  }
+});
+
+app.delete('/api/subscribers/:id', async (req, res): Promise<any> => {
+  try {
+    const { id } = req.params;
+    await Subscriber.findByIdAndDelete(id);
+    return res.json({ message: 'Đã xóa email' });
+  } catch (error) {
+    return res.status(500).json({ message: 'Lỗi server' });
+  }
+});
 
 
 // Connect to MongoDB
