@@ -58,8 +58,8 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* 6 COLUMNS BLOCK */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 relative z-10 pt-8 border-t border-white/10">
+        {/* 5 COLUMNS BLOCK */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 lg:gap-8 relative z-10 pt-8 border-t border-white/10">
           
           {/* Col 1: Logo & Info */}
           <div className="col-span-1 lg:col-span-1 pr-0">
@@ -105,35 +105,23 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Col 3: DANH MỤC NEW */}
-          <div>
-            <h4 className="font-black uppercase mb-5 text-[14px] text-white tracking-wider">
-              DANH MỤC NEW
-            </h4>
-            <ul className="space-y-3 text-[13px] text-white/60 font-medium">
-              <li><Link href="/category/pc-gaming-new" className="hover:text-red-400 transition-colors">PC Gaming New</Link></li>
-              <li><Link href="/category/pc-do-hoa" className="hover:text-red-400 transition-colors">PC Đồ Họa</Link></li>
-              <li><Link href="/category/linh-kien-pc-new" className="hover:text-red-400 transition-colors">Linh Kiện PC New</Link></li>
-              <li><Link href="/category/man-hinh-pc" className="hover:text-red-400 transition-colors">Màn Hình PC</Link></li>
-              <li><Link href="/category/vga-new" className="hover:text-red-400 transition-colors">VGA New</Link></li>
-            </ul>
-          </div>
 
-          {/* Col 4: CHÍNH SÁCH KHÁCH HÀNG */}
+
+          {/* Col 3: CHÍNH SÁCH TỔNG HỢP */}
           <div>
             <h4 className="font-black uppercase mb-5 text-[14px] text-white tracking-wider">
-              CHÍNH SÁCH KHÁCH HÀNG
+              CHÍNH SÁCH TỔNG HỢP
             </h4>
             <ul className="space-y-3 text-[13px] text-white/60 font-medium">
-              <li><Link href="/tin-tuc/khuyen-mai" className="hover:text-red-400 transition-colors">Khuyến Mãi</Link></li>
-              <li><Link href="/chinh-sach-tra-gop" className="hover:text-red-400 transition-colors">Chính sách hỗ trợ trả góp</Link></li>
+              <li><Link href="/chinh-sach-bao-mat" className="hover:text-red-400 transition-colors">Chính sách bảo mật</Link></li>
               <li><Link href="/chinh-sach-van-chuyen" className="hover:text-red-400 transition-colors">Chính sách vận chuyển</Link></li>
               <li><Link href="/chinh-sach-bao-hanh" className="hover:text-red-400 transition-colors">Chính sách bảo hành</Link></li>
-              <li><Link href="/chinh-sach-bao-mat" className="hover:text-red-400 transition-colors">Chính sách bảo mật & điều khoản sử dụng</Link></li>
+              <li><Link href="/chinh-sach-doi-tra" className="hover:text-red-400 transition-colors">Chính sách đổi trả</Link></li>
+              <li><Link href="/chinh-sach-thanh-toan" className="hover:text-red-400 transition-colors">Chính sách thanh toán</Link></li>
             </ul>
           </div>
 
-          {/* Col 5: LIÊN HỆ */}
+          {/* Col 4: LIÊN HỆ */}
           <div>
             <h4 className="font-black uppercase mb-5 text-[14px] text-white tracking-wider">
               LIÊN HỆ ZCOMPUTER
@@ -146,7 +134,7 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Col 6: CÔNG TY TNHH */}
+          {/* Col 5: CÔNG TY TNHH */}
           <div className="lg:col-span-1">
             <h4 className="font-black uppercase mb-5 text-[14px] text-white tracking-wider">
               CÔNG TY TNHH TM DV ZCOM
