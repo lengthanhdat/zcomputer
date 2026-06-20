@@ -28,7 +28,7 @@ export default function HeaderNav() {
           onMouseEnter={() => setShowCategoryMenu(true)}
           onMouseLeave={() => setShowCategoryMenu(false)}
         >
-          <div className="bg-gradient-to-r from-red-600 to-red-500 text-white flex items-center gap-2 px-5 py-4 cursor-pointer hover:shadow-[0_0_20px_rgba(239,68,68,0.4)] transition-all duration-300 relative overflow-hidden group">
+          <div className="bg-primary text-white flex items-center gap-2 px-5 py-4 cursor-pointer hover:brightness-110 transition-all duration-300 relative overflow-hidden group">
             <div className="absolute inset-0 bg-white/20 translate-y-[-100%] group-hover:translate-y-[100%] transition-transform duration-500 pointer-events-none"></div>
             <Menu size={20} className="relative z-10" />
             <span className="font-bold tracking-wider uppercase relative z-10 text-shadow-sm">MENU</span>
@@ -47,14 +47,14 @@ export default function HeaderNav() {
           
           {/* SẢN PHẨM Link */}
           <li>
-            <Link href="/all" className="flex items-center gap-1 py-4 hover:text-red-400 hover:drop-shadow-[0_0_8px_rgba(239,68,68,0.5)] transition-all duration-300">
+            <Link href="/all" className="flex items-center gap-1 py-4 hover:text-primary hover:drop-shadow-[0_0_8px_var(--primary-ring)] transition-all duration-300">
               <span className="uppercase relative inline-block">
                 Tất Cả Sản Phẩm
                 {/* Badge */}
-                <span className="absolute -top-5 left-1/2 -translate-x-1/2 bg-gradient-to-r from-red-600 to-red-500 text-white text-[9px] font-black px-1.5 py-0.5 rounded-sm whitespace-nowrap shadow-[0_0_10px_rgba(239,68,68,0.5)]">
+                <span className="absolute -top-5 left-1/2 -translate-x-1/2 bg-primary text-white text-[9px] font-black px-1.5 py-0.5 rounded-sm whitespace-nowrap shadow-[0_0_10px_var(--primary-ring)]">
                   SHOP
                   {/* Small triangle pointing down */}
-                  <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 border-[3px] border-transparent border-t-red-500"></span>
+                  <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 border-[3px] border-transparent border-t-primary"></span>
                 </span>
               </span>
             </Link>
@@ -63,26 +63,26 @@ export default function HeaderNav() {
 
 
           <li>
-            <Link href="/thu-mua-cu" className="py-4 block hover:text-red-400 transition-colors uppercase">
+            <Link href="/thu-mua-cu" className="py-4 block hover:text-primary transition-colors uppercase">
               Thu cũ đổi mới
             </Link>
           </li>
           <li>
-            <Link href="/gioi-thieu-ban-be" className="py-4 block hover:text-red-400 transition-colors uppercase">
+            <Link href="/gioi-thieu-ban-be" className="py-4 block hover:text-primary transition-colors uppercase">
               Giới thiệu bạn bè
             </Link>
           </li>
           <li>
-            <Link href="/tin-tuc" className="py-4 block hover:text-red-400 transition-colors uppercase">
+            <Link href="/tin-tuc" className="py-4 block hover:text-primary transition-colors uppercase">
               Tin tức
             </Link>
           </li>
           <li className="relative group">
-            <Link href="/cong-cu-test" className="py-4 block hover:text-red-400 transition-colors uppercase flex items-center gap-1 cursor-pointer">
-              Công cụ Test <ChevronDown size={14} className="text-gray-400 group-hover:rotate-180 group-hover:text-red-400 transition-all duration-300" />
+            <Link href="/cong-cu-test" className="py-4 block hover:text-primary transition-colors uppercase flex items-center gap-1 cursor-pointer">
+              Công cụ Test <ChevronDown size={14} className="text-gray-400 group-hover:rotate-180 group-hover:text-primary transition-all duration-300" />
             </Link>
             
-            <div className="absolute top-full left-0 w-60 bg-white/95 backdrop-blur-xl text-gray-800 shadow-[0_20px_40px_rgba(0,0,0,0.1)] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform origin-top -translate-y-2 group-hover:translate-y-0 border-t-2 border-red-500 rounded-b-xl overflow-hidden z-50">
+            <div className="absolute top-full left-0 w-60 bg-white/95 backdrop-blur-xl text-gray-800 shadow-[0_20px_40px_rgba(0,0,0,0.1)] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform origin-top -translate-y-2 group-hover:translate-y-0 border-t-2 border-primary rounded-b-xl overflow-hidden z-50">
               <ul className="py-2">
                 {[
                   { title: 'Test Bàn Phím', link: '/cong-cu-test/ban-phim' },
@@ -90,7 +90,7 @@ export default function HeaderNav() {
                   { title: 'Test Loa, Micro, Webcam', link: '/cong-cu-test/loa-micro-webcam' },
                 ].map((item, idx) => (
                   <li key={idx}>
-                    <Link href={item.link} className="block px-5 py-3 hover:bg-red-50/50 hover:text-red-600 hover:pl-6 transition-all duration-300 text-[13px] font-bold border-b border-gray-100 last:border-0 uppercase">
+                    <Link href={item.link} className="block px-5 py-3 hover:bg-primary/5 hover:text-primary hover:pl-6 transition-all duration-300 text-[13px] font-bold border-b border-gray-100 last:border-0 uppercase">
                       {item.title}
                     </Link>
                   </li>

@@ -229,7 +229,7 @@ export default async function DynamicRoutePage({ params }: { params: Promise<{ s
       <Image src="/logo.png" alt="ZCOMPUTER" width={120} height={120} className="mb-6 opacity-50 grayscale" />
       <h1 className="text-4xl font-black text-gray-800 mb-4 uppercase tracking-tight">Không tìm thấy nội dung</h1>
       <p className="text-gray-500 mb-8 max-w-md mx-auto">Sản phẩm hoặc danh mục bạn đang tìm kiếm không tồn tại, đã bị xóa hoặc thay đổi đường dẫn.</p>
-      <Link href="/" className="bg-primary text-white font-bold px-8 py-3 rounded-full hover:bg-red-700 transition-colors shadow-lg shadow-red-500/30">
+      <Link href="/" className="bg-primary text-white font-bold px-8 py-3 rounded-full hover:bg-brand-700 transition-colors shadow-lg shadow-brand-500/30">
         Quay về trang chủ
       </Link>
     </div>
@@ -339,13 +339,13 @@ async function ProductDetailView({ product }: { product: Product }) {
                   <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
 
                     <div className="flex items-start gap-2.5">
-                      <RefreshCcw className="text-red-600 shrink-0 mt-0.5" size={18} />
+                      <RefreshCcw className="text-primary shrink-0 mt-0.5" size={18} />
                       <span className="text-[13px] text-gray-700 leading-snug">
                         Đổi trả chỉ trong 7 ngày
                       </span>
                     </div>
                     <div className="flex items-start gap-2.5">
-                      <ShieldCheck className="text-red-600 shrink-0 mt-0.5" size={18} />
+                      <ShieldCheck className="text-primary shrink-0 mt-0.5" size={18} />
                       <span className="text-[13px] text-gray-700 leading-snug">
                         Bảo hành thiết bị từ 1 tới 12 tháng
                       </span>
@@ -356,7 +356,7 @@ async function ProductDetailView({ product }: { product: Product }) {
                 <div>
                   <h3 className="font-bold text-gray-800 mb-4 text-[15px]">Dịch vụ khác</h3>
                   <div className="flex items-start gap-2.5">
-                    <Settings className="text-red-600 shrink-0 mt-0.5" size={18} />
+                    <Settings className="text-primary shrink-0 mt-0.5" size={18} />
                     <span className="text-[13px] text-gray-700 leading-snug">
                       Gói dịch vụ bảo hành/ Sửa chữa tận nơi
                     </span>
@@ -423,8 +423,8 @@ async function ProductDetailView({ product }: { product: Product }) {
               )}
 
               {/* Price Box */}
-              <div className="relative bg-gradient-to-br from-red-50/80 via-white to-orange-50/80 rounded-2xl p-6 lg:p-8 mb-6 border border-red-100 shadow-[0_4px_20px_rgb(239,68,68,0.05)] overflow-hidden">
-                <div className="absolute top-0 right-0 w-40 h-40 bg-red-500/5 rounded-full blur-3xl -mr-10 -mt-10 pointer-events-none"></div>
+              <div className="relative bg-gradient-to-br from-primary/5 via-white to-orange-50/80 rounded-2xl p-6 lg:p-8 mb-6 border border-primary/20 shadow-[0_4px_20px_var(--primary-ring)] overflow-hidden">
+                <div className="absolute top-0 right-0 w-40 h-40 bg-primary/5 rounded-full blur-3xl -mr-10 -mt-10 pointer-events-none"></div>
                 <div className="relative z-10 flex flex-col sm:flex-row sm:items-end gap-3 sm:gap-6">
                   {((product.stock ?? 0) <= 0 || product.status === 'out_of_stock') ? (
                     <div>
@@ -436,7 +436,7 @@ async function ProductDetailView({ product }: { product: Product }) {
                   ) : (
                     <>
                       <div>
-                        <div className="text-xs font-bold text-red-500/80 uppercase tracking-wider mb-2">Giá ưu đãi đặc biệt</div>
+                        <div className="text-xs font-bold text-primary/80 uppercase tracking-wider mb-2">Giá ưu đãi đặc biệt</div>
                         <div className="text-4xl lg:text-5xl font-black text-primary tracking-tight flex items-start">
                           {product.price.toLocaleString("vi-VN")}
                           <span className="text-2xl lg:text-3xl font-bold ml-1 mt-1">₫</span>
@@ -447,7 +447,7 @@ async function ProductDetailView({ product }: { product: Product }) {
                           <div className="text-lg text-gray-400 line-through font-semibold decoration-gray-300 decoration-2">
                             {(product.discountPrice || 0).toLocaleString("vi-VN")}₫
                           </div>
-                          <div className="inline-flex items-center justify-center px-2.5 py-0.5 bg-red-100 text-red-600 text-[11px] font-black uppercase rounded mt-1 shadow-sm border border-red-200/50">
+                          <div className="inline-flex items-center justify-center px-2.5 py-0.5 bg-primary/10 text-primary text-[11px] font-black uppercase rounded mt-1 shadow-sm border border-primary/20">
                             Giảm {Math.round((1 - product.price / (product.discountPrice || 1)) * 100)}%
                           </div>
                         </div>
@@ -509,7 +509,7 @@ async function ProductDetailView({ product }: { product: Product }) {
               Đặc điểm nổi bật
               <div className="absolute -bottom-3 left-0 w-1/2 h-1 bg-primary rounded-full"></div>
             </h2>
-            <div className="prose prose-lg max-w-none text-gray-600 leading-relaxed prose-headings:text-gray-900 prose-a:text-primary hover:prose-a:text-red-700 prose-img:rounded-xl prose-img:shadow-md [&_img]:mx-auto [&_img]:max-w-full [&_img]:h-auto">
+            <div className="prose prose-lg max-w-none text-gray-600 leading-relaxed prose-headings:text-gray-900 prose-a:text-primary hover:prose-a:brightness-110 prose-img:rounded-xl prose-img:shadow-md [&_img]:mx-auto [&_img]:max-w-full [&_img]:h-auto">
               {cleanDescription.includes('<p>') || cleanDescription.includes('<h2>') || cleanDescription.includes('<h3>') || cleanDescription.includes('<br>') || cleanDescription.includes('<img') ? (
                 <div dangerouslySetInnerHTML={{ __html: cleanDescription }} />
               ) : (
@@ -540,7 +540,7 @@ async function ProductDetailView({ product }: { product: Product }) {
                 return (
                   <div
                     key={p._id}
-                    className={`snap-start shrink-0 w-[170px] md:w-[280px] bg-white rounded-2xl border border-gray-100 overflow-hidden group shadow-md flex flex-col relative transition-all duration-500 ${isOutOfStock ? 'opacity-80' : 'hover:shadow-[0_8px_30px_rgb(220,38,38,0.15)] hover:border-red-200 hover:-translate-y-2'}`}
+                    className={`snap-start shrink-0 w-[170px] md:w-[280px] bg-white rounded-2xl border border-gray-100 overflow-hidden group shadow-md flex flex-col relative transition-all duration-500 ${isOutOfStock ? 'opacity-80' : 'hover:shadow-[0_8px_30px_var(--primary-ring)] hover:border-primary/50 hover:-translate-y-2'}`}
                   >
                     <Link href={`/${p.slug}`} className="absolute inset-0 z-20"></Link>
                     <div className="relative aspect-[4/3] p-4 flex items-center justify-center bg-white overflow-hidden">
@@ -575,7 +575,7 @@ async function ProductDetailView({ product }: { product: Product }) {
                           <div className="absolute bottom-2 right-2 flex items-center gap-1 opacity-50 mix-blend-multiply">
                             <Image src="/logo.png" alt="ZCOMPUTER" width={20} height={20} className="w-4 h-4 object-contain" unoptimized />
                             <div className="flex items-baseline select-none tracking-tighter">
-                              <span className="text-red-600 font-black text-[11px] drop-shadow-sm">Z</span>
+                              <span className="text-primary font-black text-[11px] drop-shadow-sm">Z</span>
                               <span className="text-slate-800 font-black text-[10px] uppercase drop-shadow-sm">COMPUTER</span>
                             </div>
                           </div>
@@ -586,17 +586,17 @@ async function ProductDetailView({ product }: { product: Product }) {
                       <div className="absolute top-4 left-4 z-20 flex flex-col gap-1.5">
                         {p.isHotSale && (
                           <div className="shadow-lg rounded-md overflow-hidden transform -rotate-3 origin-top-left group-hover:rotate-0 transition-transform duration-300">
-                            <div className="bg-gradient-to-r from-orange-500 to-red-600 text-white text-[10px] font-black px-2 py-1 text-center uppercase tracking-widest">
+                            <div className="bg-primary text-white text-[10px] font-black px-2 py-1 text-center uppercase tracking-widest">
                               🔥 HOT SALE
                             </div>
                           </div>
                         )}
                         {saveAmount > 0 && (
                           <div className="shadow-lg rounded-md overflow-hidden transform -rotate-3 origin-top-left group-hover:rotate-0 transition-transform duration-300">
-                            <div className="bg-gradient-to-r from-red-600 to-red-500 text-white text-[10px] font-black px-2 py-1 text-center uppercase tracking-widest">
+                            <div className="bg-primary text-white text-[10px] font-black px-2 py-1 text-center uppercase tracking-widest">
                               TIẾT KIỆM
                             </div>
-                            <div className="bg-red-700 text-white text-[12px] font-black px-2 py-1 text-center border-t border-red-500">
+                            <div className="bg-primary/80 text-white text-[12px] font-black px-2 py-1 text-center border-t border-white/20">
                               {saveAmount.toLocaleString('vi-VN')} đ
                             </div>
                           </div>
@@ -631,14 +631,14 @@ async function ProductDetailView({ product }: { product: Product }) {
                           <>
                             <span className="text-gray-400 text-[12px] md:text-[13px] line-through mb-0.5 decoration-gray-300">{originalPrice.toLocaleString('vi-VN')}₫</span>
                             <div className="flex items-end gap-2">
-                              <span className="text-[16px] md:text-[18px] font-black text-red-600 leading-none">{currentPrice.toLocaleString('vi-VN')}₫</span>
-                              <span className="bg-red-50 text-red-600 border border-red-200 rounded text-[10px] md:text-[11px] font-bold px-1.5 py-[2px] leading-none">-{discountPercent}%</span>
+                              <span className="text-[16px] md:text-[18px] font-black text-primary leading-none">{currentPrice.toLocaleString('vi-VN')}₫</span>
+                              <span className="bg-primary/10 text-primary border border-primary/20 rounded text-[10px] md:text-[11px] font-bold px-1.5 py-[2px] leading-none">-{discountPercent}%</span>
                             </div>
                           </>
                         ) : (
                           <>
                             <div className="h-[18px] md:h-[20px] mb-0.5"></div>
-                            <span className="text-[16px] md:text-[18px] font-black text-red-600 leading-none">{currentPrice.toLocaleString('vi-VN')}₫</span>
+                            <span className="text-[16px] md:text-[18px] font-black text-primary leading-none">{currentPrice.toLocaleString('vi-VN')}₫</span>
                           </>
                         )}
                       </div>

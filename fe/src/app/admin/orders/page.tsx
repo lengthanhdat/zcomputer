@@ -36,7 +36,7 @@ const statusConfig: Record<string, { label: string, color: string, bg: string, i
   'processing': { label: 'Đang xử lý', color: 'text-blue-700', bg: 'bg-blue-100', icon: Package },
   'shipped': { label: 'Đang giao hàng', color: 'text-indigo-700', bg: 'bg-indigo-100', icon: Truck },
   'delivered': { label: 'Đã giao', color: 'text-green-700', bg: 'bg-green-100', icon: CheckCircle },
-  'cancelled': { label: 'Đã hủy', color: 'text-red-700', bg: 'bg-red-100', icon: XCircle }
+  'cancelled': { label: 'Đã hủy', color: 'text-brand-700', bg: 'bg-brand-100', icon: XCircle }
 };
 
 export default function AdminOrdersPage() {
@@ -133,7 +133,7 @@ export default function AdminOrdersPage() {
           <p className="text-sm text-blue-100 mt-4">Tất cả đơn hàng trên hệ thống</p>
         </div>
 
-        <div className="bg-gradient-to-br from-orange-400 to-red-500 rounded-2xl p-6 text-white shadow-lg hover:shadow-xl transition-all hover:-translate-y-1">
+        <div className="bg-gradient-to-br from-orange-400 to-brand-500 rounded-2xl p-6 text-white shadow-lg hover:shadow-xl transition-all hover:-translate-y-1">
           <div className="flex justify-between items-start">
             <div>
               <p className="text-orange-100 font-medium">Chờ xác nhận</p>

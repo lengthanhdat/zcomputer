@@ -56,8 +56,8 @@ export default function ProfilePage() {
   return (
     <div className="bg-[#f8f9fa] min-h-screen py-10 relative overflow-hidden">
       {/* Background Blobs */}
-      <div className="absolute top-0 left-0 w-full h-96 bg-gradient-to-b from-red-50 to-transparent -z-10 pointer-events-none"></div>
-      <div className="absolute top-20 right-20 w-96 h-96 bg-red-400/10 rounded-full blur-[100px] pointer-events-none -z-10"></div>
+      <div className="absolute top-0 left-0 w-full h-96 bg-gradient-to-b from-primary to-transparent -z-10 pointer-events-none"></div>
+      <div className="absolute top-20 right-20 w-96 h-96 bg-primary rounded-full blur-[100px] pointer-events-none -z-10"></div>
       <div className="absolute bottom-20 left-20 w-96 h-96 bg-blue-400/10 rounded-full blur-[100px] pointer-events-none -z-10"></div>
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -70,16 +70,16 @@ export default function ProfilePage() {
           {/* Sidebar */}
           <div className="w-full lg:w-1/3 xl:w-1/4">
             <div className="bg-white/70 backdrop-blur-2xl rounded-[2rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-white overflow-hidden relative group">
-              <div className="absolute inset-0 bg-gradient-to-br from-red-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
+              <div className="absolute inset-0 bg-gradient-to-br from-primary to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
               
               <div className="p-8 border-b border-gray-100/50 flex flex-col items-center text-center relative z-10">
-                <div className="w-28 h-28 bg-gradient-to-tr from-red-500 to-orange-400 text-white rounded-full flex items-center justify-center mb-5 shadow-[0_10px_25px_rgba(239,68,68,0.3)] relative group-hover:scale-105 transition-transform duration-500">
+                <div className="w-28 h-28 bg-gradient-to-tr from-primary to-orange-400 text-white rounded-full flex items-center justify-center mb-5 shadow-[0_10px_25px_var(--primary-ring)] relative group-hover:scale-105 transition-transform duration-500">
                   <User size={48} strokeWidth={1.5} />
                   <div className="absolute inset-0 rounded-full border-[4px] border-white/20"></div>
                 </div>
                 <h2 className="text-2xl font-black text-gray-900 drop-shadow-sm">{user.name}</h2>
                 <p className="text-sm text-gray-500 mt-1 font-medium">{user.email}</p>
-                <div className="mt-4 inline-flex items-center gap-1.5 px-4 py-1.5 bg-red-50/80 backdrop-blur-sm text-red-600 rounded-full text-[11px] font-black uppercase tracking-widest border border-red-100 shadow-sm">
+                <div className="mt-4 inline-flex items-center gap-1.5 px-4 py-1.5 bg-primary/10 backdrop-blur-sm text-primary rounded-full text-[11px] font-black uppercase tracking-widest border border-primary/50 shadow-sm">
                   {user.role === 'admin' ? <ShieldCheck size={14} /> : <User size={14} />}
                   {user.role === 'admin' ? 'Quản trị viên' : user.role === 'staff' ? 'Nhân viên' : 'Khách hàng'}
                 </div>
@@ -87,7 +87,7 @@ export default function ProfilePage() {
 
               <div className="p-4 relative z-10 space-y-2">
                 <button
-                  className="w-full flex items-center gap-3 px-5 py-4 rounded-2xl text-sm font-bold transition-all duration-300 bg-gradient-to-r from-red-600 to-red-500 text-white shadow-[0_5px_15px_rgba(220,38,38,0.3)] translate-x-2"
+                  className="w-full flex items-center gap-3 px-5 py-4 rounded-2xl text-sm font-bold transition-all duration-300 bg-gradient-to-r from-primary to-primary text-white shadow-[0_5px_15px_var(--primary-ring)] translate-x-2"
                 >
                   <User size={20} strokeWidth={2.5} />
                   Thông tin cá nhân
@@ -125,7 +125,7 @@ export default function ProfilePage() {
                     <label className="text-xs font-bold uppercase tracking-wider text-gray-500 flex items-center gap-2 mb-2 ml-1">
                       <User size={14} /> Họ và tên
                     </label>
-                    <div className="p-4 bg-gray-50/80 group-hover:bg-white rounded-2xl border border-gray-100 group-hover:border-red-100 text-gray-800 font-semibold transition-all duration-300 group-hover:shadow-[0_4px_15px_rgba(220,38,38,0.05)]">
+                    <div className="p-4 bg-gray-50/80 group-hover:bg-white rounded-2xl border border-gray-100 group-hover:border-primary/50 text-gray-800 font-semibold transition-all duration-300 group-hover:shadow-[0_4px_15px_var(--primary-ring)]">
                       {user.name}
                     </div>
                   </div>
@@ -134,7 +134,7 @@ export default function ProfilePage() {
                     <label className="text-xs font-bold uppercase tracking-wider text-gray-500 flex items-center gap-2 mb-2 ml-1">
                       <Mail size={14} /> Địa chỉ Email
                     </label>
-                    <div className="p-4 bg-gray-50/80 group-hover:bg-white rounded-2xl border border-gray-100 group-hover:border-red-100 text-gray-800 font-semibold transition-all duration-300 group-hover:shadow-[0_4px_15px_rgba(220,38,38,0.05)]">
+                    <div className="p-4 bg-gray-50/80 group-hover:bg-white rounded-2xl border border-gray-100 group-hover:border-primary/50 text-gray-800 font-semibold transition-all duration-300 group-hover:shadow-[0_4px_15px_var(--primary-ring)]">
                       {user.email}
                     </div>
                   </div>
@@ -147,7 +147,7 @@ export default function ProfilePage() {
                       {!isEditingPhone && (
                         <button 
                           onClick={() => setIsEditingPhone(true)}
-                          className="text-primary hover:text-red-700 flex items-center gap-1 text-[11px]"
+                          className="text-primary hover:text-primary flex items-center gap-1 text-[11px]"
                         >
                           <Edit2 size={12} /> Thay đổi
                         </button>
@@ -161,13 +161,13 @@ export default function ProfilePage() {
                           value={phoneInput}
                           onChange={(e) => setPhoneInput(e.target.value)}
                           placeholder="Nhập số điện thoại của bạn..."
-                          className="flex-1 p-4 bg-white rounded-2xl border border-red-200 focus:border-red-500 focus:ring-4 focus:ring-red-500/10 text-gray-800 font-semibold transition-all duration-300 outline-none shadow-[0_4px_15px_rgba(220,38,38,0.05)]"
+                          className="flex-1 p-4 bg-white rounded-2xl border border-primary/50 focus:border-primary/50 focus:ring-4 focus:ring-primary/10 text-gray-800 font-semibold transition-all duration-300 outline-none shadow-[0_4px_15px_var(--primary-ring)]"
                           autoFocus
                         />
                         <button 
                           onClick={handleSavePhone}
                           disabled={isSaving}
-                          className="px-6 py-4 bg-primary text-white font-bold rounded-2xl hover:bg-red-700 transition-colors flex items-center gap-2 shadow-[0_4px_15px_rgba(220,38,38,0.2)] disabled:opacity-70"
+                          className="px-6 py-4 bg-primary text-white font-bold rounded-2xl hover:bg-primary transition-colors flex items-center gap-2 shadow-[0_4px_15px_var(--primary-ring)] disabled:opacity-70"
                         >
                           {isSaving ? <Loader2 size={18} className="animate-spin" /> : <Save size={18} />}
                           Lưu
@@ -183,7 +183,7 @@ export default function ProfilePage() {
                         </button>
                       </div>
                     ) : (
-                      <div className="p-4 bg-gray-50/80 group-hover:bg-white rounded-2xl border border-gray-100 group-hover:border-red-100 text-gray-800 font-semibold transition-all duration-300 group-hover:shadow-[0_4px_15px_rgba(220,38,38,0.05)]">
+                      <div className="p-4 bg-gray-50/80 group-hover:bg-white rounded-2xl border border-gray-100 group-hover:border-primary/50 text-gray-800 font-semibold transition-all duration-300 group-hover:shadow-[0_4px_15px_var(--primary-ring)]">
                         {user.phone || <span className="text-gray-400 italic font-medium">Chưa cập nhật số điện thoại</span>}
                       </div>
                     )}

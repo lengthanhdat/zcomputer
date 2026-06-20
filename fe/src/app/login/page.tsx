@@ -91,7 +91,7 @@ export default function LoginPage() {
           </h2>
           <p className="mt-2 text-center text-sm text-gray-600">
             Hoặc{" "}
-            <Link href="/register" className="font-medium text-primary hover:text-red-700">
+            <Link href="/register" className="font-medium text-primary hover:text-brand-700">
               đăng ký tài khoản mới
             </Link>
           </p>
@@ -178,7 +178,7 @@ export default function LoginPage() {
             </div>
 
             <div className="text-sm">
-              <Link href="/forgot-password" className="font-medium text-primary hover:text-red-700">
+              <Link href="/forgot-password" className="font-medium text-primary hover:text-brand-700">
                 Quên mật khẩu?
               </Link>
             </div>
@@ -188,7 +188,7 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="group relative w-full flex justify-center py-2.5 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-primary hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors disabled:opacity-50"
+              className="group relative w-full flex justify-center py-2.5 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-primary hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors disabled:opacity-50"
             >
               {loading ? "Đang xử lý..." : "Đăng nhập"}
             </button>

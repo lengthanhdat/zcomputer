@@ -230,7 +230,7 @@ export default function AdminCategoriesPage() {
                               <tr
                                 ref={provided.innerRef}
                                 {...provided.draggableProps}
-                                className={`transition-colors ${editingId === cat._id ? "bg-red-50 border-l-2 border-primary" : "hover:bg-gray-50"} ${snapshot.isDragging ? "bg-blue-50 shadow-lg z-50 table" : ""}`}
+                                className={`transition-colors ${editingId === cat._id ? "bg-brand-50 border-l-2 border-primary" : "hover:bg-gray-50"} ${snapshot.isDragging ? "bg-blue-50 shadow-lg z-50 table" : ""}`}
                                 style={provided.draggableProps.style}
                               >
                                 <td className="py-3 px-4 w-10">
@@ -267,7 +267,7 @@ export default function AdminCategoriesPage() {
                                   </button>
                                   <button
                                     onClick={() => handleDelete(cat._id, cat.name)}
-                                    className="p-1.5 text-red-500 hover:bg-red-50 rounded transition-colors"
+                                    className="p-1.5 text-brand-500 hover:bg-brand-50 rounded transition-colors"
                                     title="Xóa"
                                   >
                                     <Trash2 size={15} />
@@ -291,7 +291,7 @@ export default function AdminCategoriesPage() {
       {/* Add / Edit Panel */}
       <div className="bg-white rounded-lg shadow-sm border border-gray-200 self-start overflow-hidden">
         {/* Panel header */}
-        <div className={`p-6 border-b border-gray-200 flex items-center justify-between ${isEditMode ? "bg-red-50" : ""}`}>
+        <div className={`p-6 border-b border-gray-200 flex items-center justify-between ${isEditMode ? "bg-brand-50" : ""}`}>
           <h2 className="text-xl font-bold text-gray-800 flex items-center gap-2">
             {isEditMode ? (
               <><Edit size={18} className="text-primary" /> Chỉnh sửa danh mục</>
@@ -377,7 +377,7 @@ export default function AdminCategoriesPage() {
               <button
                 type="submit"
                 disabled={saving}
-                className="flex-1 bg-primary hover:bg-red-700 disabled:opacity-60 text-white py-2 rounded-md font-semibold transition-colors text-sm"
+                className="flex-1 bg-primary hover:bg-brand-700 disabled:opacity-60 text-white py-2 rounded-md font-semibold transition-colors text-sm"
               >
                 {saving ? "Đang lưu..." : isEditMode ? "Lưu thay đổi" : "Tạo danh mục"}
               </button>

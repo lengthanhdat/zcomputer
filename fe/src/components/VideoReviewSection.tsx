@@ -67,7 +67,7 @@ const VideoCard = ({ video }: { video: any }) => {
       <div className="absolute top-4 left-4 right-4 flex items-center gap-3 z-10 pointer-events-none">
         <div className="relative">
           <Image src="/logo.webp" alt="ZComputer" width={36} height={36} className="w-9 h-9 rounded-full object-contain bg-white shadow-lg border border-white/50" />
-          <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-red-500 rounded-full border-2 border-black flex items-center justify-center">
+          <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-brand-500 rounded-full border-2 border-black flex items-center justify-center">
             <div className="w-1 h-1 bg-white rounded-full"></div>
           </div>
         </div>
@@ -84,8 +84,8 @@ const VideoCard = ({ video }: { video: any }) => {
           className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 w-16 h-16 rounded-full flex items-center justify-center cursor-pointer group/play"
         >
           {/* Glowing ring */}
-          <div className="absolute inset-0 bg-red-600 rounded-full animate-ping opacity-30"></div>
-          <div className="absolute inset-0 bg-white/20 backdrop-blur-md rounded-full border border-white/30 group-hover/play:bg-red-600/90 transition-colors duration-300 shadow-[0_0_20px_rgba(0,0,0,0.5)]"></div>
+          <div className="absolute inset-0 bg-brand-600 rounded-full animate-ping opacity-30"></div>
+          <div className="absolute inset-0 bg-white/20 backdrop-blur-md rounded-full border border-white/30 group-hover/play:bg-brand-600/90 transition-colors duration-300 shadow-[0_0_20px_rgba(0,0,0,0.5)]"></div>
           <Play fill="currentColor" size={24} className="text-white relative z-10 ml-1" />
         </div>
       )}
@@ -106,7 +106,7 @@ const VideoCard = ({ video }: { video: any }) => {
           {video.product_id ? (
             <Link 
               href={`/${video.product_id.slug}`}
-              className="flex flex-col items-center justify-center w-full py-2 bg-white/10 hover:bg-red-600 text-white border border-white/20 hover:border-red-500 rounded-xl backdrop-blur-md transition-all shadow-[0_8px_16px_rgba(0,0,0,0.4)] group/btn"
+              className="flex flex-col items-center justify-center w-full py-2 bg-white/10 hover:bg-brand-600 text-white border border-white/20 hover:border-brand-500 rounded-xl backdrop-blur-md transition-all shadow-[0_8px_16px_rgba(0,0,0,0.4)] group/btn"
             >
               <span className="font-bold text-[11px] uppercase opacity-80 group-hover/btn:opacity-100 mb-0.5">Sản phẩm trong video</span>
               <span className="font-bold text-sm line-clamp-1 px-2 text-center flex items-center gap-1">
@@ -118,7 +118,7 @@ const VideoCard = ({ video }: { video: any }) => {
               href={video.redirectLink} 
               target="_blank" 
               rel="noopener noreferrer" 
-              className="flex items-center justify-center gap-2 w-full py-3 bg-white/10 hover:bg-red-600 text-white border border-white/20 hover:border-red-500 rounded-xl font-bold text-sm backdrop-blur-md transition-all shadow-[0_8px_16px_rgba(0,0,0,0.4)]"
+              className="flex items-center justify-center gap-2 w-full py-3 bg-white/10 hover:bg-brand-600 text-white border border-white/20 hover:border-brand-500 rounded-xl font-bold text-sm backdrop-blur-md transition-all shadow-[0_8px_16px_rgba(0,0,0,0.4)]"
             >
               Xem Ngay <ChevronRight size={16} />
             </a>
@@ -136,8 +136,8 @@ export default function VideoReviewSection({ videos }: VideoReviewProps) {
       {/* Header */}
       <div className="flex flex-col items-center justify-center mb-10">
         <h2 className="text-3xl md:text-4xl font-black uppercase text-gray-900 tracking-tight flex items-center gap-3">
-          <Play fill="currentColor" className="text-red-600" size={32} />
-          <span>REVIEW <span className="text-red-600">SẢN PHẨM</span></span>
+          <Play fill="currentColor" className="text-brand-600" size={32} />
+          <span>REVIEW <span className="text-brand-600">SẢN PHẨM</span></span>
         </h2>
         <p className="text-gray-500 mt-2 font-medium">Trải nghiệm thực tế - Đánh giá chân thực</p>
       </div>

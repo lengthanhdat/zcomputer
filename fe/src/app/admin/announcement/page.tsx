@@ -80,8 +80,8 @@ export default function AnnouncementPage() {
 
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8 max-w-3xl">
         <div className="flex items-center gap-2 mb-6 border-b border-gray-100 pb-4">
-          <div className="w-8 h-8 rounded-lg bg-red-50 flex items-center justify-center text-red-500">
-            <BellRing size={18} className="fill-red-500" />
+          <div className="w-8 h-8 rounded-lg bg-brand-50 flex items-center justify-center text-brand-500">
+            <BellRing size={18} className="fill-brand-500" />
           </div>
           <h2 className="text-lg font-bold text-gray-800">Cấu hình Popup</h2>
         </div>
@@ -107,31 +107,31 @@ export default function AnnouncementPage() {
                   checked={popupActive}
                   onChange={(e) => setPopupActive(e.target.checked)}
                 />
-                <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-red-500"></div>
+                <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-brand-500"></div>
               </label>
             </div>
 
             {/* Title */}
             <div>
-              <label className="block text-sm font-bold text-gray-700 mb-1">Tiêu đề thông báo <span className="text-red-500">*</span></label>
+              <label className="block text-sm font-bold text-gray-700 mb-1">Tiêu đề thông báo <span className="text-brand-500">*</span></label>
               <input
                 type="text"
                 value={popupTitle}
                 onChange={(e) => setPopupTitle(e.target.value)}
                 placeholder="VD: KHUYẾN MÃI LỚN - GIẢM GIÁ 50%"
-                className="w-full px-4 py-3 bg-gray-50/50 border border-gray-200 rounded-xl outline-none focus:border-red-500 focus:ring-4 focus:ring-red-500/10 transition-all text-gray-700"
+                className="w-full px-4 py-3 bg-gray-50/50 border border-gray-200 rounded-xl outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 transition-all text-gray-700"
               />
             </div>
 
             {/* Content */}
             <div>
-              <label className="block text-sm font-bold text-gray-700 mb-1">Nội dung <span className="text-red-500">*</span></label>
+              <label className="block text-sm font-bold text-gray-700 mb-1">Nội dung <span className="text-brand-500">*</span></label>
               <textarea
                 value={popupContent}
                 onChange={(e) => setPopupContent(e.target.value)}
                 rows={3}
                 placeholder="Nhập nội dung thông báo..."
-                className="w-full px-4 py-3 bg-gray-50/50 border border-gray-200 rounded-xl outline-none focus:border-red-500 focus:ring-4 focus:ring-red-500/10 transition-all text-gray-700 resize-none"
+                className="w-full px-4 py-3 bg-gray-50/50 border border-gray-200 rounded-xl outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 transition-all text-gray-700 resize-none"
               ></textarea>
             </div>
 
@@ -144,7 +144,7 @@ export default function AnnouncementPage() {
                   value={popupImage}
                   onChange={(e) => setPopupImage(e.target.value)}
                   placeholder="https://example.com/image.jpg"
-                  className="w-full px-4 py-3 bg-gray-50/50 border border-gray-200 rounded-xl outline-none focus:border-red-500 focus:ring-4 focus:ring-red-500/10 transition-all text-gray-700"
+                  className="w-full px-4 py-3 bg-gray-50/50 border border-gray-200 rounded-xl outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 transition-all text-gray-700"
                 />
               </div>
               <div>
@@ -154,7 +154,7 @@ export default function AnnouncementPage() {
                   value={popupLink}
                   onChange={(e) => setPopupLink(e.target.value)}
                   placeholder="VD: /laptop-gaming"
-                  className="w-full px-4 py-3 bg-gray-50/50 border border-gray-200 rounded-xl outline-none focus:border-red-500 focus:ring-4 focus:ring-red-500/10 transition-all text-gray-700"
+                  className="w-full px-4 py-3 bg-gray-50/50 border border-gray-200 rounded-xl outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 transition-all text-gray-700"
                 />
               </div>
             </div>
@@ -163,14 +163,14 @@ export default function AnnouncementPage() {
               <button
                 onClick={handleSavePopup}
                 disabled={savingPopup}
-                className="flex items-center justify-center gap-2 bg-red-600 text-white px-6 py-3 rounded-xl font-bold hover:bg-red-700 transition-colors disabled:opacity-50 w-full md:w-auto"
+                className="flex items-center justify-center gap-2 bg-brand-600 text-white px-6 py-3 rounded-xl font-bold hover:bg-brand-700 transition-colors disabled:opacity-50 w-full md:w-auto"
               >
                 <Save size={18} />
                 {savingPopup ? "Đang lưu..." : "Lưu Thông Báo"}
               </button>
             </div>
             
-            <div className="mt-2 p-4 bg-red-50/50 rounded-xl border border-red-100 text-sm text-red-700 leading-relaxed">
+            <div className="mt-2 p-4 bg-brand-50/50 rounded-xl border border-brand-100 text-sm text-brand-700 leading-relaxed">
               <strong>Lưu ý:</strong> Khách hàng chỉ nhìn thấy popup <strong>1 lần duy nhất</strong> cho mỗi phiên bản thông báo. Bất kỳ khi nào bạn bấm "Lưu Thông Báo", hệ thống sẽ tự động cập nhật phiên bản mới và thông báo sẽ bật lại trên trình duyệt của người dùng!
             </div>
           </div>

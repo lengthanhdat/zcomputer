@@ -107,13 +107,13 @@ export default function CategoryMenu({ categories }: { categories: Category[] })
             <div className="px-2 py-0.5">
               <Link
                 href={`/${cat.slug}`}
-                className={`flex items-center justify-between px-4 py-2 transition-all duration-300 rounded-lg ${isHovered ? 'bg-gradient-to-r from-red-600 to-red-500 text-white shadow-[0_4px_15px_rgba(239,68,68,0.3)] scale-[1.02]' : 'text-gray-700 hover:bg-red-50/50'}`}
+                className={`flex items-center justify-between px-4 py-2 transition-all duration-300 rounded-lg ${isHovered ? 'bg-primary text-white shadow-[0_4px_15px_var(--primary-ring)] scale-[1.02]' : 'text-gray-700 hover:bg-primary/5'}`}
               >
                 <div className="flex items-center gap-3">
-                  <Icon size={18} className={isHovered ? 'text-white' : 'text-gray-500 group-hover:text-red-500 transition-colors'} />
+                  <Icon size={18} className={isHovered ? 'text-white' : 'text-gray-500 group-hover:text-primary transition-colors'} />
                   <span className={`text-sm font-semibold ${isHovered ? 'text-white' : ''}`}>{cat.name}</span>
                 </div>
-                {hasSub && <ChevronRight size={16} className={isHovered ? 'text-white' : 'text-gray-400 group-hover:text-red-400 transition-colors'} />}
+                {hasSub && <ChevronRight size={16} className={isHovered ? 'text-white' : 'text-gray-400 group-hover:text-primary transition-colors'} />}
               </Link>
             </div>
 
@@ -124,7 +124,7 @@ export default function CategoryMenu({ categories }: { categories: Category[] })
                   <Link
                     key={sub._id}
                     href={`/${sub.slug}`}
-                    className="block px-6 py-2.5 text-sm font-medium text-gray-700 hover:text-red-600 hover:bg-red-50/80 hover:pl-8 transition-all duration-300"
+                    className="block px-6 py-2.5 text-sm font-medium text-gray-700 hover:text-primary hover:bg-primary/5 hover:pl-8 transition-all duration-300"
                   >
                     {sub.name}
                   </Link>

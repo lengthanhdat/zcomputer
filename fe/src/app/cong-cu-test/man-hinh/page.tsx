@@ -126,32 +126,32 @@ export default function MonitorTestPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#050505] text-white selection:bg-red-500 selection:text-white font-sans relative overflow-x-hidden">
+    <div className="min-h-screen bg-[#050505] text-white selection:bg-primary/100 selection:text-white font-sans relative overflow-x-hidden">
       
       {/* Premium Gaming Background */}
       <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=2070&auto=format&fit=crop')] bg-cover bg-center opacity-[0.15] mix-blend-screen pointer-events-none"></div>
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#050505]/90 to-[#050505] pointer-events-none"></div>
       
       {/* Neon Orbs */}
-      <div className="absolute top-[20%] left-[5%] w-[40vw] h-[40vw] bg-red-600/20 rounded-full blur-[150px] pointer-events-none animate-pulse"></div>
+      <div className="absolute top-[20%] left-[5%] w-[40vw] h-[40vw] bg-primary rounded-full blur-[150px] pointer-events-none animate-pulse"></div>
       <div className="absolute bottom-[10%] right-[10%] w-[30vw] h-[30vw] bg-orange-500/20 rounded-full blur-[120px] pointer-events-none"></div>
 
       <div className="container mx-auto px-4 max-w-5xl py-12 relative z-10">
         <div className="mb-8">
-          <Link href="/" className="inline-flex items-center text-gray-400 hover:text-red-500 transition-colors bg-white/5 px-4 py-2 rounded-lg backdrop-blur border border-white/5">
+          <Link href="/" className="inline-flex items-center text-gray-400 hover:text-primary transition-colors bg-white/5 px-4 py-2 rounded-lg backdrop-blur border border-white/5">
             <ArrowLeft size={18} className="mr-2" /> Trở về
           </Link>
         </div>
 
         <div className="relative group max-w-4xl mx-auto">
-          <div className="absolute inset-0 bg-gradient-to-r from-red-600 to-orange-600 rounded-[2.5rem] blur opacity-20 group-hover:opacity-40 transition-opacity duration-500"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-primary to-orange-600 rounded-[2.5rem] blur opacity-20 group-hover:opacity-40 transition-opacity duration-500"></div>
           
           <div className="bg-[#0a0a0a]/80 backdrop-blur-2xl border border-white/10 rounded-[2.5rem] p-8 md:p-14 text-center shadow-2xl relative overflow-hidden">
             
             <div className="flex flex-col items-center">
-              <div className="w-24 h-24 bg-red-500/10 rounded-full flex items-center justify-center mb-6 shadow-[0_0_30px_rgba(239,68,68,0.2)] relative">
-                <div className="absolute inset-0 bg-red-500/20 rounded-full animate-ping opacity-50"></div>
-                <Monitor size={40} className="text-red-500 relative z-10" />
+              <div className="w-24 h-24 bg-primary/100/10 rounded-full flex items-center justify-center mb-6 shadow-[0_0_30px_rgba(239,68,68,0.2)] relative">
+                <div className="absolute inset-0 bg-primary/100/20 rounded-full animate-ping opacity-50"></div>
+                <Monitor size={40} className="text-primary relative z-10" />
               </div>
 
               <h1 className="text-4xl md:text-5xl font-black uppercase tracking-tight mb-4 text-white">
@@ -164,23 +164,23 @@ export default function MonitorTestPage() {
 
               <button 
                 onClick={toggleFullscreen}
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-3 bg-red-600 hover:bg-red-500 text-white px-12 py-5 rounded-2xl font-black text-lg transition-all shadow-[0_0_30px_rgba(239,68,68,0.4)] hover:shadow-[0_0_50px_rgba(239,68,68,0.6)] hover:-translate-y-1 mb-12 uppercase tracking-widest"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-3 bg-primary hover:bg-primary/100 text-white px-12 py-5 rounded-2xl font-black text-lg transition-all shadow-[0_0_30px_rgba(239,68,68,0.4)] hover:shadow-[0_0_50px_rgba(239,68,68,0.6)] hover:-translate-y-1 mb-12 uppercase tracking-widest"
               >
                 <Expand size={24} /> Bắt Đầu Test
               </button>
 
               <div className="bg-[#111] border border-white/5 rounded-2xl p-6 text-left w-full max-w-2xl mx-auto shadow-inner">
                 <h3 className="text-white font-bold mb-5 uppercase tracking-wider text-sm flex items-center gap-2">
-                  <CheckCircle2 size={18} className="text-red-500" /> Hướng dẫn nhanh
+                  <CheckCircle2 size={18} className="text-primary" /> Hướng dẫn nhanh
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm text-gray-400">
                   <div className="flex flex-col gap-4">
-                    <div className="flex gap-3"><div className="w-1.5 h-1.5 rounded-full bg-red-500 mt-1.5 shrink-0"></div><p><strong className="text-gray-200">Lau sạch màn hình</strong> trước khi test để tránh nhầm bụi với điểm chết.</p></div>
-                    <div className="flex gap-3"><div className="w-1.5 h-1.5 rounded-full bg-red-500 mt-1.5 shrink-0"></div><p><strong className="text-gray-200">Click chuột</strong> hoặc <strong className="text-gray-200">Phím mũi tên</strong> để đổi qua lại giữa các bài test màu.</p></div>
+                    <div className="flex gap-3"><div className="w-1.5 h-1.5 rounded-full bg-primary/100 mt-1.5 shrink-0"></div><p><strong className="text-gray-200">Lau sạch màn hình</strong> trước khi test để tránh nhầm bụi với điểm chết.</p></div>
+                    <div className="flex gap-3"><div className="w-1.5 h-1.5 rounded-full bg-primary/100 mt-1.5 shrink-0"></div><p><strong className="text-gray-200">Click chuột</strong> hoặc <strong className="text-gray-200">Phím mũi tên</strong> để đổi qua lại giữa các bài test màu.</p></div>
                   </div>
                   <div className="flex flex-col gap-4">
-                    <div className="flex gap-3"><div className="w-1.5 h-1.5 rounded-full bg-red-500 mt-1.5 shrink-0"></div><p><strong className="text-gray-200">Tập trung nhìn kỹ</strong> các chấm đen trên nền màu sáng hoặc chấm sáng trên nền đen.</p></div>
-                    <div className="flex gap-3"><div className="w-1.5 h-1.5 rounded-full bg-red-500 mt-1.5 shrink-0"></div><p><strong className="text-gray-200">Phím ESC</strong> để thoát chế độ Toàn màn hình bất kỳ lúc nào.</p></div>
+                    <div className="flex gap-3"><div className="w-1.5 h-1.5 rounded-full bg-primary/100 mt-1.5 shrink-0"></div><p><strong className="text-gray-200">Tập trung nhìn kỹ</strong> các chấm đen trên nền màu sáng hoặc chấm sáng trên nền đen.</p></div>
+                    <div className="flex gap-3"><div className="w-1.5 h-1.5 rounded-full bg-primary/100 mt-1.5 shrink-0"></div><p><strong className="text-gray-200">Phím ESC</strong> để thoát chế độ Toàn màn hình bất kỳ lúc nào.</p></div>
                   </div>
                 </div>
               </div>

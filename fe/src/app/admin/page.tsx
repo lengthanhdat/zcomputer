@@ -49,7 +49,7 @@ export default function AdminDashboardPage() {
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
       {/* Header Area */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 bg-white p-8 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-blue-50 to-red-50 rounded-full blur-3xl opacity-70 -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>
+        <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-blue-50 to-brand-50 rounded-full blur-3xl opacity-70 -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>
         <div className="relative z-10">
           <h1 className="text-3xl font-black text-gray-900 tracking-tight mb-2">Tổng quan hệ thống</h1>
           <p className="text-gray-500 font-medium">Hôm nay: {today}</p>
@@ -137,14 +137,14 @@ export default function AdminDashboardPage() {
         <div className="lg:col-span-2 bg-white rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 p-8">
            <div className="flex items-center justify-between mb-6">
              <h3 className="text-xl font-bold text-gray-900">Bảng điều khiển nhanh</h3>
-             <div className="w-10 h-1 bg-red-500 rounded-full"></div>
+             <div className="w-10 h-1 bg-brand-500 rounded-full"></div>
            </div>
            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-             <Link href="/admin/products/new" className="flex flex-col items-center justify-center p-6 bg-gray-50 border border-gray-100 rounded-2xl hover:bg-white hover:border-red-200 hover:shadow-xl hover:shadow-red-500/10 transition-all group">
-               <div className="w-14 h-14 bg-white text-gray-600 rounded-full flex items-center justify-center mb-4 shadow-sm group-hover:bg-red-500 group-hover:text-white transition-all duration-300 group-hover:scale-110">
+             <Link href="/admin/products/new" className="flex flex-col items-center justify-center p-6 bg-gray-50 border border-gray-100 rounded-2xl hover:bg-white hover:border-brand-200 hover:shadow-xl hover:shadow-brand-500/10 transition-all group">
+               <div className="w-14 h-14 bg-white text-gray-600 rounded-full flex items-center justify-center mb-4 shadow-sm group-hover:bg-brand-500 group-hover:text-white transition-all duration-300 group-hover:scale-110">
                  <Package size={28} />
                </div>
-               <span className="font-bold text-sm text-gray-700 group-hover:text-red-600">Thêm SP</span>
+               <span className="font-bold text-sm text-gray-700 group-hover:text-brand-600">Thêm SP</span>
              </Link>
              
              <Link href="/admin/categories" className="flex flex-col items-center justify-center p-6 bg-gray-50 border border-gray-100 rounded-2xl hover:bg-white hover:border-blue-200 hover:shadow-xl hover:shadow-blue-500/10 transition-all group">
@@ -172,17 +172,17 @@ export default function AdminDashboardPage() {
 
         {/* Promo / Banner block */}
         <div className="bg-gradient-to-br from-gray-900 to-black rounded-2xl shadow-xl shadow-gray-900/20 p-8 flex flex-col justify-between relative overflow-hidden text-white">
-          <div className="absolute top-0 right-0 w-40 h-40 bg-red-600/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
+          <div className="absolute top-0 right-0 w-40 h-40 bg-brand-600/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
           <div className="relative z-10">
             <div className="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center backdrop-blur-md mb-6 border border-white/10">
-              <Warehouse className="text-red-400" size={24} />
+              <Warehouse className="text-brand-400" size={24} />
             </div>
             <h3 className="text-2xl font-black mb-3">Tình trạng kho lưu trữ</h3>
             <p className="text-gray-400 text-sm leading-relaxed mb-6 font-medium">
               Kiểm tra hàng tồn, cảnh báo hết hàng và quản lý nhập xuất theo thời gian thực.
             </p>
           </div>
-          <Link href="/admin/inventory" className="relative z-10 w-full bg-red-600 text-white font-bold py-4 px-6 rounded-xl text-center hover:bg-red-500 transition-colors flex items-center justify-center gap-2 shadow-lg shadow-red-600/30">
+          <Link href="/admin/inventory" className="relative z-10 w-full bg-brand-600 text-white font-bold py-4 px-6 rounded-xl text-center hover:bg-brand-500 transition-colors flex items-center justify-center gap-2 shadow-lg shadow-brand-600/30">
             Mở trình quản lý <ArrowRight size={18} />
           </Link>
         </div>

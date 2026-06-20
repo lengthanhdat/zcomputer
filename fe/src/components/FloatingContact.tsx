@@ -36,7 +36,7 @@ export default function FloatingContact() {
         {/* Scroll to Top */}
         <button
           onClick={scrollToTop}
-          className={`w-11 h-11 md:w-14 md:h-14 bg-gray-800/80 backdrop-blur-md border border-gray-600/50 text-white rounded-full flex items-center justify-center shadow-[0_0_15px_rgba(0,0,0,0.3)] hover:bg-red-600 hover:border-red-500 hover:-translate-y-1 hover:shadow-[0_0_20px_rgba(220,38,38,0.5)] transition-all duration-300 relative group ${
+          className={`w-11 h-11 md:w-14 md:h-14 bg-gray-800/80 backdrop-blur-md border border-gray-600/50 text-white rounded-full flex items-center justify-center shadow-[0_0_15px_rgba(0,0,0,0.3)] hover:bg-primary hover:border-primary hover:-translate-y-1 hover:shadow-[0_0_20px_var(--primary-ring)] transition-all duration-300 relative group ${
             showScrollTop ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10 pointer-events-none hidden"
           }`}
         >
@@ -71,10 +71,10 @@ export default function FloatingContact() {
             {/* Phone */}
             <a
               href="tel:0977334415"
-              className="w-11 h-11 md:w-14 md:h-14 bg-red-600 text-white rounded-full flex items-center justify-center shadow-[0_0_15px_rgba(220,38,38,0.4)] hover:bg-red-700 hover:scale-110 transition-all group relative"
+              className="w-11 h-11 md:w-14 md:h-14 bg-primary text-white rounded-full flex items-center justify-center shadow-[0_0_15px_var(--primary-ring)] hover:brightness-110 hover:scale-110 transition-all group relative"
             >
               <PhoneCall className="w-5 h-5 md:w-6 md:h-6" />
-              <span className="absolute right-full mr-3 bg-red-600 text-white px-3 py-1 rounded font-bold text-sm whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none hidden md:block">
+              <span className="absolute right-full mr-3 bg-primary text-white px-3 py-1 rounded font-bold text-sm whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none hidden md:block">
                 0977 334 415
               </span>
             </a>
@@ -109,7 +109,7 @@ export default function FloatingContact() {
           {/* Main Toggle Button */}
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className={`w-11 h-11 md:w-14 md:h-14 bg-primary text-white rounded-full flex items-center justify-center shadow-[0_0_15px_rgba(220,38,38,0.5)] hover:bg-red-700 hover:scale-110 transition-all relative z-50 ${isOpen ? '' : 'animate-bounce'}`}
+            className={`w-11 h-11 md:w-14 md:h-14 bg-primary text-white rounded-full flex items-center justify-center shadow-[0_0_15px_var(--primary-ring)] hover:brightness-110 hover:scale-110 transition-all relative z-50 ${isOpen ? '' : 'animate-bounce'}`}
             style={{ animationDuration: '2s' }}
           >
             {isOpen ? <X className="w-5 h-5 md:w-6 md:h-6" /> : <Headset className="w-5 h-5 md:w-6 md:h-6" />}

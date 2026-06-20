@@ -17,7 +17,7 @@ export default function CartPage() {
         </div>
         <h2 className="text-2xl font-bold mb-3 text-gray-800">Danh sách sản phẩm đang trống</h2>
         <p className="text-gray-500 mb-8">Hãy tìm thêm những sản phẩm công nghệ bạn yêu thích nhé.</p>
-        <Link href="/" className="bg-primary text-white px-8 py-3 rounded-md font-bold hover:bg-red-700 transition-colors">
+        <Link href="/" className="bg-primary text-white px-8 py-3 rounded-md font-bold hover:bg-primary/90 transition-colors">
           TIẾP TỤC MUA SẮM
         </Link>
       </div>
@@ -75,7 +75,7 @@ export default function CartPage() {
                       </div>
                       <button 
                         onClick={() => removeItem(item._id)}
-                        className="mt-3 text-sm text-red-500 flex items-center gap-1 mx-auto hover:underline"
+                        className="mt-3 text-sm text-primary flex items-center gap-1 mx-auto hover:underline"
                       >
                         <Trash2 size={14} /> Xóa
                       </button>
@@ -108,7 +108,7 @@ export default function CartPage() {
                 <div className="flex items-center justify-between border-t pt-3">
                   <button 
                     onClick={() => removeItem(item._id)}
-                    className="text-sm text-red-500 flex items-center gap-1 hover:underline"
+                    className="text-sm text-primary flex items-center gap-1 hover:underline"
                   >
                     <Trash2 size={14} /> Xóa khỏi giỏ
                   </button>
@@ -165,7 +165,7 @@ export default function CartPage() {
 
             <button 
               onClick={() => setShowContactModal(true)}
-              className="w-full bg-primary text-white font-bold text-lg py-4 rounded hover:bg-red-700 transition-colors flex items-center justify-center gap-2"
+              className="w-full bg-primary text-white font-bold text-lg py-4 rounded hover:bg-primary/90 transition-colors flex items-center justify-center gap-2"
             >
               NHẬN BÁO GIÁ / ĐẶT HÀNG <ArrowRight size={20} />
             </button>
@@ -196,9 +196,9 @@ export default function CartPage() {
                 <div className="flex flex-col gap-4 w-full">
                   <a 
                     href="tel:0977334415" 
-                    className="flex items-center gap-4 bg-gray-50 hover:bg-red-50 p-4 rounded-xl border border-gray-100 transition-colors group h-full"
+                    className="flex items-center gap-4 bg-gray-50 hover:bg-primary/10 p-4 rounded-xl border border-gray-100 transition-colors group h-full"
                   >
-                    <div className="w-12 h-12 bg-red-100 text-primary rounded-full flex items-center justify-center group-hover:scale-110 transition-transform shrink-0">
+                    <div className="w-12 h-12 bg-primary/20 text-primary rounded-full flex items-center justify-center group-hover:scale-110 transition-transform shrink-0">
                       <Phone size={24} />
                     </div>
                     <div>
@@ -266,7 +266,7 @@ export default function CartPage() {
         </div>
         <button 
           onClick={() => setShowContactModal(true)}
-          className="bg-primary text-white font-bold px-6 py-3.5 rounded-xl hover:bg-red-700 transition-colors shadow-lg shadow-red-500/20 text-sm uppercase"
+          className="bg-primary text-white font-bold px-6 py-3.5 rounded-xl hover:bg-primary/90 transition-colors shadow-lg shadow-primary/30 text-sm uppercase"
         >
           Đặt Hàng Ngay
         </button>

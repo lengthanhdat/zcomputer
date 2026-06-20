@@ -15,7 +15,7 @@ export default function AboutUsPage() {
           <div className="max-w-4xl mx-auto">
             <h1 className="text-3xl md:text-5xl lg:text-6xl font-black text-white uppercase tracking-tight mb-4 drop-shadow-lg leading-tight">
               Hệ thống cung cấp PC & Laptop <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-primary inline-block pb-1 pt-2 drop-shadow-none">Uy tín hàng đầu TP.HCM</span>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-500 to-primary inline-block pb-1 pt-2 drop-shadow-none">Uy tín hàng đầu TP.HCM</span>
             </h1>
             <p className="text-gray-300 text-base md:text-lg mb-8 font-medium">Chất lượng thực - Giá trị thực. Đồng hành cùng bạn trên mọi nẻo đường công nghệ.</p>
             <div className="flex flex-wrap justify-center gap-4 mb-12 md:mb-20">
@@ -105,7 +105,7 @@ export default function AboutUsPage() {
             ].map((item, idx) => (
               <div key={idx} className="bg-white/5 backdrop-blur-lg rounded-2xl p-8 border border-white/10 hover:bg-white/10 transition-colors group">
                 <div className="w-14 h-14 rounded-xl bg-primary/20 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
-                  <item.icon className="text-red-400" size={28} />
+                  <item.icon className="text-brand-400" size={28} />
                 </div>
                 <h3 className="text-xl font-bold mb-3">{item.title}</h3>
                 <p className="text-gray-400 leading-relaxed">{item.desc}</p>
@@ -124,8 +124,8 @@ export default function AboutUsPage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="border border-gray-100 rounded-2xl p-8 shadow-sm hover:shadow-xl hover:border-red-100 transition-all duration-300 group relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-red-50 rounded-bl-full -z-10 group-hover:scale-150 transition-transform duration-500"></div>
+            <div className="border border-gray-100 rounded-2xl p-8 shadow-sm hover:shadow-xl hover:border-brand-100 transition-all duration-300 group relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-brand-50 rounded-bl-full -z-10 group-hover:scale-150 transition-transform duration-500"></div>
               <div className="flex items-center gap-4 mb-6">
                 <div className="w-12 h-12 bg-primary text-white rounded-full flex items-center justify-center font-black text-xl shadow-lg">1</div>
                 <h3 className="text-xl font-bold text-gray-900">Chi nhánh 1 (Trụ sở)</h3>
@@ -139,8 +139,8 @@ export default function AboutUsPage() {
               </div>
             </div>
 
-            <div className="border border-gray-100 rounded-2xl p-8 shadow-sm hover:shadow-xl hover:border-red-100 transition-all duration-300 group relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-red-50 rounded-bl-full -z-10 group-hover:scale-150 transition-transform duration-500"></div>
+            <div className="border border-gray-100 rounded-2xl p-8 shadow-sm hover:shadow-xl hover:border-brand-100 transition-all duration-300 group relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-brand-50 rounded-bl-full -z-10 group-hover:scale-150 transition-transform duration-500"></div>
               <div className="flex items-center gap-4 mb-6">
                 <div className="w-12 h-12 bg-primary text-white rounded-full flex items-center justify-center font-black text-xl shadow-lg">2</div>
                 <h3 className="text-xl font-bold text-gray-900">Chi nhánh 2</h3>
@@ -160,12 +160,12 @@ export default function AboutUsPage() {
       {/* Contact CTA */}
       <section className="py-20 bg-gray-50">
         <div className="container mx-auto px-4 max-w-4xl">
-          <div className="bg-gradient-to-br from-primary to-red-700 rounded-3xl p-10 md:p-14 text-white text-center shadow-2xl relative overflow-hidden">
+          <div className="bg-gradient-to-br from-primary to-brand-700 rounded-3xl p-10 md:p-14 text-white text-center shadow-2xl relative overflow-hidden">
             <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
             <div className="absolute bottom-0 left-0 w-64 h-64 bg-black/20 rounded-full blur-3xl"></div>
 
             <h2 className="text-3xl md:text-4xl font-black mb-4 relative z-10">Bạn cần tìm một bộ máy tính phù hợp?</h2>
-            <p className="text-red-100 text-lg mb-10 max-w-2xl mx-auto relative z-10">Hãy liên hệ ngay với ZCOMPUTER để được tư vấn cấu hình tối ưu nhất cho nhu cầu học tập, làm việc và giải trí của bạn.</p>
+            <p className="text-brand-100 text-lg mb-10 max-w-2xl mx-auto relative z-10">Hãy liên hệ ngay với ZCOMPUTER để được tư vấn cấu hình tối ưu nhất cho nhu cầu học tập, làm việc và giải trí của bạn.</p>
 
             <div className="flex flex-col sm:flex-row justify-center gap-4 relative z-10">
               <a href="tel:0977334415" className="flex items-center justify-center gap-2 px-8 py-4 bg-white text-primary rounded-xl font-black text-lg hover:bg-gray-100 transition-colors shadow-lg hover:-translate-y-1 duration-300">

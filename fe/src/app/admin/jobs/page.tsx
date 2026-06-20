@@ -130,7 +130,7 @@ export default function AdminJobsPage() {
         </div>
         <button 
           onClick={() => openModal()}
-          className="bg-primary hover:bg-red-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors"
+          className="bg-primary hover:bg-brand-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors"
         >
           <Plus size={20} /> Thêm vị trí mới
         </button>
@@ -158,7 +158,7 @@ export default function AdminJobsPage() {
                   <td className="p-4">
                     <p className="font-bold text-gray-800 flex items-center gap-2">
                       {job.title}
-                      {job.isHot && <span className="bg-red-100 text-red-600 text-[10px] px-2 py-0.5 rounded uppercase">HOT</span>}
+                      {job.isHot && <span className="bg-brand-100 text-brand-600 text-[10px] px-2 py-0.5 rounded uppercase">HOT</span>}
                     </p>
                     <p className="text-xs text-gray-500">{job.location} • {job.type}</p>
                   </td>
@@ -182,7 +182,7 @@ export default function AdminJobsPage() {
                     </button>
                     <button 
                       onClick={() => handleDelete(job._id)}
-                      className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                      className="p-2 text-brand-600 hover:bg-brand-50 rounded-lg transition-colors"
                       title="Xóa"
                     >
                       <Trash2 size={18} />
@@ -308,7 +308,7 @@ export default function AdminJobsPage() {
               <button 
                 type="submit"
                 form="jobForm"
-                className="px-6 py-2 bg-primary hover:bg-red-700 text-white rounded-lg transition-colors font-medium"
+                className="px-6 py-2 bg-primary hover:bg-brand-700 text-white rounded-lg transition-colors font-medium"
               >
                 {editingJob ? "Lưu thay đổi" : "Thêm mới"}
               </button>

@@ -59,7 +59,7 @@ export default function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
       <div className="relative w-full max-w-md bg-white/80 backdrop-blur-xl rounded-[2rem] shadow-[0_20px_60px_rgba(0,0,0,0.1)] border border-white p-8 animate-in zoom-in-95 fade-in duration-300">
         <button 
           onClick={onClose}
-          className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 text-gray-500 hover:bg-red-50 hover:text-red-500 transition-colors"
+          className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 text-gray-500 hover:bg-brand-50 hover:text-brand-500 transition-colors"
         >
           <X size={18} />
         </button>

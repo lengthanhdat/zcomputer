@@ -493,7 +493,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
             
             <div className="space-y-6">
               <div>
-                <label className="block text-sm font-bold text-gray-700 mb-2">Tên sản phẩm <span className="text-red-500">*</span></label>
+                <label className="block text-sm font-bold text-gray-700 mb-2">Tên sản phẩm <span className="text-brand-500">*</span></label>
                 <div className="relative group">
                   <input 
                     type="text" 
@@ -518,7 +518,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-sm font-bold text-gray-700 mb-2">Danh mục <span className="text-red-500">*</span></label>
+                  <label className="block text-sm font-bold text-gray-700 mb-2">Danh mục <span className="text-brand-500">*</span></label>
                   <select 
                     name="category_id"
                     required
@@ -546,7 +546,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-bold text-gray-700 mb-2">Tình trạng máy <span className="text-red-500">*</span></label>
+                  <label className="block text-sm font-bold text-gray-700 mb-2">Tình trạng máy <span className="text-brand-500">*</span></label>
                   <select 
                     name="condition"
                     value={formData.condition} 
@@ -660,7 +660,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
                           const newSpecs = { ...formData.specs };
                           delete (newSpecs as any)[key];
                           setFormData({...formData, specs: newSpecs});
-                        }} className="px-3 bg-red-50 text-red-500 rounded-xl hover:bg-red-100 transition-colors">
+                        }} className="px-3 bg-brand-50 text-brand-500 rounded-xl hover:bg-brand-100 transition-colors">
                           <X size={18} />
                         </button>
                       </div>
@@ -740,7 +740,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
             
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-bold text-gray-700 mb-2">Giá bán (VNĐ) <span className="text-red-500">*</span></label>
+                <label className="block text-sm font-bold text-gray-700 mb-2">Giá bán (VNĐ) <span className="text-brand-500">*</span></label>
                 <div className="relative">
                   <input 
                     type="text" 
@@ -770,7 +770,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
               </div>
               
               <div>
-                <label className="block text-sm font-bold text-gray-700 mb-2">Số lượng tồn kho <span className="text-red-500">*</span></label>
+                <label className="block text-sm font-bold text-gray-700 mb-2">Số lượng tồn kho <span className="text-brand-500">*</span></label>
                 <div className="relative">
                   <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
                     <Box size={18} />
@@ -849,7 +849,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
                       <button 
                         type="button"
                         onClick={() => handleRemoveImage(idx)}
-                        className="absolute top-2 right-2 bg-white text-red-500 p-1.5 rounded-full shadow-md opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-50"
+                        className="absolute top-2 right-2 bg-white text-brand-500 p-1.5 rounded-full shadow-md opacity-0 group-hover:opacity-100 transition-opacity hover:bg-brand-50"
                       >
                         <X size={16} />
                       </button>
@@ -954,7 +954,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
                     onClick={() => {
                       setFormData(prev => ({ ...prev, gifts: prev.gifts.filter((_, i) => i !== idx) }));
                     }}
-                    className="px-3 bg-red-50 text-red-500 rounded-xl hover:bg-red-100 transition-colors shrink-0"
+                    className="px-3 bg-brand-50 text-brand-500 rounded-xl hover:bg-brand-100 transition-colors shrink-0"
                   >
                     <X size={16} />
                   </button>
@@ -975,7 +975,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
             <button 
               type="submit" 
               disabled={loading}
-              className="w-full bg-primary hover:bg-red-700 text-white px-6 py-3.5 rounded-xl font-bold shadow-lg shadow-red-500/30 transition-all hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+              className="w-full bg-primary hover:bg-brand-700 text-white px-6 py-3.5 rounded-xl font-bold shadow-lg shadow-brand-500/30 transition-all hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
             >
               {loading ? "Đang xử lý..." : "Lưu thay đổi"}
             </button>

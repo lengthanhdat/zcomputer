@@ -10,11 +10,11 @@ export const metadata: Metadata = {
 
 export default function ReferFriendPage() {
   return (
-    <div className="min-h-screen bg-[#030303] text-white selection:bg-red-600 selection:text-white font-sans overflow-hidden">
+    <div className="min-h-screen bg-[#030303] text-white selection:bg-primary selection:text-white font-sans overflow-hidden">
       
       {/* Dynamic Backgrounds */}
       <div className="fixed inset-0 z-0 pointer-events-none">
-        <div className="absolute top-[-20%] left-[-10%] w-[50vw] h-[50vw] bg-red-600/10 rounded-full blur-[150px] mix-blend-screen animate-pulse"></div>
+        <div className="absolute top-[-20%] left-[-10%] w-[50vw] h-[50vw] bg-primary/10 rounded-full blur-[150px] mix-blend-screen animate-pulse"></div>
         <div className="absolute bottom-[-20%] right-[-10%] w-[60vw] h-[60vw] bg-orange-600/10 rounded-full blur-[150px] mix-blend-screen opacity-70"></div>
         <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-[0.02]"></div>
       </div>
@@ -31,19 +31,19 @@ export default function ReferFriendPage() {
           <div className="max-w-4xl mx-auto text-center">
             
             <div className="inline-flex items-center gap-2 px-5 py-2.5 bg-black/50 backdrop-blur-md border border-white/10 rounded-full text-xs font-bold uppercase tracking-widest mb-8 shadow-xl">
-              <span className="flex h-2 w-2 rounded-full bg-red-500 animate-pulse"></span>
+              <span className="flex h-2 w-2 rounded-full bg-primary animate-pulse"></span>
               CHƯƠNG TRÌNH ĐỐI TÁC GIỚI THIỆU
             </div>
             
             <h1 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold leading-tight tracking-tight mb-8 drop-shadow-2xl">
               GIỚI THIỆU BẠN HIỀN <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-orange-500 to-yellow-500 inline-block pb-3 pt-3">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-orange-500 to-yellow-500 inline-block pb-3 pt-3">
                 NHẬN TIỀN LÌ XÌ LIỀN!
               </span>
             </h1>
             
             <p className="text-lg sm:text-xl text-gray-300 mb-12 font-medium leading-relaxed max-w-3xl mx-auto drop-shadow-md">
-              Trở thành đối tác giới thiệu của ZCOMPUTER. Khi giới thiệu bạn bè hoặc khách hàng mua sắm thành công các sản phẩm PC và Laptop tại hệ thống, bạn sẽ nhận ngay phần quà tri ân bằng tiền mặt lên đến <strong className="text-white font-extrabold bg-red-600/30 px-3 py-1 rounded-lg text-red-400 border border-red-500/20">500.000 VNĐ</strong>.
+              Trở thành đối tác giới thiệu của ZCOMPUTER. Khi giới thiệu bạn bè hoặc khách hàng mua sắm thành công các sản phẩm PC và Laptop tại hệ thống, bạn sẽ nhận ngay phần quà tri ân bằng tiền mặt lên đến <strong className="text-white font-extrabold bg-primary/30 px-3 py-1 rounded-lg text-primary border border-primary/20">500.000 VNĐ</strong>.
             </p>
             
             <div className="flex flex-wrap items-center justify-center gap-4 mb-12">
@@ -62,7 +62,7 @@ export default function ReferFriendPage() {
               <Link 
                 href="https://zalo.me/0977334415" 
                 target="_blank" 
-                className="w-full sm:w-auto relative group overflow-hidden flex items-center justify-center gap-3 bg-red-600 text-white px-10 py-4 rounded-xl font-bold text-lg transition-all shadow-[0_0_30px_rgba(239,68,68,0.4)] hover:shadow-[0_0_50px_rgba(239,68,68,0.6)] hover:-translate-y-1"
+                className="w-full sm:w-auto relative group overflow-hidden flex items-center justify-center gap-3 bg-primary text-white px-10 py-4 rounded-xl font-bold text-lg transition-all shadow-[0_0_30px_var(--primary-ring)] hover:shadow-[0_0_50px_var(--primary-ring)] hover:-translate-y-1"
               >
                 <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-out"></div>
                 <MessageCircle size={22} className="relative z-10" />
@@ -87,22 +87,22 @@ export default function ReferFriendPage() {
             <h2 className="text-4xl md:text-5xl font-black uppercase tracking-tight mb-4 text-white">
               QUY TRÌNH NHẬN QUÀ
             </h2>
-            <div className="w-16 h-1 bg-red-600 mx-auto"></div>
+            <div className="w-16 h-1 bg-primary mx-auto"></div>
           </div>
 
           <div className="relative max-w-5xl mx-auto">
             {/* Connecting Line */}
-            <div className="hidden md:block absolute top-12 left-[15%] right-[15%] h-[1px] bg-red-900/40 z-0"></div>
+            <div className="hidden md:block absolute top-12 left-[15%] right-[15%] h-[1px] bg-primary/20 z-0"></div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8 relative z-10">
               
               {/* Step 1 */}
               <div className="flex flex-col items-center text-center group">
                 <div className="relative mb-6">
-                  <div className="w-24 h-24 bg-[#110a0a] border border-white/5 rounded-2xl flex items-center justify-center group-hover:border-red-500/30 transition-colors shadow-lg">
-                    <Share2 size={32} className="text-red-500" />
+                  <div className="w-24 h-24 bg-[#110a0a] border border-white/5 rounded-2xl flex items-center justify-center group-hover:border-primary/30 transition-colors shadow-lg">
+                    <Share2 size={32} className="text-primary" />
                   </div>
-                  <div className="absolute -top-3 -right-3 w-8 h-8 rounded-full bg-[#110a0a] border border-red-900/50 flex items-center justify-center text-red-500 font-bold text-sm shadow-md">
+                  <div className="absolute -top-3 -right-3 w-8 h-8 rounded-full bg-[#110a0a] border border-primary/30 flex items-center justify-center text-primary font-bold text-sm shadow-md">
                     1
                   </div>
                 </div>
@@ -150,7 +150,7 @@ export default function ReferFriendPage() {
       </section>
 
       {/* Reward Table Section */}
-      <section id="reward-table" className="py-24 relative z-10 bg-[#0a0303] border-y border-red-900/20">
+      <section id="reward-table" className="py-24 relative z-10 bg-[#0a0303] border-y border-primary/30">
         <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-[0.03]"></div>
         
         <div className="container mx-auto px-4 sm:px-6 relative z-10">
@@ -162,16 +162,16 @@ export default function ReferFriendPage() {
           </div>
 
           <div className="max-w-4xl mx-auto">
-            <div className="bg-[#110505] border border-red-900/30 rounded-2xl overflow-hidden shadow-2xl">
+            <div className="bg-[#110505] border border-primary/30 rounded-2xl overflow-hidden shadow-2xl">
               
               {/* Table Header */}
-              <div className="flex items-center justify-between p-6 md:px-8 bg-red-950/20 border-b border-red-900/30">
-                <span className="text-red-500 font-bold uppercase tracking-widest text-sm">DÒNG SẢN PHẨM</span>
-                <span className="text-red-500 font-bold uppercase tracking-widest text-sm">QUÀ TẶNG</span>
+              <div className="flex items-center justify-between p-6 md:px-8 bg-primary/10 border-b border-primary/30">
+                <span className="text-primary font-bold uppercase tracking-widest text-sm">DÒNG SẢN PHẨM</span>
+                <span className="text-primary font-bold uppercase tracking-widest text-sm">QUÀ TẶNG</span>
               </div>
 
               {/* Row 1 */}
-              <div className="flex items-center justify-between p-6 md:px-8 border-b border-red-900/10 hover:bg-white/5 transition-colors">
+              <div className="flex items-center justify-between p-6 md:px-8 border-b border-primary/30 hover:bg-white/5 transition-colors">
                 <div className="flex items-center gap-4">
                   <CheckCircle2 size={20} className="text-gray-500" />
                   <span className="text-gray-300 font-medium text-sm md:text-base">PC Văn Phòng / Laptop Văn Phòng cơ bản</span>
@@ -180,7 +180,7 @@ export default function ReferFriendPage() {
               </div>
 
               {/* Row 2 */}
-              <div className="flex items-center justify-between p-6 md:px-8 border-b border-red-900/10 hover:bg-white/5 transition-colors">
+              <div className="flex items-center justify-between p-6 md:px-8 border-b border-primary/30 hover:bg-white/5 transition-colors">
                 <div className="flex items-center gap-4">
                   <CheckCircle2 size={20} className="text-gray-500" />
                   <span className="text-gray-300 font-medium text-sm md:text-base">PC Gaming / Laptop Gaming (Dưới 20 triệu)</span>
@@ -189,7 +189,7 @@ export default function ReferFriendPage() {
               </div>
 
               {/* Row 3 */}
-              <div className="flex items-center justify-between p-6 md:px-8 border-b border-red-900/10 hover:bg-white/5 transition-colors">
+              <div className="flex items-center justify-between p-6 md:px-8 border-b border-primary/30 hover:bg-white/5 transition-colors">
                 <div className="flex items-center gap-4">
                   <CheckCircle2 size={20} className="text-gray-500" />
                   <span className="text-gray-300 font-medium text-sm md:text-base">PC Đồ Họa / Laptop Gaming (Từ 20 - 40 triệu)</span>
@@ -198,13 +198,13 @@ export default function ReferFriendPage() {
               </div>
 
               {/* Row 4 (Highlighted) */}
-              <div className="flex items-center justify-between p-6 md:px-8 bg-red-950/30 relative overflow-hidden group">
-                <div className="absolute inset-0 bg-gradient-to-r from-red-600/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+              <div className="flex items-center justify-between p-6 md:px-8 bg-primary/10 relative overflow-hidden group">
+                <div className="absolute inset-0 bg-gradient-to-r from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
                 <div className="flex items-center gap-4 relative z-10">
-                  <CheckCircle2 size={20} className="text-red-500 drop-shadow-[0_0_10px_rgba(239,68,68,0.5)]" />
-                  <span className="text-red-400 font-bold text-sm md:text-base drop-shadow-sm">PC Workstation / Laptop Cao Cấp (Trên 40 triệu)</span>
+                  <CheckCircle2 size={20} className="text-primary drop-shadow-[0_0_10px_var(--primary-ring)]" />
+                  <span className="text-primary font-bold text-sm md:text-base drop-shadow-sm">PC Workstation / Laptop Cao Cấp (Trên 40 triệu)</span>
                 </div>
-                <div className="text-red-500 font-black text-xl md:text-2xl tracking-wide relative z-10 drop-shadow-[0_0_10px_rgba(239,68,68,0.3)]">500.000đ</div>
+                <div className="text-primary font-black text-xl md:text-2xl tracking-wide relative z-10 drop-shadow-[0_0_10px_var(--primary-ring)]">500.000đ</div>
               </div>
             </div>
           </div>
@@ -215,7 +215,7 @@ export default function ReferFriendPage() {
       <section className="py-24 relative z-10 text-center">
         <div className="container mx-auto px-4">
           <h2 className="text-4xl md:text-5xl font-black uppercase tracking-tight mb-8 text-white">
-            KẾT NỐI VỚI <span className="text-red-500">ĐỘI NGŨ ZCOMPUTER</span>
+            KẾT NỐI VỚI <span className="text-primary">ĐỘI NGŨ ZCOMPUTER</span>
           </h2>
           <p className="text-xl text-gray-400 mb-12 max-w-2xl mx-auto">
             Liên hệ ngay qua Zalo để đội ngũ chuyên viên của chúng tôi hỗ trợ tư vấn các cấu hình tối ưu và chi tiết nhất cho khách hàng của bạn.
@@ -224,7 +224,7 @@ export default function ReferFriendPage() {
           <Link 
             href="https://zalo.me/0977334415" 
             target="_blank"
-            className="inline-flex bg-red-600 text-white hover:bg-red-500 px-12 py-5 rounded-2xl font-black text-xl transition-all shadow-[0_10px_30px_rgba(239,68,68,0.4)] hover:-translate-y-1 items-center justify-center gap-3"
+            className="inline-flex bg-primary text-white hover:bg-primary px-12 py-5 rounded-2xl font-black text-xl transition-all shadow-[0_10px_30px_var(--primary-ring)] hover:-translate-y-1 items-center justify-center gap-3"
           >
             <MessageCircle size={24} />
             LIÊN HỆ TƯ VẤN NGAY

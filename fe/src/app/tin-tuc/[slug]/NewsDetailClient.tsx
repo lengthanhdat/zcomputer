@@ -104,7 +104,7 @@ export default function NewsDetailClient({ slug }: { slug: string }) {
   if (loading) {
     return (
       <div className="flex justify-center items-center py-40 min-h-[60vh]">
-        <div className="w-12 h-12 border-4 border-red-500/30 border-t-red-600 rounded-full animate-spin"></div>
+        <div className="w-12 h-12 border-4 border-primary/50 border-t-primary rounded-full animate-spin"></div>
       </div>
     );
   }
@@ -114,7 +114,7 @@ export default function NewsDetailClient({ slug }: { slug: string }) {
       <div className="container mx-auto px-4 py-20 text-center min-h-[60vh] flex flex-col justify-center items-center">
         <h2 className="text-3xl font-bold mb-4">Không tìm thấy bài viết!</h2>
         <p className="text-gray-500 mb-8">Bài viết bạn đang tìm có thể đã bị xóa hoặc đường dẫn không đúng.</p>
-        <Link href="/tin-tuc" className="bg-red-600 text-white px-6 py-3 rounded-lg font-bold hover:bg-red-700 transition">
+        <Link href="/tin-tuc" className="bg-primary text-white px-6 py-3 rounded-lg font-bold hover:bg-primary transition">
           Về trang tin tức
         </Link>
       </div>
@@ -145,7 +145,7 @@ export default function NewsDetailClient({ slug }: { slug: string }) {
           </Link>
           
           <div className="inline-flex mb-4">
-            <span className="bg-red-600 text-white font-bold text-xs uppercase px-3 py-1.5 rounded shadow-lg">
+            <span className="bg-primary text-white font-bold text-xs uppercase px-3 py-1.5 rounded shadow-lg">
               {article.category}
             </span>
           </div>
@@ -175,7 +175,7 @@ export default function NewsDetailClient({ slug }: { slug: string }) {
           {/* Article Body */}
           <div className="lg:w-8/12 xl:w-9/12 min-w-0 bg-white rounded-2xl md:rounded-[2rem] p-6 md:p-10 lg:p-16 shadow-[0_10px_40px_rgba(0,0,0,0.05)]">
             {/* Summary Box */}
-            <div className="bg-red-50 border-l-4 border-red-500 p-6 rounded-r-xl mb-10 text-gray-800 text-lg font-medium italic break-words">
+            <div className="bg-primary/10 border-l-4 border-primary/50 p-6 rounded-r-xl mb-10 text-gray-800 text-lg font-medium italic break-words">
               {article.summary}
             </div>
             
@@ -288,7 +288,7 @@ export default function NewsDetailClient({ slug }: { slug: string }) {
               <div className="mt-12 pt-8 border-t border-gray-100 flex items-center gap-3 flex-wrap">
                 <span className="font-bold text-gray-900 mr-2">Tags:</span>
                 {(Array.isArray(article.tags) ? article.tags : article.tags.split(",")).map((tag: string, index: number) => (
-                  <span key={index} className="bg-gray-100 text-gray-600 px-3 py-1 rounded-md text-sm font-medium hover:bg-red-50 hover:text-red-600 cursor-pointer transition">
+                  <span key={index} className="bg-gray-100 text-gray-600 px-3 py-1 rounded-md text-sm font-medium hover:bg-primary/10 hover:text-primary cursor-pointer transition">
                     #{typeof tag === 'string' ? tag.trim() : tag}
                   </span>
                 ))}
@@ -299,7 +299,7 @@ export default function NewsDetailClient({ slug }: { slug: string }) {
             <div className="mt-8 pt-8 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-4">
               <h4 className="font-bold text-lg text-gray-900">Chia sẻ bài viết này:</h4>
               <div className="flex items-center gap-3">
-                <button onClick={copyLink} className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 hover:bg-red-600 hover:text-white transition-colors">
+                <button onClick={copyLink} className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 hover:bg-primary hover:text-white transition-colors">
                   <LinkIcon size={18} />
                 </button>
                 <a href={`https://www.facebook.com/sharer/sharer.php?u=${typeof window !== 'undefined' ? window.location.href : ''}`} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-[#1877F2]/10 flex items-center justify-center text-[#1877F2] hover:bg-[#1877F2] hover:text-white transition-colors">
@@ -316,7 +316,7 @@ export default function NewsDetailClient({ slug }: { slug: string }) {
           <div className="lg:w-4/12 xl:w-3/12 hidden lg:block">
             <div className="sticky top-28 bg-white rounded-3xl p-6 shadow-sm border border-gray-100">
               <h3 className="text-xl font-black text-gray-900 mb-6 flex items-center gap-2">
-                <TrendingUp className="text-red-600" /> Các tin tức khác
+                <TrendingUp className="text-primary" /> Các tin tức khác
               </h3>
               
               <div className="flex flex-col gap-6">
@@ -327,7 +327,7 @@ export default function NewsDetailClient({ slug }: { slug: string }) {
                         <img src={getImageUrl(item.thumbnail)} alt="Thumbnail" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
                       </div>
                       <div>
-                        <h4 className="font-bold text-gray-800 text-sm line-clamp-2 mb-1 group-hover:text-red-600 transition-colors">{item.title}</h4>
+                        <h4 className="font-bold text-gray-800 text-sm line-clamp-2 mb-1 group-hover:text-primary transition-colors">{item.title}</h4>
                         <p className="text-xs text-gray-500 flex items-center gap-1"><Eye size={12} /> {item.views} lượt xem</p>
                       </div>
                     </Link>
@@ -338,9 +338,9 @@ export default function NewsDetailClient({ slug }: { slug: string }) {
               </div>
 
               <div className="mt-8 pt-8 border-t border-gray-100">
-                <div className="bg-gradient-to-br from-red-600 to-red-500 rounded-2xl p-6 text-white text-center shadow-lg shadow-red-500/30">
+                <div className="bg-gradient-to-br from-primary to-primary rounded-2xl p-6 text-white text-center shadow-lg shadow-primary">
                   <h4 className="font-black text-lg mb-2">Đăng ký nhận tin</h4>
-                  <p className="text-sm text-red-100 mb-4">Nhận ngay thông báo về siêu khuyến mãi và mã giảm giá độc quyền.</p>
+                  <p className="text-sm text-primary mb-4">Nhận ngay thông báo về siêu khuyến mãi và mã giảm giá độc quyền.</p>
                   <input 
                     type="email" 
                     value={email}
@@ -351,7 +351,7 @@ export default function NewsDetailClient({ slug }: { slug: string }) {
                   <button 
                     onClick={handleSubscribe}
                     disabled={subscribing}
-                    className="w-full bg-white text-red-600 font-bold py-2.5 rounded-lg text-sm hover:shadow-lg transition disabled:opacity-70 disabled:hover:shadow-none"
+                    className="w-full bg-white text-primary font-bold py-2.5 rounded-lg text-sm hover:shadow-lg transition disabled:opacity-70 disabled:hover:shadow-none"
                   >
                     {subscribing ? "Đang xử lý..." : "Đăng ký ngay"}
                   </button>

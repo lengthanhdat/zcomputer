@@ -44,7 +44,7 @@ export default function Header() {
           {/* Mobile Hamburger Menu Icon */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="lg:hidden p-2 text-gray-700 hover:text-red-600 transition-colors focus:outline-none"
+            className="lg:hidden p-2 text-gray-700 hover:text-brand-600 transition-colors focus:outline-none"
             aria-label="Toggle menu"
           >
             {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
@@ -60,7 +60,7 @@ export default function Header() {
               }
             }}
           >
-            <div className="absolute inset-0 bg-red-500/10 blur-[20px] rounded-full group-hover:bg-red-500/20 transition-all duration-500 pointer-events-none"></div>
+            <div className="absolute inset-0 bg-brand-500/10 blur-[20px] rounded-full group-hover:bg-brand-500/20 transition-all duration-500 pointer-events-none"></div>
             <Image src="/logo.webp" alt="Z" width={80} height={80} priority className="h-14 w-14 sm:h-[68px] sm:w-[68px] object-contain group-hover:scale-105 transition-all duration-300 drop-shadow-md relative z-10" />
             
             {/* New Storefront-style Text Logo */}
@@ -87,9 +87,9 @@ export default function Header() {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Bạn cần tìm linh kiện, PC hay Laptop..."
-                className="w-full border-2 border-red-100 bg-white/60 backdrop-blur-md rounded-full py-2.5 px-5 pr-12 text-sm focus:outline-none focus:border-red-400 focus:bg-white shadow-inner transition-all duration-300 text-gray-800 placeholder-gray-400 group-hover/search:shadow-[0_0_15px_rgba(239,68,68,0.1)]"
+              className="w-full border-2 border-primary/20 bg-white/60 backdrop-blur-md rounded-full py-2.5 px-5 pr-12 text-sm focus:outline-none focus:border-primary/60 focus:bg-white shadow-inner transition-all duration-300 text-gray-800 placeholder-gray-400 group-hover/search:shadow-[0_0_15px_var(--primary-ring)]"
               />
-              <button type="submit" className="absolute right-0 top-0 h-full w-14 bg-gradient-to-r from-red-600 to-red-500 rounded-r-full text-white flex items-center justify-center hover:shadow-[0_0_15px_rgba(239,68,68,0.5)] transition-all duration-300" aria-label="Tìm kiếm">
+              <button type="submit" className="absolute right-0 top-0 h-full w-14 bg-primary rounded-r-full text-white flex items-center justify-center hover:brightness-110 transition-all duration-300" aria-label="Tìm kiếm">
                 <Search size={18} />
               </button>
             </form>
@@ -100,12 +100,12 @@ export default function Header() {
             {/* Hotline & Showroom */}
             <div className="hidden xl:flex items-center gap-6 mr-4 border-r pr-6 border-gray-200">
               <div className="flex items-center gap-2 group cursor-pointer">
-                <div className="w-10 h-10 rounded-full bg-red-50 flex items-center justify-center text-red-600 group-hover:bg-red-600 group-hover:text-white transition-colors duration-300">
+                <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors duration-300">
                   <PhoneCall size={20} />
                 </div>
                 <div className="flex flex-col">
                   <span className="text-[11px] text-gray-500 font-medium uppercase tracking-wide">Hotline mua hàng</span>
-                  <span className="text-[15px] font-black text-red-600 leading-tight">0977 334 415</span>
+                  <span className="text-[15px] font-black text-primary leading-tight">0977 334 415</span>
                 </div>
               </div>
 
@@ -186,7 +186,7 @@ export default function Header() {
                         {children.length > 0 && (
                           <div className={`grid transition-all duration-300 ease-out ${isExpanded ? 'grid-rows-[1fr] opacity-100 mt-2' : 'grid-rows-[0fr] opacity-0'}`}>
                             <div className="overflow-hidden">
-                              <ul className="pl-4 border-l-2 border-red-100 space-y-3 py-2 text-sm font-medium text-gray-600">
+                              <ul className="pl-4 border-l-2 border-brand-100 space-y-3 py-2 text-sm font-medium text-gray-600">
                                 {children.map((child: any) => (
                                   <li key={child._id || Math.random()}>
                                     <Link href={`/${child.slug || ''}`} onClick={() => setMobileMenuOpen(false)} className="block hover:text-primary transition-colors">
