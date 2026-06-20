@@ -43,7 +43,7 @@ export default function HeaderNav() {
           )}
         </div>
 
-        <ul suppressHydrationWarning className="flex items-center gap-3 lg:gap-4 xl:gap-8 text-[11px] lg:text-[12px] xl:text-[13px] font-bold tracking-wide flex-1 whitespace-nowrap">
+        <ul suppressHydrationWarning className="flex flex-wrap items-center gap-x-3 gap-y-0 lg:gap-x-4 xl:gap-x-8 text-[10.5px] lg:text-[11px] xl:text-[13px] font-bold tracking-wide flex-1">
           
           {/* SẢN PHẨM Link */}
           <li>
