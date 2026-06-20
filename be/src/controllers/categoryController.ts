@@ -6,7 +6,6 @@ import slugify from 'slugify';
 export const getCategories = async (req: Request, res: Response) => {
   try {
     const categories = await Category.find().sort({ order: 1, createdAt: 1 }).select('name slug description parent_id image order').lean();
-    res.set('Cache-Control', 'public, max-age=120, stale-while-revalidate=60');
     res.json(categories);
   } catch (error) {
     res.status(500).json({ message: 'Lỗi server khi lấy danh mục', error });

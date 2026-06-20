@@ -113,10 +113,10 @@ export default function HomeClient() {
     async function fetchData() {
       try {
         const [catRes, prodRes, bannerRes, videoRes] = await Promise.all([
-          fetchApi("/categories", { signal: controller.signal }),
-          fetchApi("/products?limit=100", { signal: controller.signal }),
-          fetchApi("/banners", { signal: controller.signal }),
-          fetchApi("/video-reviews", { signal: controller.signal })
+          fetchApi(`/categories?t=${Date.now()}`, { signal: controller.signal }),
+          fetchApi(`/products?limit=100&t=${Date.now()}`, { signal: controller.signal }),
+          fetchApi(`/banners?t=${Date.now()}`, { signal: controller.signal }),
+          fetchApi(`/video-reviews?t=${Date.now()}`, { signal: controller.signal })
         ]);
         const [catData, prodData, bannerData, videoData] = await Promise.all([
           catRes.ok ? catRes.json() : [],
