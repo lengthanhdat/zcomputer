@@ -153,7 +153,7 @@ export default function AnnouncementPage() {
                   type="text"
                   value={popupLink}
                   onChange={(e) => setPopupLink(e.target.value)}
-                  placeholder="VD: /category/laptop-gaming"
+                  placeholder="VD: /laptop-gaming"
                   className="w-full px-4 py-3 bg-gray-50/50 border border-gray-200 rounded-xl outline-none focus:border-red-500 focus:ring-4 focus:ring-red-500/10 transition-all text-gray-700"
                 />
               </div>

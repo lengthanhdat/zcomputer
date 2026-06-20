@@ -187,7 +187,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
               </div>
               <h2 className="text-2xl font-black text-gray-800 mb-2 uppercase tracking-wide">Không tìm thấy sản phẩm</h2>
               <p className="text-gray-500 text-lg">Rất tiếc, chúng tôi không tìm thấy sản phẩm nào phù hợp với từ khóa <span className="font-bold text-gray-800">"{query}"</span>.</p>
-              <Link href="/category/all" className="mt-6 px-6 py-2 bg-gray-100 hover:bg-gray-200 text-gray-800 font-bold rounded-lg transition-colors">Xóa bộ lọc</Link>
+              <Link href="/all" className="mt-6 px-6 py-2 bg-gray-100 hover:bg-gray-200 text-gray-800 font-bold rounded-lg transition-colors">Xóa bộ lọc</Link>
             </div>
           ) : (
             <>
@@ -209,7 +209,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
                       key={product._id}
                       className={`bg-white rounded-2xl border border-gray-100 overflow-hidden group shadow-sm flex flex-col h-full relative transition-all duration-300 ${isOutOfStock ? 'opacity-80' : 'hover:shadow-[0_20px_40px_rgb(220,38,38,0.12)] hover:-translate-y-2'}`}
                     >
-                      <Link href={`/product/${product.slug}`} className="absolute inset-0 z-20"></Link>
+                      <Link href={`/${product.slug}`} className="absolute inset-0 z-20"></Link>
                       <div className="relative aspect-[4/3] p-4 flex items-center justify-center bg-white overflow-hidden">
 
                         {isOutOfStock && (
@@ -285,7 +285,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
                           <div className="text-[11px] font-bold text-gray-500 uppercase">{product.brand || "KHÁC"}</div>
                           <LikeButton product={product} />
                         </div>
-                        <Link href={`/product/${product.slug}`} className="hover:text-red-600 transition-colors mb-3 z-30 relative">
+                        <Link href={`/${product.slug}`} className="hover:text-red-600 transition-colors mb-3 z-30 relative">
                           <h3 className="text-gray-700 text-[13px] font-medium leading-relaxed line-clamp-2">{product.name}</h3>
                         </Link>
                         

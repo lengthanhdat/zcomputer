@@ -1,11 +1,13 @@
 import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { Filter, CheckCircle2, ShieldCheck, Truck, Zap, Gift, ArrowRight, RefreshCcw, Settings, Eye, Maximize, Cpu, Monitor, Server, HardDrive } from "lucide-react";
+import CategoryClient from "@/components/CategoryClient";
 import ProductActions from "@/components/ProductActions";
 import ProductGallery from "@/components/ProductGallery";
 import ViewIncrementer from "@/components/ViewIncrementer";
 import LikeButton from "@/components/LikeButton";
-import { CheckCircle2, ShieldCheck, Truck, Zap, Gift, ArrowRight, RefreshCcw, Settings, Eye, Maximize, Cpu, Monitor, Server, HardDrive } from "lucide-react";
+import { notFound } from "next/navigation";
 
 export const revalidate = 0;
 
@@ -33,20 +35,21 @@ type Product = {
   isHotSale?: boolean;
   flashSalePrice?: number;
   flashSaleEnd?: string | Date;
+  message?: string;
 };
 
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:5000";
 
+// --- FETCH FUNCTIONS ---
+
 async function getProduct(slug: string): Promise<Product | null> {
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), 2500);
-
   try {
     const res = await fetch(`${API_BASE}/api/products/${slug}`, {
       next: { revalidate },
       signal: controller.signal,
     });
-
     if (!res.ok) return null;
     return res.json();
   } catch {
@@ -54,6 +57,38 @@ async function getProduct(slug: string): Promise<Product | null> {
   } finally {
     clearTimeout(timeout);
   }
+}
+
+async function getCategoryProducts(categorySlug: string): Promise<Product[]> {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 2500);
+  try {
+    const res = await fetch(`${API_BASE}/api/products?category=${categorySlug}`, {
+      next: { revalidate },
+      signal: controller.signal,
+    });
+    if (!res.ok) return [];
+    return res.json();
+  } catch {
+    return [];
+  } finally {
+    clearTimeout(timeout);
+  }
+}
+
+async function getCategoryName(categorySlug: string): Promise<string | null> {
+  if (categorySlug === 'all') return 'Tất cả sản phẩm';
+  try {
+    const res = await fetch(`${API_BASE}/api/categories`);
+    if (res.ok) {
+      const categories = await res.json();
+      const cat = categories.find((c: any) => c.slug === categorySlug);
+      return cat ? cat.name : null;
+    }
+  } catch (error) {
+    console.error("Failed to fetch category name:", error);
+  }
+  return null;
 }
 
 async function getSimilarProducts(categoryId: string | null, excludeId: string): Promise<Product[]> {
@@ -69,12 +104,9 @@ async function getSimilarProducts(categoryId: string | null, excludeId: string):
     let similar = data.filter((p: any) => 
       categoryId && (p.category_id === categoryId || p.category_id?._id === categoryId) && p._id !== excludeId
     );
-    
-    // Nếu không có sản phẩm cùng danh mục, lấy đại các sản phẩm khác (fallback)
     if (similar.length === 0) {
       similar = data.filter((p: any) => p._id !== excludeId);
     }
-    
     return similar.slice(0, 4);
   } catch {
     return [];
@@ -83,59 +115,102 @@ async function getSimilarProducts(categoryId: string | null, excludeId: string):
   }
 }
 
+// --- METADATA ---
+
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const resolvedParams = await params;
-  const product = await getProduct(resolvedParams.slug);
+  const slug = resolvedParams.slug;
+  const siteUrl = process.env.NEXT_PUBLIC_FRONTEND_URL || 'http://localhost:3000';
 
-  if (!product) {
+  // 1. Try to fetch as Product
+  const product = await getProduct(slug);
+  if (product && !product.message) {
+    const plainTextDescription = product.description 
+      ? product.description.replace(/<[^>]+>/g, '').substring(0, 160) + '...'
+      : `Mua ${product.name} chính hãng tại ZCOMPUTER với giá tốt nhất, bảo hành uy tín.`;
+
+    const currentUrl = `${siteUrl}/${product.slug}`;
+
     return {
-      title: "Không tìm thấy sản phẩm - ZCOMPUTER",
-      description: "Sản phẩm bạn tìm kiếm không tồn tại hoặc đã bị xóa.",
+      title: `${product.name} | ZCOMPUTER`,
+      description: plainTextDescription,
+      alternates: { canonical: currentUrl },
+      openGraph: {
+        title: product.name,
+        description: plainTextDescription,
+        url: currentUrl,
+        images: product.images?.[0] ? [{ url: product.images[0] }] : [],
+        type: 'article',
+      },
+      twitter: {
+        card: 'summary_large_image',
+        title: product.name,
+        description: plainTextDescription,
+        images: product.images?.[0] ? [product.images[0]] : [],
+      }
     };
   }
 
-  const plainTextDescription = product.description 
-    ? product.description.replace(/<[^>]+>/g, '').substring(0, 160) + '...'
-    : `Mua ${product.name} chính hãng tại ZCOMPUTER với giá tốt nhất, bảo hành uy tín.`;
+  // 2. Try to fetch as Category
+  const categoryName = await getCategoryName(slug);
+  if (categoryName) {
+    return {
+      title: `${categoryName} chính hãng, giá tốt | ZCOMPUTER`,
+      description: `Mua ${categoryName} tại ZCOMPUTER với giá tốt nhất thị trường, cam kết chính hãng 100%, bảo hành uy tín, giao hàng toàn quốc.`,
+      openGraph: {
+        title: `${categoryName} | ZCOMPUTER`,
+        description: `Khám phá các sản phẩm ${categoryName} chất lượng cao tại ZCOMPUTER.`,
+      },
+    };
+  }
 
-  const siteUrl = process.env.NEXT_PUBLIC_FRONTEND_URL || 'http://localhost:3000';
-  const currentUrl = `${siteUrl}/product/${product.slug}`;
-
+  // 3. Fallback
   return {
-    title: `${product.name} | ZCOMPUTER`,
-    description: plainTextDescription,
-    alternates: {
-      canonical: currentUrl,
-    },
-    openGraph: {
-      title: product.name,
-      description: plainTextDescription,
-      url: currentUrl,
-      images: product.images?.[0] ? [{ url: product.images[0] }] : [],
-      type: 'article',
-    },
-    twitter: {
-      card: 'summary_large_image',
-      title: product.name,
-      description: plainTextDescription,
-      images: product.images?.[0] ? [product.images[0]] : [],
-    }
+    title: "Không tìm thấy trang - ZCOMPUTER",
+    description: "Trang bạn tìm kiếm không tồn tại hoặc đã bị xóa.",
   };
 }
 
-export default async function ProductDetailPage({ params }: { params: Promise<{ slug: string }> }) {
+// --- PAGE COMPONENT ---
+
+export default async function DynamicRoutePage({ params }: { params: Promise<{ slug: string }> }) {
   const resolvedParams = await params;
-  const product = await getProduct(resolvedParams.slug);
-
-  if (!product) {
-    return (
-      <div className="container mx-auto px-4 py-20 text-center">
-        <h1 className="text-2xl font-bold text-gray-800 mb-4">Không tìm thấy sản phẩm</h1>
-        <Link href="/" className="text-primary font-bold hover:underline">Quay về trang chủ</Link>
-      </div>
-    );
+  const slug = resolvedParams.slug;
+  
+  // Try fetching as Product first
+  const product = await getProduct(slug);
+  
+  // If product exists and doesn't have an error message
+  if (product && !product.message && product.name) {
+    return <ProductDetailView product={product} />;
   }
+  
+  // If not product, try fetching as Category
+  const categoryName = await getCategoryName(slug);
+  
+  // If it's a valid category or 'all'
+  if (categoryName || slug === 'all') {
+    const products = await getCategoryProducts(slug);
+    const finalCatName = categoryName || "Sản phẩm";
+    return <CategoryClient initialProducts={products} categoryName={finalCatName} />;
+  }
+  
+  // If neither product nor category, show 404
+  return (
+    <div className="container mx-auto px-4 py-32 text-center min-h-[60vh] flex flex-col items-center justify-center">
+      <Image src="/logo.png" alt="ZCOMPUTER" width={120} height={120} className="mb-6 opacity-50 grayscale" />
+      <h1 className="text-4xl font-black text-gray-800 mb-4 uppercase tracking-tight">Không tìm thấy nội dung</h1>
+      <p className="text-gray-500 mb-8 max-w-md mx-auto">Sản phẩm hoặc danh mục bạn đang tìm kiếm không tồn tại, đã bị xóa hoặc thay đổi đường dẫn.</p>
+      <Link href="/" className="bg-primary text-white font-bold px-8 py-3 rounded-full hover:bg-red-700 transition-colors shadow-lg shadow-red-500/30">
+        Quay về trang chủ
+      </Link>
+    </div>
+  );
+}
 
+// --- PRODUCT DETAIL UI COMPONENT ---
+
+async function ProductDetailView({ product }: { product: Product }) {
   let specArray = product.specs ? Object.entries(product.specs).filter(([_, v]) => v) : [];
   let cleanDescription = product.description || "";
 
@@ -184,7 +259,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
     },
     offers: {
       "@type": "Offer",
-      url: `${siteUrl}/product/${product.slug}`,
+      url: `${siteUrl}/${product.slug}`,
       priceCurrency: "VND",
       price: product.price,
       itemCondition: "https://schema.org/NewCondition",
@@ -204,7 +279,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
         <div className="container mx-auto px-4 text-sm text-gray-500 flex gap-2 items-center overflow-x-auto hide-scrollbar whitespace-nowrap">
           <Link href="/" className="shrink-0 hover:text-primary transition-colors">Trang chủ</Link>
           <span className="shrink-0">/</span>
-          <Link href={`/category/${product.category_id?.slug || "all"}`} className="shrink-0 hover:text-primary transition-colors uppercase">
+          <Link href={`/${product.category_id?.slug || "all"}`} className="shrink-0 hover:text-primary transition-colors uppercase">
             {product.category_id?.name || "Sản phẩm"}
           </Link>
           <span className="shrink-0">/</span>
@@ -370,10 +445,6 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
                   </div>
                   <div className="p-5 flex flex-col gap-3 text-sm text-gray-700">
                     {product.gifts.map((gift, idx) => {
-                      // Nếu muốn highlight các chữ Tặng, Miễn phí... như trước
-                      const isHighlight = gift.startsWith("Tặng") || gift.startsWith("Miễn phí");
-                      const firstSpace = gift.indexOf(' ', gift.indexOf(' ') + 1); // Tìm vị trí khoảng trắng thứ 2 hoặc 3
-                      
                       return (
                         <div key={idx} className="flex gap-3 items-start">
                           <CheckCircle2 size={16} className="text-orange-500 shrink-0 mt-0.5"/> 
@@ -439,7 +510,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
                     key={p._id}
                     className={`snap-start shrink-0 w-[170px] md:w-[280px] bg-white rounded-2xl border border-gray-100 overflow-hidden group shadow-md flex flex-col relative transition-all duration-500 ${isOutOfStock ? 'opacity-80' : 'hover:shadow-[0_8px_30px_rgb(220,38,38,0.15)] hover:border-red-200 hover:-translate-y-2'}`}
                   >
-                    <Link href={`/product/${p.slug}`} className="absolute inset-0 z-20"></Link>
+                    <Link href={`/${p.slug}`} className="absolute inset-0 z-20"></Link>
                     <div className="relative aspect-[4/3] p-4 flex items-center justify-center bg-white overflow-hidden">
 
                       {isOutOfStock && (
@@ -515,7 +586,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
                         <div className="text-[10px] md:text-[12px] font-extrabold text-gray-400 uppercase tracking-wider">{p.brand || "KHÁC"}</div>
                         <LikeButton product={p as any} />
                       </div>
-                      <Link href={`/product/${p.slug}`} className="hover:text-primary transition-colors mb-2 md:mb-4 z-30 relative">
+                      <Link href={`/${p.slug}`} className="hover:text-primary transition-colors mb-2 md:mb-4 z-30 relative">
                         <h3 className="text-gray-800 text-[13px] md:text-[15px] font-medium leading-snug line-clamp-2 group-hover:text-primary transition-colors duration-300">{p.name}</h3>
                       </Link>
                       

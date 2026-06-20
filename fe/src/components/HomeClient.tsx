@@ -278,7 +278,7 @@ export default function HomeClient() {
                 return (
                 <Link
                   key={cat._id}
-                  href={`/category/${cat.slug}`}
+                  href={`/${cat.slug}`}
                   className="flex flex-col items-center justify-center gap-3 p-4 md:p-6 rounded-[1.5rem] md:rounded-[2rem] bg-white/40 backdrop-blur-xl border border-white/60 shadow-[0_8px_32px_rgba(0,0,0,0.04)] hover:shadow-[0_8px_32px_rgba(220,38,38,0.15)] hover:-translate-y-2 hover:border-white/80 hover:bg-white/60 transition-all duration-500 cursor-pointer group text-gray-700 font-bold relative overflow-hidden"
                 >
                   <div className="absolute inset-0 bg-gradient-to-br from-red-500/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 mix-blend-multiply"></div>
@@ -367,7 +367,7 @@ export default function HomeClient() {
                   {cat.name}
                   <div className="absolute -bottom-2 left-0 w-1/2 h-1 bg-primary rounded-full"></div>
                 </h3>
-                <Link href={`/category/${cat.slug}`} className="text-primary text-sm font-bold flex items-center hover:underline">
+                <Link href={`/${cat.slug}`} className="text-primary text-sm font-bold flex items-center hover:underline">
                   Xem tất cả <ChevronRight size={16} />
                 </Link>
               </div>
@@ -390,7 +390,7 @@ export default function HomeClient() {
                   {/* Glassmorphism content area */}
                   <div className="absolute bottom-4 left-4 right-4 bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-6 transform translate-y-2 group-hover:translate-y-0 transition-all duration-500 shadow-[0_8px_32px_rgba(0,0,0,0.3)]">
                     <h3 className="text-white font-black text-2xl uppercase leading-tight drop-shadow-md">{cat.name}</h3>
-                    <Link href={`/category/${cat.slug}`} className="inline-flex items-center gap-2 mt-4 text-xs font-bold text-white bg-white/20 hover:bg-white/30 backdrop-blur-sm border border-white/30 rounded-full px-4 py-2 transition-all">
+                    <Link href={`/${cat.slug}`} className="inline-flex items-center gap-2 mt-4 text-xs font-bold text-white bg-white/20 hover:bg-white/30 backdrop-blur-sm border border-white/30 rounded-full px-4 py-2 transition-all">
                       XEM TẤT CẢ <ChevronRight size={14} />
                     </Link>
                   </div>
@@ -411,14 +411,14 @@ export default function HomeClient() {
                       {topSubCategories.map(subCat => (
                         <Link 
                           key={subCat._id} 
-                          href={`/category/${subCat.slug}`}
+                          href={`/${subCat.slug}`}
                           className="px-4 py-1.5 bg-white/60 hover:bg-white backdrop-blur-md rounded-xl text-[12px] font-bold text-gray-700 hover:text-red-600 transition-all duration-300 shadow-[0_2px_10px_rgba(0,0,0,0.02)] hover:shadow-[0_5px_15px_rgba(220,38,38,0.1)] border border-white/50 hover:border-red-200"
                         >
                           {subCat.name}
                         </Link>
                       ))}
                       <Link 
-                        href={`/category/${cat.slug}`}
+                        href={`/${cat.slug}`}
                         className="ml-auto text-[12px] font-bold text-red-600 hover:text-red-700 flex items-center gap-1 transition-all duration-300 hover:translate-x-1 px-2"
                       >
                         Xem tất cả <ChevronRight size={14} />
@@ -541,7 +541,7 @@ function ProductCard({ product }: { product: Product }) {
     <div
       className={`flex-none w-[170px] md:w-[280px] bg-white rounded-2xl border border-gray-100 overflow-hidden group shadow-md flex flex-col relative transition-all duration-500 ${isOutOfStock ? 'opacity-80' : 'hover:shadow-[0_8px_30px_rgb(220,38,38,0.15)] hover:border-red-200 hover:-translate-y-2'}`}
     >
-      <Link href={`/product/${product.slug}`} className="absolute inset-0 z-20"></Link>
+      <Link href={`/${product.slug}`} className="absolute inset-0 z-20"></Link>
       <div className="relative aspect-[4/3] p-4 flex items-center justify-center bg-white overflow-hidden">
 
         {isOutOfStock && (
@@ -617,7 +617,7 @@ function ProductCard({ product }: { product: Product }) {
           <div className="text-[10px] md:text-[12px] font-extrabold text-gray-400 uppercase tracking-wider">{product.brand || "KHÁC"}</div>
           <LikeButton product={product} />
         </div>
-        <Link href={`/product/${product.slug}`} className="hover:text-primary transition-colors mb-2 md:mb-4 z-30 relative">
+        <Link href={`/${product.slug}`} className="hover:text-primary transition-colors mb-2 md:mb-4 z-30 relative">
           <h3 className="text-gray-800 text-[13px] md:text-[15px] font-medium leading-snug line-clamp-2 group-hover:text-primary transition-colors duration-300">{product.name}</h3>
         </Link>
         

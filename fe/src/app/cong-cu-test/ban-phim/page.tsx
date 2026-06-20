@@ -85,6 +85,8 @@ export default function KeyboardTestPage() {
   const [pressedKeys, setPressedKeys] = useState<Set<string>>(new Set());
   const [activeKeys, setActiveKeys] = useState<Set<string>>(new Set());
   const [history, setHistory] = useState<string[]>([]);
+  const [scale, setScale] = useState(1);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const [maxSimultaneous, setMaxSimultaneous] = useState(0);
   const [chatterCount, setChatterCount] = useState(0);
@@ -105,6 +107,24 @@ export default function KeyboardTestPage() {
       setKpm(timestampsRef.current.length * 12);
     }, 500);
     return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    const updateScale = () => {
+      if (containerRef.current) {
+        const containerWidth = containerRef.current.clientWidth;
+        const padding = 48; // p-6 * 2
+        const keyboardWidth = 1040 + padding; // approx width of the full keyboard
+        if (containerWidth < keyboardWidth) {
+          setScale(containerWidth / keyboardWidth);
+        } else {
+          setScale(1);
+        }
+      }
+    };
+    updateScale();
+    window.addEventListener('resize', updateScale);
+    return () => window.removeEventListener('resize', updateScale);
   }, []);
 
   const playClick = () => {
@@ -313,9 +333,14 @@ export default function KeyboardTestPage() {
           </div>
 
           {/* Keyboard Container */}
-          <div className="w-full overflow-x-auto custom-scrollbar pb-6 flex-1 flex flex-col items-center justify-start relative">
+          <div ref={containerRef} className="w-full pb-6 flex-1 flex flex-col items-center justify-start relative overflow-hidden">
             <div
-              className="flex gap-[20px] w-max mx-auto bg-[#0a0c10] p-6 rounded-[20px] border border-[#1e2430] shadow-[inset_0_0_40px_rgba(0,0,0,0.8)]"
+              style={{
+                transform: `scale(${scale})`,
+                transformOrigin: 'top center',
+                marginBottom: scale < 1 ? `-${480 * (1 - scale)}px` : '0px'
+              }}
+              className="flex gap-[20px] w-max bg-[#0a0c10] p-6 rounded-[20px] border border-[#1e2430] shadow-[inset_0_0_40px_rgba(0,0,0,0.8)]"
             >
               {/* Left Block (Main) */}
               <div className="flex flex-col gap-[8px] relative">

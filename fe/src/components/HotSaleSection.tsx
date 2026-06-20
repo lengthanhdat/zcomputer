@@ -287,7 +287,7 @@ export default function HotSaleSection({
                       key={`${product._id}-${idx}`}
                       className={`flex-none w-[280px] bg-white rounded-2xl border border-gray-100 overflow-hidden group hover:shadow-[0_20px_40px_rgb(220,38,38,0.12)] hover:border-red-200 hover:-translate-y-2 transition-all duration-500 flex flex-col relative ${isOutOfStock ? 'opacity-80' : ''}`}
                     >
-                      <Link href={`/product/${product.slug}`} className="absolute inset-0 z-20"></Link>
+                      <Link href={`/${product.slug}`} className="absolute inset-0 z-20"></Link>
                       
                       <div className="relative aspect-[4/3] p-6 flex items-center justify-center bg-gradient-to-b from-gray-50 to-white overflow-hidden">
                         
@@ -352,7 +352,7 @@ export default function HotSaleSection({
                           </div>
                         </div>
 
-                        <Link href={`/product/${product.slug}`} className="hover:text-red-600 transition-colors mb-3 z-30 relative">
+                        <Link href={`/${product.slug}`} className="hover:text-red-600 transition-colors mb-3 z-30 relative">
                           <h3 className="text-gray-800 text-[14px] font-bold leading-snug line-clamp-2">{product.name}</h3>
                         </Link>
 
@@ -407,7 +407,7 @@ export default function HotSaleSection({
                             {(product.views || 0).toLocaleString('vi-VN')}
                           </div>
                           <Link 
-                            href={`/product/${product.slug}`}
+                            href={`/${product.slug}`}
                             className="relative z-30 flex items-center justify-center gap-1.5 px-4 py-1.5 bg-red-50 text-red-600 hover:bg-red-600 hover:text-white rounded-lg font-bold text-[12px] transition-all duration-300 group/btn"
                           >
                             <span>Mua ngay</span>

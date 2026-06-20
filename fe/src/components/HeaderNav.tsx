@@ -43,11 +43,11 @@ export default function HeaderNav() {
           )}
         </div>
 
-        <ul suppressHydrationWarning className="flex items-center gap-8 text-[13px] font-bold tracking-wide flex-1">
+        <ul suppressHydrationWarning className="flex items-center gap-3 lg:gap-4 xl:gap-8 text-[11px] lg:text-[12px] xl:text-[13px] font-bold tracking-wide flex-1 whitespace-nowrap">
           
           {/* SẢN PHẨM Link */}
           <li>
-            <Link href="/category/all" className="flex items-center gap-1 py-4 hover:text-red-400 hover:drop-shadow-[0_0_8px_rgba(239,68,68,0.5)] transition-all duration-300">
+            <Link href="/all" className="flex items-center gap-1 py-4 hover:text-red-400 hover:drop-shadow-[0_0_8px_rgba(239,68,68,0.5)] transition-all duration-300">
               <span className="uppercase relative inline-block">
                 Tất Cả Sản Phẩm
                 {/* Badge */}
