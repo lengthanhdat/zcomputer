@@ -2,7 +2,12 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Laptop, Monitor, Cpu, Server, Mouse, Keyboard, Headphones, HardDrive, Maximize, ChevronRight } from "lucide-react";
+import {
+  Laptop, Monitor, Cpu, Server, Mouse, Keyboard, Headphones,
+  HardDrive, ChevronRight, Gamepad2, CircuitBoard, Fan, Zap,
+  MemoryStick, Package, Printer, Camera, Wifi, Cable,
+  Computer, ScanSearch, Settings2
+} from "lucide-react";
 
 type Category = {
   _id: string;
@@ -13,14 +18,70 @@ type Category = {
 
 const getIcon = (name: string) => {
   const lower = name.toLowerCase();
+
+  // Laptop
+  if (lower.includes('laptop')) return Laptop;
+
+  // PC / Máy tính bàn / Workstation
+  if (lower.includes('workstation') || lower.includes('máy tính bàn')) return Computer;
+  if ((lower.includes('pc') && !lower.includes('cpu')) || lower.includes('máy tính')) return Computer;
+
+  // Màn hình
   if (lower.includes('màn hình') || lower.includes('monitor')) return Monitor;
-  if (lower.includes('pc') || lower.includes('case')) return Server;
-  if (lower.includes('linh kiện') || lower.includes('cpu') || lower.includes('vga') || lower.includes('mainboard')) return Cpu;
+
+  // Linh kiện
+  if (lower.includes('linh kiện')) return Settings2;
+
+  // CPU / Bộ vi xử lý
+  if (lower.includes('cpu') || lower.includes('vi xử lý') || lower.includes('processor')) return Cpu;
+
+  // VGA / Card màn hình
+  if (lower.includes('vga') || lower.includes('card màn hình') || lower.includes('gpu') || lower.includes('đồ họa')) return ScanSearch;
+
+  // Mainboard / Bo mạch chủ
+  if (lower.includes('mainboard') || lower.includes('bo mạch') || lower.includes('motherboard')) return CircuitBoard;
+
+  // RAM / Bộ nhớ
+  if (lower.includes('ram') || lower.includes('bộ nhớ')) return MemoryStick;
+
+  // Ổ cứng / HDD / SSD
+  if (lower.includes('ổ cứng') || lower.includes('hdd') || lower.includes('ssd') || lower.includes('storage')) return HardDrive;
+
+  // PSU / Nguồn
+  if (lower.includes('psu') || lower.includes('nguồn')) return Zap;
+
+  // Case / Vỏ máy tính
+  if (lower.includes('case') || lower.includes('vỏ máy') || lower.includes('thùng máy')) return Server;
+
+  // Tản nhiệt / Cooling
+  if (lower.includes('tản nhiệt') || lower.includes('tan nhiệt') || lower.includes('cooling') || lower.includes('quạt')) return Fan;
+
+  // Gaming Gear / Thiết bị gaming
+  if (lower.includes('gaming') || lower.includes('gear')) return Gamepad2;
+
+  // Chuột
   if (lower.includes('chuột') || lower.includes('mouse')) return Mouse;
+
+  // Bàn phím
   if (lower.includes('phím') || lower.includes('keyboard')) return Keyboard;
-  if (lower.includes('tai nghe') || lower.includes('audio')) return Headphones;
-  if (lower.includes('ram') || lower.includes('hdd') || lower.includes('ssd') || lower.includes('ổ cứng')) return HardDrive;
-  return Laptop;
+
+  // Tai nghe / Loa
+  if (lower.includes('tai nghe') || lower.includes('loa') || lower.includes('audio') || lower.includes('headphone')) return Headphones;
+
+  // Webcam / Camera
+  if (lower.includes('webcam') || lower.includes('camera')) return Camera;
+
+  // Mạng / Router / Wifi
+  if (lower.includes('mạng') || lower.includes('router') || lower.includes('wifi') || lower.includes('network')) return Wifi;
+
+  // Máy in / Printer
+  if (lower.includes('máy in') || lower.includes('printer') || lower.includes('in')) return Printer;
+
+  // Dây cáp / Cable / Phụ kiện
+  if (lower.includes('cáp') || lower.includes('cable') || lower.includes('phụ kiện') || lower.includes('adapter')) return Cable;
+
+  // Mặc định
+  return Package;
 };
 
 export default function CategoryMenu({ categories }: { categories: Category[] }) {
