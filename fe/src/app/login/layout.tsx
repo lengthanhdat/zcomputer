@@ -1,1 +1,1 @@
-export const metadata = { title: 'Đăng nhập', robots: { index: false, follow: false } }; export default function Layout({ children }) { return <>{children}</>; }
+export const metadata = { title: 'Đăng nhập', robots: { index: false, follow: false } }; export default function Layout({ children }: { children: React.ReactNode }) { return <>{children}</>; }
