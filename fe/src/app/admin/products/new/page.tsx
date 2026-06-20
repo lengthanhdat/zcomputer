@@ -430,7 +430,7 @@ export default function NewProductPage() {
 
     // 2. Nhận diện Thông số kỹ thuật (Specs)
     const parts = formData.name.split('/').map(p => p.trim());
-    parts.forEach(part => {
+    parts.forEach((part, index) => {
       const upperPart = part.toUpperCase();
       
       const isCPU = upperPart.includes('CPU') || upperPart.includes('I3') || upperPart.includes('I5') || 
@@ -442,7 +442,16 @@ export default function NewProductPage() {
 
       // CPU
       if (isCPU && !upperPart.includes('GB') && !upperPart.includes('SSD') && !upperPart.includes('HDD') && !upperPart.includes('VGA') && !upperPart.includes('RTX') && !upperPart.includes('GTX')) {
-        newSpecs.CPU = part.replace(/^(CPU|CHIP|BỘ VI XỬ LÝ)\s*:/i, '').trim();
+        let cpuStr = part.replace(/^(CPU|CHIP|BỘ VI XỬ LÝ)\s*:/i, '').trim();
+        
+        if (index === 0 || upperPart.includes('LAPTOP') || upperPart.includes('PC') || upperPart.includes('MÁY TÍNH')) {
+           const match = cpuStr.match(/\b(core|ryzen|pentium|celeron|xeon|ultra|apple\s*m[1-4]|m[1-4]\b|i[3579]\b)/i);
+           if (match && match.index !== undefined) {
+             cpuStr = cpuStr.substring(match.index).trim();
+           }
+        }
+        
+        newSpecs.CPU = cpuStr;
         extractedCount++;
       }
       // RAM
