@@ -353,6 +353,30 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
         newSpecs.Screen = part.replace(/^(MÀN HÌNH|SCREEN|MÀN)\s*:/i, '').trim();
         extractedCount++;
       }
+      // Mainboard
+      else if (upperPart.includes('MAIN') || upperPart.includes('MAINBOARD') || /(H610|B660|B760|Z690|Z790|H410|H510|B460|B560|A320|B450|B550|X570|X670|A520)/i.test(upperPart)) {
+        let mbStr = part.replace(/^(MAINBOARD|MAIN|BO MẠCH CHỦ)\s*:/i, '').trim();
+        if (index === 0) {
+            mbStr = mbStr.replace(/^(BỘ MÁY TÍNH|PC GAMING|PC LẮP RÁP|PC VĂN PHÒNG|PC|MÁY TÍNH BÀN|MÁY TÍNH)\s*/i, '').trim();
+        }
+        newSpecs.Mainboard = mbStr;
+        extractedCount++;
+      }
+      // PSU
+      else if (upperPart.includes('NGUỒN') || upperPart.includes('PSU') || /\b\d{3,4}W\b/.test(upperPart)) {
+        newSpecs.PSU = part.replace(/^(NGUỒN|PSU)\s*:/i, '').trim();
+        extractedCount++;
+      }
+      // Case
+      else if (upperPart.includes('CASE') || upperPart.includes('VỎ')) {
+        newSpecs.Case = part.replace(/^(CASE|VỎ|VỎ MÁY|VỎ CASE)\s*:/i, '').trim();
+        extractedCount++;
+      }
+      // Cooler
+      else if (upperPart.includes('TẢN') || upperPart.includes('COOLER') || upperPart.includes('AIO')) {
+        newSpecs.Cooler = part.replace(/^(TẢN|TẢN NHIỆT|COOLER)\s*:/i, '').trim();
+        extractedCount++;
+      }
     });
 
     if (extractedCount > 0) {
