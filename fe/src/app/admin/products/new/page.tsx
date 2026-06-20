@@ -331,7 +331,7 @@ export default function NewProductPage() {
             const found = categories.find(c => 
               c.name.toLowerCase().includes(data.category_name.toLowerCase()) || 
               data.category_name.toLowerCase().includes(c.name.toLowerCase()) ||
-              c.slug.includes(data.category_name.toLowerCase())
+              c.slug?.includes(data.category_name.toLowerCase())
             );
             if (found) matchedCategory = found._id;
           }
