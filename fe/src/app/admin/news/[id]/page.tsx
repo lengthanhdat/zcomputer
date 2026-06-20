@@ -398,7 +398,7 @@ export default function EditNewsPage({ params }: { params: Promise<{ id: string 
       <form onSubmit={handleSubmit} className="flex flex-col lg:flex-row gap-5">
         
         {/* Cột chính: Nội dung bài viết */}
-        <div className="flex-1 space-y-6">
+        <div className="flex-1 min-w-0 space-y-6">
           <div className="bg-white/80 backdrop-blur-xl border border-white/60 shadow-xl shadow-slate-200/50 rounded-2xl overflow-hidden group hover:shadow-2xl hover:shadow-slate-200/60 transition-all duration-300">
             <input
               type="text"
@@ -423,6 +423,12 @@ export default function EditNewsPage({ params }: { params: Promise<{ id: string 
             </div>
 
             <div className="bg-white/50">
+              <style>{`
+                .ql-editor img {
+                  max-width: 100%;
+                  height: auto;
+                }
+              `}</style>
               <ReactQuill 
                 forwardedRef={quillRef}
                 theme="snow"
