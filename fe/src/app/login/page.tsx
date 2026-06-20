@@ -105,7 +105,6 @@ export default function LoginPage() {
                 onError={() => {
                   setError("Google Login encountered an error");
                 }}
-                useOneTap
                 theme="outline"
                 size="large"
                 text="signin_with"
