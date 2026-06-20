@@ -4,6 +4,7 @@ import { Playfair_Display, Montserrat } from "next/font/google";
 import { FaFacebookF, FaInstagram, FaTiktok, FaYoutube, FaMapMarkerAlt, FaPhoneAlt, FaEnvelope, FaChevronRight } from "react-icons/fa";
 
 const montserrat = Montserrat({ subsets: ["latin", "vietnamese"], weight: ["700", "900"] });
+const playfair = Playfair_Display({ subsets: ["latin", "vietnamese"], weight: ["700", "900"] });
 
 export default function Footer() {
   return (
@@ -68,14 +69,18 @@ export default function Footer() {
                  <div className="bg-white p-1.5 rounded-xl shadow-[0_0_15px_rgba(255,255,255,0.2)] group-hover:shadow-[0_0_20px_rgba(220,38,38,0.4)] transition-shadow">
                    <Image src="/logo.png" alt="ZCOMPUTER" width={50} height={50} className="h-10 w-10 object-contain" />
                  </div>
-                 <div className="flex flex-col">
-                   <div className={`${montserrat.className} flex items-center select-none group-hover:scale-[1.02] transition-transform duration-300`}>
-                     <span className="text-red-500 text-[26px] font-black drop-shadow-[0_0_10px_rgba(220,38,38,0.5)] leading-none">Z</span>
-                     <span className="text-white text-[26px] font-black uppercase drop-shadow-[0_0_10px_rgba(255,255,255,0.2)] leading-none">COMPUTER</span>
-                   </div>
-                   <span className={`${montserrat.className} text-red-400 text-[8.5px] font-black uppercase tracking-[0.16em] mt-1`}>
-                     PC GAMING - LAPTOP
+                 <div className="flex items-center gap-1.5 group-hover:scale-[1.02] transition-transform duration-300 select-none">
+                   <span className={`${playfair.className} text-[#cc0000] text-[50px] font-black leading-[0.8] drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]`}>
+                     Z
                    </span>
+                   <div className="flex flex-col justify-center">
+                     <span className={`${playfair.className} text-white text-[24px] font-black uppercase tracking-widest drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)] leading-none`}>
+                       COMPUTER
+                     </span>
+                     <span className={`${montserrat.className} text-[#cc0000] font-black text-[8px] uppercase tracking-[0.16em] mt-1`}>
+                       PC GAMING - LAPTOP
+                     </span>
+                   </div>
                  </div>
                </div>
              </Link>
