@@ -541,7 +541,7 @@ function ProductCard({ product }: { product: Product }) {
     <div
       className={`flex-none w-[170px] md:w-[280px] bg-white rounded-2xl border border-gray-100 overflow-hidden group shadow-md flex flex-col relative transition-all duration-500 ${isOutOfStock ? 'opacity-80' : 'hover:shadow-[0_8px_30px_rgb(220,38,38,0.15)] hover:border-red-200 hover:-translate-y-2'}`}
     >
-      <Link href={`/product/${product.slug}`} className="absolute inset-0 z-20"></Link>
+      <Link href={`/${product.slug}`} className="absolute inset-0 z-20"></Link>
       <div className="relative aspect-[4/3] p-4 flex items-center justify-center bg-white overflow-hidden">
 
         {isOutOfStock && (
@@ -617,7 +617,7 @@ function ProductCard({ product }: { product: Product }) {
           <div className="text-[10px] md:text-[12px] font-extrabold text-gray-400 uppercase tracking-wider">{product.brand || "KHÁC"}</div>
           <LikeButton product={product} />
         </div>
-        <Link href={`/product/${product.slug}`} className="hover:text-primary transition-colors mb-2 md:mb-4 z-30 relative">
+        <Link href={`/${product.slug}`} className="hover:text-primary transition-colors mb-2 md:mb-4 z-30 relative">
           <h3 className="text-gray-800 text-[13px] md:text-[15px] font-medium leading-snug line-clamp-2 group-hover:text-primary transition-colors duration-300">{product.name}</h3>
         </Link>
         

@@ -209,7 +209,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
                       key={product._id}
                       className={`bg-white rounded-2xl border border-gray-100 overflow-hidden group shadow-sm flex flex-col h-full relative transition-all duration-300 ${isOutOfStock ? 'opacity-80' : 'hover:shadow-[0_20px_40px_rgb(220,38,38,0.12)] hover:-translate-y-2'}`}
                     >
-                      <Link href={`/product/${product.slug}`} className="absolute inset-0 z-20"></Link>
+                      <Link href={`/${product.slug}`} className="absolute inset-0 z-20"></Link>
                       <div className="relative aspect-[4/3] p-4 flex items-center justify-center bg-white overflow-hidden">
 
                         {isOutOfStock && (
@@ -285,7 +285,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
                           <div className="text-[11px] font-bold text-gray-500 uppercase">{product.brand || "KHÁC"}</div>
                           <LikeButton product={product} />
                         </div>
-                        <Link href={`/product/${product.slug}`} className="hover:text-red-600 transition-colors mb-3 z-30 relative">
+                        <Link href={`/${product.slug}`} className="hover:text-red-600 transition-colors mb-3 z-30 relative">
                           <h3 className="text-gray-700 text-[13px] font-medium leading-relaxed line-clamp-2">{product.name}</h3>
                         </Link>
                         

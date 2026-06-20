@@ -105,7 +105,7 @@ const VideoCard = ({ video }: { video: any }) => {
         <div className="absolute bottom-6 left-5 right-5 z-20">
           {video.product_id ? (
             <Link 
-              href={`/product/${video.product_id.slug}`}
+              href={`/${video.product_id.slug}`}
               className="flex flex-col items-center justify-center w-full py-2 bg-white/10 hover:bg-red-600 text-white border border-white/20 hover:border-red-500 rounded-xl backdrop-blur-md transition-all shadow-[0_8px_16px_rgba(0,0,0,0.4)] group/btn"
             >
               <span className="font-bold text-[11px] uppercase opacity-80 group-hover/btn:opacity-100 mb-0.5">Sản phẩm trong video</span>

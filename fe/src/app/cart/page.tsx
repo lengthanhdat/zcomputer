@@ -49,7 +49,7 @@ export default function CartPage() {
                           {item.image ? <img src={item.image} alt={item.name} className="w-full h-full object-contain" /> : <Package size={30} className="text-gray-300" />}
                         </div>
                         <div>
-                          <Link href={`/product/${item._id}`} className="font-bold text-gray-800 hover:text-primary transition-colors line-clamp-2 mb-1">
+                          <Link href={`/${item._id}`} className="font-bold text-gray-800 hover:text-primary transition-colors line-clamp-2 mb-1">
                             {item.name}
                           </Link>
                           <div className="text-primary font-bold">{item.price.toLocaleString('vi-VN')}đ</div>
@@ -98,7 +98,7 @@ export default function CartPage() {
                     {item.image ? <img src={item.image} alt={item.name} className="w-full h-full object-contain" /> : <Package size={24} className="text-gray-300" />}
                   </div>
                   <div className="flex-1">
-                    <Link href={`/product/${item._id}`} className="font-bold text-gray-800 hover:text-primary transition-colors line-clamp-2 text-sm mb-1 leading-snug">
+                    <Link href={`/${item._id}`} className="font-bold text-gray-800 hover:text-primary transition-colors line-clamp-2 text-sm mb-1 leading-snug">
                       {item.name}
                     </Link>
                     <div className="text-primary font-bold text-sm">{item.price.toLocaleString('vi-VN')}đ</div>
