@@ -580,6 +580,7 @@ export default function NewProductPage() {
                     <td className="px-4 py-3">
                       <input 
                         type="text" 
+                        list="brand-suggestions"
                         value={item.brand} 
                         onChange={(e) => updatePreviewItem(idx, 'brand', e.target.value)}
                         className="w-full px-3 py-1.5 border border-gray-200 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 text-sm"
@@ -634,6 +635,24 @@ export default function NewProductPage() {
 
   return (
     <div className="pb-12">
+      <datalist id="brand-suggestions">
+        <option value="Dell" />
+        <option value="HP" />
+        <option value="Lenovo" />
+        <option value="Apple" />
+        <option value="ASUS" />
+        <option value="Acer" />
+        <option value="MSI" />
+        <option value="Gigabyte" />
+        <option value="Samsung" />
+        <option value="LG" />
+        <option value="Intel" />
+        <option value="AMD" />
+        <option value="NVIDIA" />
+        <option value="Logitech" />
+        <option value="Corsair" />
+        <option value="Kingston" />
+      </datalist>
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
         <div className="flex items-center gap-4">
@@ -706,6 +725,7 @@ export default function NewProductPage() {
                   <input 
                     type="text" 
                     name="brand" 
+                    list="brand-suggestions"
                     required
                     value={formData.brand} 
                     onChange={handleChange}

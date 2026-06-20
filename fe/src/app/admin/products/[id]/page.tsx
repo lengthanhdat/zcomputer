@@ -342,6 +342,24 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
 
   return (
     <div className="pb-12">
+      <datalist id="brand-suggestions">
+        <option value="Dell" />
+        <option value="HP" />
+        <option value="Lenovo" />
+        <option value="Apple" />
+        <option value="ASUS" />
+        <option value="Acer" />
+        <option value="MSI" />
+        <option value="Gigabyte" />
+        <option value="Samsung" />
+        <option value="LG" />
+        <option value="Intel" />
+        <option value="AMD" />
+        <option value="NVIDIA" />
+        <option value="Logitech" />
+        <option value="Corsair" />
+        <option value="Kingston" />
+      </datalist>
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
         <div className="flex items-center gap-4">
@@ -404,6 +422,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
                   <input 
                     type="text" 
                     name="brand" 
+                    list="brand-suggestions"
                     value={formData.brand} 
                     onChange={handleChange}
                     className="w-full px-4 py-3 bg-gray-50/50 border border-gray-200 rounded-xl outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all text-gray-800 font-medium"
