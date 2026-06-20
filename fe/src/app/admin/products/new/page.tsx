@@ -129,9 +129,20 @@ export default function NewProductPage() {
       try {
         const res = await fetchApi("/categories");
         const data = await res.json();
-        setCategories(data);
-        if (data.length > 0) {
-          setFormData((prev) => ({ ...prev, category_id: data[0]._id }));
+        
+        const parents = data.filter((c: any) => !c.parent_id);
+        const organized: any[] = [];
+        parents.forEach((p: any) => {
+          organized.push(p);
+          const children = data.filter((c: any) => c.parent_id === p._id);
+          organized.push(...children);
+        });
+        const orphaned = data.filter((c: any) => c.parent_id && !parents.find((p: any) => p._id === c.parent_id));
+        organized.push(...orphaned);
+
+        setCategories(organized);
+        if (organized.length > 0) {
+          setFormData((prev) => ({ ...prev, category_id: organized[0]._id }));
         }
       } catch (error) {
         console.error("Failed to fetch categories:", error);
@@ -558,7 +569,9 @@ export default function NewProductPage() {
                       >
                         <option value="">Chọn danh mục</option>
                         {categories.map((cat) => (
-                          <option key={cat._id} value={cat._id}>{cat.name}</option>
+                          <option key={cat._id} value={cat._id}>
+                            {cat.parent_id ? `\u00A0\u00A0\u00A0\u00A0|_ ${cat.name}` : cat.name}
+                          </option>
                         ))}
                       </select>
                     </td>
@@ -679,9 +692,11 @@ export default function NewProductPage() {
                     className="w-full px-4 py-3 bg-gray-50/50 border border-gray-200 rounded-xl outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all text-gray-800 font-medium cursor-pointer"
                   >
                     {categories.length === 0 && <option value="">Đang tải danh mục...</option>}
-                    {categories.map((cat) => (
-                      <option key={cat._id} value={cat._id}>{cat.name}</option>
-                    ))}
+                      {categories.map((cat) => (
+                        <option key={cat._id} value={cat._id}>
+                          {cat.parent_id ? `\u00A0\u00A0\u00A0\u00A0|_ ${cat.name}` : cat.name}
+                        </option>
+                      ))}
                   </select>
                 </div>
                 <div>
