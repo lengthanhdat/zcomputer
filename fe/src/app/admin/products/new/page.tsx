@@ -1,13 +1,38 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, Sparkles, X, Image as ImageIcon, Box, Tag, DollarSign, FileText, UploadCloud, Loader2, Gift, Cpu, Trash2, Save } from "lucide-react";
+import { ArrowLeft, Sparkles, X, Image as ImageIcon, Box, Tag, DollarSign, FileText, UploadCloud, Loader2, Gift, Cpu, Trash2, Save, Upload } from "lucide-react";
 import Link from "next/link";
 import toast from "react-hot-toast";
 import * as XLSX from "xlsx";
+import dynamic from "next/dynamic";
 
 import { fetchApi } from "@/lib/api";
+
+const ReactQuill = dynamic(
+  async () => {
+    const rq = await import("react-quill-new");
+    const RQ = rq.default;
+    const Quill = (RQ as any).Quill;
+
+    if (Quill && typeof window !== "undefined") {
+      (window as any).Quill = Quill;
+      const { default: BlotFormatter } = await import("quill-blot-formatter");
+      Quill.register("modules/blotFormatter", BlotFormatter);
+      
+      const Font = Quill.import('formats/font');
+      Font.whitelist = ['sans-serif', 'arial', 'times-new-roman', 'tahoma', 'verdana', 'courier-new'];
+      Quill.register(Font, true);
+    }
+
+    return function Comp({ forwardedRef, ...props }: any) {
+      return <RQ ref={forwardedRef} {...props} />;
+    };
+  },
+  { ssr: false }
+);
+import "react-quill-new/dist/quill.snow.css";
 
 interface Category {
   _id: string;
@@ -66,6 +91,7 @@ const SPEC_CONFIGS: Record<string, { key: string, label: string, placeholder: st
 
 export default function NewProductPage() {
   const router = useRouter();
+  const quillRef = useRef<any>(null);
   const [loading, setLoading] = useState(false);
   const [categories, setCategories] = useState<Category[]>([]);
   
@@ -158,6 +184,45 @@ export default function NewProductPage() {
     } finally {
       setUploadingImage(false);
       e.target.value = ""; // Reset input
+    }
+  };
+
+  const handleInsertMedia = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const data = new FormData();
+    data.append("image", file);
+    const toastId = toast.loading("Đang tải ảnh lên...");
+
+    try {
+      const res = await fetchApi("/upload/image", {
+        method: "POST",
+        body: data,
+        requireAuth: true,
+      });
+
+      if (res.ok) {
+        const responseData = await res.json();
+        const imageUrl = responseData.url.startsWith('http') || responseData.url.startsWith('data:') 
+          ? responseData.url 
+          : `${process.env.NEXT_PUBLIC_API_BASE_URL || 'http://127.0.0.1:5000'}${responseData.url}`;
+          
+        if (quillRef.current) {
+          const editor = quillRef.current.getEditor();
+          const range = editor.getSelection();
+          const cursorPosition = range ? range.index : editor.getLength();
+          editor.insertEmbed(cursorPosition, 'image', imageUrl);
+          editor.setSelection(cursorPosition + 1);
+        }
+        toast.success("Đã chèn ảnh vào mô tả", { id: toastId });
+      } else {
+        toast.error("Tải ảnh thất bại", { id: toastId });
+      }
+    } catch (error) {
+      toast.error("Lỗi tải ảnh", { id: toastId });
+    } finally {
+      e.target.value = "";
     }
   };
 
@@ -777,15 +842,37 @@ export default function NewProductPage() {
               <h2 className="text-lg font-bold text-gray-800">Mô tả sản phẩm</h2>
             </div>
             
-            <div>
-              <textarea 
-                name="description" 
-                rows={12} 
-                required
-                value={formData.description} 
-                onChange={handleChange}
-                className="w-full px-4 py-4 bg-gray-50/50 border border-gray-200 rounded-xl outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all text-gray-800 leading-relaxed resize-y"
-                placeholder="Nhập thông tin mô tả chi tiết của sản phẩm..."
+            <div className="flex justify-between items-center mb-4">
+              <label className="cursor-pointer flex items-center gap-2 text-sm font-medium text-blue-600 hover:text-blue-700 hover:bg-blue-50 border border-blue-200 bg-white px-4 py-2 rounded-xl transition-all shadow-sm">
+                <Upload size={16} /> Chèn ảnh vào mô tả
+                <input type="file" accept="image/*" className="hidden" onChange={handleInsertMedia} />
+              </label>
+            </div>
+            
+            <div className="bg-white/50 pb-12">
+              <ReactQuill 
+                forwardedRef={quillRef}
+                theme="snow"
+                value={formData.description}
+                onChange={(val: string) => setFormData({ ...formData, description: val })}
+                modules={{
+                  blotFormatter: {},
+                  toolbar: [
+                    [{ 'font': [false, 'arial', 'times-new-roman', 'tahoma', 'verdana', 'courier-new'] }, { 'size': ['small', false, 'large', 'huge'] }],
+                    [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+                    ['bold', 'italic', 'underline', 'strike'],
+                    [{ 'color': [] }, { 'background': [] }],
+                    [{ 'script': 'sub'}, { 'script': 'super' }],
+                    ['blockquote', 'code-block'],
+                    [{ 'list': 'ordered'}, { 'list': 'bullet' }, { 'list': 'check' }],
+                    [{ 'indent': '-1'}, { 'indent': '+1' }],
+                    [{ 'direction': 'rtl' }],
+                    [{ 'align': [] }],
+                    ['link', 'image', 'video', 'formula'],
+                    ['clean']
+                  ]
+                }}
+                className="h-[500px] border-none [&_.ql-container]:border-none [&_.ql-toolbar]:border-none [&_.ql-toolbar]:border-b [&_.ql-toolbar]:border-gray-200/60 [&_.ql-editor]:text-base [&_.ql-editor]:text-gray-700"
               />
             </div>
           </div>

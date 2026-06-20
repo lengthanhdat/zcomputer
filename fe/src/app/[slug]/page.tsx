@@ -217,7 +217,9 @@ async function ProductDetailView({ product }: { product: Product }) {
   let specArray = product.specs ? Object.entries(product.specs).filter(([_, v]) => v) : [];
   let cleanDescription = product.description || "";
 
-  if (specArray.length === 0 && cleanDescription) {
+  const isHtml = /<[a-z][\s\S]*>/i.test(cleanDescription);
+
+  if (specArray.length === 0 && cleanDescription && !isHtml) {
     const lines = cleanDescription.split('\n');
     const remainingLines = [];
     
@@ -254,7 +256,7 @@ async function ProductDetailView({ product }: { product: Product }) {
     "@type": "Product",
     name: product.name,
     image: product.images || [],
-    description: cleanDescription ? cleanDescription.substring(0, 160) : `Mua ${product.name} chính hãng tại ZCOMPUTER`,
+    description: cleanDescription ? cleanDescription.replace(/<[^>]+>/g, '').substring(0, 160) : `Mua ${product.name} chính hãng tại ZCOMPUTER`,
     sku: product.sku || product._id,
     brand: {
       "@type": "Brand",
@@ -484,11 +486,18 @@ async function ProductDetailView({ product }: { product: Product }) {
               Đặc điểm nổi bật
               <div className="absolute -bottom-3 left-0 w-1/2 h-1 bg-primary rounded-full"></div>
             </h2>
-            <div className="prose prose-lg max-w-none text-gray-600 leading-relaxed prose-headings:text-gray-900 prose-a:text-primary hover:prose-a:text-red-700 prose-img:rounded-xl prose-img:shadow-md">
-              {cleanDescription.split('\n').map((line, idx) => (
-                <p key={idx}>{line}</p>
-              ))}
-            </div>
+            {isHtml ? (
+              <div 
+                className="prose prose-lg max-w-none text-gray-600 leading-relaxed prose-headings:text-gray-900 prose-a:text-primary hover:prose-a:text-red-700 prose-img:rounded-xl prose-img:shadow-md"
+                dangerouslySetInnerHTML={{ __html: cleanDescription }}
+              />
+            ) : (
+              <div className="prose prose-lg max-w-none text-gray-600 leading-relaxed prose-headings:text-gray-900 prose-a:text-primary hover:prose-a:text-red-700 prose-img:rounded-xl prose-img:shadow-md">
+                {cleanDescription.split('\n').map((line, idx) => (
+                  <p key={idx}>{line}</p>
+                ))}
+              </div>
+            )}
           </div>
         )}
 
