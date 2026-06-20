@@ -1,1 +1,1 @@
-export const metadata = { title: 'Tuyển dụng - Việc làm tại ZCOMPUTER', description: 'Cơ hội việc làm tại ZCOMPUTER. Tuyển kỹ thuật viên, sale, marketing với đãi ngộ hấp dẫn.' }; export default function Layout({ children }) { return <>{children}</>; }
+export const metadata = { title: 'Tuyển dụng - Việc làm tại ZCOMPUTER', description: 'Cơ hội việc làm tại ZCOMPUTER. Tuyển kỹ thuật viên, sale, marketing với đãi ngộ hấp dẫn.' }; export default function Layout({ children }: { children: React.ReactNode }) { return <>{children}</>; }
