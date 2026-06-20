@@ -408,6 +408,49 @@ export default function NewProductPage() {
     }
   };
 
+  const handleExtractFromName = () => {
+    if (!formData.name) return;
+    const parts = formData.name.split('/').map(p => p.trim());
+    const newSpecs = { ...formData.specs };
+    let extractedCount = 0;
+    
+    parts.forEach(part => {
+      const upperPart = part.toUpperCase();
+      // CPU
+      if (upperPart.includes('I3') || upperPart.includes('I5') || upperPart.includes('I7') || upperPart.includes('I9') || upperPart.includes('RYZEN')) {
+        newSpecs.CPU = part;
+        extractedCount++;
+      }
+      // RAM
+      else if (upperPart.includes('GB') && !upperPart.includes('SSD') && !upperPart.includes('HDD') && !upperPart.includes('VGA') && !upperPart.includes('RTX') && !upperPart.includes('GTX') && !upperPart.includes('RX')) {
+        newSpecs.RAM = part;
+        extractedCount++;
+      }
+      // Storage
+      else if (upperPart.includes('SSD') || upperPart.includes('HDD') || upperPart.includes('NVME') || upperPart.includes('TB')) {
+        newSpecs.Storage = part;
+        extractedCount++;
+      }
+      // VGA
+      else if (upperPart.includes('VGA') || upperPart.includes('RTX') || upperPart.includes('GTX') || upperPart.includes('RX ') || upperPart.includes('RADEON') || upperPart.includes('ARC')) {
+        newSpecs.VGA = part;
+        extractedCount++;
+      }
+      // Screen
+      else if (upperPart.includes('INCH') || upperPart.includes('HZ') || upperPart.includes('144HZ') || upperPart.includes('24G') || upperPart.includes('27G')) {
+        newSpecs.Screen = part;
+        extractedCount++;
+      }
+    });
+
+    if (extractedCount > 0) {
+      setFormData(prev => ({ ...prev, specs: newSpecs }));
+      toast.success(`Đã tự động điền ${extractedCount} thông số kỹ thuật!`);
+    } else {
+      toast.info('Không tìm thấy thông số trong tên. Hãy dùng nút Dán cấu hình AI.');
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.category_id) {
@@ -691,15 +734,27 @@ export default function NewProductPage() {
             <div className="space-y-6">
               <div>
                 <label className="block text-sm font-bold text-gray-700 mb-2">Tên sản phẩm <span className="text-red-500">*</span></label>
-                <input 
-                  type="text" 
-                  name="name" 
-                  required 
-                  value={formData.name} 
-                  onChange={handleChange}
-                  className="w-full px-4 py-3 bg-gray-50/50 border border-gray-200 rounded-xl outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all text-gray-800 font-medium placeholder:font-normal"
-                  placeholder="VD: Laptop Dell Latitude 7490 Core i5..."
-                />
+                <div className="relative group">
+                  <input 
+                    type="text" 
+                    name="name" 
+                    required 
+                    value={formData.name} 
+                    onChange={handleChange}
+                    className="w-full pl-4 pr-32 py-3 bg-gray-50/50 border border-gray-200 rounded-xl outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all text-gray-800 font-medium placeholder:font-normal"
+                    placeholder="VD: BỘ MÁY TÍNH H610M-E/ I3 12100F/16GB/SSD 256GB..."
+                  />
+                  {formData.name.includes('/') && (
+                    <button
+                      type="button"
+                      onClick={handleExtractFromName}
+                      className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1 px-3 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-600 rounded-lg text-xs font-bold transition-all"
+                    >
+                      <Sparkles size={14} />
+                      Tách TT
+                    </button>
+                  )}
+                </div>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
