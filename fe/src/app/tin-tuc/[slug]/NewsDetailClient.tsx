@@ -9,16 +9,17 @@ import toast from "react-hot-toast";
 
 
 
-export default function NewsDetailClient({ slug }: { slug: string }) {
-  const [article, setArticle] = useState<any>(null);
+export default function NewsDetailClient({ slug, initialArticle }: { slug: string, initialArticle?: any }) {
+  const [article, setArticle] = useState<any>(initialArticle || null);
   const [recentNews, setRecentNews] = useState<any[]>([]);
   const [email, setEmail] = useState("");
   const [subscribing, setSubscribing] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(!initialArticle && slug !== "preview");
 
   useEffect(() => {
     const loadNewsDetail = async () => {
-      setLoading(true);
+      if (!initialArticle) {
+        setLoading(true);
       
       if (slug === "preview") {
         const previewData = localStorage.getItem("news_preview");
@@ -40,9 +41,10 @@ export default function NewsDetailClient({ slug }: { slug: string }) {
           setArticle(null);
         }
       } catch (error) {
-        setArticle(null);
-      } finally {
-        setLoading(false);
+          setArticle(null);
+        } finally {
+          setLoading(false);
+        }
       }
 
       // Fetch related/recent news
@@ -57,7 +59,7 @@ export default function NewsDetailClient({ slug }: { slug: string }) {
       } catch (error) {}
     };
     loadNewsDetail();
-  }, [slug]);
+  }, [slug, initialArticle]);
 
   const copyLink = () => {
     navigator.clipboard.writeText(window.location.href);
