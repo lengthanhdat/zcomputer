@@ -2,11 +2,11 @@
 
 import { useState, useEffect, use, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, Image as ImageIcon, Box, Tag, DollarSign, FileText, UploadCloud, Loader2, X, Gift, Cpu, Upload } from "lucide-react";
+import { ArrowLeft, Image as ImageIcon, Box, Tag, DollarSign, FileText, UploadCloud, Loader2, X, Gift, Cpu } from "lucide-react";
 import Link from "next/link";
 import toast from "react-hot-toast";
-import dynamic from "next/dynamic";
 import { fetchApi } from "@/lib/api";
+import dynamic from "next/dynamic";
 
 const ReactQuill = dynamic(
   async () => {
@@ -218,9 +218,9 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
     const file = e.target.files?.[0];
     if (!file) return;
 
+    setUploadingImage(true);
     const data = new FormData();
     data.append("image", file);
-    const toastId = toast.loading("Đang tải ảnh lên...");
 
     try {
       const res = await fetchApi("/upload/image", {
@@ -242,13 +242,14 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
           editor.insertEmbed(cursorPosition, 'image', imageUrl);
           editor.setSelection(cursorPosition + 1);
         }
-        toast.success("Đã chèn ảnh vào mô tả", { id: toastId });
+        toast.success("Đã chèn ảnh vào nội dung");
       } else {
-        toast.error("Tải ảnh thất bại", { id: toastId });
+        toast.error("Tải ảnh thất bại");
       }
     } catch (error) {
-      toast.error("Lỗi tải ảnh", { id: toastId });
+      toast.error("Lỗi tải ảnh");
     } finally {
+      setUploadingImage(false);
       e.target.value = "";
     }
   };
@@ -540,14 +541,17 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
               <h2 className="text-lg font-bold text-gray-800">Mô tả sản phẩm</h2>
             </div>
             
-            <div className="flex justify-between items-center mb-4">
-              <label className="cursor-pointer flex items-center gap-2 text-sm font-medium text-blue-600 hover:text-blue-700 hover:bg-blue-50 border border-blue-200 bg-white px-4 py-2 rounded-xl transition-all shadow-sm">
-                <Upload size={16} /> Chèn ảnh vào mô tả
-                <input type="file" accept="image/*" className="hidden" onChange={handleInsertMedia} />
+            <div className="bg-slate-50/50 p-3 mb-2 border border-slate-200/60 rounded-t-xl flex flex-wrap items-center justify-between gap-3">
+              <label className="cursor-pointer flex items-center gap-2 text-sm font-medium text-indigo-600 hover:text-indigo-700 hover:bg-indigo-50 border border-indigo-200 bg-white px-4 py-2 rounded-xl transition-all shadow-sm">
+                <UploadCloud size={16} /> Thêm ảnh vào nội dung
+                <input type="file" accept="image/*" className="hidden" onChange={handleInsertMedia} disabled={uploadingImage} />
               </label>
+              <span className="text-xs text-slate-400 max-w-[400px]">
+                💡 Sử dụng công cụ để chèn hình ảnh, định dạng tiêu đề (H2, H3), in đậm...
+              </span>
             </div>
-            
-            <div className="bg-white/50 pb-12">
+
+            <div className="bg-white">
               <ReactQuill 
                 forwardedRef={quillRef}
                 theme="snow"
@@ -564,13 +568,12 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
                     ['blockquote', 'code-block'],
                     [{ 'list': 'ordered'}, { 'list': 'bullet' }, { 'list': 'check' }],
                     [{ 'indent': '-1'}, { 'indent': '+1' }],
-                    [{ 'direction': 'rtl' }],
                     [{ 'align': [] }],
-                    ['link', 'image', 'video', 'formula'],
+                    ['link', 'image', 'video'],
                     ['clean']
-                  ]
+                  ],
                 }}
-                className="h-[500px] border-none [&_.ql-container]:border-none [&_.ql-toolbar]:border-none [&_.ql-toolbar]:border-b [&_.ql-toolbar]:border-gray-200/60 [&_.ql-editor]:text-base [&_.ql-editor]:text-gray-700"
+                className="h-[500px] border border-gray-200 rounded-b-xl pb-10 [&_.ql-editor]:text-base [&_.ql-editor]:text-slate-700"
               />
             </div>
           </div>
