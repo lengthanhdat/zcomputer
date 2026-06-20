@@ -129,7 +129,6 @@ export default function ProductActions({ product }: ProductActionsProps) {
           Mua ngay
         </button>
       </div>
-      </div>
 
       {/* Contact Modal */}
       {showContactModal && (
