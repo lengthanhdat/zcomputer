@@ -130,14 +130,15 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Col 4: LIÊN HỆ */}
+          {/* Col 4: VỀ ZCOMPUTER */}
           <div className="md:col-span-4 lg:col-span-2">
             <h4 className="font-black uppercase mb-5 text-[14px] text-white tracking-wider">
-              LIÊN HỆ ZCOMPUTER
+              VỀ ZCOMPUTER
             </h4>
             <ul className="space-y-3 text-[13px] text-white/60 font-medium">
-              <li><Link href="/ve-chung-toi" className="hover:text-red-400 transition-colors">Giới Thiệu ZCOMPUTER</Link></li>
+              <li><Link href="/ve-chung-toi" className="hover:text-red-400 transition-colors">Giới Thiệu Về ZCOMPUTER</Link></li>
               <li><Link href="/lien-he" className="hover:text-red-400 transition-colors">Liên Hệ</Link></li>
+              <li><Link href="/tuyen-dung" className="hover:text-red-400 transition-colors">Tuyển Dụng</Link></li>
               <li><Link href="/he-thong-cua-hang" className="hover:text-red-400 transition-colors">Hệ Thống Cửa Hàng</Link></li>
               <li><Link href="/tin-tuc" className="hover:text-red-400 transition-colors">Tin Tức</Link></li>
             </ul>

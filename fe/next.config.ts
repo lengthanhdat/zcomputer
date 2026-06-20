@@ -37,6 +37,15 @@ const nextConfig: NextConfig = {
       }
     ];
   },
+  async redirects() {
+    return [
+      {
+        source: '/category/:slug*',
+        destination: '/:slug*',
+        permanent: true,
+      },
+    ];
+  },
   // Tắt source maps trong dev để compile nhanh hơn
   productionBrowserSourceMaps: false,
 };

@@ -72,11 +72,8 @@ export default function Header() {
                 <span className="text-gray-900 text-[20px] sm:text-[24px] md:text-[28px] font-bold uppercase tracking-[0.02em] leading-none mb-0.5">
                   COMPUTER
                 </span>
-                <span className={`${montserrat.className} text-[#cc0000] font-black text-[6px] sm:text-[7.5px] md:text-[8.5px] uppercase tracking-[0.05em] leading-none hidden sm:block`}>
+                <span className={`${montserrat.className} text-[#cc0000] font-black text-[5.5px] sm:text-[7.5px] md:text-[8.5px] uppercase tracking-[0.02em] sm:tracking-[0.05em] leading-none`}>
                   PC GAMING - LAPTOP - WORKSTATION
-                </span>
-                <span className={`${montserrat.className} text-[#cc0000] font-black text-[6px] uppercase tracking-[0.05em] leading-none sm:hidden`}>
-                  PC GAMING - LAPTOP
                 </span>
               </div>
             </div>

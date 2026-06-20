@@ -195,7 +195,32 @@ export default async function DynamicRoutePage({ params }: { params: Promise<{ s
   if (categoryName || slug === 'all') {
     const products = await getCategoryProducts(slug);
     const finalCatName = categoryName || "Sản phẩm";
-    return <CategoryClient initialProducts={products} categoryName={finalCatName} />;
+    
+    const breadcrumbData = {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Trang chủ",
+          "item": process.env.NEXT_PUBLIC_FRONTEND_URL || "https://zcomputer.site"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": finalCatName,
+          "item": `${process.env.NEXT_PUBLIC_FRONTEND_URL || "https://zcomputer.site"}/${slug}`
+        }
+      ]
+    };
+
+    return (
+      <>
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbData) }} />
+        <CategoryClient initialProducts={products} categoryName={finalCatName} />
+      </>
+    );
   }
   
   // If neither product nor category, show 404
@@ -484,10 +509,14 @@ async function ProductDetailView({ product }: { product: Product }) {
               Đặc điểm nổi bật
               <div className="absolute -bottom-3 left-0 w-1/2 h-1 bg-primary rounded-full"></div>
             </h2>
-            <div className="prose prose-lg max-w-none text-gray-600 leading-relaxed prose-headings:text-gray-900 prose-a:text-primary hover:prose-a:text-red-700 prose-img:rounded-xl prose-img:shadow-md">
-              {cleanDescription.split('\n').map((line, idx) => (
-                <p key={idx}>{line}</p>
-              ))}
+            <div className="prose prose-lg max-w-none text-gray-600 leading-relaxed prose-headings:text-gray-900 prose-a:text-primary hover:prose-a:text-red-700 prose-img:rounded-xl prose-img:shadow-md [&_img]:mx-auto [&_img]:max-w-full [&_img]:h-auto">
+              {cleanDescription.includes('<p>') || cleanDescription.includes('<h2>') || cleanDescription.includes('<h3>') || cleanDescription.includes('<br>') || cleanDescription.includes('<img') ? (
+                <div dangerouslySetInnerHTML={{ __html: cleanDescription }} />
+              ) : (
+                cleanDescription.split('\n').map((line, idx) => (
+                  <p key={idx}>{line}</p>
+                ))
+              )}
             </div>
           </div>
         )}

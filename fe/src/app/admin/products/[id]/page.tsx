@@ -1,11 +1,36 @@
 "use client";
 
-import { useState, useEffect, use } from "react";
+import { useState, useEffect, use, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowLeft, Image as ImageIcon, Box, Tag, DollarSign, FileText, UploadCloud, Loader2, X, Gift, Cpu } from "lucide-react";
 import Link from "next/link";
 import toast from "react-hot-toast";
 import { fetchApi } from "@/lib/api";
+import dynamic from "next/dynamic";
+
+const ReactQuill = dynamic(
+  async () => {
+    const rq = await import("react-quill-new");
+    const RQ = rq.default;
+    const Quill = (RQ as any).Quill;
+
+    if (Quill && typeof window !== "undefined") {
+      (window as any).Quill = Quill;
+      const { default: BlotFormatter } = await import("quill-blot-formatter");
+      Quill.register("modules/blotFormatter", BlotFormatter);
+      
+      const Font = Quill.import('formats/font');
+      Font.whitelist = ['sans-serif', 'arial', 'times-new-roman', 'tahoma', 'verdana', 'courier-new'];
+      Quill.register(Font, true);
+    }
+
+    return function Comp({ forwardedRef, ...props }: any) {
+      return <RQ ref={forwardedRef} {...props} />;
+    };
+  },
+  { ssr: false }
+);
+import "react-quill-new/dist/quill.snow.css";
 
 const SPEC_CONFIGS: Record<string, { key: string, label: string, placeholder: string }[]> = {
   'laptop': [
@@ -65,6 +90,7 @@ interface Category {
 export default function EditProductPage({ params }: { params: Promise<{ id: string }> }) {
   const resolvedParams = use(params);
   const router = useRouter();
+  const quillRef = useRef<any>(null);
   const [loading, setLoading] = useState(false);
   const [fetching, setFetching] = useState(true);
   const [categories, setCategories] = useState<Category[]>([]);
@@ -185,6 +211,46 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
     } finally {
       setUploadingImage(false);
       e.target.value = ""; // Reset input
+    }
+  };
+
+  const handleInsertMedia = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploadingImage(true);
+    const data = new FormData();
+    data.append("image", file);
+
+    try {
+      const res = await fetchApi("/upload/image", {
+        method: "POST",
+        body: data,
+        requireAuth: true,
+      });
+
+      if (res.ok) {
+        const responseData = await res.json();
+        const imageUrl = responseData.url.startsWith('http') || responseData.url.startsWith('data:') 
+          ? responseData.url 
+          : `${process.env.NEXT_PUBLIC_API_BASE_URL || 'http://127.0.0.1:5000'}${responseData.url}`;
+          
+        if (quillRef.current) {
+          const editor = quillRef.current.getEditor();
+          const range = editor.getSelection();
+          const cursorPosition = range ? range.index : editor.getLength();
+          editor.insertEmbed(cursorPosition, 'image', imageUrl);
+          editor.setSelection(cursorPosition + 1);
+        }
+        toast.success("Đã chèn ảnh vào nội dung");
+      } else {
+        toast.error("Tải ảnh thất bại");
+      }
+    } catch (error) {
+      toast.error("Lỗi tải ảnh");
+    } finally {
+      setUploadingImage(false);
+      e.target.value = "";
     }
   };
 
@@ -475,14 +541,39 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
               <h2 className="text-lg font-bold text-gray-800">Mô tả sản phẩm</h2>
             </div>
             
-            <div>
-              <textarea 
-                name="description" 
-                rows={12} 
-                value={formData.description} 
-                onChange={handleChange}
-                className="w-full px-4 py-4 bg-gray-50/50 border border-gray-200 rounded-xl outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all text-gray-800 leading-relaxed resize-y"
-                placeholder="Nhập thông tin mô tả chi tiết của sản phẩm..."
+            <div className="bg-slate-50/50 p-3 mb-2 border border-slate-200/60 rounded-t-xl flex flex-wrap items-center justify-between gap-3">
+              <label className="cursor-pointer flex items-center gap-2 text-sm font-medium text-indigo-600 hover:text-indigo-700 hover:bg-indigo-50 border border-indigo-200 bg-white px-4 py-2 rounded-xl transition-all shadow-sm">
+                <UploadCloud size={16} /> Thêm ảnh vào nội dung
+                <input type="file" accept="image/*" className="hidden" onChange={handleInsertMedia} disabled={uploadingImage} />
+              </label>
+              <span className="text-xs text-slate-400 max-w-[400px]">
+                💡 Sử dụng công cụ để chèn hình ảnh, định dạng tiêu đề (H2, H3), in đậm...
+              </span>
+            </div>
+
+            <div className="bg-white">
+              <ReactQuill 
+                forwardedRef={quillRef}
+                theme="snow"
+                value={formData.description}
+                onChange={(val: string) => setFormData({ ...formData, description: val })}
+                modules={{
+                  blotFormatter: {},
+                  toolbar: [
+                    [{ 'font': [false, 'arial', 'times-new-roman', 'tahoma', 'verdana', 'courier-new'] }, { 'size': ['small', false, 'large', 'huge'] }],
+                    [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+                    ['bold', 'italic', 'underline', 'strike'],
+                    [{ 'color': [] }, { 'background': [] }],
+                    [{ 'script': 'sub'}, { 'script': 'super' }],
+                    ['blockquote', 'code-block'],
+                    [{ 'list': 'ordered'}, { 'list': 'bullet' }, { 'list': 'check' }],
+                    [{ 'indent': '-1'}, { 'indent': '+1' }],
+                    [{ 'align': [] }],
+                    ['link', 'image', 'video'],
+                    ['clean']
+                  ],
+                }}
+                className="h-[500px] border border-gray-200 rounded-b-xl pb-10 [&_.ql-editor]:text-base [&_.ql-editor]:text-slate-700"
               />
             </div>
           </div>
