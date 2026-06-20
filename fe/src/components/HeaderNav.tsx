@@ -122,10 +122,26 @@ export default function HeaderNav() {
               Tin tức
             </Link>
           </li>
-          <li>
-            <Link href="/cong-cu-test" className="py-4 block hover:text-red-400 transition-colors uppercase">
-              Công cụ Test
+          <li className="relative group">
+            <Link href="/cong-cu-test" className="py-4 block hover:text-red-400 transition-colors uppercase flex items-center gap-1 cursor-pointer">
+              Công cụ Test <ChevronDown size={14} className="text-gray-400 group-hover:rotate-180 group-hover:text-red-400 transition-all duration-300" />
             </Link>
+            
+            <div className="absolute top-full left-0 w-60 bg-white/95 backdrop-blur-xl text-gray-800 shadow-[0_20px_40px_rgba(0,0,0,0.1)] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform origin-top -translate-y-2 group-hover:translate-y-0 border-t-2 border-red-500 rounded-b-xl overflow-hidden z-50">
+              <ul className="py-2">
+                {[
+                  { title: 'Test Bàn Phím', link: '/cong-cu-test/ban-phim' },
+                  { title: 'Test Màn Hình', link: '/cong-cu-test/man-hinh' },
+                  { title: 'Test Loa, Micro, Webcam', link: '/cong-cu-test/loa-micro-webcam' },
+                ].map((item, idx) => (
+                  <li key={idx}>
+                    <Link href={item.link} className="block px-5 py-3 hover:bg-red-50/50 hover:text-red-600 hover:pl-6 transition-all duration-300 text-[13px] font-bold border-b border-gray-100 last:border-0 uppercase">
+                      {item.title}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </li>
         </ul>
         
