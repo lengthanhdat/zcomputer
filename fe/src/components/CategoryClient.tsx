@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { Filter, Cpu, Monitor, Server, HardDrive, Maximize, ArrowRight, Eye, LayoutGrid, Check, ChevronDown, Heart, X } from "lucide-react";
+import { Filter, Cpu, Monitor, Server, HardDrive, Maximize, ArrowRight, Eye, LayoutGrid, Check, ChevronDown, Heart, X, MemoryStick, Gpu, Battery, Layers, Zap, Keyboard, Mouse, Link as LinkIcon } from "lucide-react";
 import { useState, useMemo, useEffect } from "react";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { motion } from "framer-motion";
@@ -395,7 +395,7 @@ export default function CategoryClient({
                             <div className="absolute -bottom-[1px] -right-[1px] w-5 h-5 border-b-2 border-r-2 border-primary/60 rounded-br-xl"></div>
                             
                             <div className="absolute bottom-2 right-2 flex items-center gap-1 opacity-50 mix-blend-multiply">
-                              <Image src="/logo.png" alt="ZCOMPUTER" width={20} height={20} className="w-4 h-4 object-contain" unoptimized />
+                              <Image src="/logo.webp" alt="ZCOMPUTER" width={20} height={20} className="w-4 h-4 object-contain" unoptimized />
                               <div className="flex items-baseline select-none tracking-tighter">
                                 <span className="text-red-600 font-black text-[11px] drop-shadow-sm">Z</span>
                                 <span className="text-slate-800 font-black text-[10px] uppercase drop-shadow-sm">COMPUTER</span>
@@ -467,21 +467,33 @@ export default function CategoryClient({
 
                         {product.specs && Object.keys(product.specs).length > 0 && (
                           <div className="bg-gray-50/80 border border-gray-100 rounded-lg p-2.5 text-[10px] text-gray-600 grid grid-cols-2 gap-y-2 gap-x-2 mt-auto">
-                            {Object.entries(product.specs).filter(([_, v]) => v && String(v).trim() !== '').slice(0, 5).map(([key, value], index) => {
-                              const lowerKey = key.toLowerCase();
-                              let Icon = Maximize;
-                              if (lowerKey.includes('cpu') || lowerKey.includes('chip') || lowerKey.includes('vi xử lý')) Icon = Cpu;
-                              else if (lowerKey.includes('vga') || lowerKey.includes('card') || lowerKey.includes('đồ họa')) Icon = Monitor;
-                              else if (lowerKey.includes('ram')) Icon = Server;
-                              else if (lowerKey.includes('ổ') || lowerKey.includes('ssd') || lowerKey.includes('hdd') || lowerKey.includes('storage')) Icon = HardDrive;
-                              
-                              return (
-                                <div key={key} className={`flex items-center gap-1.5 truncate ${index === 4 ? 'col-span-2' : ''}`} title={`${key}: ${value}`}>
-                                  <Icon size={12} className="text-gray-400 shrink-0"/> 
-                                  <span className="truncate">{value as string}</span>
-                                </div>
-                              );
-                            })}
+                            {(() => {
+                              const entries = Object.entries(product.specs).filter(([_, v]) => v && String(v).trim() !== '').slice(0, 5);
+                              return entries.map(([key, value], index) => {
+                                const lowerKey = key.toLowerCase();
+                                let Icon = Maximize;
+                                if (lowerKey.includes('cpu') || lowerKey.includes('chip') || lowerKey.includes('vi xử lý')) Icon = Cpu;
+                                else if (lowerKey.includes('vga') || lowerKey.includes('card') || lowerKey.includes('đồ họa')) Icon = Gpu;
+                                else if (lowerKey.includes('ram')) Icon = MemoryStick;
+                                else if (lowerKey.includes('ổ') || lowerKey.includes('ssd') || lowerKey.includes('hdd') || lowerKey.includes('storage')) Icon = HardDrive;
+                                else if (lowerKey.includes('màn') || lowerKey.includes('screen') || lowerKey.includes('display') || lowerKey.includes('độ phân giải') || lowerKey.includes('resolution')) Icon = Monitor;
+                                else if (lowerKey.includes('pin') || lowerKey.includes('battery')) Icon = Battery;
+                                else if (lowerKey.includes('tần số') || lowerKey.includes('hz') || lowerKey.includes('refreshrate')) Icon = Zap;
+                                else if (lowerKey.includes('tấm nền') || lowerKey.includes('panel')) Icon = Layers;
+                                else if (lowerKey.includes('kích thước') || lowerKey.includes('size')) Icon = Maximize;
+                                else if (lowerKey.includes('phím') || lowerKey.includes('switch') || lowerKey.includes('keycap')) Icon = Keyboard;
+                                else if (lowerKey.includes('chuột') || lowerKey.includes('sensor') || lowerKey.includes('dpi')) Icon = Mouse;
+                                else if (lowerKey.includes('kết nối') || lowerKey.includes('connection')) Icon = LinkIcon;
+                                
+                                const isOddTotalAndLast = entries.length % 2 !== 0 && index === entries.length - 1;
+                                return (
+                                  <div key={key} className={`flex items-center gap-1.5 truncate ${isOddTotalAndLast ? 'col-span-2' : ''}`} title={`${key}: ${value}`}>
+                                    <Icon size={12} className="text-gray-400 shrink-0"/> 
+                                    <span className="truncate font-medium">{value as string}</span>
+                                  </div>
+                                );
+                              });
+                            })()}
                           </div>
                         )}
 

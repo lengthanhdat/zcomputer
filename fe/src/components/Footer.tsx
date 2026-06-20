@@ -67,7 +67,7 @@ export default function Footer() {
              <Link href="/" className="flex flex-col items-start shrink-0 group mb-6">
                <div className="flex items-center gap-1.5">
                  <div className="bg-white p-1.5 rounded-xl shadow-[0_0_15px_rgba(255,255,255,0.2)] group-hover:shadow-[0_0_20px_rgba(220,38,38,0.4)] transition-shadow">
-                   <Image src="/logo.png" alt="ZCOMPUTER" width={50} height={50} className="h-10 w-10 object-contain" />
+                   <Image src="/logo.webp" alt="ZCOMPUTER" width={50} height={50} className="h-10 w-10 object-contain" />
                  </div>
                  <div className="flex items-center gap-0.5 group-hover:scale-[1.02] transition-transform duration-300 select-none font-serif">
                    <span className="text-[#cc0000] text-[58px] font-bold leading-none drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">

@@ -193,7 +193,7 @@ export default function CartPage() {
               </p>
 
               <div className="flex flex-col md:flex-row gap-5 items-stretch">
-                <div className="flex flex-col gap-4 w-full md:w-[55%]">
+                <div className="flex flex-col gap-4 w-full">
                   <a 
                     href="tel:0977334415" 
                     className="flex items-center gap-4 bg-gray-50 hover:bg-red-50 p-4 rounded-xl border border-gray-100 transition-colors group h-full"
@@ -242,23 +242,6 @@ export default function CartPage() {
                       <div className="text-[17px] font-black text-gray-900">Fanpage Facebook</div>
                     </div>
                   </a>
-                </div>
-
-                {/* QR Code Section */}
-                <div className="w-full md:w-[45%] flex flex-col items-center justify-center bg-gray-50 rounded-xl border border-gray-100 p-5">
-                  <div className="relative w-44 h-44 mb-3 bg-white rounded-xl shadow-sm border border-gray-150 overflow-hidden">
-                    <img 
-                      src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=https://zalo.me/0977334415" 
-                      alt="Zalo QR" 
-                      className="w-full h-full object-contain p-2" 
-                    />
-                    <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                      <div className="bg-white p-1 rounded-full">
-                        <div className="bg-black text-white w-10 h-10 rounded-full flex items-center justify-center font-bold text-[12px]">Zalo</div>
-                      </div>
-                    </div>
-                  </div>
-                  <p className="text-[13px] text-gray-500 font-bold text-center uppercase tracking-widest">Quét mã Zalo</p>
                 </div>
               </div>
               
