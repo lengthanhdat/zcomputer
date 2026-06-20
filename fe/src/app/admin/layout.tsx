@@ -139,13 +139,18 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             </button>
             <h2 className="text-lg md:text-xl font-bold text-gray-800 truncate">Quản trị hệ thống</h2>
           </div>
-          <div className="flex items-center gap-3 shrink-0">
-            <div className="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center font-bold text-sm uppercase">
+          <div className="flex items-center gap-3 shrink-0 bg-gray-50 px-3 py-1.5 rounded-full border border-gray-200">
+            <div className="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center font-bold text-sm uppercase shadow-sm">
               {user?.name?.charAt(0) || 'A'}
             </div>
-            <span className="hidden sm:inline text-sm font-semibold text-gray-700 capitalize">
-              {user?.role || 'admin'}
-            </span>
+            <div className="hidden sm:flex flex-col pr-2">
+              <span className="text-sm font-bold text-gray-800 leading-tight">
+                {user?.name || 'Người dùng'}
+              </span>
+              <span className="text-[11px] text-gray-500 uppercase font-semibold leading-tight">
+                {user?.role === 'admin' ? 'Quản trị viên' : 'Nhân viên'}
+              </span>
+            </div>
           </div>
         </header>
         <div className="flex-1 overflow-x-hidden overflow-y-auto p-4 md:p-6 w-full">
