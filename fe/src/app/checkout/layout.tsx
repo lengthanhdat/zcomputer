@@ -1,0 +1,1 @@
+export const metadata = { title: 'Thanh toán', robots: { index: false, follow: false } }; export default function Layout({ children }) { return <>{children}</>; }
