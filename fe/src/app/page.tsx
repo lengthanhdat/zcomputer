@@ -3,6 +3,9 @@ import HomeClient from "@/components/HomeClient";
 export const metadata = {
   title: "ZCOMPUTER - PC Gaming, Laptop, Workstation",
   description: "ZCOMPUTER chuyên cung cấp PC Gaming, Laptop, Workstation uy tín giá rẻ.",
+  alternates: {
+    canonical: '/',
+  },
 };
 
 export default function Home() {
@@ -10,8 +13,8 @@ export default function Home() {
     "@context": "https://schema.org",
     "@type": "Organization",
     "name": "ZCOMPUTER",
-    "url": "https://zcomputer.com",
-    "logo": "https://zcomputer.com/logo.png",
+    "url": "https://zcomputer.vn",
+    "logo": "https://zcomputer.vn/logo.png",
     "contactPoint": {
       "@type": "ContactPoint",
       "telephone": "+84-977-334-415",
