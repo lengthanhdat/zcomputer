@@ -120,7 +120,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           </Link>
           <button 
             onClick={handleLogout}
-            className="w-full flex items-center gap-3 px-4 py-3 rounded hover:bg-red-900/50 hover:text-red-400 transition-colors text-gray-400 text-sm text-left"
+            className="w-full flex items-center gap-3 px-4 py-3 rounded hover:bg-brand-900/50 hover:text-brand-400 transition-colors text-gray-400 text-sm text-left"
           >
             <LogOut size={18} /> Đăng xuất
           </button>

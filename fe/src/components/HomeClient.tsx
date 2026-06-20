@@ -216,7 +216,7 @@ export default function HomeClient() {
   }, [categories, products]);
 
   return (
-    <div className="bg-[#f8f9fa] min-h-screen text-gray-900 selection:bg-primary selection:text-white">
+    <div className="bg-[#f8f9fa] min-h-screen text-gray-900 selection:bg-brand-600 selection:text-white">
       <h1 suppressHydrationWarning className="sr-only">ZCOMPUTER - PC Gaming, Laptop, Workstation</h1>
       {/* Banner */}
       <section className="container mx-auto px-2 md:px-4 pt-4 pb-6 md:pt-8 md:pb-12">
@@ -259,7 +259,7 @@ export default function HomeClient() {
         ) : categories.length > 0 ? (
           <div className="relative">
             {/* Decorative Background Blobs for Glassmorphism */}
-            <div className="absolute top-10 left-1/4 w-72 h-72 bg-red-400/20 rounded-full blur-[80px] pointer-events-none -z-10"></div>
+            <div className="absolute top-10 left-1/4 w-72 h-72 bg-brand-400/20 rounded-full blur-[80px] pointer-events-none -z-10"></div>
             <div className="absolute bottom-10 right-1/4 w-72 h-72 bg-blue-400/20 rounded-full blur-[80px] pointer-events-none -z-10"></div>
 
             <div className="grid grid-cols-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-3 lg:gap-6">
@@ -282,7 +282,7 @@ export default function HomeClient() {
                   href={`/${cat.slug}`}
                   className="flex flex-col items-center justify-center gap-3 p-4 md:p-6 rounded-[1.5rem] md:rounded-[2rem] bg-white/40 backdrop-blur-xl border border-white/60 shadow-[0_8px_32px_rgba(0,0,0,0.04)] hover:shadow-[0_8px_32px_rgba(220,38,38,0.15)] hover:-translate-y-2 hover:border-white/80 hover:bg-white/60 transition-all duration-500 cursor-pointer group text-gray-700 font-bold relative overflow-hidden"
                 >
-                  <div className="absolute inset-0 bg-gradient-to-br from-red-500/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 mix-blend-multiply"></div>
+                  <div className="absolute inset-0 bg-gradient-to-br from-brand-500/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 mix-blend-multiply"></div>
                   <div className="absolute -top-24 -right-24 w-48 h-48 bg-gradient-to-br from-white/40 to-transparent rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"></div>
 
                   <div className="w-14 h-14 md:w-20 md:h-20 rounded-full bg-white/50 backdrop-blur-md border border-white/80 group-hover:bg-white flex items-center justify-center relative z-10 transition-all duration-500 shadow-inner group-hover:shadow-[0_0_20px_rgb(220,38,38,0.15)]">
@@ -295,15 +295,15 @@ export default function HomeClient() {
               {!showAllCategories && categories.filter(c => !c.parent_id).length > 5 && (
                 <button
                   onClick={() => setShowAllCategories(true)}
-                  className="flex flex-col items-center justify-center gap-4 p-6 rounded-[2rem] bg-red-50/40 backdrop-blur-xl border border-white/60 shadow-[0_8px_32px_rgba(0,0,0,0.04)] hover:shadow-[0_8px_32px_rgba(220,38,38,0.15)] hover:-translate-y-2 hover:border-red-100 hover:bg-red-50/80 transition-all duration-500 cursor-pointer group text-primary font-bold relative overflow-hidden"
+                  className="flex flex-col items-center justify-center gap-4 p-6 rounded-[2rem] bg-brand-50/40 backdrop-blur-xl border border-white/60 shadow-[0_8px_32px_rgba(0,0,0,0.04)] hover:shadow-[0_8px_32px_rgba(220,38,38,0.15)] hover:-translate-y-2 hover:border-brand-100 hover:bg-brand-50/80 transition-all duration-500 cursor-pointer group text-primary font-bold relative overflow-hidden"
                 >
-                  <div className="absolute inset-0 bg-gradient-to-br from-red-500/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 mix-blend-multiply"></div>
+                  <div className="absolute inset-0 bg-gradient-to-br from-brand-500/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 mix-blend-multiply"></div>
                   <div className="absolute -top-24 -right-24 w-48 h-48 bg-gradient-to-br from-white/40 to-transparent rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"></div>
 
                   <div className="w-14 h-14 md:w-20 md:h-20 rounded-full bg-white/50 backdrop-blur-md border border-white/80 group-hover:bg-white flex items-center justify-center relative z-10 transition-all duration-500 shadow-inner group-hover:shadow-[0_0_20px_rgb(220,38,38,0.15)]">
                     <ArrowRight size={24} strokeWidth={1.5} className="text-primary group-hover:translate-x-2 transition-transform duration-300 md:w-[32px] md:h-[32px]" />
                   </div>
-                  <span className="uppercase tracking-widest text-[10px] md:text-[12px] relative z-10 text-center leading-relaxed group-hover:text-red-700 transition-colors">Xem tất cả ({categories.filter(c => !c.parent_id).length - 5})</span>
+                  <span className="uppercase tracking-widest text-[10px] md:text-[12px] relative z-10 text-center leading-relaxed group-hover:text-primary transition-colors">Xem tất cả ({categories.filter(c => !c.parent_id).length - 5})</span>
                 </button>
               )}
               {showAllCategories && categories.filter(c => !c.parent_id).length > 5 && (
@@ -404,20 +404,20 @@ export default function HomeClient() {
 
                 {/* Slider Container */}
                 <div className="w-full lg:w-3/4 xl:w-[calc(100%-280px)] bg-transparent p-6 md:p-8 relative flex-1 flex flex-col">
-                  <div className="absolute -top-32 -right-32 w-64 h-64 bg-red-600/10 rounded-full blur-3xl pointer-events-none"></div>
+                  <div className="absolute -top-32 -right-32 w-64 h-64 bg-primary/10 rounded-full blur-3xl pointer-events-none"></div>
                   <div className="absolute -bottom-32 -left-32 w-64 h-64 bg-blue-600/10 rounded-full blur-3xl pointer-events-none"></div>
                   
                   {/* Top Subcategories Bar */}
                   {topSubCategories.length > 0 && (
-                    <div className="flex overflow-x-auto whitespace-nowrap items-center gap-2 md:gap-3 mb-6 relative z-10 bg-gradient-to-r from-red-500/10 via-orange-400/5 to-transparent p-2.5 rounded-2xl border border-red-500/10 scrollbar-hide [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-                      <div className="flex text-red-600 font-black text-[11px] uppercase tracking-widest px-3 border-r border-red-500/20 mr-1 items-center gap-1.5 flex-shrink-0">
+                    <div className="flex overflow-x-auto whitespace-nowrap items-center gap-2 md:gap-3 mb-6 relative z-10 bg-gradient-to-r from-primary/10 via-primary/5 to-transparent p-2.5 rounded-2xl border border-primary/10 scrollbar-hide [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+                      <div className="flex text-primary font-black text-[11px] uppercase tracking-widest px-3 border-r border-primary/20 mr-1 items-center gap-1.5 flex-shrink-0">
                         <Zap size={14} className="text-orange-500 fill-orange-500" />
                         Nổi bật
                       </div>
                       
                       <button
                         onClick={() => setActiveSubCats(prev => ({...prev, [cat._id]: "all"}))}
-                        className={`flex-shrink-0 px-4 py-1.5 backdrop-blur-md rounded-xl text-[12px] font-bold transition-all duration-300 shadow-[0_2px_10px_rgba(0,0,0,0.02)] hover:shadow-[0_5px_15px_rgba(220,38,38,0.1)] border ${activeSubCatId === "all" ? "bg-red-500 text-white border-red-500 shadow-[0_5px_15px_rgba(220,38,38,0.3)]" : "bg-white/60 text-gray-700 hover:bg-white hover:text-red-600 border-white/50 hover:border-red-200"}`}
+                        className={`flex-shrink-0 px-4 py-1.5 backdrop-blur-md rounded-xl text-[12px] font-bold transition-all duration-300 shadow-[0_2px_10px_rgba(0,0,0,0.02)] hover:shadow-[0_5px_15px_var(--primary-ring)] border ${activeSubCatId === "all" ? "bg-primary text-white border-primary shadow-[0_5px_15px_var(--primary-ring)]" : "bg-white/60 text-gray-700 hover:bg-white hover:text-primary border-white/50 hover:border-primary/50"}`}
                       >
                         Tất cả
                       </button>
@@ -426,14 +426,14 @@ export default function HomeClient() {
                         <button 
                           key={subCat._id} 
                           onClick={() => setActiveSubCats(prev => ({...prev, [cat._id]: subCat._id}))}
-                          className={`flex-shrink-0 px-4 py-1.5 backdrop-blur-md rounded-xl text-[12px] font-bold transition-all duration-300 shadow-[0_2px_10px_rgba(0,0,0,0.02)] hover:shadow-[0_5px_15px_rgba(220,38,38,0.1)] border ${activeSubCatId === subCat._id ? "bg-red-500 text-white border-red-500 shadow-[0_5px_15px_rgba(220,38,38,0.3)]" : "bg-white/60 text-gray-700 hover:bg-white hover:text-red-600 border-white/50 hover:border-red-200"}`}
+                          className={`flex-shrink-0 px-4 py-1.5 backdrop-blur-md rounded-xl text-[12px] font-bold transition-all duration-300 shadow-[0_2px_10px_rgba(0,0,0,0.02)] hover:shadow-[0_5px_15px_var(--primary-ring)] border ${activeSubCatId === subCat._id ? "bg-primary text-white border-primary shadow-[0_5px_15px_var(--primary-ring)]" : "bg-white/60 text-gray-700 hover:bg-white hover:text-primary border-white/50 hover:border-primary/50"}`}
                         >
                           {subCat.name}
                         </button>
                       ))}
                       <Link 
                         href={`/${cat.slug}`}
-                        className="ml-auto flex-shrink-0 text-[12px] font-bold text-red-600 hover:text-red-700 flex items-center gap-1 transition-all duration-300 hover:translate-x-1 px-2"
+                        className="ml-auto flex-shrink-0 text-[12px] font-bold text-primary hover:brightness-110 flex items-center gap-1 transition-all duration-300 hover:translate-x-1 px-2"
                       >
                         Xem tất cả <ChevronRight size={14} />
                       </Link>
@@ -486,9 +486,9 @@ export default function HomeClient() {
         <div className="container mx-auto px-4">
           <div className="text-center max-w-4xl mx-auto mb-14 px-4">
             <h2 className="text-3xl md:text-4xl font-black text-white uppercase tracking-tight mb-6">
-              LỜI CẢM ƠN TỪ <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-400">ZCOMPUTER</span>
+              LỜI CẢM ƠN TỪ <span className="text-primary">ZCOMPUTER</span>
             </h2>
-            <div className="w-24 h-1 bg-gradient-to-r from-red-600 to-orange-500 mx-auto mb-8 rounded-full shadow-[0_0_10px_rgba(220,38,38,0.5)]"></div>
+            <div className="w-24 h-1 bg-primary mx-auto mb-8 rounded-full shadow-[0_0_10px_var(--primary-ring)]"></div>
             <p className="text-gray-300 text-base md:text-[17px] leading-8 md:leading-9 italic font-medium">
               &quot;ZCOMPUTER trân trọng từng khoảnh khắc được đồng hành cùng quý khách. Sự tin tưởng và ủng hộ của bạn chính là động lực to lớn giúp chúng tôi không ngừng hoàn thiện, mang đến những sản phẩm và dịch vụ chất lượng nhất. Hy vọng ZCOMPUTER sẽ luôn là địa chỉ uy tín, gắn bó lâu dài cùng đam mê công nghệ của quý khách. Chân thành cảm ơn bạn đã lựa chọn chúng tôi!&quot;
             </p>
@@ -528,7 +528,7 @@ function ProductCard({ product }: { product: Product }) {
 
   return (
     <div
-      className={`flex-none w-[170px] md:w-[280px] bg-white rounded-2xl border border-gray-100 overflow-hidden group shadow-md flex flex-col relative transition-all duration-500 ${isOutOfStock ? 'opacity-80' : 'hover:shadow-[0_8px_30px_rgb(220,38,38,0.15)] hover:border-red-200 hover:-translate-y-2'}`}
+      className={`flex-none w-[170px] md:w-[280px] bg-white rounded-2xl border border-gray-100 overflow-hidden group shadow-md flex flex-col relative transition-all duration-500 ${isOutOfStock ? 'opacity-80' : 'hover:shadow-[0_8px_30px_var(--primary-ring)] hover:border-primary/50 hover:-translate-y-2'}`}
     >
       <Link href={`/${product.slug}`} className="absolute inset-0 z-20"></Link>
       <div className="relative aspect-[4/3] p-4 flex items-center justify-center bg-white overflow-hidden">
@@ -563,7 +563,7 @@ function ProductCard({ product }: { product: Product }) {
             <div className="absolute bottom-2 right-2 flex items-center gap-1 opacity-50 mix-blend-multiply">
               <Image src="/logo.webp" alt="ZCOMPUTER" width={20} height={20} className="w-4 h-4 object-contain" unoptimized />
               <div className="flex items-baseline select-none tracking-tighter">
-                <span className="text-red-600 font-black text-[11px] drop-shadow-sm">Z</span>
+                <span className="text-primary font-black text-[11px] drop-shadow-sm">Z</span>
                 <span className="text-slate-800 font-black text-[10px] uppercase drop-shadow-sm">COMPUTER</span>
               </div>
             </div>
@@ -574,17 +574,17 @@ function ProductCard({ product }: { product: Product }) {
         <div className="absolute top-4 left-4 z-20 flex flex-col gap-1.5">
           {product.isHotSale && (
             <div className="shadow-lg rounded-md overflow-hidden transform -rotate-3 origin-top-left group-hover:rotate-0 transition-transform duration-300">
-              <div className="bg-gradient-to-r from-orange-500 to-red-600 text-white text-[10px] font-black px-2 py-1 text-center uppercase tracking-widest">
+              <div className="bg-primary text-white text-[10px] font-black px-2 py-1 text-center uppercase tracking-widest">
                 🔥 HOT SALE
               </div>
             </div>
           )}
           {saveAmount > 0 && (
             <div className="shadow-lg rounded-md overflow-hidden transform -rotate-3 origin-top-left group-hover:rotate-0 transition-transform duration-300">
-              <div className="bg-gradient-to-r from-red-600 to-red-500 text-white text-[10px] font-black px-2 py-1 text-center uppercase tracking-widest">
+              <div className="bg-primary text-white text-[10px] font-black px-2 py-1 text-center uppercase tracking-widest">
                 TIẾT KIỆM
               </div>
-              <div className="bg-red-700 text-white text-[12px] font-black px-2 py-1 text-center border-t border-red-500">
+              <div className="bg-primary/80 text-white text-[12px] font-black px-2 py-1 text-center border-t border-white/20">
                 {saveAmount.toLocaleString('vi-VN')} đ
               </div>
             </div>
@@ -619,14 +619,14 @@ function ProductCard({ product }: { product: Product }) {
             <>
               <span className="text-gray-400 text-[12px] md:text-[13px] line-through mb-0.5 decoration-gray-300">{originalPrice.toLocaleString('vi-VN')}₫</span>
               <div className="flex items-end gap-2">
-                <span className="text-[16px] md:text-[18px] font-black text-red-600 leading-none">{currentPrice.toLocaleString('vi-VN')}₫</span>
-                <span className="bg-red-50 text-red-600 border border-red-200 rounded text-[10px] md:text-[11px] font-bold px-1.5 py-[2px] leading-none">-{discountPercent}%</span>
+                <span className="text-[16px] md:text-[18px] font-black text-primary leading-none">{currentPrice.toLocaleString('vi-VN')}₫</span>
+                <span className="bg-primary/10 text-primary border border-primary/20 rounded text-[10px] md:text-[11px] font-bold px-1.5 py-[2px] leading-none">-{discountPercent}%</span>
               </div>
             </>
           ) : (
              <>
                <div className="h-[18px] md:h-[20px] mb-0.5"></div>
-               <span className="text-[16px] md:text-[18px] font-black text-red-600 leading-none">{currentPrice.toLocaleString('vi-VN')}₫</span>
+               <span className="text-[16px] md:text-[18px] font-black text-primary leading-none">{currentPrice.toLocaleString('vi-VN')}₫</span>
              </>
           )}
         </div>

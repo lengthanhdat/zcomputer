@@ -106,7 +106,7 @@ export default function ForgotPasswordPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="group relative w-full flex justify-center py-2.5 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-primary hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors disabled:opacity-50"
+                className="group relative w-full flex justify-center py-2.5 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-primary hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors disabled:opacity-50"
               >
                 {loading ? "Đang gửi..." : "Gửi mã OTP"}
               </button>
@@ -177,7 +177,7 @@ export default function ForgotPasswordPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="group relative w-full flex justify-center py-2.5 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-primary hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors disabled:opacity-50"
+                className="group relative w-full flex justify-center py-2.5 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-primary hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors disabled:opacity-50"
               >
                 {loading ? "Đang xử lý..." : "Đặt lại mật khẩu"}
               </button>
@@ -196,7 +196,7 @@ export default function ForgotPasswordPage() {
         )}
 
         <div className="text-center">
-          <Link href="/login" className="font-medium text-primary hover:text-red-700 text-sm transition-colors">
+          <Link href="/login" className="font-medium text-primary hover:text-brand-700 text-sm transition-colors">
             Trở lại trang đăng nhập
           </Link>
         </div>

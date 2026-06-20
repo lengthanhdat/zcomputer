@@ -1,4 +1,5 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
+import type { CSSProperties } from "react";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
@@ -7,8 +8,23 @@ import FloatingContact from "@/components/FloatingContact";
 import PublicChrome from "@/components/PublicChrome";
 import PopupAnnouncement from "@/components/PopupAnnouncement";
 import { Toaster } from "react-hot-toast";
+import { getThemePreset, buildThemeStyle } from "@/lib/theme";
 
 const inter = Inter({ subsets: ["latin", "vietnamese"] });
+
+async function fetchThemeStyle(): Promise<CSSProperties> {
+  try {
+    const API = process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:5000";
+    const res = await fetch(`${API}/api/settings/theme_color`, {
+      next: { revalidate: 30 },
+    });
+    if (!res.ok) return buildThemeStyle(getThemePreset("red"));
+    const data = await res.json();
+    return buildThemeStyle(getThemePreset(data?.value ?? "red"));
+  } catch {
+    return buildThemeStyle(getThemePreset("red"));
+  }
+}
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_FRONTEND_URL || 'http://localhost:3000'),
@@ -40,13 +56,14 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const themeStyle = await fetchThemeStyle();
   return (
-    <html lang="vi" suppressHydrationWarning>
+    <html lang="vi" suppressHydrationWarning style={themeStyle}>
       <body
         className={`${inter.className} antialiased min-h-screen flex flex-col`}
         suppressHydrationWarning

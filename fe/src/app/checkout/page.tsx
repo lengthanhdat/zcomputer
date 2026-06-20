@@ -68,7 +68,7 @@ export default function CheckoutPage() {
       <div className="container mx-auto px-4 py-20 text-center min-h-[50vh] flex flex-col justify-center items-center">
         <h2 className="text-2xl font-bold mb-4">Giỏ hàng trống</h2>
         <p className="text-gray-500 mb-8">Bạn chưa chọn sản phẩm nào để thanh toán.</p>
-        <button onClick={() => router.push('/')} className="bg-primary text-white px-6 py-2 rounded-md font-semibold hover:bg-red-700">
+        <button onClick={() => router.push('/')} className="bg-primary text-white px-6 py-2 rounded-md font-semibold hover:bg-primary/90">
           Tiếp tục mua sắm
         </button>
       </div>
@@ -110,7 +110,7 @@ export default function CheckoutPage() {
 
               <div className="mt-8 pt-6 border-t">
                 <h3 className="font-bold mb-4">Phương thức thanh toán</h3>
-                <div className="border border-primary bg-red-50 p-4 rounded cursor-pointer flex items-center gap-3">
+                <div className="border border-primary bg-primary/10 p-4 rounded cursor-pointer flex items-center gap-3">
                   <input type="radio" checked readOnly className="w-4 h-4 text-primary" />
                   <span className="font-medium text-gray-800">Thanh toán khi nhận hàng (COD)</span>
                 </div>
@@ -119,7 +119,7 @@ export default function CheckoutPage() {
               <button 
                 type="submit" 
                 disabled={loading}
-                className="w-full mt-6 bg-primary text-white font-bold text-lg py-3 rounded hover:bg-red-700 transition-colors disabled:opacity-70"
+                className="w-full mt-6 bg-primary text-white font-bold text-lg py-3 rounded hover:bg-primary/90 transition-colors disabled:opacity-70"
               >
                 {loading ? "Đang xử lý..." : "HOÀN TẤT ĐẶT HÀNG"}
               </button>

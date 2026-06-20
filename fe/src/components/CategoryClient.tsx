@@ -193,7 +193,7 @@ export default function CategoryClient({
           >
             <div className="flex items-center justify-between font-black text-lg pb-4 border-b border-gray-100 text-gray-900 uppercase">
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-full bg-red-50 flex items-center justify-center">
+                <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
                   <Filter size={16} className="text-primary" />
                 </div>
                 Bộ lọc sản phẩm
@@ -206,11 +206,11 @@ export default function CategoryClient({
             <div className="mt-6">
               <div className="mb-8">
                 <h3 className="font-bold mb-4 text-gray-800 uppercase tracking-wider text-sm flex items-center gap-2">
-                <span className="w-1 h-4 bg-red-500 rounded-full"></span>Tính năng nổi bật
+                <span className="w-1 h-4 bg-primary rounded-full"></span>Tính năng nổi bật
               </h3>
               <div className="space-y-4">
                 <label className="flex items-center gap-3 cursor-pointer group" onClick={() => updateParam('isDiscount', isDiscount ? [] : ['true'])}>
-                  <div className={`w-5 h-5 rounded flex items-center justify-center transition-all duration-300 ${isDiscount ? 'bg-red-500 border-red-500 shadow-md shadow-red-500/20' : 'border border-gray-300 group-hover:border-red-400'}`}>
+                  <div className={`w-5 h-5 rounded flex items-center justify-center transition-all duration-300 ${isDiscount ? 'bg-primary border-primary shadow-md shadow-primary/20' : 'border border-gray-300 group-hover:border-primary/50'}`}>
                     {isDiscount && <Check size={14} className="text-white" />}
                   </div>
                   <span className={`text-[14px] transition-colors ${isDiscount ? 'text-gray-900 font-bold' : 'text-gray-600 font-medium group-hover:text-gray-900'}`}>
@@ -320,7 +320,7 @@ export default function CategoryClient({
               transition={{ delay: 0.4 }}
               className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 mb-6 flex flex-col sm:flex-row justify-between items-center gap-4 relative overflow-hidden"
             >
-              <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-red-500 to-purple-500"></div>
+              <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-primary to-purple-500"></div>
               
               <div className="flex items-center justify-between w-full sm:w-auto">
                 <div className="text-gray-600 font-medium ml-2">
@@ -397,7 +397,7 @@ export default function CategoryClient({
                             <div className="absolute bottom-2 right-2 flex items-center gap-1 opacity-50 mix-blend-multiply">
                               <Image src="/logo.webp" alt="ZCOMPUTER" width={20} height={20} className="w-4 h-4 object-contain" unoptimized />
                               <div className="flex items-baseline select-none tracking-tighter">
-                                <span className="text-red-600 font-black text-[11px] drop-shadow-sm">Z</span>
+                                <span className="text-primary font-black text-[11px] drop-shadow-sm">Z</span>
                                 <span className="text-slate-800 font-black text-[10px] uppercase drop-shadow-sm">COMPUTER</span>
                               </div>
                             </div>
@@ -408,17 +408,17 @@ export default function CategoryClient({
                         <div className="absolute top-4 left-4 z-20 flex flex-col gap-1.5">
                           {product.isHotSale && (
                             <div className="shadow-lg rounded-md overflow-hidden transform -rotate-2 origin-top-left group-hover:rotate-0 transition-transform duration-300">
-                              <div className="bg-gradient-to-r from-orange-500 to-red-600 text-white text-[10px] font-black px-2 py-1 text-center uppercase tracking-widest">
+                              <div className="bg-primary text-white text-[10px] font-black px-2 py-1 text-center uppercase tracking-widest">
                                 🔥 HOT SALE
                               </div>
                             </div>
                           )}
                           {saveAmount > 0 && !isOutOfStock && (
                             <div className="shadow-lg rounded-md overflow-hidden transform -rotate-2 origin-top-left group-hover:rotate-0 transition-transform duration-300">
-                              <div className="bg-gradient-to-r from-red-600 to-red-500 text-white text-[10px] font-black px-2 py-1 text-center uppercase tracking-widest">
+                              <div className="bg-primary text-white text-[10px] font-black px-2 py-1 text-center uppercase tracking-widest">
                                 TIẾT KIỆM
                               </div>
-                              <div className="bg-red-700 text-white text-[11px] font-black px-2 py-1 text-center border-t border-red-500">
+                              <div className="bg-primary/80 text-white text-[11px] font-black px-2 py-1 text-center border-t border-white/20">
                                 {saveAmount.toLocaleString('vi-VN')} đ
                               </div>
                             </div>
@@ -440,7 +440,7 @@ export default function CategoryClient({
                           <div className="text-[11px] font-bold text-gray-500 uppercase">{product.brand || "KHÁC"}</div>
                           <LikeButton product={product} />
                         </div>
-                        <Link href={`/${product.slug}`} className="hover:text-red-600 transition-colors mb-3 z-30 relative">
+                        <Link href={`/${product.slug}`} className="hover:text-primary transition-colors mb-3 z-30 relative">
                           <h3 className="text-gray-700 text-[13px] font-medium leading-relaxed line-clamp-2">{product.name}</h3>
                         </Link>
                         
@@ -453,14 +453,14 @@ export default function CategoryClient({
                             <>
                               <span className="text-gray-400 text-[12px] line-through mb-0.5">{originalPrice.toLocaleString('vi-VN')}₫</span>
                               <div className="flex items-center gap-2">
-                                <span className="text-[16px] font-black text-red-600">{currentPrice.toLocaleString('vi-VN')}₫</span>
-                                <span className="text-red-500 border border-red-500 rounded text-[10px] font-bold px-1 py-[1px] leading-none">-{discountPercent}%</span>
+                                <span className="text-[16px] font-black text-primary">{currentPrice.toLocaleString('vi-VN')}₫</span>
+                                <span className="text-primary border border-primary/50 rounded text-[10px] font-bold px-1 py-[1px] leading-none">-{discountPercent}%</span>
                               </div>
                             </>
                           ) : (
                              <>
                                <div className="h-[18px] mb-0.5"></div>
-                               <span className="text-[16px] font-black text-red-600">{currentPrice.toLocaleString('vi-VN')}₫</span>
+                               <span className="text-[16px] font-black text-primary">{currentPrice.toLocaleString('vi-VN')}₫</span>
                              </>
                           )}
                         </div>

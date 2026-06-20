@@ -56,7 +56,7 @@ export default function AdminNewsPage() {
         <h1 className="text-2xl font-bold text-gray-800">Quản lý Tin tức</h1>
         <Link 
           href="/admin/news/new" 
-          className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition"
+          className="bg-brand-600 hover:bg-brand-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition"
         >
           <Plus size={20} />
           <span>Đăng bài mới</span>
@@ -80,7 +80,7 @@ export default function AdminNewsPage() {
               {loading ? (
                 <tr>
                   <td colSpan={6} className="p-8 text-center text-gray-500">
-                    <div className="w-8 h-8 border-4 border-red-500 border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
+                    <div className="w-8 h-8 border-4 border-brand-500 border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
                     Đang tải dữ liệu...
                   </td>
                 </tr>

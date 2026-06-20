@@ -281,10 +281,10 @@ export default function AudioVideoTestPage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#050505] text-white selection:bg-red-500 selection:text-white font-sans relative overflow-x-hidden">
+    <div className="min-h-screen bg-[#050505] text-white selection:bg-primary/100 selection:text-white font-sans relative overflow-x-hidden">
       
       {/* Background Orbs */}
-      <div className="absolute top-[10%] left-[10%] w-[30vw] h-[30vw] bg-red-600/10 rounded-full blur-[150px] pointer-events-none"></div>
+      <div className="absolute top-[10%] left-[10%] w-[30vw] h-[30vw] bg-primary rounded-full blur-[150px] pointer-events-none"></div>
       <div className="absolute bottom-[20%] right-[10%] w-[30vw] h-[30vw] bg-orange-600/10 rounded-full blur-[150px] pointer-events-none"></div>
 
       <div className="container mx-auto px-4 max-w-[1400px] py-12 relative z-10">
@@ -297,9 +297,9 @@ export default function AudioVideoTestPage() {
           
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2">
-              <Zap size={24} className="text-red-500" />
+              <Zap size={24} className="text-primary" />
               <h1 className="text-3xl font-black uppercase tracking-tight text-white">
-                TEST <span className="text-red-500">THIẾT BỊ NGOẠI VI</span>
+                TEST <span className="text-primary">THIẾT BỊ NGOẠI VI</span>
               </h1>
             </div>
           </div>
@@ -312,8 +312,8 @@ export default function AudioVideoTestPage() {
             {/* Viewer */}
             <div className="flex-[5] flex flex-col gap-4">
               <div className="flex items-center gap-3 mb-2">
-                <div className="w-10 h-10 rounded-xl bg-red-500/20 flex items-center justify-center">
-                  <Video size={20} className="text-red-500" />
+                <div className="w-10 h-10 rounded-xl bg-primary/100/20 flex items-center justify-center">
+                  <Video size={20} className="text-primary" />
                 </div>
                 <div>
                   <h2 className="text-2xl font-black uppercase tracking-wider text-white">Khu Vực Test Webcam</h2>
@@ -325,10 +325,10 @@ export default function AudioVideoTestPage() {
                 {!cameraStream ? (
                   <div className="flex flex-col items-center justify-center p-8 text-center">
                     <Camera size={64} className="text-white/10 mb-6" />
-                    <button onClick={startCamera} className="bg-red-600 hover:bg-red-500 text-white px-8 py-4 rounded-xl font-black uppercase tracking-wider flex items-center gap-3 transition-all shadow-[0_0_20px_rgba(239,68,68,0.4)] hover:-translate-y-1">
+                    <button onClick={startCamera} className="bg-primary hover:bg-primary/100 text-white px-8 py-4 rounded-xl font-black uppercase tracking-wider flex items-center gap-3 transition-all shadow-[0_0_20px_rgba(239,68,68,0.4)] hover:-translate-y-1">
                       <Video size={20} /> Kiểm tra Webcam của tôi
                     </button>
-                    {cameraError && <p className="text-red-400 text-sm mt-6 flex items-center justify-center gap-2 bg-red-500/10 px-4 py-2 rounded-lg border border-red-500/20"><AlertCircle size={16}/> {cameraError}</p>}
+                    {cameraError && <p className="text-primary text-sm mt-6 flex items-center justify-center gap-2 bg-primary/100/10 px-4 py-2 rounded-lg border border-primary/50"><AlertCircle size={16}/> {cameraError}</p>}
                   </div>
                 ) : (
                   <>
@@ -340,8 +340,8 @@ export default function AudioVideoTestPage() {
                       className="w-full h-full object-cover absolute inset-0"
                       style={{ transform: "scaleX(-1)" }} 
                     />
-                    <div className="absolute top-4 left-4 bg-black/70 backdrop-blur-md text-red-500 text-xs font-black uppercase tracking-widest px-4 py-2 rounded-lg flex items-center gap-2 border border-red-500/30">
-                      <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse shadow-[0_0_10px_rgba(239,68,68,0.8)]"></div> Đang ghi hình
+                    <div className="absolute top-4 left-4 bg-black/70 backdrop-blur-md text-primary text-xs font-black uppercase tracking-widest px-4 py-2 rounded-lg flex items-center gap-2 border border-primary/50">
+                      <div className="w-2 h-2 rounded-full bg-primary/100 animate-pulse shadow-[0_0_10px_rgba(239,68,68,0.8)]"></div> Đang ghi hình
                     </div>
                   </>
                 )}
@@ -393,7 +393,7 @@ export default function AudioVideoTestPage() {
                     <button onClick={takePhoto} className="bg-white/5 hover:bg-white/10 border border-white/10 text-white p-4 rounded-xl font-bold uppercase tracking-wider flex items-center justify-center gap-2 transition-all">
                       <Camera size={18} /> Chụp ảnh
                     </button>
-                    <button onClick={stopCamera} className="bg-white/5 hover:bg-red-500/10 border border-white/10 hover:border-red-500/30 text-white hover:text-red-400 p-4 rounded-xl font-bold uppercase tracking-wider flex items-center justify-center gap-2 transition-all">
+                    <button onClick={stopCamera} className="bg-white/5 hover:bg-primary/100/10 border border-white/10 hover:border-primary/50 text-white hover:text-primary p-4 rounded-xl font-bold uppercase tracking-wider flex items-center justify-center gap-2 transition-all">
                       <Square size={18} /> Dừng Camera
                     </button>
                   </div>
@@ -403,7 +403,7 @@ export default function AudioVideoTestPage() {
                   {photoUrl && (
                     <div className="mt-2 relative rounded-xl border border-white/10 overflow-hidden bg-black/50 p-2">
                       <img src={photoUrl} alt="Snapshot" className="w-full rounded-lg" />
-                      <a href={photoUrl} download="webcam-snapshot.png" className="absolute bottom-4 right-4 bg-red-600 hover:bg-red-500 text-white px-4 py-2 rounded-lg font-bold text-xs uppercase tracking-wider flex items-center gap-2 shadow-lg">
+                      <a href={photoUrl} download="webcam-snapshot.png" className="absolute bottom-4 right-4 bg-primary hover:bg-primary/100 text-white px-4 py-2 rounded-lg font-bold text-xs uppercase tracking-wider flex items-center gap-2 shadow-lg">
                         <Download size={14} /> Tải Xuống
                       </a>
                     </div>
@@ -435,7 +435,7 @@ export default function AudioVideoTestPage() {
                     <button onClick={startMic} className="bg-orange-600 hover:bg-orange-500 text-white px-8 py-4 rounded-xl font-black uppercase tracking-wider flex items-center gap-3 transition-all shadow-[0_0_20px_rgba(249,115,22,0.4)] hover:-translate-y-1">
                       <Mic size={20} /> Kiểm tra Micro của tôi
                     </button>
-                    {micError && <p className="text-red-400 text-sm mt-6 flex items-center justify-center gap-2 bg-red-500/10 px-4 py-2 rounded-lg border border-red-500/20"><AlertCircle size={16}/> {micError}</p>}
+                    {micError && <p className="text-primary text-sm mt-6 flex items-center justify-center gap-2 bg-primary/100/10 px-4 py-2 rounded-lg border border-primary/50"><AlertCircle size={16}/> {micError}</p>}
                   </div>
                 ) : (
                   <div className="w-full max-w-2xl flex flex-col items-center gap-8 w-full">
@@ -454,14 +454,14 @@ export default function AudioVideoTestPage() {
                       <button 
                         onClick={toggleRecording} 
                         className={`flex-1 py-4 rounded-xl font-bold uppercase tracking-wider flex items-center justify-center gap-3 transition-all duration-300 border ${
-                          isRecording ? "bg-red-600/20 border-red-500/50 text-red-500 shadow-[0_0_30px_rgba(220,38,38,0.2)] animate-pulse" : "bg-white/5 border-white/10 hover:bg-white/10 text-white"
+                          isRecording ? "bg-primary border-primary/50 text-primary shadow-[0_0_30px_rgba(220,38,38,0.2)] animate-pulse" : "bg-white/5 border-white/10 hover:bg-white/10 text-white"
                         }`}
                       >
                         {isRecording ? <Square size={18} /> : <Circle size={18} fill="currentColor" />} 
                         {isRecording ? "Dừng Ghi Âm" : "Bắt Đầu Ghi Âm"}
                       </button>
                       
-                      <button onClick={stopMic} className="px-6 py-4 rounded-xl font-bold uppercase tracking-wider flex items-center justify-center gap-2 bg-white/5 border border-white/10 hover:bg-red-500/10 hover:text-red-400 transition-all text-gray-300">
+                      <button onClick={stopMic} className="px-6 py-4 rounded-xl font-bold uppercase tracking-wider flex items-center justify-center gap-2 bg-white/5 border border-white/10 hover:bg-primary/100/10 hover:text-primary transition-all text-gray-300">
                         <RefreshCw size={18} /> Tắt Mic
                       </button>
                     </div>
@@ -539,7 +539,7 @@ export default function AudioVideoTestPage() {
                 <button
                   onClick={() => activeChannel === "left" ? stopStereo() : playStereo("left")}
                   className={`py-8 rounded-2xl font-bold flex flex-col items-center justify-center gap-4 transition-all duration-300 border ${
-                    activeChannel === "left" ? "bg-red-600 border-red-500 text-white shadow-[0_0_40px_rgba(239,68,68,0.4)] scale-[1.02]" : "bg-white/5 hover:bg-white/10 border-white/10 text-gray-400 hover:text-white"
+                    activeChannel === "left" ? "bg-primary border-primary/50 text-white shadow-[0_0_40px_rgba(239,68,68,0.4)] scale-[1.02]" : "bg-white/5 hover:bg-white/10 border-white/10 text-gray-400 hover:text-white"
                   }`}
                 >
                   {activeChannel === "left" ? <Volume2 size={40} className="animate-pulse" /> : <Volume2 size={40} />}
@@ -552,7 +552,7 @@ export default function AudioVideoTestPage() {
                 <button
                   onClick={() => activeChannel === "right" ? stopStereo() : playStereo("right")}
                   className={`py-8 rounded-2xl font-bold flex flex-col items-center justify-center gap-4 transition-all duration-300 border ${
-                    activeChannel === "right" ? "bg-red-600 border-red-500 text-white shadow-[0_0_40px_rgba(239,68,68,0.4)] scale-[1.02]" : "bg-white/5 hover:bg-white/10 border-white/10 text-gray-400 hover:text-white"
+                    activeChannel === "right" ? "bg-primary border-primary/50 text-white shadow-[0_0_40px_rgba(239,68,68,0.4)] scale-[1.02]" : "bg-white/5 hover:bg-white/10 border-white/10 text-gray-400 hover:text-white"
                   }`}
                 >
                   {activeChannel === "right" ? <Volume2 size={40} className="animate-pulse" /> : <Volume2 size={40} />}

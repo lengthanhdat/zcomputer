@@ -23,9 +23,13 @@ export async function generateMetadata(
       return {
         title: `${data.title} | ZCOMPUTER`,
         description: data.summary,
+        alternates: {
+          canonical: `${process.env.NEXT_PUBLIC_FRONTEND_URL || 'http://localhost:3000'}/tin-tuc/${slug}`,
+        },
         openGraph: {
           title: data.title,
           description: data.summary,
+          url: `${process.env.NEXT_PUBLIC_FRONTEND_URL || 'http://localhost:3000'}/tin-tuc/${slug}`,
           images: [data.thumbnail || ''],
         },
       };
@@ -42,5 +46,40 @@ export async function generateMetadata(
 
 export default async function NewsDetailPage({ params }: Props) {
   const resolvedParams = await params;
-  return <NewsDetailClient slug={resolvedParams.slug} />;
+  const slug = resolvedParams.slug;
+  let article = null;
+
+  if (slug !== "preview") {
+    try {
+      const res = await fetchApi(`/news/${slug}`);
+      if (res.ok) {
+        article = await res.json();
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  const jsonLd = article ? {
+    "@context": "https://schema.org",
+    "@type": "NewsArticle",
+    "headline": article.title,
+    "image": [
+      article.thumbnail ? (article.thumbnail.startsWith('http') ? article.thumbnail : `${process.env.NEXT_PUBLIC_API_BASE_URL || 'http://127.0.0.1:5000'}${article.thumbnail}`) : ''
+    ],
+    "datePublished": article.createdAt,
+    "dateModified": article.updatedAt || article.createdAt,
+    "author": [{
+      "@type": "Person",
+      "name": article.authorName || article.author?.name || "ZComputer",
+      "url": `${process.env.NEXT_PUBLIC_FRONTEND_URL || 'http://localhost:3000'}/ve-chung-toi`
+    }]
+  } : null;
+
+  return (
+    <>
+      {jsonLd && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />}
+      <NewsDetailClient slug={slug} initialArticle={article} />
+    </>
+  );
 }

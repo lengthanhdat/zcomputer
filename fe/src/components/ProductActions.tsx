@@ -71,7 +71,7 @@ export default function ProductActions({ product }: ProductActionsProps) {
           </button>
         </div>
         {isOutOfStock && (
-          <span className="text-sm text-red-500 whitespace-nowrap font-medium">
+          <span className="text-sm text-primary whitespace-nowrap font-medium">
             (Hết hàng)
           </span>
         )}
@@ -82,7 +82,7 @@ export default function ProductActions({ product }: ProductActionsProps) {
         <button
           onClick={() => toast.success("Đã thêm vào mục ưa thích!")}
           disabled={isOutOfStock}
-          className="flex-1 border-2 border-primary text-primary hover:bg-red-50 py-4 rounded-lg font-bold text-lg uppercase transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+          className="flex-1 border-2 border-primary text-primary hover:bg-primary/5 py-4 rounded-lg font-bold text-lg uppercase transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
         >
           <Heart size={20} />
           Ưa thích
@@ -91,7 +91,7 @@ export default function ProductActions({ product }: ProductActionsProps) {
         <button
           onClick={handleBuyNow}
           disabled={isOutOfStock}
-          className="flex-1 bg-primary text-white hover:bg-red-600 py-4 rounded-lg font-bold text-lg uppercase transition-all shadow-lg shadow-red-500/20 flex flex-center items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+          className="flex-1 bg-primary text-white hover:brightness-110 py-4 rounded-lg font-bold text-lg uppercase transition-all shadow-lg shadow-[var(--primary-ring)] flex flex-center items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
         >
           <CreditCard size={20} />
           Mua ngay
@@ -106,24 +106,24 @@ export default function ProductActions({ product }: ProductActionsProps) {
            {(product.discountPrice ?? 0) > product.price && (
              <div className="text-[11px] text-gray-500 line-through mb-0.5 truncate">{product.discountPrice?.toLocaleString("vi-VN")}đ</div>
            )}
-           <div className="text-[17px] font-black text-red-600 leading-none truncate">{product.price.toLocaleString("vi-VN")}đ</div>
+           <div className="text-[17px] font-black text-primary leading-none truncate">{product.price.toLocaleString("vi-VN")}đ</div>
         </div>
 
         {/* Favorite Button (Replaces Add to Cart) */}
         <button
           onClick={() => toast.success("Đã thêm vào mục yêu thích!")}
           disabled={isOutOfStock}
-          className="w-11 h-11 shrink-0 rounded-xl flex items-center justify-center bg-white/50 border border-white/60 shadow-sm backdrop-blur-md text-red-500 hover:bg-red-50 active:scale-95 transition-all"
+          className="w-11 h-11 shrink-0 rounded-xl flex items-center justify-center bg-white/50 border border-white/60 shadow-sm backdrop-blur-md text-primary hover:bg-primary/5 active:scale-95 transition-all"
           aria-label="Thêm vào ưa thích"
         >
-          <Heart size={22} className="fill-red-500 text-red-500" />
+          <Heart size={22} className="fill-primary text-primary" />
         </button>
 
         {/* Buy Now Button */}
         <button
           onClick={handleBuyNow}
           disabled={isOutOfStock}
-          className="flex-[1.2] h-11 bg-gradient-to-r from-red-600 to-primary text-white rounded-xl font-bold text-[14px] uppercase flex items-center justify-center gap-1.5 shadow-[0_4px_15px_rgba(220,38,38,0.3)] disabled:opacity-50 active:scale-95 transition-transform"
+          className="flex-[1.2] h-11 bg-primary text-white rounded-xl font-bold text-[14px] uppercase flex items-center justify-center gap-1.5 shadow-[0_4px_15px_var(--primary-ring)] disabled:opacity-50 active:scale-95 transition-transform"
         >
           <CreditCard size={18} />
           Mua ngay
@@ -153,9 +153,9 @@ export default function ProductActions({ product }: ProductActionsProps) {
                 <div className="flex flex-col gap-4 w-full">
                   <a 
                     href="tel:0977334415" 
-                    className="flex items-center gap-4 bg-gray-50 hover:bg-red-50 p-4 rounded-xl border border-gray-100 transition-colors group h-full"
+                    className="flex items-center gap-4 bg-gray-50 hover:bg-primary/5 p-4 rounded-xl border border-gray-100 transition-colors group h-full"
                   >
-                    <div className="w-12 h-12 bg-red-100 text-primary rounded-full flex items-center justify-center group-hover:scale-110 transition-transform shrink-0">
+                    <div className="w-12 h-12 bg-primary/10 text-primary rounded-full flex items-center justify-center group-hover:scale-110 transition-transform shrink-0">
                       <Phone size={24} />
                     </div>
                     <div>

@@ -10,48 +10,48 @@ export default function Footer() {
   return (
     <footer className="relative bg-[#0b0f19] text-white/80 font-sans mt-0 border-t border-white/10 overflow-hidden pb-24 sm:pb-0">
       {/* Ambient Glowing Backgrounds */}
-      <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-red-600/10 rounded-full blur-[120px] pointer-events-none"></div>
+      <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-primary/10 rounded-full blur-[120px] pointer-events-none"></div>
       <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-blue-600/10 rounded-full blur-[100px] pointer-events-none"></div>
       
       <div className="container mx-auto px-4 py-12 relative z-10">
         
         {/* TOP ADDRESS BLOCK (Liquid Glass Card) */}
         <div className="mb-12 bg-white/5 backdrop-blur-lg border border-white/10 rounded-3xl p-8 lg:p-10 shadow-2xl relative overflow-hidden group">
-          <div className="absolute inset-0 bg-gradient-to-r from-red-600/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"></div>
           
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center relative z-10">
             <div>
               <h3 className="text-xl md:text-2xl font-black text-white uppercase mb-6 flex items-center gap-3">
                 HỆ THỐNG CỬA HÀNG ZCOMPUTER 
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none" className="text-red-500 transform rotate-45"><path d="M2 21L23 12L2 3V10L17 12L2 14V21Z"/></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none" className="text-brand-500 transform rotate-45"><path d="M2 21L23 12L2 3V10L17 12L2 14V21Z"/></svg>
               </h3>
               <div className="text-[15px] space-y-3.5 text-white/70">
                 <p className="flex items-start gap-3">
-                  <FaMapMarkerAlt className="text-red-500 mt-1 shrink-0" />
+                  <FaMapMarkerAlt className="text-primary mt-1 shrink-0" />
                   <span><strong className="text-white">Showroom 1:</strong> 23 Đường số 1, Khu phố 61, Phường Linh Xuân, TP. Thủ Đức, TP.HCM</span>
                 </p>
                 <p className="flex items-start gap-3">
-                  <FaMapMarkerAlt className="text-red-500 mt-1 shrink-0" />
+                  <FaMapMarkerAlt className="text-primary mt-1 shrink-0" />
                   <span><strong className="text-white">Showroom 2:</strong> 47/86B Bùi Đình Tuý, Phường 14, Q. Bình Thạnh, TP.HCM</span>
                 </p>
-                <p className="flex items-center gap-3"><FaChevronRight className="text-red-500 text-[10px]" /> Làm việc từ 9:00 - 19:00 tất cả các ngày trong tuần.</p>
-                <p className="flex items-center gap-3"><FaPhoneAlt className="text-red-500" /> Hotline Hỗ Trợ: <strong className="text-red-400 font-bold text-lg">0977.334.415</strong></p>
-                <p className="flex items-center gap-3"><FaEnvelope className="text-red-500" /> Email: <strong className="text-white">truong.zvncomputer@gmail.com</strong></p>
+                <p className="flex items-center gap-3"><FaChevronRight className="text-primary text-[10px]" /> Làm việc từ 9:00 - 19:00 tất cả các ngày trong tuần.</p>
+                <p className="flex items-center gap-3"><FaPhoneAlt className="text-primary" /> Hotline Hỗ Trợ: <strong className="text-primary font-bold text-lg">0977.334.415</strong></p>
+                <p className="flex items-center gap-3"><FaEnvelope className="text-primary" /> Email: <strong className="text-white">truong.zvncomputer@gmail.com</strong></p>
               </div>
             </div>
             
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                <div className="group/map">
-                  <div className="text-sm font-bold text-white mb-3 flex items-center gap-2"><div className="w-2 h-2 rounded-full bg-red-500 animate-pulse"></div> Chi nhánh Thủ Đức</div>
-                  <div className="rounded-2xl overflow-hidden border border-white/10 group-hover/map:border-red-500/50 transition-colors relative">
-                    <div className="absolute inset-0 bg-red-500/0 opacity-0 group-hover/map:opacity-100 transition-opacity pointer-events-none z-10 mix-blend-overlay"></div>
+                  <div className="text-sm font-bold text-white mb-3 flex items-center gap-2"><div className="w-2 h-2 rounded-full bg-primary animate-pulse"></div> Chi nhánh Thủ Đức</div>
+                  <div className="rounded-2xl overflow-hidden border border-white/10 group-hover/map:border-primary/50 transition-colors relative">
+                    <div className="absolute inset-0 bg-brand-500/0 opacity-0 group-hover/map:opacity-100 transition-opacity pointer-events-none z-10 mix-blend-overlay"></div>
                     <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3918.4658576162583!2d106.74981366590865!3d10.852128230492767!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31752722e4c10833%3A0x6ac88810b4b7dee!2sZ%20Computer-%20Pc%20Gaming-Laptop-Workstation!5e0!3m2!1svi!2sus!4v1781670020621!5m2!1svi!2sus" width="100%" height="160" style={{ border: 0 }} allowFullScreen loading="lazy" referrerPolicy="no-referrer-when-downgrade" className="transition-all duration-500 group-hover/map:scale-105"></iframe>
                   </div>
                </div>
                <div className="group/map">
-                  <div className="text-sm font-bold text-white mb-3 flex items-center gap-2"><div className="w-2 h-2 rounded-full bg-red-500 animate-pulse"></div> Chi nhánh Bình Thạnh</div>
-                  <div className="rounded-2xl overflow-hidden border border-white/10 group-hover/map:border-red-500/50 transition-colors relative">
-                    <div className="absolute inset-0 bg-red-500/0 opacity-0 group-hover/map:opacity-100 transition-opacity pointer-events-none z-10 mix-blend-overlay"></div>
+                  <div className="text-sm font-bold text-white mb-3 flex items-center gap-2"><div className="w-2 h-2 rounded-full bg-primary animate-pulse"></div> Chi nhánh Bình Thạnh</div>
+                  <div className="rounded-2xl overflow-hidden border border-white/10 group-hover/map:border-primary/50 transition-colors relative">
+                    <div className="absolute inset-0 bg-brand-500/0 opacity-0 group-hover/map:opacity-100 transition-opacity pointer-events-none z-10 mix-blend-overlay"></div>
                     <iframe src="https://maps.google.com/maps?q=47/86B+Bùi+Đình+Tuý,+Phường+14,+Bình+Thạnh,+TP.+Hồ+Chí+Minh&t=&z=15&ie=UTF8&iwloc=&output=embed" width="100%" height="160" style={{ border: 0 }} allowFullScreen loading="lazy" referrerPolicy="no-referrer-when-downgrade" className="transition-all duration-500 group-hover/map:scale-105"></iframe>
                   </div>
                </div>
@@ -107,10 +107,10 @@ export default function Footer() {
               DANH MỤC CŨ/ LIKE NEW
             </h4>
             <ul className="space-y-3 text-[13px] text-white/60 font-medium">
-              <li><Link href="/pc-gaming-cu" className="hover:text-red-400 transition-colors">PC Gaming Cũ</Link></li>
-              <li><Link href="/linh-kien-pc-cu" className="hover:text-red-400 transition-colors">Linh Kiện PC Cũ</Link></li>
-              <li><Link href="/vga-cu" className="hover:text-red-400 transition-colors">VGA Cũ</Link></li>
-              <li><Link href="/cpu-cu" className="hover:text-red-400 transition-colors">CPU Cũ</Link></li>
+              <li><Link href="/pc-gaming-cu" className="hover:text-primary transition-colors">PC Gaming Cũ</Link></li>
+              <li><Link href="/linh-kien-pc-cu" className="hover:text-primary transition-colors">Linh Kiện PC Cũ</Link></li>
+              <li><Link href="/vga-cu" className="hover:text-primary transition-colors">VGA Cũ</Link></li>
+              <li><Link href="/cpu-cu" className="hover:text-primary transition-colors">CPU Cũ</Link></li>
             </ul>
           </div>
 
@@ -122,11 +122,11 @@ export default function Footer() {
               CHÍNH SÁCH TỔNG HỢP
             </h4>
             <ul className="space-y-3 text-[13px] text-white/60 font-medium">
-              <li><Link href="/chinh-sach-bao-mat" className="hover:text-red-400 transition-colors">Chính sách bảo mật</Link></li>
-              <li><Link href="/chinh-sach-van-chuyen" className="hover:text-red-400 transition-colors">Chính sách vận chuyển</Link></li>
-              <li><Link href="/chinh-sach-bao-hanh" className="hover:text-red-400 transition-colors">Chính sách bảo hành</Link></li>
-              <li><Link href="/chinh-sach-doi-tra" className="hover:text-red-400 transition-colors">Chính sách đổi trả</Link></li>
-              <li><Link href="/chinh-sach-thanh-toan" className="hover:text-red-400 transition-colors">Chính sách thanh toán</Link></li>
+              <li><Link href="/chinh-sach-bao-mat" className="hover:text-primary transition-colors">Chính sách bảo mật</Link></li>
+              <li><Link href="/chinh-sach-van-chuyen" className="hover:text-primary transition-colors">Chính sách vận chuyển</Link></li>
+              <li><Link href="/chinh-sach-bao-hanh" className="hover:text-primary transition-colors">Chính sách bảo hành</Link></li>
+              <li><Link href="/chinh-sach-doi-tra" className="hover:text-primary transition-colors">Chính sách đổi trả</Link></li>
+              <li><Link href="/chinh-sach-thanh-toan" className="hover:text-primary transition-colors">Chính sách thanh toán</Link></li>
             </ul>
           </div>
 
@@ -136,11 +136,11 @@ export default function Footer() {
               VỀ ZCOMPUTER
             </h4>
             <ul className="space-y-3 text-[13px] text-white/60 font-medium">
-              <li><Link href="/ve-chung-toi" className="hover:text-red-400 transition-colors">Giới Thiệu Về ZCOMPUTER</Link></li>
-              <li><Link href="/lien-he" className="hover:text-red-400 transition-colors">Liên Hệ</Link></li>
-              <li><Link href="/tuyen-dung" className="hover:text-red-400 transition-colors">Tuyển Dụng</Link></li>
-              <li><Link href="/he-thong-cua-hang" className="hover:text-red-400 transition-colors">Hệ Thống Cửa Hàng</Link></li>
-              <li><Link href="/tin-tuc" className="hover:text-red-400 transition-colors">Tin Tức</Link></li>
+              <li><Link href="/ve-chung-toi" className="hover:text-primary transition-colors">Giới Thiệu Về ZCOMPUTER</Link></li>
+              <li><Link href="/lien-he" className="hover:text-primary transition-colors">Liên Hệ</Link></li>
+              <li><Link href="/tuyen-dung" className="hover:text-primary transition-colors">Tuyển Dụng</Link></li>
+              <li><Link href="/he-thong-cua-hang" className="hover:text-primary transition-colors">Hệ Thống Cửa Hàng</Link></li>
+              <li><Link href="/tin-tuc" className="hover:text-primary transition-colors">Tin Tức</Link></li>
             </ul>
           </div>
 

@@ -16,7 +16,7 @@ export default function ShippingPolicyPage() {
           </div>
           <div>
             <h1 className="text-3xl font-black uppercase">Chính sách vận chuyển</h1>
-            <p className="text-red-100 mt-1">Áp dụng cho tất cả đơn hàng tại ZCOMPUTER</p>
+            <p className="text-brand-100 mt-1">Áp dụng cho tất cả đơn hàng tại ZCOMPUTER</p>
           </div>
         </div>
 
@@ -40,7 +40,7 @@ export default function ShippingPolicyPage() {
               <h2 className="text-xl font-bold text-gray-900">Thời gian giao – nhận hàng</h2>
             </div>
             <div className="ml-11 space-y-4">
-              <div className="flex gap-3 p-4 bg-red-50 rounded-xl border-l-4 border-primary">
+              <div className="flex gap-3 p-4 bg-brand-50 rounded-xl border-l-4 border-primary">
                 <Clock size={20} className="text-primary shrink-0 mt-0.5" />
                 <p className="text-gray-700 leading-relaxed">Đơn hàng sau khi được tiếp nhận xử lý xong sẽ được giao ngay trong vòng <strong>24h</strong> hoặc theo tiến độ hợp đồng.</p>
               </div>

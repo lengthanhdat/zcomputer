@@ -268,7 +268,7 @@ export default function KeyboardTestPage() {
 
     const normalClass = "bg-[#181a1d] text-[#6b7280] border-b-2 border-[#0e1014] shadow-sm";
     const workedClass = "bg-[#f8fafc] text-[#0f172a] shadow-[inset_0_1px_1px_rgba(255,255,255,0.8),0_1px_2px_rgba(0,0,0,0.2)] border-b-[1px] translate-y-[1px]";
-    const activeClass = "bg-red-500 text-white shadow-[0_0_15px_rgba(239,68,68,0.5)] border-b-[0px] translate-y-[2px] font-black";
+    const activeClass = "bg-primary/100 text-white shadow-[0_0_15px_rgba(239,68,68,0.5)] border-b-[0px] translate-y-[2px] font-black";
 
     return (
       <div
@@ -297,7 +297,7 @@ export default function KeyboardTestPage() {
         </Link>
 
         <div className="flex gap-4">
-          <button onClick={() => setSoundEnabled(!soundEnabled)} className={`flex items-center text-xs font-bold uppercase tracking-wider px-4 py-2 rounded-full border transition-all ${soundEnabled ? 'bg-red-500/10 text-red-500 border-red-500/30 hover:bg-red-500/20' : 'bg-white/5 text-gray-500 border-white/10 hover:bg-white/10'}`}>
+          <button onClick={() => setSoundEnabled(!soundEnabled)} className={`flex items-center text-xs font-bold uppercase tracking-wider px-4 py-2 rounded-full border transition-all ${soundEnabled ? 'bg-primary/100/10 text-primary border-primary/50 hover:bg-primary/100/20' : 'bg-white/5 text-gray-500 border-white/10 hover:bg-white/10'}`}>
             {soundEnabled ? <Volume2 size={16} className="mr-2" /> : <VolumeX size={16} className="mr-2" />} {soundEnabled ? 'SFX: Bật' : 'SFX: Tắt'}
           </button>
           <button onClick={handleReset} className="flex items-center text-xs font-bold uppercase tracking-wider px-4 py-2 rounded-full border bg-white/5 text-white border-white/10 hover:bg-white/10 hover:border-white/30 transition-all">
@@ -314,20 +314,20 @@ export default function KeyboardTestPage() {
           {/* Header */}
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
             <div>
-              <h1 className="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-400 uppercase tracking-widest mb-2 flex items-center gap-3">
-                <ShieldCheck size={28} className="text-red-500" /> TEST BÀN PHÍM
+              <h1 className="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-primary to-orange-400 uppercase tracking-widest mb-2 flex items-center gap-3">
+                <ShieldCheck size={28} className="text-primary" /> TEST BÀN PHÍM
               </h1>
               <p className="text-[#64748b] font-medium text-xs flex items-center gap-2">
-                Chuẩn xác tuyệt đối <span className="w-1 h-1 rounded-full bg-red-500"></span> Chống giật lag
+                Chuẩn xác tuyệt đối <span className="w-1 h-1 rounded-full bg-primary/100"></span> Chống giật lag
               </p>
             </div>
             <div className="text-left sm:text-right flex flex-col items-start sm:items-end">
               <div className="flex items-baseline gap-1">
                 <span className="text-4xl font-black text-white drop-shadow-[0_0_15px_rgba(239,68,68,0.5)]">{progressPercent}</span>
-                <span className="text-lg font-bold text-red-500">%</span>
+                <span className="text-lg font-bold text-primary">%</span>
               </div>
               <div className="w-24 h-1.5 bg-[#1e2430] rounded-full mt-2 overflow-hidden relative">
-                <div className="absolute top-0 left-0 h-full bg-gradient-to-r from-red-600 to-orange-500 shadow-[0_0_10px_rgba(239,68,68,0.8)]" style={{ width: `${progressPercent}%` }}></div>
+                <div className="absolute top-0 left-0 h-full bg-gradient-to-r from-primary to-orange-500 shadow-[0_0_10px_rgba(239,68,68,0.8)]" style={{ width: `${progressPercent}%` }}></div>
               </div>
             </div>
           </div>
@@ -379,7 +379,7 @@ export default function KeyboardTestPage() {
                   <div className="flex flex-col items-center">
                     <div
                       className={`w-[260px] h-[100px] rounded-t-[12px] transition-all duration-[50ms] flex items-center justify-center cursor-crosshair border border-[#111]
-                          ${mouseActive.has(1) ? "bg-red-500 shadow-[inset_0_1px_2px_rgba(255,255,255,0.5),0_0_20px_rgba(239,68,68,0.6)] border-red-600 translate-y-[2px]" : mouseWorked.has(1) ? "bg-[#f8fafc] border-[#cbd5e1] text-black" : "bg-[#181a1d] border-b-[3px] border-b-[#0e1014] hover:bg-[#1f2227]"}`}
+                          ${mouseActive.has(1) ? "bg-primary/100 shadow-[inset_0_1px_2px_rgba(255,255,255,0.5),0_0_20px_rgba(239,68,68,0.6)] border-primary/50 translate-y-[2px]" : mouseWorked.has(1) ? "bg-[#f8fafc] border-[#cbd5e1] text-black" : "bg-[#181a1d] border-b-[3px] border-b-[#0e1014] hover:bg-[#1f2227]"}`}
                     >
                       <span className={`text-[11px] font-black uppercase tracking-[0.5em] select-none ${mouseActive.has(1) ? "text-white" : mouseWorked.has(1) ? "text-[#0f172a]" : "text-[#64748b]"}`}>Touchpad</span>
                     </div>
@@ -387,21 +387,21 @@ export default function KeyboardTestPage() {
                     <div className="flex gap-[8px] w-[260px] mt-[8px]">
                       <div
                         className={`flex-[2] h-10 rounded-b-[12px] transition-all duration-[50ms] flex items-center justify-center cursor-crosshair border border-[#111]
-                            ${mouseActive.has(0) ? "bg-red-500 shadow-[0_0_20px_rgba(239,68,68,0.6)] border-red-600 text-white translate-y-[2px]" : mouseWorked.has(0) ? "bg-[#f8fafc] border-[#cbd5e1] text-[#0f172a]" : "bg-[#181a1d] border-b-[3px] border-b-[#0e1014] text-[#64748b] hover:bg-[#1f2227]"}`}
+                            ${mouseActive.has(0) ? "bg-primary/100 shadow-[0_0_20px_rgba(239,68,68,0.6)] border-primary/50 text-white translate-y-[2px]" : mouseWorked.has(0) ? "bg-[#f8fafc] border-[#cbd5e1] text-[#0f172a]" : "bg-[#181a1d] border-b-[3px] border-b-[#0e1014] text-[#64748b] hover:bg-[#1f2227]"}`}
                       >
                         <span className="text-[10px] font-bold uppercase tracking-widest select-none">Trái</span>
                       </div>
 
                       <div
                         className={`flex-[1] h-10 rounded-b-[12px] transition-all duration-[50ms] flex items-center justify-center cursor-crosshair border border-[#111]
-                            ${mouseActive.has(1) ? "bg-red-500 shadow-[0_0_20px_rgba(239,68,68,0.6)] border-red-600 text-white translate-y-[2px]" : mouseWorked.has(1) ? "bg-[#f8fafc] border-[#cbd5e1] text-[#0f172a]" : "bg-[#181a1d] border-b-[3px] border-b-[#0e1014] text-[#64748b] hover:bg-[#1f2227]"}`}
+                            ${mouseActive.has(1) ? "bg-primary/100 shadow-[0_0_20px_rgba(239,68,68,0.6)] border-primary/50 text-white translate-y-[2px]" : mouseWorked.has(1) ? "bg-[#f8fafc] border-[#cbd5e1] text-[#0f172a]" : "bg-[#181a1d] border-b-[3px] border-b-[#0e1014] text-[#64748b] hover:bg-[#1f2227]"}`}
                       >
                         <span className="text-[10px] font-bold uppercase select-none">Giữa</span>
                       </div>
 
                       <div
                         className={`flex-[2] h-10 rounded-b-[12px] transition-all duration-[50ms] flex items-center justify-center cursor-crosshair border border-[#111]
-                            ${mouseActive.has(2) ? "bg-red-500 shadow-[0_0_20px_rgba(239,68,68,0.6)] border-red-600 text-white translate-y-[2px]" : mouseWorked.has(2) ? "bg-[#f8fafc] border-[#cbd5e1] text-[#0f172a]" : "bg-[#181a1d] border-b-[3px] border-b-[#0e1014] text-[#64748b] hover:bg-[#1f2227]"}`}
+                            ${mouseActive.has(2) ? "bg-primary/100 shadow-[0_0_20px_rgba(239,68,68,0.6)] border-primary/50 text-white translate-y-[2px]" : mouseWorked.has(2) ? "bg-[#f8fafc] border-[#cbd5e1] text-[#0f172a]" : "bg-[#181a1d] border-b-[3px] border-b-[#0e1014] text-[#64748b] hover:bg-[#1f2227]"}`}
                       >
                         <span className="text-[10px] font-bold uppercase tracking-widest select-none">Phải</span>
                       </div>
@@ -442,7 +442,7 @@ export default function KeyboardTestPage() {
           {/* LIVE METRICS */}
           <div className="bg-[#0c0f16] border border-[#1e2430] rounded-[24px] p-6 shadow-2xl backdrop-blur-xl">
             <div className="flex items-center gap-2 text-white font-black uppercase tracking-wider mb-6 text-sm">
-              <Zap size={18} className="text-red-500" /> Thống Kê Realtime
+              <Zap size={18} className="text-primary" /> Thống Kê Realtime
             </div>
 
             <div className="grid grid-cols-2 gap-3 mb-4">
@@ -456,19 +456,19 @@ export default function KeyboardTestPage() {
               </div>
             </div>
 
-            <div className="bg-gradient-to-r from-red-500/10 to-transparent border border-red-500/20 rounded-2xl p-4 flex justify-between items-center mb-3">
+            <div className="bg-gradient-to-r from-primary to-transparent border border-primary/50 rounded-2xl p-4 flex justify-between items-center mb-3">
               <div>
-                <p className="text-red-500 text-[10px] font-bold uppercase tracking-widest mb-1">Max Ghosting</p>
-                <p className="text-2xl font-black text-white">{maxSimultaneous} <span className="text-[10px] text-red-500/70 font-bold">phím</span></p>
+                <p className="text-primary text-[10px] font-bold uppercase tracking-widest mb-1">Max Ghosting</p>
+                <p className="text-2xl font-black text-white">{maxSimultaneous} <span className="text-[10px] text-primary font-bold">phím</span></p>
               </div>
-              <div className="w-8 h-8 rounded-full bg-red-500/20 flex items-center justify-center">
-                <ShieldCheck size={16} className="text-red-500" />
+              <div className="w-8 h-8 rounded-full bg-primary/100/20 flex items-center justify-center">
+                <ShieldCheck size={16} className="text-primary" />
               </div>
             </div>
 
-            <div className={`border rounded-2xl p-4 flex justify-between items-center transition-colors ${chatterCount > 0 ? "bg-red-500/10 border-red-500/20" : "bg-white/[0.02] border-white/5"}`}>
+            <div className={`border rounded-2xl p-4 flex justify-between items-center transition-colors ${chatterCount > 0 ? "bg-primary/100/10 border-primary/50" : "bg-white/[0.02] border-white/5"}`}>
               <div>
-                <p className={`${chatterCount > 0 ? "text-red-400" : "text-[#64748b]"} text-[10px] font-bold uppercase tracking-widest mb-1`}>Cảnh báo Đúp</p>
+                <p className={`${chatterCount > 0 ? "text-primary" : "text-[#64748b]"} text-[10px] font-bold uppercase tracking-widest mb-1`}>Cảnh báo Đúp</p>
                 <p className={`text-2xl font-black ${chatterCount > 0 ? "text-red-500" : "text-white"}`}>{chatterCount} <span className="text-[10px] opacity-50 font-bold">lỗi</span></p>
               </div>
             </div>
@@ -477,7 +477,7 @@ export default function KeyboardTestPage() {
           {/* HISTORY LOG */}
           <div className="bg-[#0c0f16] border border-[#1e2430] rounded-[24px] p-6 shadow-2xl flex-1 flex flex-col min-h-[250px]">
             <div className="flex items-center gap-2 text-white font-black uppercase tracking-wider mb-4 text-sm">
-              <History size={18} className="text-red-500" /> Log Nhấn Phím
+              <History size={18} className="text-primary" /> Log Nhấn Phím
             </div>
 
             <div className="flex-1 bg-[#050608] border border-white/5 rounded-xl p-3 flex flex-wrap content-start gap-2 overflow-y-auto custom-scrollbar relative">
@@ -487,7 +487,7 @@ export default function KeyboardTestPage() {
                 </div>
               )}
               {history.slice().reverse().map((h, i) => (
-                <div key={i} className={`px-2 py-1 rounded text-[10px] font-bold transition-all duration-300 ${i === 0 ? "bg-red-500/20 border border-red-500/50 text-red-400 scale-105" : "bg-[#1e293b] border border-[#334155] text-[#94a3b8]"}`}>
+                <div key={i} className={`px-2 py-1 rounded text-[10px] font-bold transition-all duration-300 ${i === 0 ? "bg-primary/100/20 border border-primary/50 text-primary scale-105" : "bg-[#1e293b] border border-[#334155] text-[#94a3b8]"}`}>
                   {h}
                 </div>
               ))}
