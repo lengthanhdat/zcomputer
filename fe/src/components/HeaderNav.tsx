@@ -24,7 +24,7 @@ export default function HeaderNav() {
         
         {/* VERTICAL CATEGORY MENU DROPDOWN */}
         <div 
-          className="relative mr-3 lg:mr-4 xl:mr-8 shrink-0"
+          className="relative mr-8"
           onMouseEnter={() => setShowCategoryMenu(true)}
           onMouseLeave={() => setShowCategoryMenu(false)}
         >
@@ -43,8 +43,7 @@ export default function HeaderNav() {
           )}
         </div>
 
-        <div className="flex-1 overflow-x-auto hide-scrollbar">
-        <ul suppressHydrationWarning className="flex items-center gap-3 lg:gap-3 xl:gap-6 text-[10px] lg:text-[11px] xl:text-[13px] font-bold tracking-wide whitespace-nowrap w-max">
+        <ul suppressHydrationWarning className="flex items-center gap-3 lg:gap-4 xl:gap-8 text-[11px] lg:text-[12px] xl:text-[13px] font-bold tracking-wide flex-1 whitespace-nowrap">
           
           {/* SẢN PHẨM Link */}
           <li>
@@ -145,7 +144,6 @@ export default function HeaderNav() {
             </div>
           </li>
         </ul>
-        </div>
         
 
         {/* Social Links */}
