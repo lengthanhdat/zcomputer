@@ -432,29 +432,37 @@ export default function NewProductPage() {
     const parts = formData.name.split('/').map(p => p.trim());
     parts.forEach(part => {
       const upperPart = part.toUpperCase();
+      
+      const isCPU = upperPart.includes('CPU') || upperPart.includes('I3') || upperPart.includes('I5') || 
+                    upperPart.includes('I7') || upperPart.includes('I9') || upperPart.includes('RYZEN') || 
+                    upperPart.includes('CORE') || upperPart.includes('PENTIUM') || upperPart.includes('CELERON') || 
+                    upperPart.includes('XEON') || upperPart.includes('ULTRA') || upperPart.includes('M1') || 
+                    upperPart.includes('M2') || upperPart.includes('M3') || upperPart.includes('M4') ||
+                    /\b(10100|10400|11400|12100|12400|13400|14400|13600|14600|13700|14700|13900|14900|4600|5600|5700|7600|7700|7800|7900|7950|8600|8700)\b/.test(upperPart);
+
       // CPU
-      if (upperPart.includes('I3') || upperPart.includes('I5') || upperPart.includes('I7') || upperPart.includes('I9') || upperPart.includes('RYZEN')) {
-        newSpecs.CPU = part;
+      if (isCPU && !upperPart.includes('GB') && !upperPart.includes('SSD') && !upperPart.includes('HDD') && !upperPart.includes('VGA') && !upperPart.includes('RTX') && !upperPart.includes('GTX')) {
+        newSpecs.CPU = part.replace(/^(CPU|CHIP|BỘ VI XỬ LÝ)\s*:/i, '').trim();
         extractedCount++;
       }
       // RAM
-      else if (upperPart.includes('GB') && !upperPart.includes('SSD') && !upperPart.includes('HDD') && !upperPart.includes('VGA') && !upperPart.includes('RTX') && !upperPart.includes('GTX') && !upperPart.includes('RX')) {
-        newSpecs.RAM = part;
+      else if (upperPart.includes('RAM') || (upperPart.includes('GB') && !upperPart.includes('SSD') && !upperPart.includes('HDD') && !upperPart.includes('VGA') && !upperPart.includes('RTX') && !upperPart.includes('GTX') && !upperPart.includes('RX'))) {
+        newSpecs.RAM = part.replace(/^RAM\s*:/i, '').trim();
         extractedCount++;
       }
       // Storage
-      else if (upperPart.includes('SSD') || upperPart.includes('HDD') || upperPart.includes('NVME') || upperPart.includes('TB')) {
-        newSpecs.Storage = part;
+      else if (upperPart.includes('SSD') || upperPart.includes('HDD') || upperPart.includes('NVME') || upperPart.includes('TB') || upperPart.includes('Ổ CỨNG')) {
+        newSpecs.Storage = part.replace(/^(SSD|HDD|Ổ CỨNG|STORAGE)\s*:/i, '').trim();
         extractedCount++;
       }
       // VGA
-      else if (upperPart.includes('VGA') || upperPart.includes('RTX') || upperPart.includes('GTX') || upperPart.includes('RX ') || upperPart.includes('RADEON') || upperPart.includes('ARC')) {
-        newSpecs.VGA = part;
+      else if (upperPart.includes('VGA') || upperPart.includes('RTX') || upperPart.includes('GTX') || upperPart.includes('RX ') || upperPart.includes('RADEON') || upperPart.includes('ARC') || upperPart.includes('CARD') || upperPart.includes('GRAPHICS')) {
+        newSpecs.VGA = part.replace(/^(VGA|CARD|CARD MÀN HÌNH)\s*:/i, '').trim();
         extractedCount++;
       }
       // Screen
-      else if (upperPart.includes('INCH') || upperPart.includes('HZ') || upperPart.includes('144HZ') || upperPart.includes('24G') || upperPart.includes('27G')) {
-        newSpecs.Screen = part;
+      else if (upperPart.includes('INCH') || upperPart.includes('HZ') || upperPart.includes('144HZ') || upperPart.includes('MÀN HÌNH') || upperPart.includes('24G') || upperPart.includes('27G')) {
+        newSpecs.Screen = part.replace(/^(MÀN HÌNH|SCREEN|MÀN)\s*:/i, '').trim();
         extractedCount++;
       }
     });
