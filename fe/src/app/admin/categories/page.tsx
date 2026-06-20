@@ -32,8 +32,19 @@ export default function AdminCategoriesPage() {
   const fetchCategories = async () => {
     try {
       const res = await fetchApi(`/categories?t=${Date.now()}`);
-      const data = await res.json();
-      setCategories(data);
+      const data: Category[] = await res.json();
+      
+      const parents = data.filter(c => !c.parent_id);
+      const result: Category[] = [];
+      parents.forEach(p => {
+        result.push(p);
+        const children = data.filter(c => c.parent_id === p._id);
+        result.push(...children);
+      });
+      const orphaned = data.filter(c => c.parent_id && !parents.find(p => p._id === c.parent_id));
+      result.push(...orphaned);
+
+      setCategories(result);
     } catch {
       toast.error("Không thể tải danh mục");
     } finally {
@@ -237,8 +248,10 @@ export default function AdminCategoriesPage() {
                                   )}
                                 </td>
                                 <td className="py-3 px-4 text-sm font-semibold text-gray-900">
-                                  {cat.parent_id && <span className="text-gray-400 font-normal mr-2">|_</span>}
-                                  {cat.name}
+                                  <div className={`flex items-center ${cat.parent_id ? "ml-6" : ""}`}>
+                                    {cat.parent_id && <span className="text-gray-300 font-normal mr-2">|_</span>}
+                                    <span className={cat.parent_id ? "text-gray-600 font-medium" : "text-gray-900"}>{cat.name}</span>
+                                  </div>
                                 </td>
                                 <td className="py-3 px-4 text-sm text-center text-gray-500">
                                   {cat.parent_id ? categories.find(c => c._id === cat.parent_id)?.name || "---" : "---"}
