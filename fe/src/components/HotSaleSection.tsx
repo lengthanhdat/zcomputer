@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { Zap, Timer, ShoppingCart, ArrowRight, Eye, Maximize, Cpu, Database, MonitorPlay, HardDrive, Monitor, Battery, Weight } from "lucide-react";
+import { Zap, Timer, ShoppingCart, ArrowRight, Eye, Maximize, Cpu, Database, MonitorPlay, HardDrive, Monitor, Battery, Weight, MemoryStick, Gpu, Layers, Keyboard, Mouse, Link as LinkIcon } from "lucide-react";
 import { useState, useEffect } from "react";
 
 export default function HotSaleSection({ 
@@ -358,24 +358,34 @@ export default function HotSaleSection({
 
                         <div className="grid grid-cols-2 gap-1.5 mb-3">
                           {product.specs && typeof product.specs === 'object' && (
-                            Object.entries(product.specs).filter(([_, v]) => v && String(v).trim() !== '').map(([key, value], index) => {
-                              const lowerKey = key.toLowerCase();
-                              let Icon = Maximize;
-                              if (lowerKey.includes('cpu') || lowerKey.includes('chip')) Icon = Cpu;
-                              else if (lowerKey.includes('ram')) Icon = Database;
-                              else if (lowerKey.includes('vga') || lowerKey.includes('card')) Icon = MonitorPlay;
-                              else if (lowerKey.includes('ổ cứng') || lowerKey.includes('ssd') || lowerKey.includes('hdd')) Icon = HardDrive;
-                              else if (lowerKey.includes('màn') || lowerKey.includes('lcd')) Icon = Monitor;
-                              else if (lowerKey.includes('pin') || lowerKey.includes('battery')) Icon = Battery;
-                              else if (lowerKey.includes('trọng lượng') || lowerKey.includes('weight')) Icon = Weight;
-                              
-                              return (
-                                <div key={index} className="flex items-center gap-2 text-xs text-gray-500 bg-gray-50/50 p-1.5 rounded-lg border border-gray-100">
-                                  <Icon size={14} className="text-gray-400 shrink-0" />
-                                  <span className="truncate" title={`${value}`}>{value as React.ReactNode}</span>
-                                </div>
-                              );
-                            })
+                            (() => {
+                              const entries = Object.entries(product.specs).filter(([_, v]) => v && String(v).trim() !== '').slice(0, 5);
+                              return entries.map(([key, value], index) => {
+                                const lowerKey = key.toLowerCase();
+                                let Icon = Maximize;
+                                if (lowerKey.includes('cpu') || lowerKey.includes('chip') || lowerKey.includes('vi xử lý')) Icon = Cpu;
+                                else if (lowerKey.includes('vga') || lowerKey.includes('card') || lowerKey.includes('đồ họa')) Icon = Gpu;
+                                else if (lowerKey.includes('ram')) Icon = MemoryStick;
+                                else if (lowerKey.includes('ổ') || lowerKey.includes('ssd') || lowerKey.includes('hdd') || lowerKey.includes('storage')) Icon = HardDrive;
+                                else if (lowerKey.includes('màn') || lowerKey.includes('screen') || lowerKey.includes('display') || lowerKey.includes('độ phân giải') || lowerKey.includes('resolution')) Icon = Monitor;
+                                else if (lowerKey.includes('pin') || lowerKey.includes('battery')) Icon = Battery;
+                                else if (lowerKey.includes('tần số') || lowerKey.includes('hz') || lowerKey.includes('refreshrate')) Icon = Zap;
+                                else if (lowerKey.includes('tấm nền') || lowerKey.includes('panel')) Icon = Layers;
+                                else if (lowerKey.includes('kích thước') || lowerKey.includes('size')) Icon = Maximize;
+                                else if (lowerKey.includes('phím') || lowerKey.includes('switch') || lowerKey.includes('keycap')) Icon = Keyboard;
+                                else if (lowerKey.includes('chuột') || lowerKey.includes('sensor') || lowerKey.includes('dpi')) Icon = Mouse;
+                                else if (lowerKey.includes('kết nối') || lowerKey.includes('connection')) Icon = LinkIcon;
+                                else if (lowerKey.includes('trọng lượng') || lowerKey.includes('weight')) Icon = Weight;
+                                
+                                const isOddTotalAndLast = entries.length % 2 !== 0 && index === entries.length - 1;
+                                return (
+                                  <div key={index} className={`flex items-center gap-2 text-xs text-gray-500 bg-gray-50/50 p-1.5 rounded-lg border border-gray-100 truncate ${isOddTotalAndLast ? 'col-span-2' : ''}`}>
+                                    <Icon size={14} className="text-gray-400 shrink-0" />
+                                    <span className="truncate font-medium" title={`${value}`}>{value as React.ReactNode}</span>
+                                  </div>
+                                );
+                              });
+                            })()
                           )}
                         </div>
                         

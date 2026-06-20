@@ -80,12 +80,12 @@ export default function ProductActions({ product }: ProductActionsProps) {
       {/* Desktop Buttons */}
       <div className="hidden sm:flex gap-4">
         <button
-          onClick={handleAddToCart}
+          onClick={() => toast.success("Đã thêm vào mục ưa thích!")}
           disabled={isOutOfStock}
           className="flex-1 border-2 border-primary text-primary hover:bg-red-50 py-4 rounded-lg font-bold text-lg uppercase transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
         >
-          <ShoppingCart size={20} />
-          Thêm vào giỏ hàng
+          <Heart size={20} />
+          Ưa thích
         </button>
 
         <button
@@ -199,6 +199,7 @@ export default function ProductActions({ product }: ProductActionsProps) {
                       <div className="text-[17px] font-black text-gray-900">Fanpage Facebook</div>
                     </div>
                   </a>
+                </div>
               </div>
               
               <div className="mt-8 text-center">

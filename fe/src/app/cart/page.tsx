@@ -242,6 +242,7 @@ export default function CartPage() {
                       <div className="text-[17px] font-black text-gray-900">Fanpage Facebook</div>
                     </div>
                   </a>
+                </div>
               </div>
               
               <div className="mt-8 text-center">
