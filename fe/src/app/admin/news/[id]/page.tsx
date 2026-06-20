@@ -20,6 +20,7 @@ const ReactQuill = dynamic(
       const { default: BlotFormatter } = await import("quill-blot-formatter");
       Quill.register("modules/blotFormatter", BlotFormatter);
       
+      // @ts-ignore
       const { default: MagicUrl } = await import("quill-magic-url");
       Quill.register("modules/magicUrl", MagicUrl);
       
