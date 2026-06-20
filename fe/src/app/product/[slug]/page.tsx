@@ -234,12 +234,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
                 <div>
                   <h3 className="font-bold text-gray-800 mb-4 text-[15px]">Chính sách bán hàng</h3>
                   <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
-                    <div className="flex items-start gap-2.5">
-                      <Truck className="text-red-600 shrink-0 mt-0.5" size={18} />
-                      <span className="text-[13px] text-gray-700 leading-snug">
-                        Miễn phí giao hàng cho đơn hàng từ 5 triệu
-                      </span>
-                    </div>
+
                     <div className="flex items-start gap-2.5">
                       <RefreshCcw className="text-red-600 shrink-0 mt-0.5" size={18} />
                       <span className="text-[13px] text-gray-700 leading-snug">

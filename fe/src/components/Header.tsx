@@ -52,7 +52,7 @@ export default function Header() {
 
           <Link 
             href="/" 
-            className="flex items-center gap-3 shrink-0 group relative"
+            className="flex items-center gap-1.5 shrink-0 group relative"
             onClick={(e) => {
               if (window.location.pathname === "/") {
                 e.preventDefault();
@@ -64,15 +64,15 @@ export default function Header() {
             <Image src="/logo.png" alt="Z" width={80} height={80} priority className="h-14 w-14 sm:h-[68px] sm:w-[68px] object-contain group-hover:scale-105 transition-all duration-300 drop-shadow-md relative z-10" />
             
             {/* New Storefront-style Text Logo */}
-            <div className="flex items-center gap-1.5 group-hover:scale-[1.02] transition-transform duration-300 select-none relative z-10">
-              <span className={`${playfair.className} text-[#cc0000] text-[54px] sm:text-[62px] font-black leading-[0.8] drop-shadow-[0_2px_4px_rgba(0,0,0,0.15)]`}>
+            <div className="flex items-center gap-0.5 group-hover:scale-[1.02] transition-transform duration-300 select-none relative z-10 font-serif">
+              <span className="text-[#cc0000] text-[58px] font-bold leading-none">
                 Z
               </span>
-              <div className="flex flex-col justify-center">
-                <span className={`${playfair.className} text-gray-900 text-[24px] sm:text-[28px] font-black uppercase tracking-widest drop-shadow-sm leading-none`}>
+              <div className="flex flex-col justify-center pt-1">
+                <span className="text-gray-900 text-[28px] font-bold uppercase tracking-[0.02em] leading-none mb-0.5">
                   COMPUTER
                 </span>
-                <span className={`${montserrat.className} text-[#cc0000] font-black text-[8px] sm:text-[9.5px] uppercase tracking-[0.15em] mt-1`}>
+                <span className={`${montserrat.className} text-[#cc0000] font-black text-[8.5px] uppercase tracking-[0.05em] leading-none`}>
                   PC GAMING - LAPTOP - WORKSTATION
                 </span>
               </div>
