@@ -154,12 +154,15 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   // 2. Try to fetch as Category
   const categoryName = await getCategoryName(slug);
   if (categoryName) {
+    const currentUrl = `${siteUrl}/${slug}`;
     return {
       title: `${categoryName} chính hãng, giá tốt | ZCOMPUTER`,
       description: `Mua ${categoryName} tại ZCOMPUTER với giá tốt nhất thị trường, cam kết chính hãng 100%, bảo hành uy tín, giao hàng toàn quốc.`,
+      alternates: { canonical: currentUrl },
       openGraph: {
         title: `${categoryName} | ZCOMPUTER`,
         description: `Khám phá các sản phẩm ${categoryName} chất lượng cao tại ZCOMPUTER.`,
+        url: currentUrl,
       },
     };
   }
