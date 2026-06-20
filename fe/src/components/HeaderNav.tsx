@@ -61,52 +61,7 @@ export default function HeaderNav() {
           </li>
 
 
-          <li className="relative group">
-            <div className="py-4 block hover:text-red-400 transition-colors uppercase flex items-center gap-1 cursor-pointer">
-              Chính Sách Tổng Hợp <ChevronDown size={14} className="text-gray-400 group-hover:rotate-180 group-hover:text-red-400 transition-all duration-300" />
-            </div>
-            
-            {/* Dropdown Menu */}
-            <div className="absolute top-full left-0 w-60 bg-white/95 backdrop-blur-xl text-gray-800 shadow-[0_20px_40px_rgba(0,0,0,0.1)] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform origin-top -translate-y-2 group-hover:translate-y-0 border-t-2 border-red-500 rounded-b-xl overflow-hidden z-50">
-              <ul className="py-2">
-                {[
-                  { title: 'Chính sách bảo mật', link: '/chinh-sach-bao-mat' },
-                  { title: 'Chính sách vận chuyển', link: '/chinh-sach-van-chuyen' },
-                  { title: 'Chính sách bảo hành', link: '/chinh-sach-bao-hanh' },
-                  { title: 'Chính sách đổi trả', link: '/chinh-sach-doi-tra' },
-                  { title: 'Chính sách thanh toán', link: '/chinh-sach-thanh-toan' },
-                ].map((item, idx) => (
-                  <li key={idx}>
-                    <Link href={item.link} className="block px-5 py-3 hover:bg-red-50/50 hover:text-red-600 hover:pl-6 transition-all duration-300 text-[13px] font-bold border-b border-gray-100 last:border-0 uppercase">
-                      {item.title}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </li>
-          <li className="relative group">
-            <div className="py-4 block hover:text-red-400 transition-colors uppercase flex items-center gap-1 cursor-pointer">
-              Về ZCOMPUTER <ChevronDown size={14} className="text-gray-400 group-hover:rotate-180 group-hover:text-red-400 transition-all duration-300" />
-            </div>
-            
-            {/* Dropdown Menu */}
-            <div className="absolute top-full left-0 w-60 bg-white/95 backdrop-blur-xl text-gray-800 shadow-[0_20px_40px_rgba(0,0,0,0.1)] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform origin-top -translate-y-2 group-hover:translate-y-0 border-t-2 border-red-500 rounded-b-xl overflow-hidden z-50">
-              <ul className="py-2">
-                {[
-                  { title: 'Giới Thiệu Về ZCOMPUTER', link: '/ve-chung-toi' },
-                  { title: 'Liên Hệ', link: '/lien-he' },
-                  { title: 'Tuyển Dụng', link: '/tuyen-dung' },
-                ].map((item, idx) => (
-                  <li key={idx}>
-                    <Link href={item.link} className="block px-5 py-3 hover:bg-red-50/50 hover:text-red-600 hover:pl-6 transition-all duration-300 text-[13px] font-bold border-b border-gray-100 last:border-0 uppercase">
-                      {item.title}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </li>
+
           <li>
             <Link href="/thu-mua-cu" className="py-4 block hover:text-red-400 transition-colors uppercase">
               Thu cũ đổi mới
