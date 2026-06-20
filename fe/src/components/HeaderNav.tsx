@@ -122,6 +122,11 @@ export default function HeaderNav() {
               Tin tức
             </Link>
           </li>
+          <li>
+            <Link href="/cong-cu-test" className="py-4 block hover:text-red-400 transition-colors uppercase">
+              Công cụ Test
+            </Link>
+          </li>
         </ul>
         
 
