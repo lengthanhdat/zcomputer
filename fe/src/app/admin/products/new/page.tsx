@@ -604,6 +604,21 @@ export default function NewProductPage() {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
+                  <label className="block text-sm font-bold text-gray-700 mb-2">Danh mục <span className="text-red-500">*</span></label>
+                  <select 
+                    name="category_id"
+                    required
+                    value={formData.category_id}
+                    onChange={handleCategoryChange}
+                    className="w-full px-4 py-3 bg-gray-50/50 border border-gray-200 rounded-xl outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all text-gray-800 font-medium cursor-pointer"
+                  >
+                    {categories.length === 0 && <option value="">Đang tải danh mục...</option>}
+                    {categories.map((cat) => (
+                      <option key={cat._id} value={cat._id}>{cat.name}</option>
+                    ))}
+                  </select>
+                </div>
+                <div>
                   <label className="block text-sm font-bold text-gray-700 mb-2">Thương hiệu <span className="text-red-500">*</span></label>
                   <input 
                     type="text" 
@@ -628,119 +643,21 @@ export default function NewProductPage() {
                     <option value="Trưng bày">Trưng bày</option>
                   </select>
                 </div>
-
                 <div>
-                  <label className="flex items-center gap-3 cursor-pointer mt-8">
-                    <div className="relative flex items-center">
-                      <input 
-                        type="checkbox" 
-                        name="isHotSale"
-                        checked={formData.isHotSale}
-                        onChange={(e) => setFormData({...formData, isHotSale: e.target.checked})}
-                        className="w-5 h-5 border-2 border-gray-300 rounded text-blue-600 focus:ring-blue-500 cursor-pointer accent-blue-600 transition-all"
-                      />
+                  <label className="block text-sm font-bold text-gray-700 mb-2">Mã SKU</label>
+                  <div className="relative">
+                    <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
+                      <Tag size={18} />
                     </div>
-                    <span className="text-sm font-bold text-gray-700">Hiển thị trong mục HOT SALE MỖI NGÀY</span>
-                  </label>
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-sm font-bold text-gray-700 mb-2">Mô tả & Cấu hình <span className="text-red-500">*</span></label>
-                <textarea 
-                  name="description" 
-                  rows={8} 
-                  required
-                  value={formData.description} 
-                  onChange={handleChange}
-                  className="w-full px-4 py-4 bg-gray-50/50 border border-gray-200 rounded-xl outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all text-gray-800 leading-relaxed resize-y"
-                  placeholder="Nhập thông số kỹ thuật và bài viết mô tả sản phẩm..."
-                />
-              </div>
-            </div>
-          </div>
-
-          {/* Card: Giá và Tồn kho */}
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8">
-            <div className="flex items-center gap-2 mb-6">
-              <div className="w-8 h-8 rounded-lg bg-emerald-50 flex items-center justify-center text-emerald-600">
-                <DollarSign size={18} />
-              </div>
-              <h2 className="text-lg font-bold text-gray-800">Định giá & Tồn kho</h2>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <label className="block text-sm font-bold text-gray-700 mb-2">Giá bán (VNĐ) <span className="text-red-500">*</span></label>
-                <div className="relative">
-                  <input 
-                    type="number" 
-                    name="price" 
-                    required 
-                    value={formData.price} 
-                    onChange={(e) => setFormData({...formData, price: e.target.value})}
-                    className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none w-full pl-4 pr-12 py-3 bg-gray-50/50 border border-gray-200 rounded-xl outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all text-gray-800 font-bold text-lg"
-                    placeholder="0"
-                  />
-                  <span className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 font-bold">đ</span>
-                </div>
-                {formData.price && (
-                  <p className="text-xs text-emerald-600 font-medium mt-2 ml-1">
-                    Sẽ hiển thị: {Number(formData.price).toLocaleString('vi-VN')} đ
-                  </p>
-                )}
-              </div>
-              <div>
-                <label className="block text-sm font-bold text-gray-700 mb-2">Giá niêm yết (Gốc)</label>
-                <div className="relative">
-                  <input 
-                    type="number" 
-                    name="discountPrice" 
-                    value={formData.discountPrice} 
-                    onChange={(e) => setFormData({...formData, discountPrice: e.target.value})}
-                    className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none w-full pl-4 pr-12 py-3 bg-gray-50/50 border border-gray-200 rounded-xl outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all text-gray-500 font-medium"
-                    placeholder="0"
-                  />
-                  <span className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 font-bold">đ</span>
-                </div>
-                {formData.discountPrice && (
-                  <p className="text-xs text-gray-500 font-medium mt-2 ml-1">
-                    Sẽ hiển thị: {Number(formData.discountPrice).toLocaleString('vi-VN')} đ
-                  </p>
-                )}
-              </div>
-              
-              <div>
-                <label className="block text-sm font-bold text-gray-700 mb-2">Số lượng tồn kho <span className="text-red-500">*</span></label>
-                <div className="relative">
-                  <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
-                    <Box size={18} />
+                    <input 
+                      type="text" 
+                      name="sku" 
+                      value={formData.sku} 
+                      onChange={handleChange}
+                      className="w-full pl-11 pr-4 py-3 bg-gray-50/50 border border-gray-200 rounded-xl outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all text-gray-800 font-mono uppercase"
+                      placeholder="VD: DELL-7490-01"
+                    />
                   </div>
-                  <input 
-                    type="number" 
-                    name="stock" 
-                    required
-                    value={formData.stock} 
-                    onChange={handleChange}
-                    className="w-full pl-11 pr-4 py-3 bg-gray-50/50 border border-gray-200 rounded-xl outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all text-gray-800 font-medium"
-                    placeholder="VD: 10"
-                  />
-                </div>
-              </div>
-              <div>
-                <label className="block text-sm font-bold text-gray-700 mb-2">Mã SKU</label>
-                <div className="relative">
-                  <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
-                    <Tag size={18} />
-                  </div>
-                  <input 
-                    type="text" 
-                    name="sku" 
-                    value={formData.sku} 
-                    onChange={handleChange}
-                    className="w-full pl-11 pr-4 py-3 bg-gray-50/50 border border-gray-200 rounded-xl outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all text-gray-800 font-mono uppercase"
-                    placeholder="VD: DELL-7490-01"
-                  />
                 </div>
               </div>
             </div>
@@ -851,29 +768,104 @@ export default function NewProductPage() {
               </div>
             </div>
           </div>
+          {/* Card: Mô tả chi tiết */}
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8 mt-8">
+            <div className="flex items-center gap-2 mb-6">
+              <div className="w-8 h-8 rounded-lg bg-yellow-50 flex items-center justify-center text-yellow-600">
+                <FileText size={18} />
+              </div>
+              <h2 className="text-lg font-bold text-gray-800">Mô tả sản phẩm</h2>
+            </div>
+            
+            <div>
+              <textarea 
+                name="description" 
+                rows={12} 
+                required
+                value={formData.description} 
+                onChange={handleChange}
+                className="w-full px-4 py-4 bg-gray-50/50 border border-gray-200 rounded-xl outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all text-gray-800 leading-relaxed resize-y"
+                placeholder="Nhập thông tin mô tả chi tiết của sản phẩm..."
+              />
+            </div>
+          </div>
         </div>
 
-        {/* Cột phải: Hình ảnh, Phân loại, Publish */}
+        {/* Cột phải: Giá, Hình ảnh, Publish */}
         <div className="space-y-8">
           
-          {/* Card: Phân loại */}
+          {/* Card: Giá và Tồn kho */}
           <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-            <h2 className="text-base font-bold text-gray-800 mb-5">Phân loại sản phẩm</h2>
+            <h2 className="text-base font-bold text-gray-800 mb-5">Định giá & Tồn kho</h2>
             
-            <div className="space-y-2">
-              <label className="block text-sm font-bold text-gray-700">Danh mục <span className="text-red-500">*</span></label>
-              <select 
-                name="category_id"
-                required
-                value={formData.category_id}
-                onChange={handleCategoryChange}
-                className="w-full px-4 py-3 bg-gray-50/50 border border-gray-200 rounded-xl outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all font-bold text-gray-800 cursor-pointer"
-              >
-                {categories.length === 0 && <option value="">Đang tải danh mục...</option>}
-                {categories.map((cat) => (
-                  <option key={cat._id} value={cat._id}>{cat.name}</option>
-                ))}
-              </select>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-bold text-gray-700 mb-2">Giá bán (VNĐ) <span className="text-red-500">*</span></label>
+                <div className="relative">
+                  <input 
+                    type="number" 
+                    name="price" 
+                    required 
+                    value={formData.price} 
+                    onChange={(e) => setFormData({...formData, price: e.target.value})}
+                    className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none w-full pl-4 pr-12 py-3 bg-gray-50/50 border border-gray-200 rounded-xl outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all text-gray-800 font-bold text-lg"
+                    placeholder="0"
+                  />
+                  <span className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 font-bold">đ</span>
+                </div>
+                {formData.price && (
+                  <p className="text-xs text-emerald-600 font-medium mt-2 ml-1">
+                    Sẽ hiển thị: {Number(formData.price).toLocaleString('vi-VN')} đ
+                  </p>
+                )}
+              </div>
+              <div>
+                <label className="block text-sm font-bold text-gray-700 mb-2">Giá niêm yết (Gốc)</label>
+                <div className="relative">
+                  <input 
+                    type="number" 
+                    name="discountPrice" 
+                    value={formData.discountPrice} 
+                    onChange={(e) => setFormData({...formData, discountPrice: e.target.value})}
+                    className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none w-full pl-4 pr-12 py-3 bg-gray-50/50 border border-gray-200 rounded-xl outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all text-gray-500 font-medium"
+                    placeholder="0"
+                  />
+                  <span className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 font-bold">đ</span>
+                </div>
+              </div>
+              
+              <div>
+                <label className="block text-sm font-bold text-gray-700 mb-2">Số lượng tồn kho <span className="text-red-500">*</span></label>
+                <div className="relative">
+                  <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
+                    <Box size={18} />
+                  </div>
+                  <input 
+                    type="number" 
+                    name="stock" 
+                    required
+                    value={formData.stock} 
+                    onChange={handleChange}
+                    className="w-full pl-11 pr-4 py-3 bg-gray-50/50 border border-gray-200 rounded-xl outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all text-gray-800 font-medium"
+                    placeholder="VD: 10"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="flex items-center gap-3 cursor-pointer mt-4">
+                  <div className="relative flex items-center">
+                    <input 
+                      type="checkbox" 
+                      name="isHotSale"
+                      checked={formData.isHotSale}
+                      onChange={(e) => setFormData({...formData, isHotSale: e.target.checked})}
+                      className="w-5 h-5 border-2 border-gray-300 rounded text-blue-600 focus:ring-blue-500 cursor-pointer accent-blue-600 transition-all"
+                    />
+                  </div>
+                  <span className="text-sm font-bold text-gray-700">Hiển thị trong HOT SALE</span>
+                </label>
+              </div>
             </div>
           </div>
 
