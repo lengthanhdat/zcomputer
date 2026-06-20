@@ -31,7 +31,7 @@ export default function AdminCategoriesPage() {
 
   const fetchCategories = async () => {
     try {
-      const res = await fetchApi("/categories");
+      const res = await fetchApi(`/categories?t=${Date.now()}`);
       const data = await res.json();
       setCategories(data);
     } catch {
@@ -157,6 +157,8 @@ export default function AdminCategoriesPage() {
         if (res.ok) {
           setName("");
           setDesc("");
+          setImage("");
+          setParentId("");
           fetchCategories();
           toast.success("Đã thêm danh mục");
         } else {
