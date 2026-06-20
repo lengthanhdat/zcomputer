@@ -40,7 +40,10 @@ export default function PopupAnnouncement() {
           }
         }
       })
-      .catch(err => console.error("Error fetching popup announcement:", err));
+      .catch(() => {
+        // Silent fail to prevent Next.js from throwing a dev overlay
+        // console.warn("Failed to fetch popup announcement");
+      });
   }, []);
 
   const handleClose = () => {
