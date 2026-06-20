@@ -1,296 +1,237 @@
 import React from "react";
 import Link from "next/link";
-import { Users, ShoppingCart, Gift, DollarSign, Infinity, MonitorSmartphone, Store, MessageCircle, ChevronRight, Share2, Sparkles, CheckCircle2, AlertCircle } from "lucide-react";
+import { Gift, DollarSign, Share2, Sparkles, CheckCircle2, ChevronRight, MessageCircle, AlertCircle, Users, Cpu, ShieldCheck, Zap } from "lucide-react";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Giới thiệu bạn bè - Cùng mua sắm nhận quà | ZComputer",
-  description: "Chương trình giới thiệu bạn bè mua sắm Laptop, PC tại ZComputer để nhận ngay hoa hồng tiền mặt hoặc voucher.",
+  title: "Giới thiệu bạn bè - Rinh ngay tiền mặt | ZComputer",
+  description: "Rủ bạn bè mua sắm tại ZComputer, cả hai cùng vui với phần quà tiền mặt lên đến 500.000đ. Nhận tiền siêu tốc trong 24h!",
 };
 
 export default function ReferFriendPage() {
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-white selection:bg-red-600 selection:text-white">
+    <div className="min-h-screen bg-[#030303] text-white selection:bg-red-600 selection:text-white font-sans overflow-hidden">
+      
+      {/* Dynamic Backgrounds */}
+      <div className="fixed inset-0 z-0 pointer-events-none">
+        <div className="absolute top-[-20%] left-[-10%] w-[50vw] h-[50vw] bg-red-600/10 rounded-full blur-[150px] mix-blend-screen animate-pulse"></div>
+        <div className="absolute bottom-[-20%] right-[-10%] w-[60vw] h-[60vw] bg-orange-600/10 rounded-full blur-[150px] mix-blend-screen opacity-70"></div>
+        <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-[0.02]"></div>
+      </div>
+
       {/* Hero Section */}
-      <section className="relative pt-20 pb-24 md:pt-32 md:pb-40 overflow-hidden border-b border-white/10">
-        <div className="absolute inset-0 bg-[#1a0505]"></div>
-        {/* Lưới chấm bi mờ ảo */}
-        <div className="absolute inset-0 opacity-20" style={{ backgroundImage: 'radial-gradient(#ef4444 1px, transparent 1px)', backgroundSize: '30px 30px' }}></div>
-        {/* Vầng sáng phía trên */}
-        <div className="absolute top-0 right-1/4 w-[600px] h-[600px] bg-red-600/20 rounded-full blur-[120px] pointer-events-none"></div>
-        <div className="absolute bottom-0 left-1/4 w-[600px] h-[600px] bg-orange-600/20 rounded-full blur-[120px] pointer-events-none"></div>
-
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center min-h-[600px]">
+      <section className="relative pt-28 pb-20 lg:pt-36 lg:pb-32 z-10">
+        <div className="container mx-auto px-4 sm:px-6">
+          <div className="flex flex-col lg:flex-row items-center justify-between gap-12 lg:gap-20">
             
-            {/* Cột trái: Hình ảnh Composition (Mockup kiểu 3D) */}
-            <div className="hidden lg:flex relative w-full h-[550px] items-center justify-center order-2 lg:order-1">
-              {/* Khối nền vuông bo tròn màu đỏ tối (Frame) */}
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[380px] h-[380px] bg-gradient-to-br from-[#2a0808] to-[#1a0505] border border-red-500/20 rounded-[2.5rem] shadow-[0_0_80px_rgba(239,68,68,0.15)] z-0"></div>
-              
-              {/* Sparks (Tia lửa) */}
-              <div className="absolute inset-0 z-0 pointer-events-none opacity-60" style={{ backgroundImage: 'radial-gradient(circle at 20% 30%, #ef4444 3px, transparent 3px), radial-gradient(circle at 80% 40%, #f97316 2px, transparent 2px), radial-gradient(circle at 30% 70%, #ef4444 4px, transparent 4px), radial-gradient(circle at 70% 80%, #f97316 2px, transparent 2px), radial-gradient(circle at 50% 10%, #ef4444 2px, transparent 2px)', backgroundSize: '150px 150px' }}></div>
-              
-              {/* Vầng hào quang (Glow effect) bùng nổ phía sau */}
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-gradient-to-tr from-red-600/40 via-orange-500/20 to-red-900/40 rounded-full blur-[80px] z-0 animate-pulse"></div>
-              
-              {/* Vòng sáng xoay nghệ thuật */}
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[450px] h-[450px] border border-red-500/30 rounded-full z-0 animate-[spin_10s_linear_infinite]"></div>
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[350px] h-[350px] border border-orange-500/20 rounded-full z-0 animate-[spin_15s_linear_infinite_reverse]"></div>
-
-              {/* User Uploaded Hero Composition Image (Đã xóa nền & xóa sao) */}
-              <div className="absolute inset-0 flex items-center justify-center z-10 animate-float">
-                <div className="relative w-[145%] max-w-[150%] h-auto scale-[1.15] translate-x-4 -translate-y-4 group-img">
-                  {/* Bóng đổ sáng dưới chân */}
-                  <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 w-[70%] h-[30px] bg-red-600/60 blur-[30px] rounded-[100%] animate-pulse"></div>
-                  <img 
-                    src="/hero-clean.png" 
-                    alt="PC & Laptop" 
-                    className="w-full h-full object-contain drop-shadow-[0_0_60px_rgba(239,68,68,0.7)] transition-all duration-700 hover:scale-105 hover:drop-shadow-[0_0_100px_rgba(239,68,68,1)]"
-                  />
-                </div>
-              </div>
-
-              {/* Float Card: Quà tặng (Góc dưới trái) */}
-              <div className="absolute -left-2 bottom-[5%] z-30 bg-[#1a0505]/95 backdrop-blur-xl border border-red-500/40 p-4 pr-8 rounded-2xl shadow-[0_20px_40px_rgba(0,0,0,0.8)] flex items-center gap-4 hover:-translate-y-2 transition-transform duration-300">
-                <div className="w-12 h-12 bg-gradient-to-br from-red-600 to-orange-500 rounded-xl flex items-center justify-center shadow-[0_0_20px_rgba(239,68,68,0.4)]">
-                  <Gift size={24} className="text-white" />
-                </div>
-                <div>
-                  <div className="text-red-300 text-[10px] font-black uppercase tracking-[0.1em] mb-0.5">Quà tặng lên đến</div>
-                  <div className="text-white font-black text-2xl drop-shadow-[0_0_10px_rgba(255,255,255,0.2)]">500.000<span className="text-sm text-red-500 ml-1">đ</span></div>
-                </div>
-              </div>
-            </div>
-
-            {/* Cột phải: Nội dung chuyên nghiệp */}
-            <div className="max-w-2xl flex flex-col justify-center order-1 lg:order-2">
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-red-500/10 text-red-400 border border-red-500/20 rounded-full text-sm font-bold uppercase tracking-widest mb-6 w-fit backdrop-blur-sm">
-                <Sparkles size={16} /> Chương Trình Đặc Biệt
+            {/* Left Content */}
+            <div className="flex-1 text-center lg:text-left">
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-[#111] border border-white/10 rounded-full text-xs font-black uppercase tracking-widest mb-8 shadow-[0_0_20px_rgba(255,255,255,0.05)]">
+                <span className="flex h-2 w-2 rounded-full bg-red-500 animate-pulse"></span>
+                CHƯƠNG TRÌNH: CÙNG MUA CÙNG VUI
               </div>
               
-              <h1 className="text-5xl md:text-6xl lg:text-[70px] font-black leading-[1.1] tracking-tight mb-6">
-                GIỚI THIỆU BẠN <br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-orange-500">
-                  NHẬN QUÀ NGAY
+              <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black leading-[1.05] tracking-tight mb-6">
+                GIỚI THIỆU BẠN HIỀN <br />
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-orange-500 to-yellow-500">
+                  NHẬN TIỀN LÌ XÌ LIỀN!
                 </span>
               </h1>
               
-              <p className="text-xl text-gray-400 mb-8 font-light leading-relaxed">
-                Rủ bạn bè mua sắm PC, Laptop tại ZComputer để rinh ngay phần quà tri ân tiền mặt trị giá lên đến <strong className="text-white font-bold">500.000 VNĐ</strong> cho mỗi lượt giới thiệu thành công.
+              <p className="text-lg sm:text-xl text-gray-400 mb-10 font-medium leading-relaxed max-w-2xl mx-auto lg:mx-0">
+                Chỉ một câu mách nhỏ đưa bạn bè đến ZComputer sắm PC xịn, bạn sẽ được "ting ting" ngay khoản tiền cảm ơn lên đến <strong className="text-white font-black bg-red-500/20 px-2 py-0.5 rounded text-red-400">500.000 VNĐ</strong> vào tài khoản!
               </p>
               
-              {/* Bullet Points */}
-              <div className="flex flex-col gap-4 mb-10">
-                <div className="flex items-center gap-3 text-gray-300 font-medium">
-                  <div className="w-6 h-6 rounded-full bg-red-500/20 text-red-400 flex items-center justify-center shrink-0">
-                    <CheckCircle2 size={16} />
-                  </div>
-                  Quà tặng tiền mặt trao tay trực tiếp trong 24h
+              <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 mb-12">
+                <div className="flex items-center gap-2 bg-white/5 border border-white/10 px-4 py-2 rounded-lg text-sm text-gray-300 backdrop-blur-sm">
+                  <DollarSign size={16} className="text-green-500" /> Thanh toán 24h
                 </div>
-                <div className="flex items-center gap-3 text-gray-300 font-medium">
-                  <div className="w-6 h-6 rounded-full bg-red-500/20 text-red-400 flex items-center justify-center shrink-0">
-                    <CheckCircle2 size={16} />
-                  </div>
-                  Không giới hạn số lần giới thiệu
+                <div className="flex items-center gap-2 bg-white/5 border border-white/10 px-4 py-2 rounded-lg text-sm text-gray-300 backdrop-blur-sm">
+                  <Users size={16} className="text-orange-500" /> Không giới hạn lượt
                 </div>
-                <div className="flex items-center gap-3 text-gray-300 font-medium">
-                  <div className="w-6 h-6 rounded-full bg-red-500/20 text-red-400 flex items-center justify-center shrink-0">
-                    <CheckCircle2 size={16} />
-                  </div>
-                  Áp dụng cho tất cả dòng PC và Laptop tại Shop
+                <div className="flex items-center gap-2 bg-white/5 border border-white/10 px-4 py-2 rounded-lg text-sm text-gray-300 backdrop-blur-sm">
+                  <CheckCircle2 size={16} className="text-blue-500" /> Thủ tục cực dễ
                 </div>
               </div>
-              
-              <div className="flex flex-col sm:flex-row items-center gap-4">
+
+              <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-5">
                 <Link 
                   href="https://zalo.me/0977334415" 
                   target="_blank" 
-                  className="w-full sm:w-auto flex items-center justify-center gap-3 bg-gradient-to-r from-red-600 to-orange-600 hover:from-red-500 hover:to-orange-500 text-white px-10 py-4 rounded-lg font-bold text-lg transition-all duration-300 shadow-[0_10px_30px_rgba(239,68,68,0.4)] hover:-translate-y-1"
+                  className="w-full sm:w-auto relative group overflow-hidden flex items-center justify-center gap-3 bg-red-600 text-white px-10 py-4 rounded-xl font-black text-lg transition-all shadow-[0_0_30px_rgba(239,68,68,0.3)] hover:shadow-[0_0_50px_rgba(239,68,68,0.6)] hover:-translate-y-1"
                 >
-                  <MessageCircle size={22} />
-                  LIÊN HỆ NGAY
+                  <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-out"></div>
+                  <MessageCircle size={22} className="relative z-10" />
+                  <span className="relative z-10">NHẮN TIN NGAY</span>
                 </Link>
                 <Link 
-                  href="#commission-table" 
-                  className="w-full sm:w-auto flex items-center justify-center gap-2 px-8 py-4 rounded-lg font-bold text-lg text-white hover:bg-white/5 transition-all duration-300"
+                  href="#reward-table" 
+                  className="w-full sm:w-auto flex items-center justify-center gap-2 px-8 py-4 rounded-xl font-bold text-lg text-gray-300 bg-white/5 border border-white/10 hover:bg-white/10 hover:text-white transition-all"
                 >
-                  Xem thể lệ <ChevronRight size={20} />
+                  Xem Bảng Thưởng <ChevronRight size={20} />
                 </Link>
               </div>
             </div>
-          </div>
-        </div>
 
-        {/* Subtle Divider */}
-        <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
-      </section>
+            {/* Right Content - 3D Mockup */}
+            <div className="flex-1 relative w-full max-w-lg lg:max-w-none mt-10 lg:mt-0">
+              <div className="relative w-full aspect-square flex items-center justify-center">
+                {/* Decorative Elements */}
+                <div className="absolute inset-0 border border-white/10 rounded-full animate-[spin_20s_linear_infinite] opacity-50"></div>
+                <div className="absolute inset-4 border border-red-500/20 rounded-full animate-[spin_15s_linear_infinite_reverse] opacity-50"></div>
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60%] h-[60%] bg-red-600/30 rounded-full blur-[80px]"></div>
+                
+                {/* Floating Image */}
+                <img 
+                  src="/hero-clean.png" 
+                  alt="PC ZComputer" 
+                  className="relative z-10 w-[110%] max-w-[120%] h-auto object-contain drop-shadow-[0_20px_50px_rgba(0,0,0,0.8)] animate-float"
+                />
 
-      {/* 3 Steps Section */}
-      <section className="py-24 relative bg-[#0a0a0a]">
-        <div className="absolute inset-0 bg-gradient-to-b from-[#1a0505] to-transparent opacity-50"></div>
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tight mb-4 text-white">Quy Trình Nhận Quà</h2>
-            <div className="w-24 h-1.5 bg-gradient-to-r from-red-500 to-orange-600 mx-auto rounded-full shadow-[0_0_10px_rgba(239,68,68,0.5)]"></div>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 relative max-w-5xl mx-auto">
-            <div className="hidden md:block absolute top-[60px] left-[15%] right-[15%] h-px bg-gradient-to-r from-red-500/0 via-red-500/50 to-red-500/0 z-0"></div>
+                {/* Floating Badge */}
+                <div className="absolute -bottom-4 right-0 lg:-right-10 bg-[#111]/90 backdrop-blur-xl border border-red-500/30 p-5 rounded-2xl shadow-2xl flex items-center gap-4 z-20 hover:scale-105 transition-transform">
+                  <div className="w-14 h-14 bg-gradient-to-br from-red-500 to-orange-600 rounded-xl flex items-center justify-center text-white shadow-inner">
+                    <Gift size={28} />
+                  </div>
+                  <div>
+                    <div className="text-gray-400 text-xs font-bold uppercase tracking-widest mb-1">Tiền thưởng lên tới</div>
+                    <div className="text-white font-black text-3xl">500<span className="text-lg text-red-500">K</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
             
-            <div className="relative z-10 flex flex-col items-center group">
-              <div className="w-28 h-28 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl flex items-center justify-center mb-8 text-red-400 group-hover:-translate-y-2 group-hover:bg-red-500/10 group-hover:border-red-500/30 group-hover:shadow-[0_0_30px_rgba(239,68,68,0.2)] transition-all duration-500">
-                <Share2 size={40} strokeWidth={1.5} />
-                <div className="absolute -top-4 -right-4 w-10 h-10 bg-[#1a0505] border border-red-500/30 text-red-400 rounded-full flex items-center justify-center font-bold text-lg shadow-lg">1</div>
+          </div>
+        </div>
+      </section>
+
+      {/* Modern 3 Steps */}
+      <section className="py-24 relative z-10">
+        <div className="container mx-auto px-4 sm:px-6">
+          <div className="text-center mb-20">
+            <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tight mb-4 text-white">
+              3 Bước Nhận Quà <span className="text-red-500">Thần Tốc</span>
+            </h2>
+            <p className="text-gray-400 text-lg max-w-2xl mx-auto">Vô cùng đơn giản, không cần tải app hay đăng ký tài khoản rườm rà.</p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="bg-[#0f0f0f] border border-white/5 p-8 md:p-10 rounded-[2rem] hover:bg-[#151515] hover:border-red-500/30 transition-all duration-300 group">
+              <div className="w-16 h-16 bg-red-500/10 text-red-500 rounded-2xl flex items-center justify-center mb-8 group-hover:scale-110 transition-transform">
+                <Share2 size={32} />
               </div>
-              <h3 className="text-2xl font-bold mb-3 text-center text-white">Chia sẻ & Giới thiệu</h3>
-              <p className="text-gray-400 text-center px-4 leading-relaxed font-light">
-                Giới thiệu bạn bè, người thân có nhu cầu mua sắm máy tính đến hệ thống ZComputer.
-              </p>
+              <div className="text-4xl font-black text-white/5 absolute top-8 right-8 pointer-events-none">01</div>
+              <h3 className="text-2xl font-black mb-3 text-white">Rủ Bạn Bè</h3>
+              <p className="text-gray-400 leading-relaxed">Gửi link sản phẩm, cửa hàng ZComputer cho bạn bè, người thân đang muốn mua sắm.</p>
             </div>
 
-            <div className="relative z-10 flex flex-col items-center group">
-              <div className="w-28 h-28 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl flex items-center justify-center mb-8 text-orange-400 group-hover:-translate-y-2 group-hover:bg-orange-500/10 group-hover:border-orange-500/30 group-hover:shadow-[0_0_30px_rgba(249,115,22,0.2)] transition-all duration-500">
-                <ShoppingCart size={40} strokeWidth={1.5} />
-                <div className="absolute -top-4 -right-4 w-10 h-10 bg-[#1a0505] border border-orange-500/30 text-orange-400 rounded-full flex items-center justify-center font-bold text-lg shadow-lg">2</div>
+            <div className="bg-[#0f0f0f] border border-white/5 p-8 md:p-10 rounded-[2rem] hover:bg-[#151515] hover:border-orange-500/30 transition-all duration-300 group">
+              <div className="w-16 h-16 bg-orange-500/10 text-orange-500 rounded-2xl flex items-center justify-center mb-8 group-hover:scale-110 transition-transform">
+                <MessageCircle size={32} />
               </div>
-              <h3 className="text-2xl font-bold mb-3 text-center text-white">Mua sắm thành công</h3>
-              <p className="text-gray-400 text-center px-4 leading-relaxed font-light">
-                Người được giới thiệu cung cấp số điện thoại của bạn khi mua hàng tại Shop.
-              </p>
+              <div className="text-4xl font-black text-white/5 absolute top-8 right-8 pointer-events-none">02</div>
+              <h3 className="text-2xl font-black mb-3 text-white">Báo Số Điện Thoại</h3>
+              <p className="text-gray-400 leading-relaxed">Khi bạn bè của bạn thanh toán xong, chỉ cần đọc <strong>SĐT của bạn</strong> cho nhân viên tư vấn.</p>
             </div>
 
-            <div className="relative z-10 flex flex-col items-center group">
-              <div className="w-28 h-28 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl flex items-center justify-center mb-8 text-yellow-400 group-hover:-translate-y-2 group-hover:bg-yellow-500/10 group-hover:border-yellow-500/30 group-hover:shadow-[0_0_30px_rgba(234,179,8,0.2)] transition-all duration-500">
-                <DollarSign size={40} strokeWidth={1.5} />
-                <div className="absolute -top-4 -right-4 w-10 h-10 bg-[#1a0505] border border-yellow-500/30 text-yellow-400 rounded-full flex items-center justify-center font-bold text-lg shadow-lg">3</div>
+            <div className="bg-[#0f0f0f] border border-white/5 p-8 md:p-10 rounded-[2rem] hover:bg-[#151515] hover:border-green-500/30 transition-all duration-300 group">
+              <div className="w-16 h-16 bg-green-500/10 text-green-500 rounded-2xl flex items-center justify-center mb-8 group-hover:scale-110 transition-transform">
+                <DollarSign size={32} />
               </div>
-              <h3 className="text-2xl font-bold mb-3 text-center text-white">Nhận Quà Tặng</h3>
-              <p className="text-gray-400 text-center px-4 leading-relaxed font-light">
-                ZComputer sẽ trao tặng món quà tri ân tiền mặt trực tiếp cho bạn trong vòng 24h.
-              </p>
+              <div className="text-4xl font-black text-white/5 absolute top-8 right-8 pointer-events-none">03</div>
+              <h3 className="text-2xl font-black mb-3 text-white">Ting Ting Chuyển Khoản</h3>
+              <p className="text-gray-400 leading-relaxed">Shop sẽ ghi nhận và chủ động liên hệ chuyển khoản tiền thưởng trực tiếp cho bạn cực nhanh chóng.</p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Table Section */}
-      <section id="commission-table" className="py-24 bg-[#1a0505] relative">
-        <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(#ef4444 1px, transparent 1px)', backgroundSize: '40px 40px' }}></div>
-        <div className="container mx-auto px-4 max-w-4xl relative z-10">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-black uppercase tracking-tight mb-4 text-white">Danh Sách Quà Tặng Chi Tiết</h2>
-            <p className="text-gray-400 font-light">Giá trị quà tặng tương ứng cho mỗi đơn hàng mua thành công</p>
-          </div>
-          
-          <div className="bg-[#1f0a0a]/80 backdrop-blur-xl border border-white/10 rounded-2xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
-            <div className="grid grid-cols-3 bg-red-500/10 border-b border-red-500/20 p-5 sm:p-6 font-bold text-sm sm:text-lg text-red-400 tracking-wide uppercase">
-              <div className="col-span-2">Dòng Sản Phẩm</div>
-              <div className="text-right">Quà Tặng</div>
-            </div>
-            <div className="divide-y divide-white/5">
-              <div className="grid grid-cols-3 p-5 sm:p-6 items-center hover:bg-white/5 transition-colors group">
-                <div className="col-span-2 flex items-center gap-4">
-                  <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-red-500/20 group-hover:text-red-400 transition-colors">
-                    <CheckCircle2 className="text-gray-500 group-hover:text-red-400" size={18} />
-                  </div>
-                  <span className="text-gray-300 group-hover:text-white transition-colors">PC Văn Phòng / Laptop Văn Phòng cơ bản</span>
-                </div>
-                <div className="text-right font-black text-xl text-white">100.000đ</div>
-              </div>
-              <div className="grid grid-cols-3 p-5 sm:p-6 items-center hover:bg-white/5 transition-colors group">
-                <div className="col-span-2 flex items-center gap-4">
-                  <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-red-500/20 group-hover:text-red-400 transition-colors">
-                    <CheckCircle2 className="text-gray-500 group-hover:text-red-400" size={18} />
-                  </div>
-                  <span className="text-gray-300 group-hover:text-white transition-colors">PC Gaming / Laptop Gaming (Dưới 20 triệu)</span>
-                </div>
-                <div className="text-right font-black text-xl text-white">200.000đ</div>
-              </div>
-              <div className="grid grid-cols-3 p-5 sm:p-6 items-center hover:bg-white/5 transition-colors group">
-                <div className="col-span-2 flex items-center gap-4">
-                  <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-red-500/20 group-hover:text-red-400 transition-colors">
-                    <CheckCircle2 className="text-gray-500 group-hover:text-red-400" size={18} />
-                  </div>
-                  <span className="text-gray-300 group-hover:text-white transition-colors">PC Đồ Họa / Laptop Gaming (Từ 20 - 40 triệu)</span>
-                </div>
-                <div className="text-right font-black text-xl text-white">300.000đ</div>
-              </div>
-              <div className="grid grid-cols-3 p-5 sm:p-6 items-center hover:bg-white/5 transition-colors bg-red-600/5 group">
-                <div className="col-span-2 flex items-center gap-4">
-                  <div className="w-8 h-8 rounded-full bg-red-500/20 flex items-center justify-center text-red-400 shadow-[0_0_15px_rgba(239,68,68,0.3)]">
-                    <CheckCircle2 size={18} />
-                  </div>
-                  <span className="font-bold text-red-300">PC Workstation / Laptop Cao Cấp (Trên 40 triệu)</span>
-                </div>
-                <div className="text-right font-black text-2xl text-red-400 drop-shadow-[0_0_10px_rgba(239,68,68,0.5)]">500.000đ</div>
-              </div>
-            </div>
+      {/* Gamified Reward Cards */}
+      <section id="reward-table" className="py-24 relative z-10 bg-[#0a0a0a] border-y border-white/5">
+        <div className="container mx-auto px-4 sm:px-6">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tight mb-4 text-white">
+              Phần Thưởng <span className="text-red-500">Cực Ngon</span>
+            </h2>
+            <p className="text-gray-400 text-lg max-w-2xl mx-auto">Tùy theo cấu hình máy bạn bè chốt đơn, mức thưởng của bạn sẽ tự động nhảy số.</p>
           </div>
 
-          <div className="mt-8 flex items-start gap-4 bg-red-900/20 border border-red-500/30 p-5 rounded-xl text-red-200 text-sm backdrop-blur-sm">
-            <AlertCircle size={20} className="shrink-0 text-red-400 mt-0.5" />
-            <p className="font-light leading-relaxed"><strong className="text-white">Lưu ý:</strong> Quà tặng không áp dụng đồng thời với các chương trình khuyến mãi giảm giá trực tiếp khác tại hệ thống.</p>
-          </div>
-        </div>
-      </section>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            
+            {/* Card 1 */}
+            <div className="bg-gradient-to-b from-[#151515] to-black border border-white/10 rounded-[2rem] p-8 hover:-translate-y-2 transition-transform duration-300 relative overflow-hidden group">
+              <div className="w-14 h-14 bg-white/5 rounded-full flex items-center justify-center mb-6 text-gray-400 group-hover:bg-gray-800 transition-colors">
+                <ShieldCheck size={28} />
+              </div>
+              <h3 className="text-sm font-black uppercase tracking-widest text-gray-500 mb-2">Mức Văn Phòng</h3>
+              <div className="text-3xl font-black text-white mb-6">100.000<span className="text-base text-gray-500">đ</span></div>
+              <p className="text-gray-400 font-medium">Bạn bè mua <strong>PC / Laptop Văn Phòng cơ bản</strong>.</p>
+            </div>
 
-      {/* Terms & Conditions Section */}
-      <section className="py-20 relative bg-[#0a0a0a] border-t border-white/5">
-        <div className="container mx-auto px-4 max-w-4xl relative z-10">
-          <div className="text-center mb-10">
-            <h2 className="text-2xl md:text-3xl font-bold uppercase tracking-tight mb-4 text-white">Điều khoản & Điều kiện</h2>
-            <div className="w-16 h-1 bg-red-600 mx-auto rounded-full"></div>
+            {/* Card 2 */}
+            <div className="bg-gradient-to-b from-[#1a1810] to-black border border-yellow-900/30 rounded-[2rem] p-8 hover:-translate-y-2 transition-transform duration-300 relative overflow-hidden group">
+              <div className="w-14 h-14 bg-yellow-500/10 rounded-full flex items-center justify-center mb-6 text-yellow-500 group-hover:bg-yellow-500/20 transition-colors">
+                <Zap size={28} />
+              </div>
+              <h3 className="text-sm font-black uppercase tracking-widest text-yellow-600 mb-2">Mức Gaming</h3>
+              <div className="text-3xl font-black text-white mb-6">200.000<span className="text-base text-yellow-600">đ</span></div>
+              <p className="text-gray-400 font-medium">Bạn bè mua <strong>PC / Laptop Gaming</strong> (Dưới 20 triệu).</p>
+            </div>
+
+            {/* Card 3 */}
+            <div className="bg-gradient-to-b from-[#1a1015] to-black border border-pink-900/30 rounded-[2rem] p-8 hover:-translate-y-2 transition-transform duration-300 relative overflow-hidden group">
+              <div className="w-14 h-14 bg-pink-500/10 rounded-full flex items-center justify-center mb-6 text-pink-500 group-hover:bg-pink-500/20 transition-colors">
+                <Sparkles size={28} />
+              </div>
+              <h3 className="text-sm font-black uppercase tracking-widest text-pink-600 mb-2">Mức Đồ Họa</h3>
+              <div className="text-3xl font-black text-white mb-6">300.000<span className="text-base text-pink-600">đ</span></div>
+              <p className="text-gray-400 font-medium">Bạn bè mua <strong>PC Đồ Họa / Gaming</strong> (Từ 20 - 40 triệu).</p>
+            </div>
+
+            {/* Card 4 (Diamond/Max) */}
+            <div className="bg-gradient-to-b from-red-900/20 to-black border border-red-500/50 rounded-[2rem] p-8 hover:-translate-y-2 transition-transform duration-300 relative overflow-hidden shadow-[0_0_40px_rgba(239,68,68,0.15)] group">
+              <div className="absolute top-0 right-0 bg-red-600 text-white text-xs font-black px-4 py-1.5 uppercase rounded-bl-xl shadow-lg">TRÙM CUỐI</div>
+              <div className="absolute inset-0 bg-gradient-to-tr from-red-600/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+              <div className="w-14 h-14 bg-red-600 rounded-full flex items-center justify-center mb-6 text-white relative z-10 shadow-[0_0_15px_rgba(239,68,68,0.5)]">
+                <Cpu size={28} />
+              </div>
+              <h3 className="text-sm font-black uppercase tracking-widest text-red-500 mb-2 relative z-10">Mức Cao Cấp</h3>
+              <div className="text-4xl font-black text-white mb-6 relative z-10">500.000<span className="text-lg text-red-500">đ</span></div>
+              <p className="text-gray-300 font-bold relative z-10">Bạn bè mua <strong>PC Workstation / Laptop Cao Cấp</strong> (&gt; 40 triệu).</p>
+            </div>
+
           </div>
-          
-          <div className="bg-[#111] border border-white/10 rounded-2xl p-6 sm:p-10 text-gray-300 font-light leading-relaxed space-y-5 shadow-xl">
-            <p className="flex items-start gap-3">
-              <CheckCircle2 size={20} className="text-red-500 shrink-0 mt-1" />
-              <span>Chương trình áp dụng cho tất cả khách hàng cũ và mới giới thiệu người quen mua sắm thành công PC hoặc Laptop tại hệ thống ZComputer.</span>
-            </p>
-            <p className="flex items-start gap-3">
-              <CheckCircle2 size={20} className="text-red-500 shrink-0 mt-1" />
-              <span><strong>Đơn hàng mua sắm thành công</strong> được xác nhận khi người mua đã hoàn tất thanh toán 100% giá trị đơn hàng và nhận máy.</span>
-            </p>
-            <p className="flex items-start gap-3">
-              <CheckCircle2 size={20} className="text-red-500 shrink-0 mt-1" />
-              <span>Quà tặng tri ân sẽ được chuyển khoản trực tiếp vào tài khoản ngân hàng của người giới thiệu chậm nhất trong vòng <strong>24 giờ</strong> làm việc kể từ lúc đơn hàng hoàn tất.</span>
-            </p>
-            <p className="flex items-start gap-3">
-              <CheckCircle2 size={20} className="text-red-500 shrink-0 mt-1" />
-              <span>Chương trình không giới hạn số lượt giới thiệu. Bạn giới thiệu càng nhiều, nhận quà càng lớn.</span>
-            </p>
-            <p className="flex items-start gap-3">
-              <CheckCircle2 size={20} className="text-red-500 shrink-0 mt-1" />
-              <span>Trong mọi trường hợp phát sinh vấn đề hoặc tranh chấp, quyết định của ZComputer sẽ là quyết định cuối cùng.</span>
+
+          <div className="max-w-3xl mx-auto mt-12 bg-[#111] border border-white/5 p-6 rounded-2xl flex items-start gap-4">
+            <AlertCircle size={24} className="text-orange-500 shrink-0" />
+            <p className="text-gray-400 text-sm leading-relaxed">
+              <strong className="text-white">Lưu ý nhỏ:</strong> Tiền thưởng không áp dụng chung khi sản phẩm đang chạy các chương trình xả kho, thanh lý xập xình với giá vốn (Nhân viên sẽ báo trước thông tin này cho bạn nha).
             </p>
           </div>
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-24 relative text-center bg-[#0a0a0a] overflow-hidden">
-        {/* Glow Effects */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-red-600/20 rounded-full blur-[120px] pointer-events-none"></div>
-        
-        <div className="container mx-auto px-4 relative z-10">
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-black uppercase tracking-tight mb-6 text-white">
-            Lan Tỏa Niềm Vui <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-orange-500">Cùng ZComputer</span>
+      {/* Footer CTA */}
+      <section className="py-24 relative z-10 text-center">
+        <div className="container mx-auto px-4">
+          <h2 className="text-4xl md:text-5xl font-black uppercase tracking-tight mb-8 text-white">
+            Chuẩn Bị Sẵn <span className="text-red-500">Mã QR Nhận Tiền</span> Thôi!
           </h2>
-          <p className="text-xl text-gray-400 mb-10 max-w-2xl mx-auto font-light leading-relaxed">
-            Mang đến những sản phẩm công nghệ chất lượng nhất cho bạn bè và nhận ngay những phần quà vô cùng ý nghĩa!
+          <p className="text-xl text-gray-400 mb-12 max-w-2xl mx-auto">
+            Nhắn ngay cho ZComputer qua Zalo để chúng mình tư vấn cấu hình chuẩn xác nhất cho bạn bè của bạn nhé.
           </p>
+          
           <Link 
             href="https://zalo.me/0977334415" 
-            target="_blank" 
-            className="inline-flex items-center justify-center gap-3 bg-gradient-to-r from-red-600 to-orange-600 text-white px-12 py-5 rounded-full font-black text-xl hover:from-red-500 hover:to-orange-500 transition-all duration-300 shadow-[0_10px_40px_rgba(239,68,68,0.4)] hover:shadow-[0_15px_50px_rgba(239,68,68,0.6)] hover:-translate-y-1"
+            target="_blank"
+            className="inline-flex bg-red-600 text-white hover:bg-red-500 px-12 py-5 rounded-2xl font-black text-xl transition-all shadow-[0_10px_30px_rgba(239,68,68,0.4)] hover:-translate-y-1 items-center justify-center gap-3"
           >
             <MessageCircle size={24} />
-            LIÊN HỆ NGAY
+            CHAT VỚI SHOP NGAY
           </Link>
         </div>
       </section>
+
     </div>
   );
 }

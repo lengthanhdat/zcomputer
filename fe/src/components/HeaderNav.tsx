@@ -116,31 +116,33 @@ export default function HeaderNav() {
               Giới thiệu bạn bè
             </Link>
           </li>
+          <li className="relative group">
+            <div className="py-4 block hover:text-red-400 transition-colors uppercase flex items-center gap-1 cursor-pointer">
+              CÔNG CỤ TEST <ChevronDown size={14} className="text-gray-400 group-hover:rotate-180 group-hover:text-red-400 transition-all duration-300" />
+            </div>
+            
+            {/* Dropdown Menu */}
+            <div className="absolute top-full left-0 w-64 bg-white/95 backdrop-blur-xl text-gray-800 shadow-[0_20px_40px_rgba(0,0,0,0.1)] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform origin-top -translate-y-2 group-hover:translate-y-0 border-t-2 border-red-500 rounded-b-xl overflow-hidden z-50">
+              <ul className="py-2">
+                {[
+                  { title: 'Kiểm tra Bàn phím', link: '/cong-cu-test/ban-phim' },
+                  { title: 'Kiểm tra Màn hình', link: '/cong-cu-test/man-hinh' },
+                  { title: 'Kiểm tra Loa-Micro-Webcam', link: '/cong-cu-test/loa-micro-webcam' },
+                ].map((item, idx) => (
+                  <li key={idx}>
+                    <Link href={item.link} className="block px-5 py-3 hover:bg-red-50/50 hover:text-red-600 hover:pl-6 transition-all duration-300 text-[13px] font-bold border-b border-gray-100 last:border-0 uppercase">
+                      {item.title}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </li>
         </ul>
         
-        {/* Freeship Badge */}
-        <div className="hidden xl:flex items-center gap-3 ml-auto pr-8 cursor-pointer group">
-          <div className="flex-shrink-0 group-hover:scale-110 transition-transform duration-300">
-            <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#E30019" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-              {/* Outer Arrow */}
-              <path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8" />
-              <path d="M21 3v5h-5" />
-              {/* Inner Globe */}
-              <circle cx="12" cy="12" r="4.5" />
-              <path d="M12 7.5c1.5 0 2.5 2 2.5 4.5s-1 4.5-2.5 4.5-2.5-2-2.5-4.5 1-4.5 2.5-4.5z" />
-              <path d="M7.5 12h9" />
-            </svg>
-          </div>
-          <div className="flex flex-col justify-center">
-            <div className="flex flex-col">
-              <span className="text-white text-[15px] font-black uppercase tracking-wide leading-none mb-[4px]">GIAO HÀNG TẬN NƠI</span>
-              <div className="w-full h-[2.5px] bg-[#d90467]"></div>
-            </div>
-          </div>
-        </div>
 
         {/* Social Links */}
-        <div className="hidden xl:flex items-center gap-5 border-l border-white/10 pl-8">
+        <div className="hidden xl:flex items-center gap-5 border-l border-white/10 pl-8 ml-auto">
           <a href="https://www.facebook.com/pcgamingthuduc" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-[#1877F2] transition-all duration-300 hover:-translate-y-1 hover:scale-110 drop-shadow-md" title="Facebook">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="none">
               <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.469h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.469h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>

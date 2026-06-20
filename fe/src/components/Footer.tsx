@@ -58,85 +58,108 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* 4 COLUMNS BLOCK */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-8 relative z-10 pt-4">
+        {/* 6 COLUMNS BLOCK */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 relative z-10 pt-8 border-t border-white/10">
           
           {/* Col 1: Logo & Info */}
-          <div className="col-span-1 pr-4">
-             <Link href="/" className="flex items-center gap-3 shrink-0 group mb-6">
-               <div className="bg-white p-1 rounded-xl shadow-[0_0_15px_rgba(255,255,255,0.2)] group-hover:shadow-[0_0_20px_rgba(220,38,38,0.4)] transition-shadow">
-                 <Image src="/logo.png" alt="ZCOMPUTER" width={60} height={60} className="h-10 w-10 object-contain" />
-               </div>
-               <div className="flex flex-col items-start justify-center">
-                 <div className={`${montserrat.className} flex items-center select-none group-hover:scale-[1.02] transition-transform duration-300`}>
-                   <span className="text-red-500 text-3xl font-black drop-shadow-[0_0_10px_rgba(220,38,38,0.5)] leading-none">Z</span>
-                   <span className="text-white text-3xl font-black uppercase drop-shadow-[0_0_10px_rgba(255,255,255,0.2)] leading-none">COMPUTER</span>
+          <div className="col-span-1 lg:col-span-1 pr-0">
+             <Link href="/" className="flex flex-col items-start shrink-0 group mb-4">
+               <div className="flex items-center gap-2">
+                 <div className="bg-white p-1 rounded-xl shadow-[0_0_15px_rgba(255,255,255,0.2)] group-hover:shadow-[0_0_20px_rgba(220,38,38,0.4)] transition-shadow">
+                   <Image src="/logo.png" alt="ZCOMPUTER" width={40} height={40} className="h-8 w-8 object-contain" />
                  </div>
-                 <span className={`${montserrat.className} text-red-400 text-[9px] font-black uppercase tracking-[0.2em] mt-1.5`}>
-                   PC GAMING - LAPTOP - WORKSTATION
-                 </span>
+                 <div className={`${montserrat.className} flex items-center select-none group-hover:scale-[1.02] transition-transform duration-300`}>
+                   <span className="text-red-500 text-xl font-black drop-shadow-[0_0_10px_rgba(220,38,38,0.5)] leading-none">Z</span>
+                   <span className="text-white text-xl font-black uppercase drop-shadow-[0_0_10px_rgba(255,255,255,0.2)] leading-none">COMPUTER</span>
+                 </div>
                </div>
+               <span className={`${montserrat.className} text-red-400 text-[8px] font-black uppercase tracking-[0.1em] mt-1.5 ml-11`}>
+                 PC GAMING - LAPTOP
+               </span>
              </Link>
-             <p className="text-[14px] text-white/60 leading-relaxed mb-8 font-medium">
-               Laptop, PC Gaming Cũ Giá Tốt tại ZCOMPUTER - PC Gaming, PC Đồ Họa, Linh Kiện PC với đa dạng mẫu mã và chất lượng đỉnh cao!
+             
+             <p className="text-[13px] text-white/60 leading-relaxed mb-6 font-medium">
+               Build PC Like New Giá Cực Tốt tại ZCOMPUTER - PC Gaming, PC Đồ Họa, Linh Kiện PC với đa dạng mẫu mã và chất lượng tốt!
              </p>
+             
              <div>
-               <p className="font-bold uppercase text-[12px] tracking-widest text-white/80 mb-4">Kết nối với chúng tôi</p>
-               <div className="flex gap-3">
-                 <a href="https://www.facebook.com/pcgamingthuduc" target="_blank" rel="noreferrer" className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white/80 hover:bg-[#3b5998] hover:text-white hover:border-[#3b5998] hover:-translate-y-1 hover:shadow-[0_10px_20px_rgba(59,89,152,0.4)] transition-all duration-300"><FaFacebookF size={16} /></a>
-                 <a href="#" className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white/80 hover:bg-[#cd486b] hover:text-white hover:border-[#cd486b] hover:-translate-y-1 hover:shadow-[0_10px_20px_rgba(205,72,107,0.4)] transition-all duration-300"><FaInstagram size={16} /></a>
-                 <a href="https://vt.tiktok.com/ZSQxHwj4q/" target="_blank" rel="noreferrer" className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white/80 hover:bg-black hover:text-white hover:border-white/20 hover:-translate-y-1 hover:shadow-[0_10px_20px_rgba(0,0,0,0.4)] transition-all duration-300"><FaTiktok size={16} /></a>
-                 <a href="#" className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white/80 hover:bg-[#ff0000] hover:text-white hover:border-[#ff0000] hover:-translate-y-1 hover:shadow-[0_10px_20px_rgba(255,0,0,0.4)] transition-all duration-300"><FaYoutube size={16} /></a>
+               <p className="font-bold uppercase text-[12px] tracking-widest text-white/80 mb-3">THEO DÕI ZCOMPUTER TẠI</p>
+               <div className="flex gap-2">
+                 <a href="https://www.facebook.com/pcgamingthuduc" target="_blank" rel="noreferrer" className="w-8 h-8 rounded-full bg-[#3b5998] flex items-center justify-center text-white hover:-translate-y-1 hover:shadow-[0_5px_15px_rgba(59,89,152,0.4)] transition-all duration-300"><FaFacebookF size={14} /></a>
+                 <a href="#" className="w-8 h-8 rounded-full bg-[#ff0000] flex items-center justify-center text-white hover:-translate-y-1 hover:shadow-[0_5px_15px_rgba(255,0,0,0.4)] transition-all duration-300"><FaYoutube size={14} /></a>
+                 <a href="https://vt.tiktok.com/ZSQxHwj4q/" target="_blank" rel="noreferrer" className="w-8 h-8 rounded-full bg-black border border-white/20 flex items-center justify-center text-white hover:-translate-y-1 hover:shadow-[0_5px_15px_rgba(0,0,0,0.4)] transition-all duration-300"><FaTiktok size={14} /></a>
                </div>
              </div>
           </div>
 
-          {/* Col 2: CHÍNH SÁCH KHÁCH HÀNG */}
-          <div className="lg:pl-8">
-            <h4 className="font-black uppercase mb-6 text-[15px] text-white tracking-widest flex items-center gap-2">
-              <div className="w-1.5 h-4 bg-red-500 rounded-full"></div>
-              Chính sách
+          {/* Col 2: DANH MỤC CŨ / LIKE NEW */}
+          <div>
+            <h4 className="font-black uppercase mb-5 text-[14px] text-white tracking-wider">
+              DANH MỤC CŨ/ LIKE NEW
             </h4>
-            <ul className="space-y-4 text-[14px] text-white/60 font-medium uppercase">
-              <li><Link href="/chinh-sach-bao-mat" className="hover:text-red-400 hover:translate-x-2 transition-all duration-300 flex items-center gap-2"><FaChevronRight className="text-[10px] text-red-500/50" /> CHÍNH SÁCH BẢO MẬT</Link></li>
-              <li><Link href="/chinh-sach-van-chuyen" className="hover:text-red-400 hover:translate-x-2 transition-all duration-300 flex items-center gap-2"><FaChevronRight className="text-[10px] text-red-500/50" /> CHÍNH SÁCH VẬN CHUYỂN</Link></li>
-              <li><Link href="/chinh-sach-bao-hanh" className="hover:text-red-400 hover:translate-x-2 transition-all duration-300 flex items-center gap-2"><FaChevronRight className="text-[10px] text-red-500/50" /> CHÍNH SÁCH BẢO HÀNH</Link></li>
-              <li><Link href="/chinh-sach-doi-tra" className="hover:text-red-400 hover:translate-x-2 transition-all duration-300 flex items-center gap-2"><FaChevronRight className="text-[10px] text-red-500/50" /> CHÍNH SÁCH ĐỔI TRẢ</Link></li>
-              <li><Link href="/chinh-sach-thanh-toan" className="hover:text-red-400 hover:translate-x-2 transition-all duration-300 flex items-center gap-2"><FaChevronRight className="text-[10px] text-red-500/50" /> CHÍNH SÁCH THANH TOÁN</Link></li>
+            <ul className="space-y-3 text-[13px] text-white/60 font-medium">
+              <li><Link href="/category/pc-gaming-cu" className="hover:text-red-400 transition-colors">PC Gaming Cũ</Link></li>
+              <li><Link href="/category/linh-kien-pc-cu" className="hover:text-red-400 transition-colors">Linh Kiện PC Cũ</Link></li>
+              <li><Link href="/category/vga-cu" className="hover:text-red-400 transition-colors">VGA Cũ</Link></li>
+              <li><Link href="/category/cpu-cu" className="hover:text-red-400 transition-colors">CPU Cũ</Link></li>
             </ul>
           </div>
 
-          {/* Col 3: CÔNG TY TNHH */}
+          {/* Col 3: DANH MỤC NEW */}
           <div>
-            <h4 className="font-black uppercase mb-6 text-[15px] text-white tracking-widest flex items-center gap-2">
-              <div className="w-1.5 h-4 bg-blue-500 rounded-full"></div>
-              Công ty
+            <h4 className="font-black uppercase mb-5 text-[14px] text-white tracking-wider">
+              DANH MỤC NEW
             </h4>
-            <div className="text-[14px] text-white/60 space-y-4 leading-relaxed font-medium">
-              <p className="bg-white/5 p-4 rounded-xl border border-white/5 backdrop-blur-sm hover:bg-white/10 transition-colors">
-                <strong className="text-white block mb-1">CÔNG TY TNHH TM DV ZCOM</strong>
-                MST: 0317130199 <br/>
-                Sở KHĐT TP.HCM cấp ngày 18/01/2022
-              </p>
-            </div>
+            <ul className="space-y-3 text-[13px] text-white/60 font-medium">
+              <li><Link href="/category/pc-gaming-new" className="hover:text-red-400 transition-colors">PC Gaming New</Link></li>
+              <li><Link href="/category/pc-do-hoa" className="hover:text-red-400 transition-colors">PC Đồ Họa</Link></li>
+              <li><Link href="/category/linh-kien-pc-new" className="hover:text-red-400 transition-colors">Linh Kiện PC New</Link></li>
+              <li><Link href="/category/man-hinh-pc" className="hover:text-red-400 transition-colors">Màn Hình PC</Link></li>
+              <li><Link href="/category/vga-new" className="hover:text-red-400 transition-colors">VGA New</Link></li>
+            </ul>
           </div>
 
-          {/* Col 4: FANPAGE */}
+          {/* Col 4: CHÍNH SÁCH KHÁCH HÀNG */}
           <div>
-            <h4 className="font-black uppercase mb-6 text-[15px] text-white tracking-widest flex items-center gap-2">
-              <div className="w-1.5 h-4 bg-[#1877F2] rounded-full"></div>
-              Fanpage Facebook
+            <h4 className="font-black uppercase mb-5 text-[14px] text-white tracking-wider">
+              CHÍNH SÁCH KHÁCH HÀNG
             </h4>
-            <div className="rounded-xl overflow-hidden border border-white/10 bg-white/5 h-[130px]">
-              <iframe 
-                src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2Fpcgamingthuduc&tabs=&width=340&height=130&small_header=false&adapt_container_width=true&hide_cover=false&show_facepile=true&appId" 
-                width="100%" 
-                height="130" 
-                style={{border:"none",overflow:"hidden"}} 
-                scrolling="no" 
-                allowFullScreen={true} 
-                allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
-              ></iframe>
+            <ul className="space-y-3 text-[13px] text-white/60 font-medium">
+              <li><Link href="/tin-tuc/khuyen-mai" className="hover:text-red-400 transition-colors">Khuyến Mãi</Link></li>
+              <li><Link href="/chinh-sach-tra-gop" className="hover:text-red-400 transition-colors">Chính sách hỗ trợ trả góp</Link></li>
+              <li><Link href="/chinh-sach-van-chuyen" className="hover:text-red-400 transition-colors">Chính sách vận chuyển</Link></li>
+              <li><Link href="/chinh-sach-bao-hanh" className="hover:text-red-400 transition-colors">Chính sách bảo hành</Link></li>
+              <li><Link href="/chinh-sach-bao-mat" className="hover:text-red-400 transition-colors">Chính sách bảo mật & điều khoản sử dụng</Link></li>
+            </ul>
+          </div>
+
+          {/* Col 5: LIÊN HỆ */}
+          <div>
+            <h4 className="font-black uppercase mb-5 text-[14px] text-white tracking-wider">
+              LIÊN HỆ ZCOMPUTER
+            </h4>
+            <ul className="space-y-3 text-[13px] text-white/60 font-medium">
+              <li><Link href="/ve-chung-toi" className="hover:text-red-400 transition-colors">Giới Thiệu ZCOMPUTER</Link></li>
+              <li><Link href="/lien-he" className="hover:text-red-400 transition-colors">Liên Hệ</Link></li>
+              <li><Link href="/he-thong-cua-hang" className="hover:text-red-400 transition-colors">Hệ Thống Cửa Hàng</Link></li>
+              <li><Link href="/tin-tuc" className="hover:text-red-400 transition-colors">Tin Tức</Link></li>
+            </ul>
+          </div>
+
+          {/* Col 6: CÔNG TY TNHH */}
+          <div className="lg:col-span-1">
+            <h4 className="font-black uppercase mb-5 text-[14px] text-white tracking-wider">
+              CÔNG TY TNHH TM DV ZCOM
+            </h4>
+            <div className="text-[13px] text-white/60 space-y-2 leading-relaxed font-medium mb-6">
+              <p>Mã số GPKD: 0317130199 - Được cấp phép bởi Sở KH và ĐT Thành phố Hồ Chí Minh.</p>
+              <p className="pt-2">Cung cấp linh kiện máy tính chính hãng</p>
+              <p>Máy tính chơi Game - Máy Tính Đồ Họa - Máy Tính Văn Phòng</p>
+            </div>
+            
+            <div className="flex flex-col gap-3">
+              <img src="https://theme.hstatic.net/1000026716/1000440777/14/logo-bct.png?v=296" alt="Đã thông báo bộ công thương" className="h-10 object-contain w-fit opacity-80 hover:opacity-100 transition-opacity" />
+              <img src="https://images.dmca.com/Badges/dmca_protected_sml_120n.png?ID=wp" alt="DMCA.com Protection Status" className="h-6 object-contain w-fit opacity-80 hover:opacity-100 transition-opacity" />
             </div>
           </div>
 
