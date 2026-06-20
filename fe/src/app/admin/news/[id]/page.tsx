@@ -20,6 +20,9 @@ const ReactQuill = dynamic(
       const { default: BlotFormatter } = await import("quill-blot-formatter");
       Quill.register("modules/blotFormatter", BlotFormatter);
       
+      const { default: MagicUrl } = await import("quill-magic-url");
+      Quill.register("modules/magicUrl", MagicUrl);
+      
       const Font = Quill.import('formats/font');
       Font.whitelist = ['sans-serif', 'arial', 'times-new-roman', 'tahoma', 'verdana', 'courier-new'];
       Quill.register(Font, true);
@@ -355,6 +358,7 @@ export default function EditNewsPage({ params }: { params: Promise<{ id: string 
 
   const modules = {
     blotFormatter: {},
+    magicUrl: true,
     toolbar: [
       [{ 'font': [false, 'arial', 'times-new-roman', 'tahoma', 'verdana', 'courier-new'] }, { 'size': ['small', false, 'large', 'huge'] }],
       [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
