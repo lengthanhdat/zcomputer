@@ -181,9 +181,107 @@ export default function NewsDetailClient({ slug }: { slug: string }) {
             
             {/* Rich Text Content */}
             <div 
-              className="prose prose-lg md:prose-xl max-w-none break-words [overflow-wrap:anywhere] prose-headings:font-black prose-headings:text-gray-900 prose-h2:text-3xl prose-h2:mt-12 prose-h2:mb-6 prose-p:text-gray-600 prose-p:leading-relaxed prose-a:text-red-600 hover:prose-a:text-red-700 prose-img:rounded-2xl prose-img:shadow-md"
+              className="article-content max-w-none"
               dangerouslySetInnerHTML={{ __html: article.content }}
             />
+            <style>{`
+              .article-content {
+                font-size: 16px;
+                line-height: 1.85;
+                color: #374151;
+                word-break: break-word;
+                overflow-wrap: anywhere;
+              }
+              .article-content h1, .article-content h2, .article-content h3,
+              .article-content h4, .article-content h5, .article-content h6 {
+                font-weight: 800;
+                color: #111827;
+                margin-top: 2rem;
+                margin-bottom: 0.75rem;
+                line-height: 1.35;
+              }
+              .article-content h1 { font-size: 2rem; }
+              .article-content h2 { font-size: 1.5rem; padding-bottom: 0.5rem; border-bottom: 2px solid #fee2e2; }
+              .article-content h3 { font-size: 1.25rem; color: #dc2626; }
+              .article-content p { margin-bottom: 1.1rem; }
+              .article-content strong, .article-content b { color: #111827; font-weight: 700; }
+              .article-content em, .article-content i { font-style: italic; }
+              .article-content a { color: #dc2626; text-decoration: underline; }
+              .article-content a:hover { color: #991b1b; }
+              .article-content img {
+                max-width: 100%;
+                border-radius: 12px;
+                margin: 1.5rem auto;
+                display: block;
+                box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+              }
+              .article-content ul, .article-content ol {
+                padding-left: 1.5rem;
+                margin-bottom: 1.1rem;
+              }
+              .article-content ul { list-style-type: disc; }
+              .article-content ol { list-style-type: decimal; }
+              .article-content li { margin-bottom: 0.4rem; }
+              .article-content blockquote {
+                border-left: 4px solid #ef4444;
+                background: #fff7f7;
+                padding: 1rem 1.25rem;
+                margin: 1.5rem 0;
+                border-radius: 0 8px 8px 0;
+                color: #4b5563;
+                font-style: italic;
+              }
+              .article-content table {
+                width: 100%;
+                border-collapse: collapse;
+                margin: 1.5rem 0;
+                font-size: 14px;
+                border-radius: 8px;
+                overflow: hidden;
+                box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+              }
+              .article-content thead {
+                background: #dc2626;
+                color: white;
+              }
+              .article-content thead th {
+                padding: 10px 14px;
+                font-weight: 700;
+                text-align: left;
+              }
+              .article-content tbody tr:nth-child(even) {
+                background: #fff7f7;
+              }
+              .article-content tbody tr:hover {
+                background: #fee2e2;
+              }
+              .article-content td {
+                padding: 9px 14px;
+                border-bottom: 1px solid #e5e7eb;
+                vertical-align: top;
+              }
+              .article-content pre {
+                background: #1e293b;
+                color: #e2e8f0;
+                padding: 1rem 1.25rem;
+                border-radius: 8px;
+                overflow-x: auto;
+                font-size: 14px;
+                margin: 1.25rem 0;
+              }
+              .article-content code {
+                background: #f1f5f9;
+                color: #dc2626;
+                padding: 2px 6px;
+                border-radius: 4px;
+                font-size: 13px;
+              }
+              .article-content hr {
+                border: none;
+                border-top: 2px solid #f3f4f6;
+                margin: 2rem 0;
+              }
+            `}</style>
 
             {/* Tags */}
             {article.tags && article.tags.length > 0 && (
