@@ -59,41 +59,45 @@ export default function Footer() {
         </div>
 
         {/* 5 COLUMNS BLOCK */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 lg:gap-8 relative z-10 pt-8 border-t border-white/10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-12 gap-8 relative z-10 pt-10 border-t border-white/10">
           
           {/* Col 1: Logo & Info */}
-          <div className="col-span-1 lg:col-span-1 pr-0">
-             <Link href="/" className="flex flex-col items-start shrink-0 group mb-4">
-               <div className="flex items-center gap-2">
-                 <div className="bg-white p-1 rounded-xl shadow-[0_0_15px_rgba(255,255,255,0.2)] group-hover:shadow-[0_0_20px_rgba(220,38,38,0.4)] transition-shadow">
-                   <Image src="/logo.png" alt="ZCOMPUTER" width={40} height={40} className="h-8 w-8 object-contain" />
+          <div className="md:col-span-6 lg:col-span-3 pr-0 lg:pr-4">
+             <Link href="/" className="flex flex-col items-start shrink-0 group mb-6">
+               <div className="flex items-center gap-3">
+                 <div className="bg-white p-1.5 rounded-xl shadow-[0_0_15px_rgba(255,255,255,0.2)] group-hover:shadow-[0_0_20px_rgba(220,38,38,0.4)] transition-shadow">
+                   <Image src="/logo.png" alt="ZCOMPUTER" width={50} height={50} className="h-10 w-10 object-contain" />
                  </div>
-                 <div className={`${montserrat.className} flex items-center select-none group-hover:scale-[1.02] transition-transform duration-300`}>
-                   <span className="text-red-500 text-xl font-black drop-shadow-[0_0_10px_rgba(220,38,38,0.5)] leading-none">Z</span>
-                   <span className="text-white text-xl font-black uppercase drop-shadow-[0_0_10px_rgba(255,255,255,0.2)] leading-none">COMPUTER</span>
+                 <div className="flex flex-col">
+                   <div className={`${montserrat.className} flex items-center select-none group-hover:scale-[1.02] transition-transform duration-300`}>
+                     <span className="text-red-500 text-[26px] font-black drop-shadow-[0_0_10px_rgba(220,38,38,0.5)] leading-none">Z</span>
+                     <span className="text-white text-[26px] font-black uppercase drop-shadow-[0_0_10px_rgba(255,255,255,0.2)] leading-none">COMPUTER</span>
+                   </div>
+                   <span className={`${montserrat.className} text-red-400 text-[8.5px] font-black uppercase tracking-[0.16em] mt-1`}>
+                     PC GAMING - LAPTOP
+                   </span>
                  </div>
                </div>
-               <span className={`${montserrat.className} text-red-400 text-[8px] font-black uppercase tracking-[0.1em] mt-1.5 ml-11`}>
-                 PC GAMING - LAPTOP
-               </span>
              </Link>
              
-             <p className="text-[13px] text-white/60 leading-relaxed mb-6 font-medium">
-               Build PC Like New Giá Cực Tốt tại ZCOMPUTER - PC Gaming, PC Đồ Họa, Linh Kiện PC với đa dạng mẫu mã và chất lượng tốt!
+             <p className="text-[13px] text-white/70 leading-relaxed mb-6 font-medium text-justify">
+               ZCOMPUTER - Hệ thống chuyên cung cấp PC, Laptop Cũ / Like New uy tín, chất lượng cao với mức giá tốt nhất tại khu vực TP.HCM.
              </p>
              
              <div>
                <p className="font-bold uppercase text-[12px] tracking-widest text-white/80 mb-3">THEO DÕI ZCOMPUTER TẠI</p>
                <div className="flex gap-2">
                  <a href="https://www.facebook.com/pcgamingthuduc" target="_blank" rel="noreferrer" className="w-8 h-8 rounded-full bg-[#3b5998] flex items-center justify-center text-white hover:-translate-y-1 hover:shadow-[0_5px_15px_rgba(59,89,152,0.4)] transition-all duration-300"><FaFacebookF size={14} /></a>
-                 <a href="#" className="w-8 h-8 rounded-full bg-[#ff0000] flex items-center justify-center text-white hover:-translate-y-1 hover:shadow-[0_5px_15px_rgba(255,0,0,0.4)] transition-all duration-300"><FaYoutube size={14} /></a>
+                 <a href="https://zalo.me/0977334415" target="_blank" rel="noreferrer" className="w-8 h-8 rounded-full bg-[#0068FF] flex items-center justify-center text-white hover:-translate-y-1 hover:shadow-[0_5px_15px_rgba(0,104,255,0.4)] transition-all duration-300">
+                   <span className="text-[11px] font-black tracking-wide mt-0.5">Zalo</span>
+                 </a>
                  <a href="https://vt.tiktok.com/ZSQxHwj4q/" target="_blank" rel="noreferrer" className="w-8 h-8 rounded-full bg-black border border-white/20 flex items-center justify-center text-white hover:-translate-y-1 hover:shadow-[0_5px_15px_rgba(0,0,0,0.4)] transition-all duration-300"><FaTiktok size={14} /></a>
                </div>
              </div>
           </div>
 
           {/* Col 2: DANH MỤC CŨ / LIKE NEW */}
-          <div>
+          <div className="md:col-span-3 lg:col-span-2">
             <h4 className="font-black uppercase mb-5 text-[14px] text-white tracking-wider">
               DANH MỤC CŨ/ LIKE NEW
             </h4>
@@ -108,7 +112,7 @@ export default function Footer() {
 
 
           {/* Col 3: CHÍNH SÁCH TỔNG HỢP */}
-          <div>
+          <div className="md:col-span-3 lg:col-span-2">
             <h4 className="font-black uppercase mb-5 text-[14px] text-white tracking-wider">
               CHÍNH SÁCH TỔNG HỢP
             </h4>
@@ -122,7 +126,7 @@ export default function Footer() {
           </div>
 
           {/* Col 4: LIÊN HỆ */}
-          <div>
+          <div className="md:col-span-4 lg:col-span-2">
             <h4 className="font-black uppercase mb-5 text-[14px] text-white tracking-wider">
               LIÊN HỆ ZCOMPUTER
             </h4>
@@ -135,7 +139,7 @@ export default function Footer() {
           </div>
 
           {/* Col 5: CÔNG TY TNHH */}
-          <div className="lg:col-span-1">
+          <div className="md:col-span-8 lg:col-span-3 lg:pl-4">
             <h4 className="font-black uppercase mb-5 text-[14px] text-white tracking-wider">
               CÔNG TY TNHH TM DV ZCOM
             </h4>
@@ -145,10 +149,6 @@ export default function Footer() {
               <p>Máy tính chơi Game - Máy Tính Đồ Họa - Máy Tính Văn Phòng</p>
             </div>
             
-            <div className="flex flex-col gap-3">
-              <img src="https://theme.hstatic.net/1000026716/1000440777/14/logo-bct.png?v=296" alt="Đã thông báo bộ công thương" className="h-10 object-contain w-fit opacity-80 hover:opacity-100 transition-opacity" />
-              <img src="https://images.dmca.com/Badges/dmca_protected_sml_120n.png?ID=wp" alt="DMCA.com Protection Status" className="h-6 object-contain w-fit opacity-80 hover:opacity-100 transition-opacity" />
-            </div>
           </div>
 
         </div>
