@@ -106,6 +106,7 @@ export default function HomeClient() {
   const [banners, setBanners] = useState<any[] | null>(cachedBanners);
   const [videoReviews, setVideoReviews] = useState<any[]>(cachedVideoReviews || []);
   const [showAllCategories, setShowAllCategories] = useState(false);
+  const [activeSubCats, setActiveSubCats] = useState<Record<string, string>>({});
 
   useEffect(() => {
     const controller = new AbortController();
@@ -358,6 +359,11 @@ export default function HomeClient() {
           const topSubCategories = subCategoriesWithCounts.slice(0, 5);
           
           if (catProducts.length === 0) return null; // Ẩn danh mục nếu không có sản phẩm nào
+          
+          const activeSubCatId = activeSubCats[cat._id] || "all";
+          if (activeSubCatId !== "all") {
+             catProducts = catProducts.filter((p: any) => p.category_id?._id === activeSubCatId || p.category_id === activeSubCatId);
+          }
 
           return (
             <section key={cat._id} className="container mx-auto px-4 mb-16">
@@ -403,23 +409,31 @@ export default function HomeClient() {
                   
                   {/* Top Subcategories Bar */}
                   {topSubCategories.length > 0 && (
-                    <div className="flex flex-wrap items-center gap-2 md:gap-3 mb-6 relative z-10 bg-gradient-to-r from-red-500/10 via-orange-400/5 to-transparent p-2.5 rounded-2xl border border-red-500/10">
-                      <div className="hidden sm:flex text-red-600 font-black text-[11px] uppercase tracking-widest px-3 border-r border-red-500/20 mr-1 items-center gap-1.5">
+                    <div className="flex overflow-x-auto whitespace-nowrap items-center gap-2 md:gap-3 mb-6 relative z-10 bg-gradient-to-r from-red-500/10 via-orange-400/5 to-transparent p-2.5 rounded-2xl border border-red-500/10 scrollbar-hide [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+                      <div className="flex text-red-600 font-black text-[11px] uppercase tracking-widest px-3 border-r border-red-500/20 mr-1 items-center gap-1.5 flex-shrink-0">
                         <Zap size={14} className="text-orange-500 fill-orange-500" />
                         Nổi bật
                       </div>
+                      
+                      <button
+                        onClick={() => setActiveSubCats(prev => ({...prev, [cat._id]: "all"}))}
+                        className={`flex-shrink-0 px-4 py-1.5 backdrop-blur-md rounded-xl text-[12px] font-bold transition-all duration-300 shadow-[0_2px_10px_rgba(0,0,0,0.02)] hover:shadow-[0_5px_15px_rgba(220,38,38,0.1)] border ${activeSubCatId === "all" ? "bg-red-500 text-white border-red-500 shadow-[0_5px_15px_rgba(220,38,38,0.3)]" : "bg-white/60 text-gray-700 hover:bg-white hover:text-red-600 border-white/50 hover:border-red-200"}`}
+                      >
+                        Tất cả
+                      </button>
+
                       {topSubCategories.map(subCat => (
-                        <Link 
+                        <button 
                           key={subCat._id} 
-                          href={`/${subCat.slug}`}
-                          className="px-4 py-1.5 bg-white/60 hover:bg-white backdrop-blur-md rounded-xl text-[12px] font-bold text-gray-700 hover:text-red-600 transition-all duration-300 shadow-[0_2px_10px_rgba(0,0,0,0.02)] hover:shadow-[0_5px_15px_rgba(220,38,38,0.1)] border border-white/50 hover:border-red-200"
+                          onClick={() => setActiveSubCats(prev => ({...prev, [cat._id]: subCat._id}))}
+                          className={`flex-shrink-0 px-4 py-1.5 backdrop-blur-md rounded-xl text-[12px] font-bold transition-all duration-300 shadow-[0_2px_10px_rgba(0,0,0,0.02)] hover:shadow-[0_5px_15px_rgba(220,38,38,0.1)] border ${activeSubCatId === subCat._id ? "bg-red-500 text-white border-red-500 shadow-[0_5px_15px_rgba(220,38,38,0.3)]" : "bg-white/60 text-gray-700 hover:bg-white hover:text-red-600 border-white/50 hover:border-red-200"}`}
                         >
                           {subCat.name}
-                        </Link>
+                        </button>
                       ))}
                       <Link 
                         href={`/${cat.slug}`}
-                        className="ml-auto text-[12px] font-bold text-red-600 hover:text-red-700 flex items-center gap-1 transition-all duration-300 hover:translate-x-1 px-2"
+                        className="ml-auto flex-shrink-0 text-[12px] font-bold text-red-600 hover:text-red-700 flex items-center gap-1 transition-all duration-300 hover:translate-x-1 px-2"
                       >
                         Xem tất cả <ChevronRight size={14} />
                       </Link>
