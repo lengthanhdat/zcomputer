@@ -66,7 +66,7 @@ const VideoCard = ({ video }: { video: any }) => {
       {/* Fake Channel Info */}
       <div className="absolute top-4 left-4 right-4 flex items-center gap-3 z-10 pointer-events-none">
         <div className="relative">
-          <Image src="/logo.png" alt="ZComputer" width={36} height={36} className="w-9 h-9 rounded-full object-contain bg-white shadow-lg border border-white/50" />
+          <Image src="/logo.webp" alt="ZComputer" width={36} height={36} className="w-9 h-9 rounded-full object-contain bg-white shadow-lg border border-white/50" />
           <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-red-500 rounded-full border-2 border-black flex items-center justify-center">
             <div className="w-1 h-1 bg-white rounded-full"></div>
           </div>

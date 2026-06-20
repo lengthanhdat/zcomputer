@@ -395,7 +395,7 @@ export default function CategoryClient({
                             <div className="absolute -bottom-[1px] -right-[1px] w-5 h-5 border-b-2 border-r-2 border-primary/60 rounded-br-xl"></div>
                             
                             <div className="absolute bottom-2 right-2 flex items-center gap-1 opacity-50 mix-blend-multiply">
-                              <Image src="/logo.png" alt="ZCOMPUTER" width={20} height={20} className="w-4 h-4 object-contain" unoptimized />
+                              <Image src="/logo.webp" alt="ZCOMPUTER" width={20} height={20} className="w-4 h-4 object-contain" unoptimized />
                               <div className="flex items-baseline select-none tracking-tighter">
                                 <span className="text-red-600 font-black text-[11px] drop-shadow-sm">Z</span>
                                 <span className="text-slate-800 font-black text-[10px] uppercase drop-shadow-sm">COMPUTER</span>

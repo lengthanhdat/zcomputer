@@ -61,7 +61,7 @@ export default function Header() {
             }}
           >
             <div className="absolute inset-0 bg-red-500/10 blur-[20px] rounded-full group-hover:bg-red-500/20 transition-all duration-500 pointer-events-none"></div>
-            <Image src="/logo.png" alt="Z" width={80} height={80} priority className="h-14 w-14 sm:h-[68px] sm:w-[68px] object-contain group-hover:scale-105 transition-all duration-300 drop-shadow-md relative z-10" />
+            <Image src="/logo.webp" alt="Z" width={80} height={80} priority className="h-14 w-14 sm:h-[68px] sm:w-[68px] object-contain group-hover:scale-105 transition-all duration-300 drop-shadow-md relative z-10" />
             
             {/* New Storefront-style Text Logo */}
             <div className="flex items-center gap-0.5 group-hover:scale-[1.02] transition-transform duration-300 select-none relative z-10 font-serif">
