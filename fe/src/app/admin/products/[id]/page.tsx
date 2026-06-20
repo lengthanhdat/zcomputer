@@ -2,7 +2,7 @@
 
 import { useState, useEffect, use, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, Image as ImageIcon, Box, Tag, DollarSign, FileText, UploadCloud, Loader2, X, Gift, Cpu } from "lucide-react";
+import { ArrowLeft, Image as ImageIcon, Box, Tag, DollarSign, FileText, UploadCloud, Loader2, X, Gift, Cpu, Sparkles } from "lucide-react";
 import Link from "next/link";
 import toast from "react-hot-toast";
 import { fetchApi } from "@/lib/api";
@@ -85,6 +85,7 @@ interface Category {
   _id: string;
   name: string;
   slug?: string;
+  parent_id?: string;
 }
 
 export default function EditProductPage({ params }: { params: Promise<{ id: string }> }) {
@@ -362,7 +363,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
       }));
       toast.success(`Đã tự động điền ${extractedCount} thông tin từ tên sản phẩm!`);
     } else {
-      toast.info('Không tìm thấy thông tin trong tên.');
+      toast.success('Không tìm thấy thông tin trong tên.', { icon: 'ℹ️' });
     }
   };
 

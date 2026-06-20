@@ -484,7 +484,7 @@ export default function NewProductPage() {
       }));
       toast.success(`Đã tự động điền ${extractedCount} thông tin từ tên sản phẩm!`);
     } else {
-      toast.info('Không tìm thấy thông tin rõ ràng trong tên. Hãy dùng nút Dán cấu hình AI để phân tích sâu hơn.');
+      toast.success('Không tìm thấy thông tin rõ ràng trong tên. Hãy dùng nút Dán cấu hình AI để phân tích sâu hơn.', { icon: 'ℹ️' });
     }
   };
 
