@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Search, Save, AlertTriangle, CheckCircle, XCircle, Plus, Minus, Edit, Trash2, Loader2 } from "lucide-react";
+import { Search, Save, AlertTriangle, CheckCircle, XCircle, Plus, Minus, Edit, Trash2, Loader2, ShoppingBag } from "lucide-react";
 import toast from "react-hot-toast";
 import { fetchApi } from "@/lib/api";
 
@@ -91,6 +91,45 @@ export default function AdminInventoryPage() {
       }
     } catch (error) {
       toast.error("Lỗi kết nối máy chủ");
+    } finally {
+      setSavingId(null);
+    }
+  };
+
+  const handleSoldProduct = async (id: string, currentStock: number) => {
+    if (currentStock <= 0) {
+      toast.error("Sản phẩm đã hết hàng!");
+      return;
+    }
+    
+    const newStock = currentStock - 1;
+    setEditedStocks(prev => ({ ...prev, [id]: newStock }));
+    
+    setSavingId(id);
+    try {
+      const product = products.find((p) => p._id === id);
+      let newStatus = product?.status;
+      if (newStock === 0) newStatus = "out_of_stock";
+
+      const res = await fetchApi(`/products/${id}`, {
+        method: "PUT",
+        body: JSON.stringify({ stock: newStock, status: newStatus }),
+      });
+
+      if (res.ok) {
+        toast.success(`Đã ghi nhận bán 1 sản phẩm ${product?.name || ''}!`);
+        setProducts((prev) =>
+          prev.map((p) =>
+            p._id === id ? { ...p, stock: newStock, status: newStatus || p.status } : p
+          )
+        );
+      } else {
+        toast.error("Cập nhật thất bại, vui lòng thử lại.");
+        setEditedStocks(prev => ({ ...prev, [id]: currentStock }));
+      }
+    } catch (error) {
+      toast.error("Lỗi kết nối máy chủ");
+      setEditedStocks(prev => ({ ...prev, [id]: currentStock }));
     } finally {
       setSavingId(null);
     }
@@ -396,6 +435,16 @@ export default function AdminInventoryPage() {
                         <td className="py-4 px-6">{statusBadge}</td>
                         <td className="py-4 px-6">
                           <div className="flex items-center justify-center gap-2">
+                            <button
+                              onClick={() => handleSoldProduct(product._id, currentStock)}
+                              disabled={currentStock <= 0 || savingId === product._id}
+                              className="inline-flex items-center gap-1 px-3 py-1.5 rounded-md text-xs font-bold transition-all bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm shadow-indigo-600/20 disabled:bg-gray-300 disabled:text-gray-500 disabled:shadow-none"
+                              title="Bán 1 sản phẩm"
+                            >
+                              <ShoppingBag size={14} />
+                              Đã bán
+                            </button>
+
                             <button
                               onClick={() => handleSaveStock(product._id)}
                               disabled={!isStockModified || savingId === product._id}

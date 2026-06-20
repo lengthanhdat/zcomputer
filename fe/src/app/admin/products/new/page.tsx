@@ -37,7 +37,8 @@ import "react-quill-new/dist/quill.snow.css";
 interface Category {
   _id: string;
   name: string;
-  slug: string;
+  slug?: string;
+  parent_id?: string;
 }
 
 const SPEC_CONFIGS: Record<string, { key: string, label: string, placeholder: string }[]> = {
@@ -113,11 +114,12 @@ export default function NewProductPage() {
     brand: "",
     price: "",
     discountPrice: "",
+    flashSalePrice: "",
     stock: "",
     sku: "",
     description: "",
     images: [] as string[],
-    gifts: [] as string[],
+    gifts: ["Chuột không dây", "Túi chống sốc", "Vệ sinh máy miễn phí cho lần đầu tiên"] as string[],
     category_id: "",
     condition: "Đã qua sử dụng (Đẹp 99%)",
     isHotSale: false,
@@ -129,9 +131,20 @@ export default function NewProductPage() {
       try {
         const res = await fetchApi("/categories");
         const data = await res.json();
-        setCategories(data);
-        if (data.length > 0) {
-          setFormData((prev) => ({ ...prev, category_id: data[0]._id }));
+        
+        const parents = data.filter((c: any) => !c.parent_id);
+        const organized: any[] = [];
+        parents.forEach((p: any) => {
+          organized.push(p);
+          const children = data.filter((c: any) => c.parent_id === p._id);
+          organized.push(...children);
+        });
+        const orphaned = data.filter((c: any) => c.parent_id && !parents.find((p: any) => p._id === c.parent_id));
+        organized.push(...orphaned);
+
+        setCategories(organized);
+        if (organized.length > 0) {
+          setFormData((prev) => ({ ...prev, category_id: organized[0]._id }));
         }
       } catch (error) {
         console.error("Failed to fetch categories:", error);
@@ -318,7 +331,7 @@ export default function NewProductPage() {
             const found = categories.find(c => 
               c.name.toLowerCase().includes(data.category_name.toLowerCase()) || 
               data.category_name.toLowerCase().includes(c.name.toLowerCase()) ||
-              c.slug.includes(data.category_name.toLowerCase())
+              c.slug?.includes(data.category_name.toLowerCase())
             );
             if (found) matchedCategory = found._id;
           }
@@ -396,6 +409,110 @@ export default function NewProductPage() {
     }
   };
 
+  const handleExtractFromName = () => {
+    if (!formData.name) return;
+    
+    // Khởi tạo các giá trị mới
+    const newSpecs = { ...formData.specs };
+    let newBrand = formData.brand;
+    let extractedCount = 0;
+    
+    const upperName = formData.name.toUpperCase();
+    
+    // 1. Nhận diện Thương hiệu (Brand)
+    const properBrands = ["Dell", "HP", "Lenovo", "Apple", "ASUS", "Acer", "MSI", "Gigabyte", "Samsung", "LG", "Intel", "AMD", "NVIDIA", "Corsair", "Kingston", "Logitech"];
+    for (const b of properBrands) {
+      if (upperName.includes(b.toUpperCase())) {
+        newBrand = b;
+        extractedCount++;
+        break;
+      }
+    }
+
+    // 2. Nhận diện Thông số kỹ thuật (Specs)
+    const parts = formData.name.split('/').map(p => p.trim());
+    parts.forEach((part, index) => {
+      const upperPart = part.toUpperCase();
+      
+      const isCPU = upperPart.includes('CPU') || upperPart.includes('I3') || upperPart.includes('I5') || 
+                    upperPart.includes('I7') || upperPart.includes('I9') || upperPart.includes('RYZEN') || 
+                    upperPart.includes('CORE') || upperPart.includes('PENTIUM') || upperPart.includes('CELERON') || 
+                    upperPart.includes('XEON') || upperPart.includes('ULTRA') || upperPart.includes('M1') || 
+                    upperPart.includes('M2') || upperPart.includes('M3') || upperPart.includes('M4') ||
+                    /\b(10100|10400|11400|12100|12400|13400|14400|13600|14600|13700|14700|13900|14900|4600|5600|5700|7600|7700|7800|7900|7950|8600|8700)\b/.test(upperPart);
+
+      // CPU
+      if (isCPU && !upperPart.includes('GB') && !upperPart.includes('SSD') && !upperPart.includes('HDD') && !upperPart.includes('VGA') && !upperPart.includes('RTX') && !upperPart.includes('GTX')) {
+        let cpuStr = part.replace(/^(CPU|CHIP|BỘ VI XỬ LÝ)\s*:/i, '').trim();
+        
+        if (index === 0 || upperPart.includes('LAPTOP') || upperPart.includes('PC') || upperPart.includes('MÁY TÍNH')) {
+           const match = cpuStr.match(/\b(core|ryzen|pentium|celeron|xeon|ultra|apple\s*m[1-4]|m[1-4]\b|i[3579]\b)/i);
+           if (match && match.index !== undefined) {
+             cpuStr = cpuStr.substring(match.index).trim();
+           }
+        }
+        
+        newSpecs.CPU = cpuStr;
+        extractedCount++;
+      }
+      // RAM
+      else if (upperPart.includes('RAM') || (upperPart.includes('GB') && !upperPart.includes('SSD') && !upperPart.includes('HDD') && !upperPart.includes('VGA') && !upperPart.includes('RTX') && !upperPart.includes('GTX') && !upperPart.includes('RX'))) {
+        newSpecs.RAM = part.replace(/^RAM\s*:/i, '').trim();
+        extractedCount++;
+      }
+      // Storage
+      else if (upperPart.includes('SSD') || upperPart.includes('HDD') || upperPart.includes('NVME') || upperPart.includes('TB') || upperPart.includes('Ổ CỨNG')) {
+        newSpecs.Storage = part.replace(/^(SSD|HDD|Ổ CỨNG|STORAGE)\s*:/i, '').trim();
+        extractedCount++;
+      }
+      // VGA
+      else if (upperPart.includes('VGA') || upperPart.includes('RTX') || upperPart.includes('GTX') || upperPart.includes('RX ') || upperPart.includes('RADEON') || upperPart.includes('ARC') || upperPart.includes('CARD') || upperPart.includes('GRAPHICS')) {
+        newSpecs.VGA = part.replace(/^(VGA|CARD|CARD MÀN HÌNH)\s*:/i, '').trim();
+        extractedCount++;
+      }
+      // Screen
+      else if (upperPart.includes('INCH') || upperPart.includes('HZ') || upperPart.includes('144HZ') || upperPart.includes('MÀN HÌNH') || upperPart.includes('24G') || upperPart.includes('27G')) {
+        newSpecs.Screen = part.replace(/^(MÀN HÌNH|SCREEN|MÀN)\s*:/i, '').trim();
+        extractedCount++;
+      }
+      // Mainboard
+      else if (upperPart.includes('MAIN') || upperPart.includes('MAINBOARD') || /(H610|B660|B760|Z690|Z790|H410|H510|B460|B560|A320|B450|B550|X570|X670|A520)/i.test(upperPart)) {
+        let mbStr = part.replace(/^(MAINBOARD|MAIN|BO MẠCH CHỦ)\s*:/i, '').trim();
+        if (index === 0) {
+            mbStr = mbStr.replace(/^(BỘ MÁY TÍNH|PC GAMING|PC LẮP RÁP|PC VĂN PHÒNG|PC|MÁY TÍNH BÀN|MÁY TÍNH)\s*/i, '').trim();
+        }
+        newSpecs.Mainboard = mbStr;
+        extractedCount++;
+      }
+      // PSU
+      else if (upperPart.includes('NGUỒN') || upperPart.includes('PSU') || /\b\d{3,4}W\b/.test(upperPart)) {
+        newSpecs.PSU = part.replace(/^(NGUỒN|PSU)\s*:/i, '').trim();
+        extractedCount++;
+      }
+      // Case
+      else if (upperPart.includes('CASE') || upperPart.includes('VỎ')) {
+        newSpecs.Case = part.replace(/^(CASE|VỎ|VỎ MÁY|VỎ CASE)\s*:/i, '').trim();
+        extractedCount++;
+      }
+      // Cooler
+      else if (upperPart.includes('TẢN') || upperPart.includes('COOLER') || upperPart.includes('AIO')) {
+        newSpecs.Cooler = part.replace(/^(TẢN|TẢN NHIỆT|COOLER)\s*:/i, '').trim();
+        extractedCount++;
+      }
+    });
+
+    if (extractedCount > 0) {
+      setFormData(prev => ({ 
+        ...prev, 
+        specs: newSpecs,
+        brand: newBrand
+      }));
+      toast.success(`Đã tự động điền ${extractedCount} thông tin từ tên sản phẩm!`);
+    } else {
+      toast.success('Không tìm thấy thông tin rõ ràng trong tên. Hãy dùng nút Dán cấu hình AI để phân tích sâu hơn.', { icon: 'ℹ️' });
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.category_id) {
@@ -418,6 +535,7 @@ export default function NewProductPage() {
         category_id: formData.category_id,
         condition: formData.condition,
         isHotSale: formData.isHotSale,
+        flashSalePrice: Number(formData.flashSalePrice) || 0,
         specs: formData.specs
       };
 
@@ -558,13 +676,16 @@ export default function NewProductPage() {
                       >
                         <option value="">Chọn danh mục</option>
                         {categories.map((cat) => (
-                          <option key={cat._id} value={cat._id}>{cat.name}</option>
+                          <option key={cat._id} value={cat._id}>
+                            {cat.parent_id ? `\u00A0\u00A0\u00A0\u00A0|_ ${cat.name}` : cat.name}
+                          </option>
                         ))}
                       </select>
                     </td>
                     <td className="px-4 py-3">
                       <input 
                         type="text" 
+                        list="brand-suggestions"
                         value={item.brand} 
                         onChange={(e) => updatePreviewItem(idx, 'brand', e.target.value)}
                         className="w-full px-3 py-1.5 border border-gray-200 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 text-sm"
@@ -619,6 +740,24 @@ export default function NewProductPage() {
 
   return (
     <div className="pb-12">
+      <datalist id="brand-suggestions">
+        <option value="Dell" />
+        <option value="HP" />
+        <option value="Lenovo" />
+        <option value="Apple" />
+        <option value="ASUS" />
+        <option value="Acer" />
+        <option value="MSI" />
+        <option value="Gigabyte" />
+        <option value="Samsung" />
+        <option value="LG" />
+        <option value="Intel" />
+        <option value="AMD" />
+        <option value="NVIDIA" />
+        <option value="Logitech" />
+        <option value="Corsair" />
+        <option value="Kingston" />
+      </datalist>
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
         <div className="flex items-center gap-4">
@@ -657,15 +796,27 @@ export default function NewProductPage() {
             <div className="space-y-6">
               <div>
                 <label className="block text-sm font-bold text-gray-700 mb-2">Tên sản phẩm <span className="text-red-500">*</span></label>
-                <input 
-                  type="text" 
-                  name="name" 
-                  required 
-                  value={formData.name} 
-                  onChange={handleChange}
-                  className="w-full px-4 py-3 bg-gray-50/50 border border-gray-200 rounded-xl outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all text-gray-800 font-medium placeholder:font-normal"
-                  placeholder="VD: Laptop Dell Latitude 7490 Core i5..."
-                />
+                <div className="relative group">
+                  <input 
+                    type="text" 
+                    name="name" 
+                    required 
+                    value={formData.name} 
+                    onChange={handleChange}
+                    className="w-full pl-4 pr-32 py-3 bg-gray-50/50 border border-gray-200 rounded-xl outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all text-gray-800 font-medium placeholder:font-normal"
+                    placeholder="VD: BỘ MÁY TÍNH H610M-E/ I3 12100F/16GB/SSD 256GB..."
+                  />
+                  {formData.name.includes('/') && (
+                    <button
+                      type="button"
+                      onClick={handleExtractFromName}
+                      className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1 px-3 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-600 rounded-lg text-xs font-bold transition-all"
+                    >
+                      <Sparkles size={14} />
+                      Tách TT
+                    </button>
+                  )}
+                </div>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -679,9 +830,11 @@ export default function NewProductPage() {
                     className="w-full px-4 py-3 bg-gray-50/50 border border-gray-200 rounded-xl outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all text-gray-800 font-medium cursor-pointer"
                   >
                     {categories.length === 0 && <option value="">Đang tải danh mục...</option>}
-                    {categories.map((cat) => (
-                      <option key={cat._id} value={cat._id}>{cat.name}</option>
-                    ))}
+                      {categories.map((cat) => (
+                        <option key={cat._id} value={cat._id}>
+                          {cat.parent_id ? `\u00A0\u00A0\u00A0\u00A0|_ ${cat.name}` : cat.name}
+                        </option>
+                      ))}
                   </select>
                 </div>
                 <div>
@@ -689,6 +842,7 @@ export default function NewProductPage() {
                   <input 
                     type="text" 
                     name="brand" 
+                    list="brand-suggestions"
                     required
                     value={formData.brand} 
                     onChange={handleChange}
@@ -893,31 +1047,26 @@ export default function NewProductPage() {
                 <label className="block text-sm font-bold text-gray-700 mb-2">Giá bán (VNĐ) <span className="text-red-500">*</span></label>
                 <div className="relative">
                   <input 
-                    type="number" 
+                    type="text" 
                     name="price" 
                     required 
-                    value={formData.price} 
-                    onChange={(e) => setFormData({...formData, price: e.target.value})}
-                    className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none w-full pl-4 pr-12 py-3 bg-gray-50/50 border border-gray-200 rounded-xl outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all text-gray-800 font-bold text-lg"
+                    value={formData.price ? Number(formData.price).toLocaleString('vi-VN') : ""} 
+                    onChange={(e) => setFormData({...formData, price: e.target.value.replace(/\D/g, '')})}
+                    className="w-full pl-4 pr-12 py-3 bg-gray-50/50 border border-gray-200 rounded-xl outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all text-gray-800 font-bold text-lg"
                     placeholder="0"
                   />
                   <span className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 font-bold">đ</span>
                 </div>
-                {formData.price && (
-                  <p className="text-xs text-emerald-600 font-medium mt-2 ml-1">
-                    Sẽ hiển thị: {Number(formData.price).toLocaleString('vi-VN')} đ
-                  </p>
-                )}
               </div>
               <div>
                 <label className="block text-sm font-bold text-gray-700 mb-2">Giá niêm yết (Gốc)</label>
                 <div className="relative">
                   <input 
-                    type="number" 
+                    type="text" 
                     name="discountPrice" 
-                    value={formData.discountPrice} 
-                    onChange={(e) => setFormData({...formData, discountPrice: e.target.value})}
-                    className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none w-full pl-4 pr-12 py-3 bg-gray-50/50 border border-gray-200 rounded-xl outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all text-gray-500 font-medium"
+                    value={formData.discountPrice ? Number(formData.discountPrice).toLocaleString('vi-VN') : ""} 
+                    onChange={(e) => setFormData({...formData, discountPrice: e.target.value.replace(/\D/g, '')})}
+                    className="w-full pl-4 pr-12 py-3 bg-gray-50/50 border border-gray-200 rounded-xl outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all text-gray-500 font-medium"
                     placeholder="0"
                   />
                   <span className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 font-bold">đ</span>
@@ -956,6 +1105,23 @@ export default function NewProductPage() {
                   <span className="text-sm font-bold text-gray-700">Hiển thị trong HOT SALE</span>
                 </label>
               </div>
+
+              {formData.isHotSale && (
+                <div className="mt-4 pt-4 border-t border-gray-100 animate-in fade-in slide-in-from-top-2">
+                  <label className="block text-sm font-bold text-orange-600 mb-2">Giá HOT SALE (VNĐ)</label>
+                  <div className="relative">
+                    <input 
+                      type="text" 
+                      name="flashSalePrice" 
+                      value={formData.flashSalePrice ? Number(formData.flashSalePrice).toLocaleString('vi-VN') : ""} 
+                      onChange={(e) => setFormData({...formData, flashSalePrice: e.target.value.replace(/\D/g, '')})}
+                      className="w-full pl-4 pr-12 py-3 bg-orange-50/50 border border-orange-200 rounded-xl outline-none focus:border-orange-500 focus:ring-4 focus:ring-orange-500/20 transition-all text-orange-700 font-bold"
+                      placeholder="Nhập giá khuyến mãi sốc..."
+                    />
+                    <span className="absolute right-4 top-1/2 -translate-y-1/2 text-orange-400 font-bold">đ</span>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
 
