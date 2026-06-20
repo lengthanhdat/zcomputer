@@ -333,7 +333,7 @@ export default function EditNewsPage({ params }: { params: Promise<{ id: string 
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    submitData(formData.isPublished);
+    submitData(true); // Nút xuất bản luôn publish
   };
 
   const handleSaveDraft = () => {
