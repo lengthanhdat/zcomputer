@@ -37,7 +37,8 @@ import "react-quill-new/dist/quill.snow.css";
 interface Category {
   _id: string;
   name: string;
-  slug: string;
+  slug?: string;
+  parent_id?: string;
 }
 
 const SPEC_CONFIGS: Record<string, { key: string, label: string, placeholder: string }[]> = {

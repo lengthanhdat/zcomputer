@@ -114,7 +114,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
     condition: "Đã qua sử dụng (Đẹp 99%)",
     isHotSale: false,
     flashSalePrice: "",
-    specs: { CPU: "", RAM: "", Storage: "", VGA: "", Screen: "" }
+    specs: { CPU: "", RAM: "", Storage: "", VGA: "", Screen: "" } as Record<string, string>
   });
 
   useEffect(() => {
