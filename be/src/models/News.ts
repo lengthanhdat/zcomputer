@@ -14,6 +14,7 @@ export interface INews extends Document {
   authorName?: string;
   createdAt: Date;
   updatedAt: Date;
+  order: number;
 }
 
 const NewsSchema = new Schema<INews>(
@@ -29,13 +30,14 @@ const NewsSchema = new Schema<INews>(
     isPublished: { type: Boolean, default: true },
     author: { type: Schema.Types.ObjectId, ref: 'User' },
     authorName: { type: String, default: 'Admin ZComputer' },
+    order: { type: Number, default: 0 },
   },
   { timestamps: true }
 );
 
 NewsSchema.index({ slug: 1 });
 NewsSchema.index({ isPublished: 1 });
-NewsSchema.index({ createdAt: -1 });
+NewsSchema.index({ order: 1, createdAt: -1 });
 NewsSchema.index({ category: 1 });
 
 export const News: Model<INews> = mongoose.models.News || mongoose.model<INews>('News', NewsSchema);

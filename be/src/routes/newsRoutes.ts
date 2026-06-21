@@ -5,7 +5,8 @@ import {
   getNewsById,
   createNews,
   updateNews,
-  deleteNews
+  deleteNews,
+  reorderNews
 } from '../controllers/newsController';
 import { authenticate, authorize } from '../middlewares/authorize';
 
@@ -21,6 +22,7 @@ router.use(authorize(['admin', 'staff']));
 
 router.get('/admin/:id', getNewsById);
 router.post('/', createNews);
+router.put('/reorder/bulk', reorderNews);
 router.put('/:id', updateNews);
 router.delete('/:id', deleteNews);
 

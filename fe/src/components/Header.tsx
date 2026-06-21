@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Playfair_Display, Montserrat } from "next/font/google";
-import { Search, Menu, X, PhoneCall, MapPin, ChevronDown, ArrowRight } from "lucide-react";
+import { Search, Menu, X, PhoneCall, MapPin, ChevronDown, ArrowRight, Laptop, Monitor } from "lucide-react";
 import HeaderAuth from "./HeaderAuth";
 import HeaderCart from "./HeaderCart";
 import HeaderNav from "./HeaderNav";
@@ -168,7 +168,11 @@ export default function Header() {
                         {item.images?.[0] ? (
                           <img src={item.images[0]} alt={item.name} className="w-full h-full object-cover rounded" />
                         ) : (
-                          <div className="w-full h-full flex items-center justify-center text-gray-400"><Search size={16} /></div>
+                          <div className="w-full h-full flex items-center justify-center text-gray-400">
+                            {item.name.toLowerCase().includes('laptop') ? <Laptop size={20} /> :
+                             item.name.toLowerCase().includes('màn') ? <Monitor size={20} /> :
+                             <Search size={16} />}
+                          </div>
                         )}
                       </div>
                       <div className="flex-1 min-w-0">
