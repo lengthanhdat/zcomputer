@@ -154,7 +154,7 @@ export default function AdminVideoReviewsPage() {
           <h1 className="text-2xl font-bold text-gray-800 mb-1">Quản lý Video Review</h1>
           <p className="text-sm text-gray-500">Quản lý các video TikTok/Shorts trên trang chủ.</p>
         </div>
-        <button onClick={openAddModal} className="bg-primary hover:bg-brand-700 text-white px-4 py-2 rounded-md font-semibold flex items-center gap-2">
+        <button onClick={openAddModal} className="bg-primary hover:bg-primary text-white px-4 py-2 rounded-md font-semibold flex items-center gap-2">
           <Plus size={18} /> Thêm Video
         </button>
       </div>
@@ -244,7 +244,7 @@ export default function AdminVideoReviewsPage() {
                           filteredProducts.map(p => (
                             <div 
                               key={p._id} 
-                              className={`p-2 hover:bg-brand-50 cursor-pointer text-sm border-b border-gray-50 last:border-0 ${formData.product_id === p._id ? 'bg-brand-50 font-medium text-primary' : ''}`}
+                              className={`p-2 hover:bg-primary/10 cursor-pointer text-sm border-b border-gray-50 last:border-0 ${formData.product_id === p._id ? 'bg-primary/10 font-medium text-primary' : ''}`}
                               onClick={() => {
                                 setFormData({...formData, product_id: p._id});
                                 setSearchTerm(p.name);
@@ -272,7 +272,7 @@ export default function AdminVideoReviewsPage() {
               
               <div className="flex gap-4 mt-6 pt-2">
                 <button type="button" onClick={() => setShowModal(false)} className="flex-1 bg-gray-100 hover:bg-gray-200 transition-colors text-gray-700 py-2 rounded font-semibold">Hủy</button>
-                <button type="submit" className="flex-1 bg-primary hover:bg-brand-700 transition-colors text-white py-2 rounded font-semibold">Lưu lại</button>
+                <button type="submit" className="flex-1 bg-primary hover:bg-primary transition-colors text-white py-2 rounded font-semibold">Lưu lại</button>
               </div>
             </form>
           </div>

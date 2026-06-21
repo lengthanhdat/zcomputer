@@ -84,34 +84,27 @@ const getIcon = (name: string) => {
   return Package;
 };
 
-export default function CategoryMenu({ categories }: { categories: Category[] }) {
-  const [hoveredCategory, setHoveredCategory] = useState<string | null>(null);
-
-  const mainCategories = Array.isArray(categories) ? categories.filter(c => c && !c.parent_id) : [];
-
-  return (
-    <div className="relative bg-white/95 backdrop-blur-2xl shadow-[0_20px_40px_rgba(0,0,0,0.15)] border-l border-r border-b border-gray-200/50 py-3 w-full z-30 flex flex-col rounded-b-xl">
-      {mainCategories.map(cat => {
-        const Icon = getIcon(cat.name);
-        const subCategories = Array.isArray(categories) ? categories.filter(c => c && c.parent_id === cat._id) : [];
-        const hasSub = subCategories.length > 0;
-        const isHovered = hoveredCategory === cat._id;
-
-        return (
+const CategoryItem = ({ category, categories, depth = 0 }: { category: Category, categories: Category[], depth?: number }) => {
+  const [isHovered, setIsHovered] = useState(false);
+  const subCategories = Array.isArray(categories) ? categories.filter(c => c && c.parent_id === category._id) : [];
+  const hasSub = subCategories.length > 0;
+  
+  if (depth === 0) {
+    const Icon = getIcon(category.name);
+    return (
           <div
-            key={cat._id}
             className="group relative"
-            onMouseEnter={() => setHoveredCategory(cat._id)}
-            onMouseLeave={() => setHoveredCategory(null)}
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
           >
             <div className="px-2 py-0.5">
               <Link
-                href={`/${cat.slug}`}
+                href={`/${category.slug}`}
                 className={`flex items-center justify-between px-4 py-2 transition-all duration-300 rounded-lg ${isHovered ? 'bg-primary text-white shadow-[0_4px_15px_var(--primary-ring)] scale-[1.02]' : 'text-gray-700 hover:bg-primary/5'}`}
               >
                 <div className="flex items-center gap-3">
                   <Icon size={18} className={isHovered ? 'text-white' : 'text-gray-500 group-hover:text-primary transition-colors'} />
-                  <span className={`text-sm font-semibold ${isHovered ? 'text-white' : ''}`}>{cat.name}</span>
+                  <span className={`text-sm font-semibold ${isHovered ? 'text-white' : ''}`}>{category.name}</span>
                 </div>
                 {hasSub && <ChevronRight size={16} className={isHovered ? 'text-white' : 'text-gray-400 group-hover:text-primary transition-colors'} />}
               </Link>
@@ -121,19 +114,49 @@ export default function CategoryMenu({ categories }: { categories: Category[] })
             {hasSub && isHovered && (
               <div className="absolute top-[-10px] left-[calc(100%-4px)] w-[280px] bg-white/95 backdrop-blur-2xl shadow-[0_20px_40px_rgba(0,0,0,0.15)] border border-gray-200/50 py-3 z-40 rounded-xl animate-in fade-in slide-in-from-left-2 duration-200 min-h-[calc(100%+20px)]">
                 {subCategories.map(sub => (
-                  <Link
-                    key={sub._id}
-                    href={`/${sub.slug}`}
-                    className="block px-6 py-2.5 text-sm font-medium text-gray-700 hover:text-primary hover:bg-primary/5 hover:pl-8 transition-all duration-300"
-                  >
-                    {sub.name}
-                  </Link>
+                  <CategoryItem key={sub._id} category={sub} categories={categories} depth={depth + 1} />
                 ))}
               </div>
             )}
           </div>
-        );
-      })}
+    );
+  }
+
+  // Depth > 0
+  return (
+    <div 
+      className="group/sub relative"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      <Link
+        href={`/${category.slug}`}
+        className="flex items-center justify-between px-6 py-2.5 text-sm font-medium text-gray-700 hover:text-primary hover:bg-primary/5 hover:pl-8 transition-all duration-300"
+      >
+        <span>{category.name}</span>
+        {hasSub && <ChevronRight size={14} className="text-gray-400 group-hover/sub:text-primary" />}
+      </Link>
+
+      {/* Nested Flyout Submenu */}
+      {hasSub && isHovered && (
+        <div className="absolute top-[-10px] left-[calc(100%-4px)] w-[280px] bg-white/95 backdrop-blur-2xl shadow-[0_20px_40px_rgba(0,0,0,0.15)] border border-gray-200/50 py-3 z-50 rounded-xl animate-in fade-in slide-in-from-left-2 duration-200 min-h-[calc(100%+20px)]">
+          {subCategories.map(sub => (
+            <CategoryItem key={sub._id} category={sub} categories={categories} depth={depth + 1} />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default function CategoryMenu({ categories }: { categories: Category[] }) {
+  const mainCategories = Array.isArray(categories) ? categories.filter(c => c && !c.parent_id) : [];
+
+  return (
+    <div className="relative bg-white/95 backdrop-blur-2xl shadow-[0_20px_40px_rgba(0,0,0,0.15)] border-l border-r border-b border-gray-200/50 py-3 w-full z-30 flex flex-col rounded-b-xl">
+      {mainCategories.map(cat => (
+        <CategoryItem key={cat._id} category={cat} categories={categories} depth={0} />
+      ))}
     </div>
   );
 }

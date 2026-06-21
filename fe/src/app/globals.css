@@ -159,3 +159,82 @@ body {
   padding-right: 18px !important;
   white-space: nowrap !important;
 }
+
+/* Fix large images in ReactQuill */
+.ql-editor img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+.ql-editor img:not([width]):not([style*="width"]) {
+  width: 400px;
+}
+
+/* Quill Font Sizes */
+.ql-snow .ql-picker.ql-size .ql-picker-label[data-value="10px"]::before, .ql-snow .ql-picker.ql-size .ql-picker-item[data-value="10px"]::before { content: '10px' !important; }
+.ql-snow .ql-picker.ql-size .ql-picker-label[data-value="12px"]::before, .ql-snow .ql-picker.ql-size .ql-picker-item[data-value="12px"]::before { content: '12px' !important; }
+.ql-snow .ql-picker.ql-size .ql-picker-label[data-value="14px"]::before, .ql-snow .ql-picker.ql-size .ql-picker-item[data-value="14px"]::before { content: '14px' !important; }
+.ql-snow .ql-picker.ql-size .ql-picker-label[data-value="16px"]::before, .ql-snow .ql-picker.ql-size .ql-picker-item[data-value="16px"]::before { content: '16px' !important; }
+.ql-snow .ql-picker.ql-size .ql-picker-label[data-value="18px"]::before, .ql-snow .ql-picker.ql-size .ql-picker-item[data-value="18px"]::before { content: '18px' !important; }
+.ql-snow .ql-picker.ql-size .ql-picker-label[data-value="20px"]::before, .ql-snow .ql-picker.ql-size .ql-picker-item[data-value="20px"]::before { content: '20px' !important; }
+.ql-snow .ql-picker.ql-size .ql-picker-label[data-value="24px"]::before, .ql-snow .ql-picker.ql-size .ql-picker-item[data-value="24px"]::before { content: '24px' !important; }
+.ql-snow .ql-picker.ql-size .ql-picker-label[data-value="30px"]::before, .ql-snow .ql-picker.ql-size .ql-picker-item[data-value="30px"]::before { content: '30px' !important; }
+.ql-snow .ql-picker.ql-size .ql-picker-label[data-value="36px"]::before, .ql-snow .ql-picker.ql-size .ql-picker-item[data-value="36px"]::before { content: '36px' !important; }
+.ql-snow .ql-picker.ql-size .ql-picker-label:not([data-value])::before, .ql-snow .ql-picker.ql-size .ql-picker-item:not([data-value])::before { content: '16px (Chuẩn)' !important; }
+
+/* Quill Color Pickers */
+.ql-snow .ql-picker.ql-color {
+  width: 90px !important;
+}
+.ql-snow .ql-picker.ql-color .ql-picker-label::before {
+  content: 'Màu chữ' !important;
+  font-weight: 600;
+  color: #475569;
+}
+.ql-snow .ql-picker.ql-background {
+  width: 90px !important;
+}
+.ql-snow .ql-picker.ql-background .ql-picker-label::before {
+  content: 'Màu nền' !important;
+  font-weight: 600;
+  color: #475569;
+}
+/* When a color is selected, keep the text but add a small colored square */
+.ql-snow .ql-picker.ql-color .ql-picker-label[data-value]::before,
+.ql-snow .ql-picker.ql-background .ql-picker-label[data-value]::before {
+  margin-right: 8px;
+}
+
+/* Hide the default huge 'A' and bucket SVG icons since we use text labels */
+.ql-snow .ql-picker.ql-color .ql-picker-label svg:first-of-type,
+.ql-snow .ql-picker.ql-background .ql-picker-label svg:first-of-type {
+  display: none !important;
+}
+
+/* Prevent Vietnamese words from breaking abruptly */
+.ql-editor *, .prose * { 
+  word-break: normal !important; 
+  overflow-wrap: break-word !important; 
+  hyphens: none !important; 
+}
+
+/* Force tables to wrap text and fit container */
+.ql-editor table, .prose table {
+  width: 100% !important;
+  max-width: 100% !important;
+  table-layout: fixed !important;
+}
+.ql-editor td, .prose td, .ql-editor th, .prose th { 
+  overflow-wrap: break-word !important; 
+  white-space: normal !important;
+  vertical-align: top;
+}
+
+/* Default text alignment to justify for all text blocks */
+.ql-editor p:not([class*="ql-align-"]), 
+.prose p:not([class*="ql-align-"]),
+.ql-editor div:not([class*="ql-align-"]), 
+.prose div:not([class*="ql-align-"]) {
+  text-align: justify;
+}

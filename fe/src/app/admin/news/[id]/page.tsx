@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, use, useRef } from "react";
+import { useState, useEffect, use, useRef, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { fetchApi } from "@/lib/api";
 import Link from "next/link";
@@ -23,16 +23,24 @@ const ReactQuill = dynamic(
       // @ts-ignore
       const { default: MagicUrl } = await import("quill-magic-url");
       Quill.register("modules/magicUrl", MagicUrl);
+
+      // @ts-ignore
+      const { default: ImageUploader } = await import("quill-image-uploader");
+      Quill.register("modules/imageUploader", ImageUploader);
       
       const Font = Quill.import('formats/font');
       Font.whitelist = ['sans-serif', 'arial', 'times-new-roman', 'tahoma', 'verdana', 'courier-new'];
       Quill.register(Font, true);
 
+      const Size = Quill.import('attributors/style/size');
+      Size.whitelist = ['10px', '12px', '14px', '16px', '18px', '20px', '24px', '30px', '36px'];
+      Quill.register(Size, true);
+
       // Bắt buộc đăng ký thuộc tính Alt cho thẻ Image, nếu không Quill sẽ tự động xóa
       const BaseImageFormat = Quill.import('formats/image');
       class ImageFormat extends BaseImageFormat {
         static formats(domNode: Element) {
-          return ['alt', 'width', 'height'].reduce(function(formats: any, attribute) {
+          return ['alt', 'width', 'height', 'style', 'class'].reduce(function(formats: any, attribute) {
             if (domNode.hasAttribute(attribute)) {
               formats[attribute] = domNode.getAttribute(attribute);
             }
@@ -40,7 +48,7 @@ const ReactQuill = dynamic(
           }, {});
         }
         format(name: string, value: any) {
-          if (['alt', 'width', 'height'].includes(name)) {
+          if (['alt', 'width', 'height', 'style', 'class'].includes(name)) {
             if (value) {
               this.domNode.setAttribute(name, value);
             } else {
@@ -421,11 +429,34 @@ export default function EditNewsPage({ params }: { params: Promise<{ id: string 
     window.open("/tin-tuc/preview", "_blank");
   };
 
-  const modules = {
+  const modules = useMemo(() => ({
     blotFormatter: {},
     magicUrl: true,
+    imageUploader: {
+      upload: (file: File) => {
+        return new Promise((resolve, reject) => {
+          const data = new FormData();
+          data.append("image", file);
+          fetchApi("/upload/image", {
+            method: "POST",
+            body: data,
+            requireAuth: true,
+          })
+            .then((res) => res.json())
+            .then((responseData) => {
+              const url = responseData.url.startsWith('http') || responseData.url.startsWith('data:') 
+                  ? responseData.url 
+                  : `${process.env.NEXT_PUBLIC_API_BASE_URL || 'http://127.0.0.1:5000'}${responseData.url}`;
+              resolve(url);
+            })
+            .catch((error) => {
+              reject("Upload failed");
+            });
+        });
+      }
+    },
     toolbar: [
-      [{ 'font': [false, 'arial', 'times-new-roman', 'tahoma', 'verdana', 'courier-new'] }, { 'size': ['small', false, 'large', 'huge'] }],
+      [{ 'font': [false, 'arial', 'times-new-roman', 'tahoma', 'verdana', 'courier-new'] }, { 'size': ['10px', '12px', '14px', false, '18px', '20px', '24px', '30px', '36px'] }],
       [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
       ['bold', 'italic', 'underline', 'strike'],
       [{ 'color': [] }, { 'background': [] }],
@@ -438,7 +469,7 @@ export default function EditNewsPage({ params }: { params: Promise<{ id: string 
       ['link', 'image', 'video', 'formula'],
       ['clean']
     ],
-  };
+  }), []);
 
   if (loading) return <div className="p-8 text-center">Đang tải dữ liệu...</div>;
 
@@ -525,7 +556,7 @@ export default function EditNewsPage({ params }: { params: Promise<{ id: string 
               <ReactQuill 
                 forwardedRef={quillRef}
                 theme="snow"
-                value={formData.content}
+                defaultValue={formData.content}
                 onChange={(val: string) => setFormData({ ...formData, content: val })}
                 modules={modules}
                 className="h-[600px] border-none [&_.ql-container]:border-none [&_.ql-toolbar]:border-none [&_.ql-toolbar]:border-b [&_.ql-toolbar]:border-slate-200/60 pb-10 [&_.ql-editor]:text-base [&_.ql-editor]:text-slate-700"

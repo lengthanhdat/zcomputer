@@ -23,7 +23,7 @@ export default function Footer() {
             <div>
               <h3 className="text-xl md:text-2xl font-black text-white uppercase mb-6 flex items-center gap-3">
                 HỆ THỐNG CỬA HÀNG ZCOMPUTER 
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none" className="text-brand-500 transform rotate-45"><path d="M2 21L23 12L2 3V10L17 12L2 14V21Z"/></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none" className="text-primary transform rotate-45"><path d="M2 21L23 12L2 3V10L17 12L2 14V21Z"/></svg>
               </h3>
               <div className="text-[15px] space-y-3.5 text-white/70">
                 <p className="flex items-start gap-3">
@@ -44,14 +44,14 @@ export default function Footer() {
                <div className="group/map">
                   <div className="text-sm font-bold text-white mb-3 flex items-center gap-2"><div className="w-2 h-2 rounded-full bg-primary animate-pulse"></div> Chi nhánh Thủ Đức</div>
                   <div className="rounded-2xl overflow-hidden border border-white/10 group-hover/map:border-primary/50 transition-colors relative">
-                    <div className="absolute inset-0 bg-brand-500/0 opacity-0 group-hover/map:opacity-100 transition-opacity pointer-events-none z-10 mix-blend-overlay"></div>
+                    <div className="absolute inset-0 bg-primary opacity-0 group-hover/map:opacity-100 transition-opacity pointer-events-none z-10 mix-blend-overlay"></div>
                     <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3918.4658576162583!2d106.74981366590865!3d10.852128230492767!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31752722e4c10833%3A0x6ac88810b4b7dee!2sZ%20Computer-%20Pc%20Gaming-Laptop-Workstation!5e0!3m2!1svi!2sus!4v1781670020621!5m2!1svi!2sus" width="100%" height="160" style={{ border: 0 }} allowFullScreen loading="lazy" referrerPolicy="no-referrer-when-downgrade" className="transition-all duration-500 group-hover/map:scale-105"></iframe>
                   </div>
                </div>
                <div className="group/map">
                   <div className="text-sm font-bold text-white mb-3 flex items-center gap-2"><div className="w-2 h-2 rounded-full bg-primary animate-pulse"></div> Chi nhánh Bình Thạnh</div>
                   <div className="rounded-2xl overflow-hidden border border-white/10 group-hover/map:border-primary/50 transition-colors relative">
-                    <div className="absolute inset-0 bg-brand-500/0 opacity-0 group-hover/map:opacity-100 transition-opacity pointer-events-none z-10 mix-blend-overlay"></div>
+                    <div className="absolute inset-0 bg-primary opacity-0 group-hover/map:opacity-100 transition-opacity pointer-events-none z-10 mix-blend-overlay"></div>
                     <iframe src="https://maps.google.com/maps?q=47/86B+Bùi+Đình+Tuý,+Phường+14,+Bình+Thạnh,+TP.+Hồ+Chí+Minh&t=&z=15&ie=UTF8&iwloc=&output=embed" width="100%" height="160" style={{ border: 0 }} allowFullScreen loading="lazy" referrerPolicy="no-referrer-when-downgrade" className="transition-all duration-500 group-hover/map:scale-105"></iframe>
                   </div>
                </div>
@@ -67,7 +67,7 @@ export default function Footer() {
              <Link href="/" className="flex flex-col items-start shrink-0 group mb-6">
                <div className="flex items-center gap-1.5">
                  <div className="bg-white p-1.5 rounded-xl shadow-[0_0_15px_rgba(255,255,255,0.2)] group-hover:shadow-[0_0_20px_rgba(220,38,38,0.4)] transition-shadow">
-                   <Image src="/logo.webp" alt="ZCOMPUTER" width={50} height={50} className="h-10 w-10 object-contain" />
+                   <Image src="/logo_broken.png" alt="ZCOMPUTER" width={50} height={50} className="h-10 w-10 object-contain" />
                  </div>
                  <div className="flex items-center gap-0.5 group-hover:scale-[1.02] transition-transform duration-300 select-none font-serif">
                    <span className="text-[#cc0000] text-[58px] font-bold leading-none drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">

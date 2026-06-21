@@ -64,6 +64,20 @@ export default async function RootLayout({
   const themeStyle = await fetchThemeStyle();
   return (
     <html lang="vi" suppressHydrationWarning style={themeStyle}>
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "WebSite",
+              "name": "ZCOMPUTER",
+              "alternateName": ["ZComputer", "zcomputer"],
+              "url": "https://zcomputer.site/",
+            }),
+          }}
+        />
+      </head>
       <body
         className={`${inter.className} antialiased min-h-screen flex flex-col`}
         suppressHydrationWarning

@@ -36,15 +36,15 @@ export default function RecruitmentPage() {
       {/* Header Banner */}
       <div className="bg-[#111] py-16 md:py-24 relative overflow-hidden">
         <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-5 mix-blend-overlay"></div>
-        <div className="absolute top-0 right-0 w-96 h-96 bg-brand-600/20 rounded-full blur-[100px] pointer-events-none"></div>
+        <div className="absolute top-0 right-0 w-96 h-96 bg-primary rounded-full blur-[100px] pointer-events-none"></div>
         <div className="absolute bottom-0 left-0 w-96 h-96 bg-blue-600/20 rounded-full blur-[100px] pointer-events-none"></div>
         
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-3xl mx-auto text-center">
             <h1 className="text-4xl md:text-5xl font-black text-white uppercase tracking-tight mb-6">
-              TUYỂN DỤNG <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-500 to-orange-400">ZCOMPUTER</span>
+              TUYỂN DỤNG <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-orange-400">ZCOMPUTER</span>
             </h1>
-            <div className="w-24 h-1 bg-gradient-to-r from-brand-600 to-orange-500 mx-auto mb-8 rounded-full shadow-[0_0_10px_rgba(220,38,38,0.5)]"></div>
+            <div className="w-24 h-1 bg-gradient-to-r from-primary to-orange-500 mx-auto mb-8 rounded-full shadow-[0_0_10px_rgba(220,38,38,0.5)]"></div>
             <p className="text-gray-300 text-lg leading-relaxed">
               Gia nhập đội ngũ ZComputer ngay hôm nay! Chúng tôi luôn tìm kiếm những con người đam mê công nghệ, nhiệt huyết và khát khao khẳng định bản thân.
             </p>
@@ -57,7 +57,7 @@ export default function RecruitmentPage() {
         {/* Lợi ích khi gia nhập */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
           <div className="bg-white p-8 rounded-2xl shadow-lg border border-gray-100 flex flex-col items-center text-center transform transition-transform hover:-translate-y-2">
-            <div className="w-16 h-16 bg-brand-50 text-brand-600 rounded-2xl flex items-center justify-center mb-6">
+            <div className="w-16 h-16 bg-primary/10 text-primary rounded-2xl flex items-center justify-center mb-6">
               <DollarSign size={32} />
             </div>
             <h3 className="text-xl font-bold text-gray-800 mb-3 uppercase">Thu nhập hấp dẫn</h3>
@@ -65,7 +65,7 @@ export default function RecruitmentPage() {
           </div>
 
           <div className="bg-white p-8 rounded-2xl shadow-lg border border-gray-100 flex flex-col items-center text-center transform transition-transform hover:-translate-y-2">
-            <div className="w-16 h-16 bg-brand-50 text-brand-600 rounded-2xl flex items-center justify-center mb-6">
+            <div className="w-16 h-16 bg-primary/10 text-primary rounded-2xl flex items-center justify-center mb-6">
               <Star size={32} />
             </div>
             <h3 className="text-xl font-bold text-gray-800 mb-3 uppercase">Môi trường năng động</h3>
@@ -73,7 +73,7 @@ export default function RecruitmentPage() {
           </div>
 
           <div className="bg-white p-8 rounded-2xl shadow-lg border border-gray-100 flex flex-col items-center text-center transform transition-transform hover:-translate-y-2">
-            <div className="w-16 h-16 bg-brand-50 text-brand-600 rounded-2xl flex items-center justify-center mb-6">
+            <div className="w-16 h-16 bg-primary/10 text-primary rounded-2xl flex items-center justify-center mb-6">
               <Award size={32} />
             </div>
             <h3 className="text-xl font-bold text-gray-800 mb-3 uppercase">Lộ trình thăng tiến</h3>
@@ -88,23 +88,23 @@ export default function RecruitmentPage() {
               <h2 className="text-2xl font-black text-gray-800 uppercase tracking-tight">Vị trí đang tuyển</h2>
               <p className="text-gray-500 mt-2">Tìm kiếm cơ hội phù hợp với năng lực của bạn.</p>
             </div>
-            <Briefcase size={36} className="text-brand-500 opacity-20 hidden sm:block" />
+            <Briefcase size={36} className="text-primary opacity-20 hidden sm:block" />
           </div>
           
           <div className="divide-y divide-gray-100 min-h-[200px] relative">
             {loading ? (
               <div className="absolute inset-0 flex items-center justify-center bg-white/80 z-10">
-                <div className="w-8 h-8 border-4 border-brand-500 border-t-transparent rounded-full animate-spin"></div>
+                <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
               </div>
             ) : jobs.length > 0 ? (
               jobs.map(job => (
-                <div key={job._id} className="p-8 hover:bg-brand-50/30 transition-colors group">
+                <div key={job._id} className="p-8 hover:bg-primary/10 transition-colors group">
                   <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
                     <div>
                       <div className="flex items-center gap-3 mb-2">
-                        <h3 className="text-xl font-bold text-gray-900 group-hover:text-brand-600 transition-colors">{job.title}</h3>
+                        <h3 className="text-xl font-bold text-gray-900 group-hover:text-primary transition-colors">{job.title}</h3>
                         {job.isHot && (
-                          <span className="px-2 py-1 bg-brand-100 text-brand-600 text-[10px] font-black uppercase rounded shadow-sm">HOT</span>
+                          <span className="px-2 py-1 bg-primary/10 text-primary text-[10px] font-black uppercase rounded shadow-sm">HOT</span>
                         )}
                       </div>
                       <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500 font-medium">
@@ -119,7 +119,7 @@ export default function RecruitmentPage() {
                         <p className="text-gray-400 mb-0.5">Hạn nộp hồ sơ</p>
                         <p className="font-bold text-gray-800">{job.deadline}</p>
                       </div>
-                      <Link href="/lien-he" className="flex items-center justify-center gap-2 px-6 py-3 bg-white border-2 border-brand-100 text-brand-600 font-bold rounded-xl hover:bg-brand-600 hover:border-brand-600 hover:text-white transition-all w-full lg:w-auto shadow-sm">
+                      <Link href="/lien-he" className="flex items-center justify-center gap-2 px-6 py-3 bg-white border-2 border-primary/10 text-primary font-bold rounded-xl hover:bg-primary hover:border-primary hover:text-white transition-all w-full lg:w-auto shadow-sm">
                         Ứng tuyển ngay <ChevronRight size={18} />
                       </Link>
                     </div>
@@ -140,7 +140,7 @@ export default function RecruitmentPage() {
           <div className="relative z-10">
             <h2 className="text-2xl font-black text-white uppercase tracking-tight mb-4">Cách thức nộp hồ sơ</h2>
             <p className="text-gray-300 max-w-2xl mx-auto mb-8">
-              Gửi CV của bạn về địa chỉ Email: <span className="font-bold text-brand-400">truong.zvncomputer@gmail.com</span><br/>
+              Gửi CV của bạn về địa chỉ Email: <span className="font-bold text-primary">truong.zvncomputer@gmail.com</span><br/>
               Tiêu đề Email ghi rõ: <span className="text-white italic">[Vị trí ứng tuyển] - [Họ và tên]</span>
             </p>
             <p className="text-sm text-gray-400 italic">Mọi thắc mắc vui lòng liên hệ Hotline Nhân sự: 0977.334.415</p>

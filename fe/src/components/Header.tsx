@@ -14,6 +14,41 @@ import { fetchApi } from "@/lib/api";
 const montserrat = Montserrat({ subsets: ["latin", "vietnamese"], weight: ["700", "900"] });
 const playfair = Playfair_Display({ subsets: ["latin", "vietnamese"], weight: ["700", "900"] });
 
+const MobileCategoryItem = ({ cat, categories, onNavigate }: { cat: any, categories: any[], onNavigate: () => void }) => {
+  const [isExpanded, setIsExpanded] = useState(false);
+  const children = Array.isArray(categories) ? categories.filter(c => c && c.parent_id === cat._id) : [];
+
+  return (
+    <li className="border-b border-gray-100 pb-2">
+      <div className="flex items-center justify-between">
+        <Link href={`/${cat.slug || ''}`} onClick={onNavigate} className="block py-1 flex-1 hover:text-primary transition-colors uppercase text-gray-800">
+          {cat.name || 'Category'}
+        </Link>
+        {children.length > 0 && (
+          <button 
+            type="button"
+            onClick={() => setIsExpanded(!isExpanded)}
+            className="p-2 -mr-2 text-gray-400 hover:text-primary transition-colors focus:outline-none"
+          >
+            <ChevronDown size={16} className={`transition-transform duration-300 ${isExpanded ? 'rotate-180 text-primary' : ''}`} />
+          </button>
+        )}
+      </div>
+      {children.length > 0 && (
+        <div className={`grid transition-all duration-300 ease-out ${isExpanded ? 'grid-rows-[1fr] opacity-100 mt-2' : 'grid-rows-[0fr] opacity-0'}`}>
+          <div className="overflow-hidden">
+            <ul className="pl-4 border-l-2 border-primary/10 space-y-3 py-2 text-sm font-medium text-gray-600">
+              {children.map((child: any) => (
+                <MobileCategoryItem key={child._id || Math.random()} cat={child} categories={categories} onNavigate={onNavigate} />
+              ))}
+            </ul>
+          </div>
+        </div>
+      )}
+    </li>
+  );
+};
+
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -44,7 +79,7 @@ export default function Header() {
           {/* Mobile Hamburger Menu Icon */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="lg:hidden p-2 text-gray-700 hover:text-brand-600 transition-colors focus:outline-none"
+            className="lg:hidden p-2 text-gray-700 hover:text-primary transition-colors focus:outline-none"
             aria-label="Toggle menu"
           >
             {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
@@ -60,8 +95,7 @@ export default function Header() {
               }
             }}
           >
-            <div className="absolute inset-0 bg-brand-500/10 blur-[20px] rounded-full group-hover:bg-brand-500/20 transition-all duration-500 pointer-events-none"></div>
-            <Image src="/logo.webp" alt="Z" width={80} height={80} priority className="h-14 w-14 sm:h-[68px] sm:w-[68px] object-contain group-hover:scale-105 transition-all duration-300 drop-shadow-md relative z-10" />
+            <Image src="/logo_broken.png" alt="Z" width={80} height={80} priority className="h-14 w-14 sm:h-[68px] sm:w-[68px] object-contain group-hover:scale-105 transition-all duration-300 drop-shadow-md relative z-10" />
             
             {/* New Storefront-style Text Logo */}
             <div className="flex items-center gap-0.5 group-hover:scale-[1.02] transition-transform duration-300 select-none relative z-10 font-serif">
@@ -165,42 +199,9 @@ export default function Header() {
                   <li>
                     <Link href="/" onClick={() => setMobileMenuOpen(false)} className="block py-1 hover:text-primary transition-colors">Trang chủ</Link>
                   </li>
-                  {Array.isArray(categories) && categories.filter(c => c && !c.parent_id).map((cat: any) => {
-                    const children = categories.filter(c => c && c.parent_id === cat._id);
-                    const isExpanded = expandedCatId === cat._id;
-                    return (
-                      <li key={cat._id || Math.random()} className="border-b border-gray-100 pb-2">
-                        <div className="flex items-center justify-between">
-                          <Link href={`/${cat.slug || ''}`} onClick={() => setMobileMenuOpen(false)} className="block py-1 flex-1 hover:text-primary transition-colors uppercase text-gray-800">
-                            {cat.name || 'Category'}
-                          </Link>
-                          {children.length > 0 && (
-                            <button 
-                              onClick={() => setExpandedCatId(isExpanded ? null : cat._id)}
-                              className="p-2 -mr-2 text-gray-400 hover:text-primary transition-colors focus:outline-none"
-                            >
-                              <ChevronDown size={16} className={`transition-transform duration-300 ${isExpanded ? 'rotate-180 text-primary' : ''}`} />
-                            </button>
-                          )}
-                        </div>
-                        {children.length > 0 && (
-                          <div className={`grid transition-all duration-300 ease-out ${isExpanded ? 'grid-rows-[1fr] opacity-100 mt-2' : 'grid-rows-[0fr] opacity-0'}`}>
-                            <div className="overflow-hidden">
-                              <ul className="pl-4 border-l-2 border-brand-100 space-y-3 py-2 text-sm font-medium text-gray-600">
-                                {children.map((child: any) => (
-                                  <li key={child._id || Math.random()}>
-                                    <Link href={`/${child.slug || ''}`} onClick={() => setMobileMenuOpen(false)} className="block hover:text-primary transition-colors">
-                                      {child.name || 'Subcategory'}
-                                    </Link>
-                                  </li>
-                                ))}
-                              </ul>
-                            </div>
-                          </div>
-                        )}
-                      </li>
-                    );
-                  })}
+                  {Array.isArray(categories) && categories.filter(c => c && !c.parent_id).map((cat: any) => (
+                    <MobileCategoryItem key={cat._id || Math.random()} cat={cat} categories={categories} onNavigate={() => setMobileMenuOpen(false)} />
+                  ))}
                 </ul>
               </div>
 

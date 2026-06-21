@@ -67,7 +67,7 @@ export default function LikeButton({ product }: { product: ProductProps }) {
     >
       <Heart 
         size={20} 
-        className={`cursor-pointer transition-all duration-300 hover:scale-110 active:scale-95 ${isLiked ? 'text-brand-500 fill-brand-500' : 'text-brand-600 hover:text-brand-500'}`} 
+        className={`cursor-pointer transition-all duration-300 hover:scale-110 active:scale-95 ${isLiked ? 'text-primary fill-primary' : 'text-primary hover:text-primary'}`} 
       />
     </button>
   );

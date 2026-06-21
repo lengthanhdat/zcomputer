@@ -8,6 +8,7 @@ import ProductGallery from "@/components/ProductGallery";
 import ViewIncrementer from "@/components/ViewIncrementer";
 import LikeButton from "@/components/LikeButton";
 import { notFound } from "next/navigation";
+import "react-quill-new/dist/quill.snow.css"; // Import Quill CSS for proper rendering
 
 export const revalidate = 0;
 
@@ -108,6 +109,24 @@ async function getSimilarProducts(categoryId: string | null, excludeId: string):
       similar = data.filter((p: any) => p._id !== excludeId);
     }
     return similar.slice(0, 4);
+  } catch {
+    return [];
+  } finally {
+    clearTimeout(timeout);
+  }
+}
+
+async function getRecentNews() {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 2500);
+  try {
+    const res = await fetch(`${API_BASE}/api/news?limit=5`, {
+      next: { revalidate },
+      signal: controller.signal,
+    });
+    if (!res.ok) return [];
+    const data = await res.json();
+    return data.data ? data.data.slice(0, 5) : [];
   } catch {
     return [];
   } finally {
@@ -226,10 +245,10 @@ export default async function DynamicRoutePage({ params }: { params: Promise<{ s
   // If neither product nor category, show 404
   return (
     <div className="container mx-auto px-4 py-32 text-center min-h-[60vh] flex flex-col items-center justify-center">
-      <Image src="/logo.png" alt="ZCOMPUTER" width={120} height={120} className="mb-6 opacity-50 grayscale" />
+      <Image src="/logo_broken.png" alt="ZCOMPUTER" width={120} height={120} className="mb-6 opacity-50 grayscale" />
       <h1 className="text-4xl font-black text-gray-800 mb-4 uppercase tracking-tight">Không tìm thấy nội dung</h1>
       <p className="text-gray-500 mb-8 max-w-md mx-auto">Sản phẩm hoặc danh mục bạn đang tìm kiếm không tồn tại, đã bị xóa hoặc thay đổi đường dẫn.</p>
-      <Link href="/" className="bg-primary text-white font-bold px-8 py-3 rounded-full hover:bg-brand-700 transition-colors shadow-lg shadow-brand-500/30">
+      <Link href="/" className="bg-primary text-white font-bold px-8 py-3 rounded-full hover:bg-primary transition-colors shadow-lg shadow-primary">
         Quay về trang chủ
       </Link>
     </div>
@@ -271,7 +290,10 @@ async function ProductDetailView({ product }: { product: Product }) {
   }
 
   const categoryId = product.category_id?._id || (typeof product.category_id === 'string' ? product.category_id : null);
-  const similarProducts = await getSimilarProducts(categoryId as string | null, product._id);
+  const [similarProducts, recentNews] = await Promise.all([
+    getSimilarProducts(categoryId as string | null, product._id),
+    getRecentNews()
+  ]);
 
   const siteUrl = process.env.NEXT_PUBLIC_FRONTEND_URL || 'http://localhost:3000';
   const schemaMarkup = {
@@ -502,24 +524,63 @@ async function ProductDetailView({ product }: { product: Product }) {
           </div>
         </div>
 
-        {/* Description */}
-        {cleanDescription && (
-          <div className="mt-8 bg-white rounded-3xl border border-gray-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] p-8 lg:p-12">
+        {/* Description & Sidebar */}
+        <div className="mt-8 grid grid-cols-1 lg:grid-cols-4 gap-8">
+          {/* Main Description */}
+          <div className="lg:col-span-3 bg-white rounded-3xl border border-gray-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] p-8 lg:p-12">
             <h2 className="text-2xl font-black text-gray-900 mb-8 uppercase tracking-tight relative inline-block">
               Đặc điểm nổi bật
               <div className="absolute -bottom-3 left-0 w-1/2 h-1 bg-primary rounded-full"></div>
             </h2>
-            <div className="prose prose-lg max-w-none text-gray-600 leading-relaxed prose-headings:text-gray-900 prose-a:text-primary hover:prose-a:brightness-110 prose-img:rounded-xl prose-img:shadow-md [&_img]:mx-auto [&_img]:max-w-full [&_img]:h-auto">
-              {cleanDescription.includes('<p>') || cleanDescription.includes('<h2>') || cleanDescription.includes('<h3>') || cleanDescription.includes('<br>') || cleanDescription.includes('<img') ? (
-                <div dangerouslySetInnerHTML={{ __html: cleanDescription }} />
-              ) : (
-                cleanDescription.split('\n').map((line, idx) => (
-                  <p key={idx}>{line}</p>
-                ))
-              )}
+            {cleanDescription ? (
+              <div className="prose prose-lg max-w-none text-gray-800 leading-relaxed text-justify prose-headings:text-gray-900 prose-a:text-primary hover:prose-a:brightness-110 prose-img:rounded-xl prose-img:shadow-md [&_img]:mx-auto [&_img]:max-w-full [&_img]:h-auto ql-snow">
+                {cleanDescription.includes('<p>') || cleanDescription.includes('<h2>') || cleanDescription.includes('<h3>') || cleanDescription.includes('<br>') || cleanDescription.includes('<img') ? (
+                  <div className="ql-editor p-0 min-w-full" dangerouslySetInnerHTML={{ __html: cleanDescription.replace(/&nbsp;/g, ' ') }} />
+                ) : (
+                  <div className="ql-editor p-0">
+                    {cleanDescription.replace(/&nbsp;/g, ' ').split('\n').map((line, idx) => (
+                      <p key={idx}>{line}</p>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ) : (
+              <p className="text-gray-500 italic">Đang cập nhật thông tin sản phẩm...</p>
+            )}
+          </div>
+
+          {/* Sidebar News */}
+          <div className="lg:col-span-1 space-y-6">
+            <div className="bg-white rounded-3xl border border-gray-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] p-6 sticky top-24">
+              <h3 className="text-lg font-black text-gray-900 mb-6 uppercase tracking-tight relative inline-block">
+                BÀI VIẾT - TIN TỨC
+                <div className="absolute -bottom-2 left-0 w-1/2 h-1 bg-primary rounded-full"></div>
+              </h3>
+              <div className="space-y-4">
+                {recentNews.length > 0 ? (
+                  recentNews.map((article: any, index: number) => (
+                    <Link href={`/tin-tuc/${article.slug}`} key={index} className="flex gap-3 group items-start">
+                      <div className="w-24 h-16 rounded-lg overflow-hidden shrink-0 relative bg-gray-100 shadow-sm border border-gray-100">
+                        <img 
+                          src={article.thumbnail ? (article.thumbnail.startsWith('http') || article.thumbnail.startsWith('data:') ? article.thumbnail : `${API_BASE}${article.thumbnail}`) : 'https://via.placeholder.com/800x450?text=No+Image'} 
+                          alt={article.title} 
+                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                        />
+                      </div>
+                      <div className="flex-1">
+                        <h4 className="text-[12px] font-bold text-gray-800 line-clamp-3 group-hover:text-primary transition-colors leading-snug">
+                          {article.title}
+                        </h4>
+                      </div>
+                    </Link>
+                  ))
+                ) : (
+                  <p className="text-gray-500 text-sm">Đang cập nhật...</p>
+                )}
+              </div>
             </div>
           </div>
-        )}
+        </div>
 
         {/* Similar Products */}
         {similarProducts.length > 0 && (
@@ -573,7 +634,7 @@ async function ProductDetailView({ product }: { product: Product }) {
                           <div className="absolute -bottom-[1px] -right-[1px] w-5 h-5 border-b-2 border-r-2 border-primary/60 rounded-br-xl"></div>
                           
                           <div className="absolute bottom-2 right-2 flex items-center gap-1 opacity-50 mix-blend-multiply">
-                            <Image src="/logo.png" alt="ZCOMPUTER" width={20} height={20} className="w-4 h-4 object-contain" unoptimized />
+                            <Image src="/logo_broken.png" alt="ZCOMPUTER" width={20} height={20} className="w-4 h-4 object-contain" unoptimized />
                             <div className="flex items-baseline select-none tracking-tighter">
                               <span className="text-primary font-black text-[11px] drop-shadow-sm">Z</span>
                               <span className="text-slate-800 font-black text-[10px] uppercase drop-shadow-sm">COMPUTER</span>

@@ -105,9 +105,9 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
 
           <form action="/search" method="GET" className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 sticky top-32 relative overflow-hidden group">
             {query && <input type="hidden" name="q" value={query} />}
-            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-brand-600 to-brand-400"></div>
+            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary to-primary"></div>
             <div className="flex items-center gap-2 font-black text-gray-900 mb-6 uppercase tracking-wider pb-4 border-b border-gray-100">
-              <Filter size={20} className="text-brand-500" />
+              <Filter size={20} className="text-primary" />
               <span>Bộ lọc sản phẩm</span>
             </div>
             
@@ -119,12 +119,12 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
                   {['ASUS', 'MSI', 'GIGABYTE', 'DELL', 'HP', 'LENOVO', 'APPLE'].map((brand) => (
                     <label key={brand} className="flex items-center gap-3 cursor-pointer group/label">
                       <div className="relative flex items-center justify-center w-5 h-5">
-                        <input type="checkbox" name="brand" value={brand} defaultChecked={brands.includes(brand)} className="peer appearance-none w-5 h-5 border-2 border-gray-300 rounded focus:ring-0 checked:bg-brand-500 checked:border-brand-500 transition-all cursor-pointer" />
+                        <input type="checkbox" name="brand" value={brand} defaultChecked={brands.includes(brand)} className="peer appearance-none w-5 h-5 border-2 border-gray-300 rounded focus:ring-0 checked:bg-primary checked:border-primary transition-all cursor-pointer" />
                         <svg className="absolute w-3 h-3 text-white pointer-events-none opacity-0 peer-checked:opacity-100 transition-opacity" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="3">
                           <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                         </svg>
                       </div>
-                      <span className="text-gray-600 text-[14px] font-medium group-hover/label:text-brand-600 transition-colors">{brand}</span>
+                      <span className="text-gray-600 text-[14px] font-medium group-hover/label:text-primary transition-colors">{brand}</span>
                     </label>
                   ))}
                 </div>
@@ -143,10 +143,10 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
                 ].map((price) => (
                   <label key={price.id} className="flex items-center gap-3 cursor-pointer group/label">
                     <div className="relative flex items-center justify-center w-5 h-5">
-                      <input type="radio" name="price_range" value={price.id} defaultChecked={priceRange === price.id} className="peer appearance-none w-5 h-5 border-2 border-gray-300 rounded-full focus:ring-0 checked:border-brand-500 transition-all cursor-pointer" />
-                      <div className="absolute w-2.5 h-2.5 bg-brand-500 rounded-full pointer-events-none opacity-0 peer-checked:opacity-100 transition-opacity scale-0 peer-checked:scale-100"></div>
+                      <input type="radio" name="price_range" value={price.id} defaultChecked={priceRange === price.id} className="peer appearance-none w-5 h-5 border-2 border-gray-300 rounded-full focus:ring-0 checked:border-primary transition-all cursor-pointer" />
+                      <div className="absolute w-2.5 h-2.5 bg-primary rounded-full pointer-events-none opacity-0 peer-checked:opacity-100 transition-opacity scale-0 peer-checked:scale-100"></div>
                     </div>
-                    <span className="text-gray-600 text-[14px] font-medium group-hover/label:text-brand-600 transition-colors">{price.label}</span>
+                    <span className="text-gray-600 text-[14px] font-medium group-hover/label:text-primary transition-colors">{price.label}</span>
                   </label>
                 ))}
               </div>
@@ -159,18 +159,18 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
                 {['Mới 100%', 'Cũ (Like New)'].map((condition) => (
                   <label key={condition} className="flex items-center gap-3 cursor-pointer group/label">
                     <div className="relative flex items-center justify-center w-5 h-5">
-                      <input type="checkbox" name="condition" value={condition} defaultChecked={conditions.includes(condition)} className="peer appearance-none w-5 h-5 border-2 border-gray-300 rounded focus:ring-0 checked:bg-brand-500 checked:border-brand-500 transition-all cursor-pointer" />
+                      <input type="checkbox" name="condition" value={condition} defaultChecked={conditions.includes(condition)} className="peer appearance-none w-5 h-5 border-2 border-gray-300 rounded focus:ring-0 checked:bg-primary checked:border-primary transition-all cursor-pointer" />
                       <svg className="absolute w-3 h-3 text-white pointer-events-none opacity-0 peer-checked:opacity-100 transition-opacity" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="3">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                       </svg>
                     </div>
-                    <span className="text-gray-600 text-[14px] font-medium group-hover/label:text-brand-600 transition-colors">{condition}</span>
+                    <span className="text-gray-600 text-[14px] font-medium group-hover/label:text-primary transition-colors">{condition}</span>
                   </label>
                 ))}
               </div>
             </div>
 
-            <button type="submit" className="w-full py-3 bg-brand-50 hover:bg-brand-500 text-brand-600 hover:text-white font-bold rounded-xl transition-all duration-300 border border-brand-100/50 hover:shadow-[0_4px_15px_rgba(239,68,68,0.3)]">
+            <button type="submit" className="w-full py-3 bg-primary/10 hover:bg-primary text-primary hover:text-white font-bold rounded-xl transition-all duration-300 border border-primary/10 hover:shadow-[0_4px_15px_rgba(239,68,68,0.3)]">
               Áp dụng bộ lọc
             </button>
             {(brands.length > 0 || priceRange || conditions.length > 0) && (
@@ -192,7 +192,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
           ) : (
             <>
               <div className="mb-6 flex justify-between items-center bg-white p-5 rounded-2xl shadow-sm border border-gray-100">
-                <span className="font-bold text-gray-800">Tìm thấy <span className="text-brand-600 font-black text-lg mx-1">{products.length}</span> sản phẩm</span>
+                <span className="font-bold text-gray-800">Tìm thấy <span className="text-primary font-black text-lg mx-1">{products.length}</span> sản phẩm</span>
               </div>
               
               <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
@@ -233,16 +233,16 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
                         
                         {/* ZCOMPUTER Overlay Frame */}
                         <div className="absolute inset-0 pointer-events-none z-[15] p-2 opacity-80">
-                          <div className="w-full h-full border border-brand-500/10 rounded-xl relative group-hover:border-brand-500/30 transition-colors duration-500">
-                            <div className="absolute -top-[1px] -left-[1px] w-5 h-5 border-t-2 border-l-2 border-brand-500/40 rounded-tl-xl group-hover:border-brand-500/80 transition-colors"></div>
-                            <div className="absolute -top-[1px] -right-[1px] w-5 h-5 border-t-2 border-r-2 border-brand-500/40 rounded-tr-xl group-hover:border-brand-500/80 transition-colors"></div>
-                            <div className="absolute -bottom-[1px] -left-[1px] w-5 h-5 border-b-2 border-l-2 border-brand-500/40 rounded-bl-xl group-hover:border-brand-500/80 transition-colors"></div>
-                            <div className="absolute -bottom-[1px] -right-[1px] w-5 h-5 border-b-2 border-r-2 border-brand-500/40 rounded-br-xl group-hover:border-brand-500/80 transition-colors"></div>
+                          <div className="w-full h-full border border-primary rounded-xl relative group-hover:border-primary transition-colors duration-500">
+                            <div className="absolute -top-[1px] -left-[1px] w-5 h-5 border-t-2 border-l-2 border-primary rounded-tl-xl group-hover:border-primary transition-colors"></div>
+                            <div className="absolute -top-[1px] -right-[1px] w-5 h-5 border-t-2 border-r-2 border-primary rounded-tr-xl group-hover:border-primary transition-colors"></div>
+                            <div className="absolute -bottom-[1px] -left-[1px] w-5 h-5 border-b-2 border-l-2 border-primary rounded-bl-xl group-hover:border-primary transition-colors"></div>
+                            <div className="absolute -bottom-[1px] -right-[1px] w-5 h-5 border-b-2 border-r-2 border-primary rounded-br-xl group-hover:border-primary transition-colors"></div>
                             
                             <div className="absolute bottom-2 right-2 flex items-center gap-1 opacity-50 mix-blend-multiply">
-                              <Image src="/logo.webp" alt="ZCOMPUTER" width={20} height={20} className="w-4 h-4 object-contain" unoptimized />
+                              <Image src="/logo_broken.png" alt="ZCOMPUTER" width={20} height={20} className="w-4 h-4 object-contain" unoptimized />
                               <div className="flex items-baseline select-none tracking-tighter">
-                                <span className="text-brand-600 font-black text-[11px] drop-shadow-sm">Z</span>
+                                <span className="text-primary font-black text-[11px] drop-shadow-sm">Z</span>
                                 <span className="text-slate-800 font-black text-[10px] uppercase drop-shadow-sm">COMPUTER</span>
                               </div>
                             </div>
@@ -253,17 +253,17 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
                         <div className="absolute top-4 left-4 z-20 flex flex-col gap-1.5">
                           {product.isHotSale && (
                             <div className="shadow-lg rounded-md overflow-hidden transform -rotate-2 origin-top-left group-hover:rotate-0 transition-transform duration-300">
-                              <div className="bg-gradient-to-r from-orange-500 to-brand-600 text-white text-[10px] font-black px-2 py-1 text-center uppercase tracking-widest">
+                              <div className="bg-gradient-to-r from-orange-500 to-primary text-white text-[10px] font-black px-2 py-1 text-center uppercase tracking-widest">
                                 🔥 HOT SALE
                               </div>
                             </div>
                           )}
                           {saveAmount > 0 && !isOutOfStock && (
                             <div className="shadow-lg rounded-md overflow-hidden transform -rotate-2 origin-top-left group-hover:rotate-0 transition-transform duration-300">
-                              <div className="bg-gradient-to-r from-brand-600 to-brand-500 text-white text-[10px] font-black px-2 py-1 text-center uppercase tracking-widest">
+                              <div className="bg-gradient-to-r from-primary to-primary text-white text-[10px] font-black px-2 py-1 text-center uppercase tracking-widest">
                                 TIẾT KIỆM
                               </div>
-                              <div className="bg-brand-700 text-white text-[11px] font-black px-2 py-1 text-center border-t border-brand-500">
+                              <div className="bg-primary text-white text-[11px] font-black px-2 py-1 text-center border-t border-primary">
                                 {saveAmount.toLocaleString('vi-VN')} đ
                               </div>
                             </div>
@@ -273,7 +273,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
                         {/* Hover Action */}
                         {!isOutOfStock && (
                           <div className="absolute bottom-4 left-1/2 -translate-x-1/2 translate-y-8 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-300 z-30 pointer-events-none">
-                            <div className="bg-white/95 backdrop-blur-sm text-brand-600 text-sm font-bold px-6 py-2 rounded-full shadow-lg border border-brand-600/20 flex items-center gap-2 whitespace-nowrap">
+                            <div className="bg-white/95 backdrop-blur-sm text-primary text-sm font-bold px-6 py-2 rounded-full shadow-lg border border-primary flex items-center gap-2 whitespace-nowrap">
                               Xem chi tiết <ArrowRight size={16} />
                             </div>
                           </div>
@@ -285,7 +285,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
                           <div className="text-[11px] font-bold text-gray-500 uppercase">{product.brand || "KHÁC"}</div>
                           <LikeButton product={product} />
                         </div>
-                        <Link href={`/${product.slug}`} className="hover:text-brand-600 transition-colors mb-3 z-30 relative">
+                        <Link href={`/${product.slug}`} className="hover:text-primary transition-colors mb-3 z-30 relative">
                           <h3 className="text-gray-700 text-[13px] font-medium leading-relaxed line-clamp-2">{product.name}</h3>
                         </Link>
                         
@@ -298,14 +298,14 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
                             <>
                               <span className="text-gray-400 text-[12px] line-through mb-0.5">{originalPrice.toLocaleString('vi-VN')}₫</span>
                               <div className="flex items-center gap-2">
-                                <span className="text-[16px] font-black text-brand-600">{currentPrice.toLocaleString('vi-VN')}₫</span>
-                                <span className="text-brand-500 border border-brand-500 rounded text-[10px] font-bold px-1 py-[1px] leading-none">-{discountPercent}%</span>
+                                <span className="text-[16px] font-black text-primary">{currentPrice.toLocaleString('vi-VN')}₫</span>
+                                <span className="text-primary border border-primary rounded text-[10px] font-bold px-1 py-[1px] leading-none">-{discountPercent}%</span>
                               </div>
                             </>
                           ) : (
                              <>
                                <div className="h-[18px] mb-0.5"></div>
-                               <span className="text-[16px] font-black text-brand-600">{currentPrice.toLocaleString('vi-VN')}₫</span>
+                               <span className="text-[16px] font-black text-primary">{currentPrice.toLocaleString('vi-VN')}₫</span>
                              </>
                           )}
                         </div>

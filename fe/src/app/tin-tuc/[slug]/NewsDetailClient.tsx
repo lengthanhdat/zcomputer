@@ -5,9 +5,8 @@ import { fetchApi } from "@/lib/api";
 import { Calendar, Eye, User, ArrowLeft, Share2, Link as LinkIcon, TrendingUp } from "lucide-react";
 import Link from "next/link";
 import toast from "react-hot-toast";
-
-
-
+import dynamic from "next/dynamic";
+import "react-quill-new/dist/quill.snow.css";
 
 export default function NewsDetailClient({ slug, initialArticle }: { slug: string, initialArticle?: any }) {
   const [article, setArticle] = useState<any>(initialArticle || null);
@@ -182,17 +181,19 @@ export default function NewsDetailClient({ slug, initialArticle }: { slug: strin
             </div>
             
             {/* Rich Text Content */}
-            <div 
-              className="article-content max-w-none"
-              dangerouslySetInnerHTML={{ __html: article.content }}
-            />
+            <div className="prose prose-lg max-w-4xl mx-auto text-gray-800 leading-relaxed text-justify prose-headings:text-gray-900 prose-a:text-primary hover:prose-a:brightness-110 prose-img:rounded-xl prose-img:shadow-md [&_img]:mx-auto [&_img]:max-w-full [&_img]:h-auto ql-snow">
+              <div 
+                className="ql-editor p-0 min-w-full article-content"
+                dangerouslySetInnerHTML={{ __html: article.content.replace(/&nbsp;/g, ' ') }}
+              />
+            </div>
             <style>{`
               .article-content {
                 font-size: 16px;
                 line-height: 1.85;
                 color: #374151;
-                word-break: break-word;
-                overflow-wrap: anywhere;
+                word-break: normal;
+                overflow-wrap: break-word;
               }
               .article-content h1, .article-content h2, .article-content h3,
               .article-content h4, .article-content h5, .article-content h6 {

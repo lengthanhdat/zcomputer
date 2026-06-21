@@ -69,7 +69,7 @@ export default function HeaderAuth() {
 
           <div className="h-px bg-gray-100 my-1"></div>
 
-          <button onClick={handleLogout} className="w-full flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-brand-600 hover:bg-brand-50 transition-colors">
+          <button onClick={handleLogout} className="w-full flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-primary hover:bg-primary/10 transition-colors">
             <LogOut size={16} />
             Đăng xuất
           </button>

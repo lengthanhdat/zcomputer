@@ -177,14 +177,14 @@ export default function AdminUsersPage() {
                       </td>
                       <td className="py-3 px-4 text-sm">
                         {isMe ? (
-                          <span className="px-2 py-1 rounded text-xs font-semibold bg-brand-100 text-brand-700 border border-brand-200">Admin Toàn Quyền</span>
+                          <span className="px-2 py-1 rounded text-xs font-semibold bg-primary/10 text-primary border border-primary/20">Admin Toàn Quyền</span>
                         ) : (
                           <div className="flex items-center gap-2">
                             <select
                               value={user.role}
                               onChange={(e) => changeRole(user._id, e.target.value)}
                               className={`text-sm border rounded px-2 py-1 outline-none font-semibold cursor-pointer ${
-                                user.role === 'admin' ? 'bg-brand-50 text-brand-700 border-brand-200' :
+                                user.role === 'admin' ? 'bg-primary/10 text-primary border-primary/20' :
                                 user.role === 'staff' ? 'bg-blue-50 text-blue-700 border-blue-200' :
                                 'bg-gray-50 text-gray-700 border-gray-200'
                               }`}
@@ -212,7 +212,7 @@ export default function AdminUsersPage() {
                           <button 
                             onClick={() => handleDelete(user._id)}
                             disabled={isMe}
-                            className={`p-1.5 rounded transition-colors ${isMe ? 'text-gray-300 cursor-not-allowed' : 'text-brand-600 hover:bg-brand-50'}`} 
+                            className={`p-1.5 rounded transition-colors ${isMe ? 'text-gray-300 cursor-not-allowed' : 'text-primary hover:bg-primary/10'}`} 
                             title={isMe ? 'Không thể tự xóa bản thân' : 'Xóa tài khoản'}>
                             <Trash2 size={16} />
                           </button>
@@ -235,7 +235,7 @@ export default function AdminUsersPage() {
               <h3 className="text-xl font-bold text-gray-800">
                 {selectedUser.role === 'staff' ? 'Phân Quyền Nhân Viên' : 'Hồ sơ Người Dùng'}
               </h3>
-              <button onClick={() => setSelectedUser(null)} className="text-gray-400 hover:text-brand-500 transition-colors">
+              <button onClick={() => setSelectedUser(null)} className="text-gray-400 hover:text-primary transition-colors">
                 <X size={24} />
               </button>
             </div>
@@ -251,7 +251,7 @@ export default function AdminUsersPage() {
                   <p className="text-gray-500 text-sm">{selectedUser.email}</p>
                   <div className="mt-1">
                     <span className={`text-xs px-2 py-0.5 rounded-full font-semibold ${
-                      selectedUser.role === 'admin' ? 'bg-brand-100 text-brand-700' :
+                      selectedUser.role === 'admin' ? 'bg-primary/10 text-primary' :
                       selectedUser.role === 'staff' ? 'bg-blue-100 text-blue-700' :
                       'bg-gray-100 text-gray-700'
                     }`}>

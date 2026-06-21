@@ -37,15 +37,15 @@ export default function ContactPage() {
       {/* Header Banner */}
       <div className="bg-[#111] py-16 md:py-24 relative overflow-hidden">
         <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-5 mix-blend-overlay"></div>
-        <div className="absolute top-0 right-0 w-96 h-96 bg-brand-600/20 rounded-full blur-[100px] pointer-events-none"></div>
+        <div className="absolute top-0 right-0 w-96 h-96 bg-primary rounded-full blur-[100px] pointer-events-none"></div>
         <div className="absolute bottom-0 left-0 w-96 h-96 bg-blue-600/20 rounded-full blur-[100px] pointer-events-none"></div>
         
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-3xl mx-auto text-center">
             <h1 className="text-4xl md:text-5xl font-black text-white uppercase tracking-tight mb-6">
-              LIÊN HỆ <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-500 to-orange-400">ZCOMPUTER</span>
+              LIÊN HỆ <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-orange-400">ZCOMPUTER</span>
             </h1>
-            <div className="w-24 h-1 bg-gradient-to-r from-brand-600 to-orange-500 mx-auto mb-8 rounded-full shadow-[0_0_10px_rgba(220,38,38,0.5)]"></div>
+            <div className="w-24 h-1 bg-gradient-to-r from-primary to-orange-500 mx-auto mb-8 rounded-full shadow-[0_0_10px_rgba(220,38,38,0.5)]"></div>
             <p className="text-gray-300 text-lg leading-relaxed">
               Chúng tôi luôn sẵn sàng lắng nghe và giải đáp mọi thắc mắc của bạn. Đừng ngần ngại liên hệ với ZComputer qua các kênh dưới đây hoặc để lại tin nhắn cho chúng tôi.
             </p>
@@ -63,7 +63,7 @@ export default function ContactPage() {
                 <h2 className="text-2xl font-black text-gray-800 uppercase tracking-tight mb-6">Thông Tin Liên Hệ</h2>
                 <div className="space-y-6">
                   <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center shrink-0">
+                    <div className="w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center shrink-0">
                       <MapPin size={24} />
                     </div>
                     <div>
@@ -76,17 +76,17 @@ export default function ContactPage() {
                   </div>
                   
                   <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center shrink-0">
+                    <div className="w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center shrink-0">
                       <Phone size={24} />
                     </div>
                     <div>
                       <h4 className="font-bold text-gray-900 mb-1">Hotline tư vấn</h4>
-                      <p className="text-gray-600 text-sm leading-relaxed font-bold text-brand-600 text-lg">0977 334 415</p>
+                      <p className="text-gray-600 text-sm leading-relaxed font-bold text-primary text-lg">0977 334 415</p>
                     </div>
                   </div>
 
                   <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center shrink-0">
+                    <div className="w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center shrink-0">
                       <Mail size={24} />
                     </div>
                     <div>
@@ -96,7 +96,7 @@ export default function ContactPage() {
                   </div>
 
                   <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center shrink-0">
+                    <div className="w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center shrink-0">
                       <Clock size={24} />
                     </div>
                     <div>
@@ -127,24 +127,24 @@ export default function ContactPage() {
                 <form onSubmit={handleSubmit} className="space-y-6">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-2">
-                      <label className="text-sm font-bold text-gray-700">Họ và tên <span className="text-brand-500">*</span></label>
+                      <label className="text-sm font-bold text-gray-700">Họ và tên <span className="text-primary">*</span></label>
                       <input 
                         type="text" 
                         required
                         value={formData.name}
                         onChange={(e) => setFormData({...formData, name: e.target.value})}
-                        className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-200 transition-all bg-gray-50 focus:bg-white"
+                        className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:border-primary focus:ring-2 focus:ring-brand-200 transition-all bg-gray-50 focus:bg-white"
                         placeholder="Nhập họ và tên của bạn"
                       />
                     </div>
                     <div className="space-y-2">
-                      <label className="text-sm font-bold text-gray-700">Số điện thoại <span className="text-brand-500">*</span></label>
+                      <label className="text-sm font-bold text-gray-700">Số điện thoại <span className="text-primary">*</span></label>
                       <input 
                         type="tel" 
                         required
                         value={formData.phone}
                         onChange={(e) => setFormData({...formData, phone: e.target.value})}
-                        className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-200 transition-all bg-gray-50 focus:bg-white"
+                        className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:border-primary focus:ring-2 focus:ring-brand-200 transition-all bg-gray-50 focus:bg-white"
                         placeholder="Nhập số điện thoại"
                       />
                     </div>
@@ -156,19 +156,19 @@ export default function ContactPage() {
                       type="email" 
                       value={formData.email}
                       onChange={(e) => setFormData({...formData, email: e.target.value})}
-                      className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-200 transition-all bg-gray-50 focus:bg-white"
+                      className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:border-primary focus:ring-2 focus:ring-brand-200 transition-all bg-gray-50 focus:bg-white"
                       placeholder="Nhập địa chỉ email của bạn (không bắt buộc)"
                     />
                   </div>
 
                   <div className="space-y-2">
-                    <label className="text-sm font-bold text-gray-700">Nội dung tin nhắn <span className="text-brand-500">*</span></label>
+                    <label className="text-sm font-bold text-gray-700">Nội dung tin nhắn <span className="text-primary">*</span></label>
                     <textarea 
                       required
                       rows={5}
                       value={formData.message}
                       onChange={(e) => setFormData({...formData, message: e.target.value})}
-                      className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-200 transition-all bg-gray-50 focus:bg-white resize-none"
+                      className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:border-primary focus:ring-2 focus:ring-brand-200 transition-all bg-gray-50 focus:bg-white resize-none"
                       placeholder="Bạn đang quan tâm đến sản phẩm nào hoặc cần hỗ trợ vấn đề gì?"
                     ></textarea>
                   </div>
@@ -176,7 +176,7 @@ export default function ContactPage() {
                   <button 
                     type="submit" 
                     disabled={isSubmitting}
-                    className="w-full py-4 bg-gradient-to-r from-brand-600 to-brand-500 hover:from-brand-700 hover:to-brand-600 text-white font-bold rounded-xl shadow-lg shadow-brand-500/30 flex items-center justify-center gap-2 transition-all hover:-translate-y-1 disabled:opacity-70 disabled:hover:translate-y-0"
+                    className="w-full py-4 bg-gradient-to-r from-primary to-primary hover:from-primary hover:to-primary text-white font-bold rounded-xl shadow-lg shadow-primary flex items-center justify-center gap-2 transition-all hover:-translate-y-1 disabled:opacity-70 disabled:hover:translate-y-0"
                   >
                     {isSubmitting ? (
                       <div className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin"></div>

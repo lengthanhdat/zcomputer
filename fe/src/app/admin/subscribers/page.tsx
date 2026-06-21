@@ -52,7 +52,7 @@ export default function AdminSubscribersPage() {
     <div className="p-6">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold text-gray-800">Quản lý Đăng ký nhận tin</h1>
-        <div className="bg-brand-50 text-brand-600 px-4 py-2 rounded-lg font-bold text-sm border border-brand-100">
+        <div className="bg-primary/10 text-primary px-4 py-2 rounded-lg font-bold text-sm border border-primary/10">
           Tổng cộng: {subscribers.length} email
         </div>
       </div>
@@ -72,7 +72,7 @@ export default function AdminSubscribersPage() {
               {loading ? (
                 <tr>
                   <td colSpan={4} className="p-8 text-center text-gray-500">
-                    <div className="w-8 h-8 border-4 border-brand-500 border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
+                    <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
                     Đang tải dữ liệu...
                   </td>
                 </tr>

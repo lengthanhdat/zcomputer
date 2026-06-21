@@ -11,7 +11,7 @@ export default function WarrantyPolicyPage() {
       {/* Header Banner */}
       <div className="bg-[#111] py-16 relative overflow-hidden">
         <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-5 mix-blend-overlay"></div>
-        <div className="absolute top-0 right-0 w-96 h-96 bg-brand-600/20 rounded-full blur-[100px] pointer-events-none"></div>
+        <div className="absolute top-0 right-0 w-96 h-96 bg-primary rounded-full blur-[100px] pointer-events-none"></div>
         
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-4xl mx-auto text-center">
@@ -19,7 +19,7 @@ export default function WarrantyPolicyPage() {
               <ShieldCheck size={40} className="text-white" />
             </div>
             <h1 className="text-3xl md:text-4xl font-black text-white uppercase tracking-tight mb-4">
-              QUY ĐỊNH BẢO HÀNH TẠI <span className="text-brand-500">ZCOMPUTER</span>
+              QUY ĐỊNH BẢO HÀNH TẠI <span className="text-primary">ZCOMPUTER</span>
             </h1>
             <p className="text-gray-400 text-lg">Đảm bảo quyền lợi tối đa cho khách hàng khi mua sắm tại ZComputer.</p>
           </div>
@@ -34,7 +34,7 @@ export default function WarrantyPolicyPage() {
             {/* Mục I */}
             <section>
               <div className="flex items-center gap-3 mb-6">
-                <div className="w-10 h-10 bg-brand-50 text-brand-600 rounded-xl flex items-center justify-center shrink-0">
+                <div className="w-10 h-10 bg-primary/10 text-primary rounded-xl flex items-center justify-center shrink-0">
                   <RefreshCw size={24} />
                 </div>
                 <h2 className="text-2xl font-black text-gray-800 uppercase">I. THỜI GIAN VÀ PHẠM VI BẢO HÀNH</h2>
@@ -99,23 +99,23 @@ export default function WarrantyPolicyPage() {
               
               <ul className="space-y-4 text-gray-600 ml-[52px]">
                 <li className="flex items-start gap-2">
-                  <XCircle className="text-brand-500 mt-1 shrink-0" size={18} />
+                  <XCircle className="text-primary mt-1 shrink-0" size={18} />
                   <span><strong className="text-gray-800">Lỗi ngoại quan sau khi rời cửa hàng:</strong> Máy bị rơi rớt, va đập, cấn móp, nứt vỡ vỏ, trầy xước nặng so với tình trạng bàn giao ban đầu.</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <XCircle className="text-brand-500 mt-1 shrink-0" size={18} />
+                  <XCircle className="text-primary mt-1 shrink-0" size={18} />
                   <span><strong className="text-gray-800">Sự cố màn hình do tác động lực:</strong> Màn hình bị vỡ, chảy mực, bị sọc màn hoặc đốm trắng/đen phát sinh sau khi mua (đây là lỗi do cấn đè hoặc ngoại lực trong quá trình di chuyển).</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <XCircle className="text-brand-500 mt-1 shrink-0" size={18} />
+                  <XCircle className="text-primary mt-1 shrink-0" size={18} />
                   <span><strong className="text-gray-800">Vấn đề về Pin:</strong> Hao mòn tự nhiên (pin chai dần theo thời gian sử dụng). Cửa hàng chỉ bảo hành pin trong tháng đầu nếu pin chết hẳn, không sạc vào điện hoặc sụt nguồn đột ngột dưới 1 tiếng.</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <XCircle className="text-brand-500 mt-1 shrink-0" size={18} />
+                  <XCircle className="text-primary mt-1 shrink-0" size={18} />
                   <span><strong className="text-gray-800">Sự cố chất lỏng & Môi trường:</strong> Máy bị đổ nước, bia, chất lỏng vào; máy bị ẩm rỉ mạch do môi trường hoặc có côn trùng (gián, kiến...) chui vào gây chập cháy.</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <XCircle className="text-brand-500 mt-1 shrink-0" size={18} />
+                  <XCircle className="text-primary mt-1 shrink-0" size={18} />
                   <span><strong className="text-gray-800">Sử dụng sai cách & Can thiệp phần cứng:</strong> Chập cháy do dùng sai dòng điện, dùng sạc lô sai công suất; Khách hàng tự ý tháo máy, tự nâng cấp linh kiện hoặc rách tem niêm phong mà không có sự xác nhận của cửa hàng.</span>
                 </li>
               </ul>
