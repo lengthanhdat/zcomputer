@@ -234,7 +234,7 @@ export default function HomeClient() {
               <div className="grid grid-cols-2 lg:grid-cols-1 lg:grid-rows-2 gap-2 md:gap-4 mt-2 lg:mt-0">
                 {banners.filter(b => b.position === 'sub').slice(0, 2).map((banner) => (
                   <Link key={banner._id} href={banner.link || "#"} className="block relative w-full h-full aspect-[16/9] lg:aspect-auto rounded-xl md:rounded-2xl overflow-hidden group shadow-sm hover:shadow-xl lg:hover:-translate-y-1 transition-all duration-300">
-                    <img src={(banner.image || "").startsWith('http') || (banner.image || "").startsWith('data:') || (banner.image || "").startsWith('/uploads') ? banner.image : `${API_BASE}${banner.image}`} alt={banner.title} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                    <img src={(banner.image || "").startsWith('http') || (banner.image || "").startsWith('data:') || (banner.image || "").startsWith('/uploads') ? banner.image : `${API_BASE}${banner.image}`} alt={banner.title} className="absolute inset-0 w-full h-full object-fill group-hover:scale-105 transition-transform duration-500" />
                   </Link>
                 ))}
               </div>
