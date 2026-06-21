@@ -16,7 +16,23 @@ export const getProducts = async (req: Request, res: Response) => {
     
     const searchQuery = req.query.search as string;
     if (searchQuery) {
-      filter.name = { $regex: searchQuery, $options: 'i' };
+      const searchTerms = searchQuery.trim().split(/\s+/).map(term => new RegExp(term, 'i'));
+      
+      filter.$and = searchTerms.map(termRegex => ({
+        $or: [
+          { name: termRegex },
+          { brand: termRegex },
+          { sku: termRegex },
+          { 'specs.CPU': termRegex },
+          { 'specs.cpu': termRegex },
+          { 'specs.VGA': termRegex },
+          { 'specs.vga': termRegex },
+          { 'specs.RAM': termRegex },
+          { 'specs.ram': termRegex },
+          { 'specs.Storage': termRegex },
+          { 'specs.storage': termRegex }
+        ]
+      }));
     }
     
     if (categoryQuery && categoryQuery !== 'all') {
