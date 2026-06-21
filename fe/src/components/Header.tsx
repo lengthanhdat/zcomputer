@@ -5,11 +5,12 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Playfair_Display, Montserrat } from "next/font/google";
-import { Search, Menu, X, PhoneCall, MapPin, ChevronDown } from "lucide-react";
+import { Search, Menu, X, PhoneCall, MapPin, ChevronDown, ArrowRight } from "lucide-react";
 import HeaderAuth from "./HeaderAuth";
 import HeaderCart from "./HeaderCart";
 import HeaderNav from "./HeaderNav";
 import { fetchApi } from "@/lib/api";
+import React from "react";
 
 const montserrat = Montserrat({ subsets: ["latin", "vietnamese"], weight: ["700", "900"] });
 const playfair = Playfair_Display({ subsets: ["latin", "vietnamese"], weight: ["700", "900"] });
@@ -54,6 +55,9 @@ export default function Header() {
   const [searchQuery, setSearchQuery] = useState("");
   const [categories, setCategories] = useState<any[]>([]);
   const [expandedCatId, setExpandedCatId] = useState<string | null>(null);
+  const [suggestions, setSuggestions] = useState<any[]>([]);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const searchTimeoutRef = React.useRef<NodeJS.Timeout | null>(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -62,6 +66,25 @@ export default function Header() {
       .then(data => setCategories(data))
       .catch(() => {});
   }, []);
+
+  useEffect(() => {
+    if (searchQuery.trim().length >= 2) {
+      if (searchTimeoutRef.current) clearTimeout(searchTimeoutRef.current);
+      
+      searchTimeoutRef.current = setTimeout(() => {
+        fetchApi(`/products?search=${encodeURIComponent(searchQuery.trim())}&limit=5`, { requireAuth: false })
+          .then(res => res.ok ? res.json() : [])
+          .then(data => {
+            setSuggestions(data);
+            setShowSuggestions(true);
+          })
+          .catch(() => {});
+      }, 300);
+    } else {
+      setSuggestions([]);
+      setShowSuggestions(false);
+    }
+  }, [searchQuery]);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -114,19 +137,57 @@ export default function Header() {
           </Link>
 
           {/* Desktop Search Bar (Hidden on Mobile) */}
-          <div className="flex-1 max-w-xl hidden md:flex mx-6">
-            <form onSubmit={handleSearch} className="relative w-full group/search">
+          <div className="flex-1 max-w-xl hidden md:flex mx-6 relative">
+            <form onSubmit={handleSearch} className="relative w-full group/search z-50">
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
+                onFocus={() => { if (suggestions.length > 0) setShowSuggestions(true); }}
+                onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
                 placeholder="Bạn cần tìm linh kiện, PC hay Laptop..."
-              className="w-full border-2 border-primary/20 bg-white/60 backdrop-blur-md rounded-full py-2.5 px-5 pr-12 text-sm focus:outline-none focus:border-primary/60 focus:bg-white shadow-inner transition-all duration-300 text-gray-800 placeholder-gray-400 group-hover/search:shadow-[0_0_15px_var(--primary-ring)]"
+                className="w-full border-2 border-primary/20 bg-white/60 backdrop-blur-md rounded-full py-2.5 px-5 pr-12 text-sm focus:outline-none focus:border-primary/60 focus:bg-white shadow-inner transition-all duration-300 text-gray-800 placeholder-gray-400 group-hover/search:shadow-[0_0_15px_var(--primary-ring)]"
               />
               <button type="submit" className="absolute right-0 top-0 h-full w-14 bg-primary rounded-r-full text-white flex items-center justify-center hover:brightness-110 transition-all duration-300" aria-label="Tìm kiếm">
                 <Search size={18} />
               </button>
             </form>
+
+            {/* Suggestions Dropdown */}
+            {showSuggestions && suggestions.length > 0 && (
+              <div className="absolute top-[110%] left-0 right-0 bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden z-50 animate-in fade-in zoom-in-95 duration-200">
+                <div className="py-2">
+                  {suggestions.map((item) => (
+                    <Link 
+                      key={item._id} 
+                      href={`/${item.slug}`} 
+                      onClick={() => setShowSuggestions(false)}
+                      className="flex items-center gap-3 px-4 py-3 hover:bg-slate-50 transition-colors border-b border-gray-50 last:border-0"
+                    >
+                      <div className="w-12 h-12 rounded-lg bg-gray-50 border border-gray-100 overflow-hidden shrink-0 p-1">
+                        {item.images?.[0] ? (
+                          <img src={item.images[0]} alt={item.name} className="w-full h-full object-cover rounded" />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center text-gray-400"><Search size={16} /></div>
+                        )}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <h4 className="text-sm font-bold text-gray-800 truncate">{item.name}</h4>
+                        <div className="flex items-center gap-2 mt-1">
+                          <span className="text-[13px] font-black text-primary">{item.price ? item.price.toLocaleString('vi-VN') + 'đ' : 'Liên hệ'}</span>
+                          {item.discountPrice > 0 && <span className="text-[10px] text-gray-400 line-through font-medium">{item.discountPrice.toLocaleString('vi-VN')}đ</span>}
+                        </div>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+                <div className="bg-slate-50 px-4 py-3 text-center border-t border-gray-100">
+                  <Link href={`/search?q=${encodeURIComponent(searchQuery)}`} onClick={() => setShowSuggestions(false)} className="text-xs font-bold text-primary hover:text-red-700 transition-colors flex items-center justify-center gap-1">
+                    Xem tất cả kết quả <ArrowRight size={12} />
+                  </Link>
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Cart & Authentication */}
