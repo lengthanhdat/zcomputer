@@ -120,6 +120,63 @@ const SPEC_CONFIGS: Record<string, { key: string, label: string, placeholder: st
   ]
 };
 
+const PriceInput = ({ value, onChange, placeholder, className, required = false, name }: any) => {
+  const [displayValue, setDisplayValue] = useState(value ? Number(value).toLocaleString('vi-VN') : "");
+  const isComposing = useRef(false);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (!isComposing.current && document.activeElement !== inputRef.current) {
+      setDisplayValue(value ? Number(value).toLocaleString('vi-VN') : "");
+    }
+  }, [value]);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const rawValue = e.target.value;
+    
+    if (isComposing.current) {
+      setDisplayValue(rawValue);
+      return;
+    }
+    
+    const numericValue = rawValue.replace(/\D/g, '');
+    setDisplayValue(numericValue ? Number(numericValue).toLocaleString('vi-VN') : "");
+    onChange(numericValue);
+  };
+
+  const handleCompositionStart = () => {
+    isComposing.current = true;
+  };
+
+  const handleCompositionEnd = (e: React.CompositionEvent<HTMLInputElement>) => {
+    isComposing.current = false;
+    const rawValue = (e.target as HTMLInputElement).value;
+    const numericValue = rawValue.replace(/\D/g, '');
+    setDisplayValue(numericValue ? Number(numericValue).toLocaleString('vi-VN') : "");
+    onChange(numericValue);
+  };
+
+  return (
+    <input 
+      ref={inputRef}
+      type="text" 
+      name={name}
+      required={required}
+      value={displayValue} 
+      onChange={handleChange}
+      onCompositionStart={handleCompositionStart}
+      onCompositionEnd={handleCompositionEnd}
+      onBlur={(e) => {
+        const numericValue = e.target.value.replace(/\D/g, '');
+        setDisplayValue(numericValue ? Number(numericValue).toLocaleString('vi-VN') : "");
+        onChange(numericValue);
+      }}
+      className={className}
+      placeholder={placeholder}
+    />
+  );
+};
+
 interface Category {
   _id: string;
   name: string;
@@ -793,12 +850,11 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
               <div>
                 <label className="block text-sm font-bold text-gray-700 mb-2">Giá bán (VNĐ) <span className="text-primary">*</span></label>
                 <div className="relative">
-                  <input 
-                    type="text" 
+                  <PriceInput 
                     name="price" 
-                    required 
-                    value={formData.price ? Number(formData.price).toLocaleString('vi-VN') : ""} 
-                    onChange={(e) => setFormData({...formData, price: e.target.value.replace(/\D/g, '')})}
+                    required={true}
+                    value={formData.price} 
+                    onChange={(val: string) => setFormData({...formData, price: val})}
                     className="w-full pl-4 pr-12 py-3 bg-gray-50/50 border border-gray-200 rounded-xl outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all text-gray-800 font-bold text-lg"
                     placeholder="0"
                   />
@@ -808,11 +864,10 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
               <div>
                 <label className="block text-sm font-bold text-gray-700 mb-2">Giá niêm yết (Gốc)</label>
                 <div className="relative">
-                  <input 
-                    type="text" 
+                  <PriceInput 
                     name="discountPrice" 
-                    value={formData.discountPrice ? Number(formData.discountPrice).toLocaleString('vi-VN') : ""} 
-                    onChange={(e) => setFormData({...formData, discountPrice: e.target.value.replace(/\D/g, '')})}
+                    value={formData.discountPrice} 
+                    onChange={(val: string) => setFormData({...formData, discountPrice: val})}
                     className="w-full pl-4 pr-12 py-3 bg-gray-50/50 border border-gray-200 rounded-xl outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all text-gray-500 font-medium"
                     placeholder="0"
                   />
@@ -857,11 +912,10 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
                 <div className="mt-4 pt-4 border-t border-gray-100 animate-in fade-in slide-in-from-top-2">
                   <label className="block text-sm font-bold text-orange-600 mb-2">Giá HOT SALE (VNĐ)</label>
                   <div className="relative">
-                    <input 
-                      type="text" 
+                    <PriceInput 
                       name="flashSalePrice" 
-                      value={formData.flashSalePrice ? Number(formData.flashSalePrice).toLocaleString('vi-VN') : ""} 
-                      onChange={(e) => setFormData({...formData, flashSalePrice: e.target.value.replace(/\D/g, '')})}
+                      value={formData.flashSalePrice} 
+                      onChange={(val: string) => setFormData({...formData, flashSalePrice: val})}
                       className="w-full pl-4 pr-12 py-3 bg-orange-50/50 border border-orange-200 rounded-xl outline-none focus:border-orange-500 focus:ring-4 focus:ring-orange-500/20 transition-all text-orange-700 font-bold"
                       placeholder="Nhập giá khuyến mãi sốc..."
                     />
