@@ -77,7 +77,7 @@ export default function AdminFeedbacks() {
 
   const getStatusBadge = (status: string) => {
     switch(status) {
-      case 'new': return <span className="px-2.5 py-1 bg-brand-100 text-brand-700 text-xs font-bold rounded-full border border-brand-200 uppercase tracking-wider">Mới</span>;
+      case 'new': return <span className="px-2.5 py-1 bg-primary/10 text-primary text-xs font-bold rounded-full border border-primary/20 uppercase tracking-wider">Mới</span>;
       case 'read': return <span className="px-2.5 py-1 bg-blue-100 text-blue-700 text-xs font-bold rounded-full border border-blue-200 uppercase tracking-wider">Đã đọc</span>;
       case 'resolved': return <span className="px-2.5 py-1 bg-green-100 text-green-700 text-xs font-bold rounded-full border border-green-200 uppercase tracking-wider">Hoàn tất</span>;
       default: return null;
@@ -148,7 +148,7 @@ export default function AdminFeedbacks() {
                       </button>
                       <button 
                         onClick={() => deleteFeedback(item._id)}
-                        className="p-2 text-brand-600 hover:bg-brand-50 rounded-lg transition-colors"
+                        className="p-2 text-primary hover:bg-primary/10 rounded-lg transition-colors"
                         title="Xóa"
                       >
                         <Trash2 size={18} />

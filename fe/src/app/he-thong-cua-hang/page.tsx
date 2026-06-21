@@ -63,13 +63,13 @@ export default function ShowroomPage() {
                 
                 <div className="space-y-4">
                   <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 rounded-full bg-brand-50 text-primary flex items-center justify-center shrink-0 mt-1">
+                    <div className="w-10 h-10 rounded-full bg-primary/10 text-primary flex items-center justify-center shrink-0 mt-1">
                       <MapPin size={20} />
                     </div>
                     <div>
                       <h3 className="font-bold text-gray-900 mb-1">Địa chỉ</h3>
                       <p className="text-gray-600 leading-relaxed">{branch.address}</p>
-                      <a href={branch.mapLink} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-sm font-bold text-primary hover:text-brand-700 mt-2">
+                      <a href={branch.mapLink} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-sm font-bold text-primary hover:text-primary mt-2">
                         Mở Google Maps &rarr;
                       </a>
                     </div>

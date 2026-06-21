@@ -134,7 +134,7 @@ export default function AdminBannersPage() {
           <h1 className="text-2xl font-bold text-gray-800 mb-1">Quản lý Banner</h1>
           <p className="text-sm text-gray-500">Thêm, sửa, xóa các banner quảng cáo trên trang chủ.</p>
         </div>
-        <button onClick={openAddModal} className="bg-primary hover:bg-brand-700 text-white px-4 py-2 rounded-md font-semibold flex items-center gap-2">
+        <button onClick={openAddModal} className="bg-primary hover:bg-primary text-white px-4 py-2 rounded-md font-semibold flex items-center gap-2">
           <Plus size={18} /> Thêm banner mới
         </button>
       </div>

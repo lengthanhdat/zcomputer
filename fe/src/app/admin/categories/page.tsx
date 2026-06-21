@@ -5,6 +5,7 @@ import { Edit, Trash2, X, Plus, GripVertical } from "lucide-react";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import toast from "react-hot-toast";
 import { fetchApi } from "@/lib/api";
+import CategoryPickerModal from "@/components/CategoryPickerModal";
 
 interface Category {
   _id: string;
@@ -13,6 +14,7 @@ interface Category {
   description?: string;
   parent_id?: string | null;
   image?: string;
+  depth?: number;
 }
 
 const API = "/api/categories";
@@ -34,15 +36,24 @@ export default function AdminCategoriesPage() {
       const res = await fetchApi(`/categories?t=${Date.now()}`);
       const data: Category[] = await res.json();
       
-      const parents = data.filter(c => !c.parent_id);
       const result: Category[] = [];
-      parents.forEach(p => {
-        result.push(p);
-        const children = data.filter(c => c.parent_id === p._id);
-        result.push(...children);
-      });
-      const orphaned = data.filter(c => c.parent_id && !parents.find(p => p._id === c.parent_id));
-      result.push(...orphaned);
+      const addedIds = new Set<string>();
+
+      const buildTree = (parentId: string | null, depth: number) => {
+        const children = data.filter(c => (parentId ? c.parent_id === parentId : !c.parent_id));
+        children.forEach(c => {
+          if (!addedIds.has(c._id)) {
+            addedIds.add(c._id);
+            result.push({ ...c, depth });
+            buildTree(c._id, depth + 1);
+          }
+        });
+      };
+      
+      buildTree(null, 0);
+
+      const orphaned = data.filter(c => !addedIds.has(c._id));
+      orphaned.forEach(c => { result.push({ ...c, depth: 0 }); });
 
       setCategories(result);
     } catch {
@@ -230,7 +241,7 @@ export default function AdminCategoriesPage() {
                               <tr
                                 ref={provided.innerRef}
                                 {...provided.draggableProps}
-                                className={`transition-colors ${editingId === cat._id ? "bg-brand-50 border-l-2 border-primary" : "hover:bg-gray-50"} ${snapshot.isDragging ? "bg-blue-50 shadow-lg z-50 table" : ""}`}
+                                className={`transition-colors ${editingId === cat._id ? "bg-primary/10 border-l-2 border-primary" : "hover:bg-gray-50"} ${snapshot.isDragging ? "bg-blue-50 shadow-lg z-50 table" : ""}`}
                                 style={provided.draggableProps.style}
                               >
                                 <td className="py-3 px-4 w-10">
@@ -248,9 +259,9 @@ export default function AdminCategoriesPage() {
                                   )}
                                 </td>
                                 <td className="py-3 px-4 text-sm font-semibold text-gray-900">
-                                  <div className={`flex items-center ${cat.parent_id ? "ml-6" : ""}`}>
-                                    {cat.parent_id && <span className="text-gray-300 font-normal mr-2">|_</span>}
-                                    <span className={cat.parent_id ? "text-gray-600 font-medium" : "text-gray-900"}>{cat.name}</span>
+                                  <div className="flex items-center" style={{ marginLeft: `${(cat.depth || 0) * 1.5}rem` }}>
+                                    {(cat.depth || 0) > 0 && <span className="text-gray-300 font-normal mr-2">|_</span>}
+                                    <span className={(cat.depth || 0) > 0 ? "text-gray-600 font-medium" : "text-gray-900"}>{cat.name}</span>
                                   </div>
                                 </td>
                                 <td className="py-3 px-4 text-sm text-center text-gray-500">
@@ -267,7 +278,7 @@ export default function AdminCategoriesPage() {
                                   </button>
                                   <button
                                     onClick={() => handleDelete(cat._id, cat.name)}
-                                    className="p-1.5 text-brand-500 hover:bg-brand-50 rounded transition-colors"
+                                    className="p-1.5 text-primary hover:bg-primary/10 rounded transition-colors"
                                     title="Xóa"
                                   >
                                     <Trash2 size={15} />
@@ -291,7 +302,7 @@ export default function AdminCategoriesPage() {
       {/* Add / Edit Panel */}
       <div className="bg-white rounded-lg shadow-sm border border-gray-200 self-start overflow-hidden">
         {/* Panel header */}
-        <div className={`p-6 border-b border-gray-200 flex items-center justify-between ${isEditMode ? "bg-brand-50" : ""}`}>
+        <div className={`p-6 border-b border-gray-200 flex items-center justify-between ${isEditMode ? "bg-primary/10" : ""}`}>
           <h2 className="text-xl font-bold text-gray-800 flex items-center gap-2">
             {isEditMode ? (
               <><Edit size={18} className="text-primary" /> Chỉnh sửa danh mục</>
@@ -330,16 +341,13 @@ export default function AdminCategoriesPage() {
             </div>
             <div className="space-y-1.5">
               <label className="text-sm font-semibold text-gray-700">Danh mục cha (Không bắt buộc)</label>
-              <select
-                value={parentId}
-                onChange={(e) => setParentId(e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-md outline-none focus:border-primary focus:ring-1 focus:ring-primary text-sm bg-white"
-              >
-                <option value="">-- Trống (Đây là danh mục lớn) --</option>
-                {categories.filter(c => c._id !== editingId && !c.parent_id).map(cat => (
-                  <option key={cat._id} value={cat._id}>{cat.name}</option>
-                ))}
-              </select>
+              <CategoryPickerModal
+                categories={categories}
+                selectedId={parentId}
+                onChange={setParentId}
+                excludeId={editingId}
+                placeholder="-- Trống (Đây là danh mục lớn) --"
+              />
             </div>
             <div className="space-y-1.5">
               <label className="text-sm font-semibold text-gray-700">Mô tả</label>
@@ -377,7 +385,7 @@ export default function AdminCategoriesPage() {
               <button
                 type="submit"
                 disabled={saving}
-                className="flex-1 bg-primary hover:bg-brand-700 disabled:opacity-60 text-white py-2 rounded-md font-semibold transition-colors text-sm"
+                className="flex-1 bg-primary hover:bg-primary disabled:opacity-60 text-white py-2 rounded-md font-semibold transition-colors text-sm"
               >
                 {saving ? "Đang lưu..." : isEditMode ? "Lưu thay đổi" : "Tạo danh mục"}
               </button>

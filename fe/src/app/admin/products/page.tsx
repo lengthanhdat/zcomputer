@@ -181,12 +181,12 @@ export default function AdminProductsPage() {
           {selectedIds.length > 0 && (
             <button 
               onClick={handleBulkDelete}
-              className="bg-brand-100 hover:bg-brand-200 text-brand-700 px-4 py-2 rounded-md font-bold flex items-center gap-2 transition-colors border border-brand-200"
+              className="bg-primary/10 hover:bg-primary/20 text-primary px-4 py-2 rounded-md font-bold flex items-center gap-2 transition-colors border border-primary/20"
             >
               <Trash2 size={18} /> Xóa {selectedIds.length} sản phẩm
             </button>
           )}
-          <Link href="/admin/products/new" className="bg-primary hover:bg-brand-700 text-white px-4 py-2 rounded-md font-semibold flex items-center gap-2 transition-colors">
+          <Link href="/admin/products/new" className="bg-primary hover:bg-primary text-white px-4 py-2 rounded-md font-semibold flex items-center gap-2 transition-colors">
             <Plus size={18} /> Thêm sản phẩm
           </Link>
         </div>
@@ -341,7 +341,7 @@ export default function AdminProductsPage() {
                         <div className="flex items-center gap-2">
                           <span className="truncate max-w-[200px] xl:max-w-[300px]" title={product.name}>{product.name}</span>
                           {(!product.images || product.images.length === 0) && (
-                            <span className="shrink-0 flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-bold bg-brand-100 text-brand-600 border border-brand-200 cursor-help" title="Sản phẩm này chưa có hình đại diện">
+                            <span className="shrink-0 flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-bold bg-primary/10 text-primary border border-primary/20 cursor-help" title="Sản phẩm này chưa có hình đại diện">
                               <ImageOff size={12} /> Thiếu ảnh
                             </span>
                           )}
@@ -350,7 +350,7 @@ export default function AdminProductsPage() {
                       <td className="py-3 px-4 text-sm text-gray-600">{product.brand || '---'}</td>
                       <td className="py-3 px-4 text-sm text-primary font-semibold">{product.price.toLocaleString('vi-VN')}đ</td>
                       <td className="py-3 px-4 text-sm text-gray-600">
-                        <span className={`px-2 py-1 rounded text-xs font-semibold ${product.stock > 0 ? 'bg-green-100 text-green-700' : 'bg-brand-100 text-brand-700'}`}>
+                        <span className={`px-2 py-1 rounded text-xs font-semibold ${product.stock > 0 ? 'bg-green-100 text-green-700' : 'bg-primary/10 text-primary'}`}>
                           {product.stock > 0 ? product.stock : 'Hết hàng'}
                         </span>
                       </td>
@@ -368,7 +368,7 @@ export default function AdminProductsPage() {
                               placeholder="Giá Flash Sale"
                               defaultValue={product.flashSalePrice || product.price}
                               onBlur={(e) => updateFlashSalePrice(product._id, e.target.value)}
-                              className="w-[90px] text-[11px] border border-brand-300 rounded px-1 py-0.5 mt-1 outline-none focus:border-brand-500 text-center text-brand-600 font-bold"
+                              className="w-[90px] text-[11px] border border-primary rounded px-1 py-0.5 mt-1 outline-none focus:border-primary text-center text-primary font-bold"
                               title="Nhập giá Flash Sale và click ra ngoài để lưu"
                             />
                           )}

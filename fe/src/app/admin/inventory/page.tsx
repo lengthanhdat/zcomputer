@@ -284,8 +284,8 @@ export default function AdminInventoryPage() {
               onClick={() => setStockFilter("out")}
               className={`px-4 py-2 text-sm font-semibold rounded-md border transition-all flex items-center gap-1.5 ${
                 stockFilter === "out"
-                  ? "bg-brand-600 text-white border-brand-600"
-                  : "bg-white text-brand-600 border-brand-200 hover:bg-brand-50"
+                  ? "bg-primary text-white border-primary"
+                  : "bg-white text-primary border-primary/20 hover:bg-primary/10"
               }`}
             >
               <XCircle size={16} /> Hết hàng
@@ -372,7 +372,7 @@ export default function AdminInventoryPage() {
                     );
                     if (currentStock === 0) {
                       statusBadge = (
-                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-brand-100 text-brand-700">
+                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-primary/10 text-primary">
                           Hết hàng
                         </span>
                       );
@@ -469,7 +469,7 @@ export default function AdminInventoryPage() {
                             
                             <button
                               onClick={() => handleDelete(product._id, product.name)}
-                              className="p-1.5 text-brand-500 hover:bg-brand-50 rounded transition-colors border border-transparent hover:border-brand-200"
+                              className="p-1.5 text-primary hover:bg-primary/10 rounded transition-colors border border-transparent hover:border-primary/20"
                               title="Xóa sản phẩm"
                             >
                               <Trash2 size={16} />

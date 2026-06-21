@@ -1,11 +1,12 @@
 "use client";
 
-import { useState, useEffect, use, useRef } from "react";
+import { useState, useEffect, use, useRef, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowLeft, Image as ImageIcon, Box, Tag, DollarSign, FileText, UploadCloud, Loader2, X, Gift, Cpu, Sparkles } from "lucide-react";
 import Link from "next/link";
 import toast from "react-hot-toast";
 import { fetchApi } from "@/lib/api";
+import CategoryPickerModal from "@/components/CategoryPickerModal";
 import dynamic from "next/dynamic";
 
 const ReactQuill = dynamic(
@@ -19,9 +20,46 @@ const ReactQuill = dynamic(
       const { default: BlotFormatter } = await import("quill-blot-formatter");
       Quill.register("modules/blotFormatter", BlotFormatter);
       
+      // @ts-ignore
+      const { default: MagicUrl } = await import("quill-magic-url");
+      Quill.register("modules/magicUrl", MagicUrl);
+
+      // @ts-ignore
+      const { default: ImageUploader } = await import("quill-image-uploader");
+      Quill.register("modules/imageUploader", ImageUploader);
+      
       const Font = Quill.import('formats/font');
       Font.whitelist = ['sans-serif', 'arial', 'times-new-roman', 'tahoma', 'verdana', 'courier-new'];
       Quill.register(Font, true);
+
+      const Size = Quill.import('attributors/style/size');
+      Size.whitelist = ['10px', '12px', '14px', '16px', '18px', '20px', '24px', '30px', '36px'];
+      Quill.register(Size, true);
+
+      // Bắt buộc đăng ký thuộc tính width, height, style, class cho thẻ Image
+      const BaseImageFormat = Quill.import('formats/image');
+      class ImageFormat extends BaseImageFormat {
+        static formats(domNode: Element) {
+          return ['alt', 'width', 'height', 'style', 'class'].reduce(function(formats: any, attribute) {
+            if (domNode.hasAttribute(attribute)) {
+              formats[attribute] = domNode.getAttribute(attribute);
+            }
+            return formats;
+          }, {});
+        }
+        format(name: string, value: any) {
+          if (['alt', 'width', 'height', 'style', 'class'].includes(name)) {
+            if (value) {
+              this.domNode.setAttribute(name, value);
+            } else {
+              this.domNode.removeAttribute(name);
+            }
+          } else {
+            super.format(name, value);
+          }
+        }
+      }
+      Quill.register(ImageFormat, true);
     }
 
     return function Comp({ forwardedRef, ...props }: any) {
@@ -31,6 +69,7 @@ const ReactQuill = dynamic(
   { ssr: false }
 );
 import "react-quill-new/dist/quill.snow.css";
+import "quill-image-uploader/dist/quill.imageUploader.min.css";
 
 const SPEC_CONFIGS: Record<string, { key: string, label: string, placeholder: string }[]> = {
   'laptop': [
@@ -92,6 +131,49 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
   const resolvedParams = use(params);
   const router = useRouter();
   const quillRef = useRef<any>(null);
+
+  const modules = useMemo(() => ({
+    blotFormatter: {},
+    magicUrl: true,
+    imageUploader: {
+      upload: (file: File) => {
+        return new Promise((resolve, reject) => {
+          const data = new FormData();
+          data.append("image", file);
+          fetchApi("/upload/image", {
+            method: "POST",
+            body: data,
+            requireAuth: true,
+          })
+            .then((res) => res.json())
+            .then((responseData) => {
+              const url = responseData.url.startsWith('http') || responseData.url.startsWith('data:') 
+                  ? responseData.url 
+                  : `${process.env.NEXT_PUBLIC_API_BASE_URL || 'http://127.0.0.1:5000'}${responseData.url}`;
+              resolve(url);
+            })
+            .catch((error) => {
+              reject("Upload failed");
+            });
+        });
+      }
+    },
+    toolbar: [
+      [{ 'font': [false, 'arial', 'times-new-roman', 'tahoma', 'verdana', 'courier-new'] }, { 'size': ['10px', '12px', '14px', false, '18px', '20px', '24px', '30px', '36px'] }],
+      [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+      ['bold', 'italic', 'underline', 'strike'],
+      [{ 'color': [] }, { 'background': [] }],
+      [{ 'script': 'sub'}, { 'script': 'super' }],
+      ['blockquote', 'code-block'],
+      [{ 'list': 'ordered'}, { 'list': 'bullet' }, { 'list': 'check' }],
+      [{ 'indent': '-1'}, { 'indent': '+1' }],
+      [{ 'direction': 'rtl' }],
+      [{ 'align': [] }],
+      ['link', 'image', 'video', 'formula'],
+      ['clean']
+    ],
+  }), []);
+
   const [loading, setLoading] = useState(false);
   const [fetching, setFetching] = useState(true);
   const [categories, setCategories] = useState<Category[]>([]);
@@ -184,6 +266,24 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
     };
     fetchProduct();
   }, [resolvedParams.id]);
+  const getSpecFields = (catId?: string | null): any[] => {
+    if (!catId) return [];
+    const cat = categories.find(c => c._id === catId);
+    if (!cat) return [];
+    
+    if (cat.slug && SPEC_CONFIGS[cat.slug]) return SPEC_CONFIGS[cat.slug];
+    
+    const nameStr = cat.name.toLowerCase();
+    if (nameStr.includes('laptop') || nameStr.includes('macbook')) return SPEC_CONFIGS['laptop'];
+    if (nameStr.includes('pc') || nameStr.includes('máy tính')) return SPEC_CONFIGS['pc-gaming'];
+    if (nameStr.includes('màn hình')) return SPEC_CONFIGS['man-hinh'];
+    if (nameStr.includes('chuột')) return SPEC_CONFIGS['chuot'];
+    if (nameStr.includes('phím')) return SPEC_CONFIGS['ban-phim'];
+    if (nameStr.includes('tai nghe')) return SPEC_CONFIGS['tai-nghe'];
+    if (nameStr.includes('linh kiện')) return SPEC_CONFIGS['linh-kien-pc'];
+    
+    return getSpecFields(cat.parent_id);
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -493,7 +593,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
             
             <div className="space-y-6">
               <div>
-                <label className="block text-sm font-bold text-gray-700 mb-2">Tên sản phẩm <span className="text-brand-500">*</span></label>
+                <label className="block text-sm font-bold text-gray-700 mb-2">Tên sản phẩm <span className="text-primary">*</span></label>
                 <div className="relative group">
                   <input 
                     type="text" 
@@ -518,21 +618,13 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-sm font-bold text-gray-700 mb-2">Danh mục <span className="text-brand-500">*</span></label>
-                  <select 
-                    name="category_id"
-                    required
-                    value={formData.category_id}
-                    onChange={handleChange}
-                    className="w-full px-4 py-3 bg-gray-50/50 border border-gray-200 rounded-xl outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all font-bold text-gray-800 cursor-pointer"
-                  >
-                    {categories.length === 0 && <option value="">Đang tải danh mục...</option>}
-                      {categories.map((cat) => (
-                        <option key={cat._id} value={cat._id}>
-                          {cat.parent_id ? `\u00A0\u00A0\u00A0\u00A0|_ ${cat.name}` : cat.name}
-                        </option>
-                      ))}
-                  </select>
+                  <label className="block text-sm font-bold text-gray-700 mb-2">Danh mục <span className="text-primary">*</span></label>
+                  <CategoryPickerModal
+                    categories={categories}
+                    selectedId={formData.category_id}
+                    onChange={(id: string) => setFormData({ ...formData, category_id: id })}
+                    placeholder={categories.length === 0 ? "Đang tải danh mục..." : "Chọn danh mục"}
+                  />
                 </div>
                 <div>
                   <label className="block text-sm font-bold text-gray-700 mb-2">Thương hiệu</label>
@@ -546,7 +638,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-bold text-gray-700 mb-2">Tình trạng máy <span className="text-brand-500">*</span></label>
+                  <label className="block text-sm font-bold text-gray-700 mb-2">Tình trạng máy <span className="text-primary">*</span></label>
                   <select 
                     name="condition"
                     value={formData.condition} 
@@ -587,20 +679,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {(() => {
-                const currentCategory = categories.find(c => c._id === formData.category_id);
-                const currentSlug = currentCategory?.slug || '';
-                let currentFields = SPEC_CONFIGS[currentSlug] || [];
-                
-                if (currentFields.length === 0 && currentCategory) {
-                  const nameStr = currentCategory.name.toLowerCase();
-                  if (nameStr.includes('laptop')) currentFields = SPEC_CONFIGS['laptop'];
-                  else if (nameStr.includes('pc') || nameStr.includes('máy tính')) currentFields = SPEC_CONFIGS['pc-gaming'];
-                  else if (nameStr.includes('màn hình')) currentFields = SPEC_CONFIGS['man-hinh'];
-                  else if (nameStr.includes('chuột')) currentFields = SPEC_CONFIGS['chuot'];
-                  else if (nameStr.includes('phím')) currentFields = SPEC_CONFIGS['ban-phim'];
-                  else if (nameStr.includes('tai nghe')) currentFields = SPEC_CONFIGS['tai-nghe'];
-                  else if (nameStr.includes('linh kiện')) currentFields = SPEC_CONFIGS['linh-kien-pc'];
-                }
+                const currentFields = getSpecFields(formData.category_id);
                 
                 return (
                   <>
@@ -625,20 +704,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
             <div className="mt-8 border-t border-gray-100 pt-6">
               <h3 className="text-sm font-bold text-gray-800 mb-4">Thuộc tính tùy chỉnh (Thêm nếu cần)</h3>
               {(() => {
-                const currentCategory = categories.find(c => c._id === formData.category_id);
-                const currentSlug = currentCategory?.slug || '';
-                let currentFields = SPEC_CONFIGS[currentSlug] || [];
-                
-                if (currentFields.length === 0 && currentCategory) {
-                  const nameStr = currentCategory.name.toLowerCase();
-                  if (nameStr.includes('laptop')) currentFields = SPEC_CONFIGS['laptop'];
-                  else if (nameStr.includes('pc') || nameStr.includes('máy tính')) currentFields = SPEC_CONFIGS['pc-gaming'];
-                  else if (nameStr.includes('màn hình')) currentFields = SPEC_CONFIGS['man-hinh'];
-                  else if (nameStr.includes('chuột')) currentFields = SPEC_CONFIGS['chuot'];
-                  else if (nameStr.includes('phím')) currentFields = SPEC_CONFIGS['ban-phim'];
-                  else if (nameStr.includes('tai nghe')) currentFields = SPEC_CONFIGS['tai-nghe'];
-                  else if (nameStr.includes('linh kiện')) currentFields = SPEC_CONFIGS['linh-kien-pc'];
-                }
+                const currentFields = getSpecFields(formData.category_id);
 
                 const customKeys = Object.keys(formData.specs).filter(key => 
                   !currentFields.find(f => f.key.toLowerCase() === key.toLowerCase()) && 
@@ -660,7 +726,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
                           const newSpecs = { ...formData.specs };
                           delete (newSpecs as any)[key];
                           setFormData({...formData, specs: newSpecs});
-                        }} className="px-3 bg-brand-50 text-brand-500 rounded-xl hover:bg-brand-100 transition-colors">
+                        }} className="px-3 bg-primary/10 text-primary rounded-xl hover:bg-primary/10 transition-colors">
                           <X size={18} />
                         </button>
                       </div>
@@ -707,24 +773,9 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
               <ReactQuill 
                 forwardedRef={quillRef}
                 theme="snow"
-                value={formData.description}
+                defaultValue={formData.description}
                 onChange={(val: string) => setFormData({ ...formData, description: val })}
-                modules={{
-                  blotFormatter: {},
-                  toolbar: [
-                    [{ 'font': [false, 'arial', 'times-new-roman', 'tahoma', 'verdana', 'courier-new'] }, { 'size': ['small', false, 'large', 'huge'] }],
-                    [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-                    ['bold', 'italic', 'underline', 'strike'],
-                    [{ 'color': [] }, { 'background': [] }],
-                    [{ 'script': 'sub'}, { 'script': 'super' }],
-                    ['blockquote', 'code-block'],
-                    [{ 'list': 'ordered'}, { 'list': 'bullet' }, { 'list': 'check' }],
-                    [{ 'indent': '-1'}, { 'indent': '+1' }],
-                    [{ 'align': [] }],
-                    ['link', 'image', 'video'],
-                    ['clean']
-                  ],
-                }}
+                modules={modules}
                 className="h-[500px] border border-gray-200 rounded-b-xl pb-10 [&_.ql-editor]:text-base [&_.ql-editor]:text-slate-700"
               />
             </div>
@@ -740,7 +791,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
             
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-bold text-gray-700 mb-2">Giá bán (VNĐ) <span className="text-brand-500">*</span></label>
+                <label className="block text-sm font-bold text-gray-700 mb-2">Giá bán (VNĐ) <span className="text-primary">*</span></label>
                 <div className="relative">
                   <input 
                     type="text" 
@@ -770,7 +821,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
               </div>
               
               <div>
-                <label className="block text-sm font-bold text-gray-700 mb-2">Số lượng tồn kho <span className="text-brand-500">*</span></label>
+                <label className="block text-sm font-bold text-gray-700 mb-2">Số lượng tồn kho <span className="text-primary">*</span></label>
                 <div className="relative">
                   <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
                     <Box size={18} />
@@ -849,7 +900,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
                       <button 
                         type="button"
                         onClick={() => handleRemoveImage(idx)}
-                        className="absolute top-2 right-2 bg-white text-brand-500 p-1.5 rounded-full shadow-md opacity-0 group-hover:opacity-100 transition-opacity hover:bg-brand-50"
+                        className="absolute top-2 right-2 bg-white text-primary p-1.5 rounded-full shadow-md opacity-0 group-hover:opacity-100 transition-opacity hover:bg-primary/10"
                       >
                         <X size={16} />
                       </button>
@@ -954,7 +1005,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
                     onClick={() => {
                       setFormData(prev => ({ ...prev, gifts: prev.gifts.filter((_, i) => i !== idx) }));
                     }}
-                    className="px-3 bg-brand-50 text-brand-500 rounded-xl hover:bg-brand-100 transition-colors shrink-0"
+                    className="px-3 bg-primary/10 text-primary rounded-xl hover:bg-primary/10 transition-colors shrink-0"
                   >
                     <X size={16} />
                   </button>
@@ -975,7 +1026,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
             <button 
               type="submit" 
               disabled={loading}
-              className="w-full bg-primary hover:bg-brand-700 text-white px-6 py-3.5 rounded-xl font-bold shadow-lg shadow-brand-500/30 transition-all hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+              className="w-full bg-primary hover:bg-primary text-white px-6 py-3.5 rounded-xl font-bold shadow-lg shadow-primary transition-all hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
             >
               {loading ? "Đang xử lý..." : "Lưu thay đổi"}
             </button>
