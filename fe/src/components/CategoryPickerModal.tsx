@@ -6,7 +6,7 @@ import { ChevronRight, ChevronDown, FolderTree, X, Check } from "lucide-react";
 interface Category {
   _id: string;
   name: string;
-  slug: string;
+  slug?: string;
   parent_id?: string | null;
 }
 
