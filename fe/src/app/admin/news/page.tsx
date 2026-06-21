@@ -3,12 +3,13 @@
 import { useState, useEffect } from "react";
 import { fetchApi } from "@/lib/api";
 import Link from "next/link";
-import { Plus, Edit, Trash2, Eye, Calendar, Tag, CheckCircle2, XCircle } from "lucide-react";
+import { Plus, Edit, Trash2, Eye, Calendar, Tag, CheckCircle2, XCircle, GripVertical } from "lucide-react";
 import toast from "react-hot-toast";
 
 export default function AdminNewsPage() {
   const [news, setNews] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [draggedItemIndex, setDraggedItemIndex] = useState<number | null>(null);
 
   const loadNews = async () => {
     setLoading(true);
@@ -45,6 +46,42 @@ export default function AdminNewsPage() {
     }
   };
 
+  const handleDragStart = (index: number) => {
+    setDraggedItemIndex(index);
+  };
+
+  const handleDragOver = (e: React.DragEvent, index: number) => {
+    e.preventDefault();
+    if (draggedItemIndex === null || draggedItemIndex === index) return;
+
+    const newNews = [...news];
+    const draggedItem = newNews[draggedItemIndex];
+    newNews.splice(draggedItemIndex, 1);
+    newNews.splice(index, 0, draggedItem);
+    
+    setDraggedItemIndex(index);
+    setNews(newNews);
+  };
+
+  const handleDrop = async () => {
+    setDraggedItemIndex(null);
+    const itemsToUpdate = news.map((item, index) => ({
+      id: item._id,
+      order: index
+    }));
+
+    try {
+      const res = await fetchApi("/news/reorder/bulk", {
+        method: "PUT",
+        body: JSON.stringify({ items: itemsToUpdate })
+      });
+      if (!res.ok) throw new Error("Lỗi");
+      toast.success("Đã cập nhật thứ tự!");
+    } catch (error) {
+      toast.error("Lỗi khi cập nhật thứ tự");
+    }
+  };
+
   const formatDate = (dateString: string) => {
     const d = new Date(dateString);
     return new Intl.DateTimeFormat('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' }).format(d);
@@ -68,6 +105,7 @@ export default function AdminNewsPage() {
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="bg-gray-50 border-b border-gray-100 text-gray-500 text-sm">
+                <th className="p-4 font-medium w-12"></th>
                 <th className="p-4 font-medium">Tiêu đề</th>
                 <th className="p-4 font-medium">Thể loại</th>
                 <th className="p-4 font-medium">Lượt xem</th>
@@ -86,13 +124,23 @@ export default function AdminNewsPage() {
                 </tr>
               ) : news.length === 0 ? (
                 <tr>
-                  <td colSpan={6} className="p-8 text-center text-gray-500">
+                  <td colSpan={7} className="p-8 text-center text-gray-500">
                     Chưa có bài viết nào. Hãy tạo bài viết đầu tiên!
                   </td>
                 </tr>
               ) : (
-                news.map((item) => (
-                  <tr key={item._id} className="hover:bg-gray-50/50 transition">
+                news.map((item, index) => (
+                  <tr 
+                    key={item._id} 
+                    draggable
+                    onDragStart={() => handleDragStart(index)}
+                    onDragOver={(e) => handleDragOver(e, index)}
+                    onDragEnd={handleDrop}
+                    className={`hover:bg-gray-50/50 transition cursor-move ${draggedItemIndex === index ? 'opacity-50 bg-gray-100' : ''}`}
+                  >
+                    <td className="p-4 text-gray-400">
+                      <GripVertical size={20} className="hover:text-gray-600" />
+                    </td>
                     <td className="p-4">
                       <div className="flex items-center gap-3">
                         <img 

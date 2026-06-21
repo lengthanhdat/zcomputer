@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { Filter, Cpu, Monitor, Server, HardDrive, Maximize, ArrowRight, Eye, LayoutGrid, Check, ChevronDown, Heart, X, MemoryStick, Gpu, Battery, Layers, Zap, Keyboard, Mouse, Link as LinkIcon } from "lucide-react";
+import { Filter, Cpu, Monitor, Server, HardDrive, Maximize, ArrowRight, Eye, LayoutGrid, Check, ChevronDown, Heart, X, MemoryStick, Gpu, Battery, Layers, Zap, Keyboard, Mouse, Link as LinkIcon, ChevronLeft, ChevronRight } from "lucide-react";
 import { useState, useMemo, useEffect } from "react";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { motion } from "framer-motion";
@@ -63,6 +63,9 @@ export default function CategoryClient({
     } else {
       params.delete(key);
     }
+    if (key !== 'page') {
+      params.delete('page');
+    }
     router.push(`${pathname}?${params.toString()}`);
   };
 
@@ -99,6 +102,7 @@ export default function CategoryClient({
     } else {
       params.delete('price');
     }
+    params.delete('page');
     router.push(`${pathname}?${params.toString()}`);
   };
 
@@ -111,6 +115,7 @@ export default function CategoryClient({
     else params.delete('maxPrice');
     
     params.delete('price'); // clear predefined
+    params.delete('page');
     router.push(`${pathname}?${params.toString()}`);
   }
 
@@ -121,6 +126,7 @@ export default function CategoryClient({
     } else {
       params.delete('sort');
     }
+    params.delete('page');
     router.push(`${pathname}?${params.toString()}`);
   }
 
@@ -347,15 +353,22 @@ export default function CategoryClient({
 
             <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4">
               {filteredProducts.length > 0 ? (
-                filteredProducts.map((product) => {
-                  const isHotSaleActive = !!(product.isHotSale && product.flashSalePrice && product.flashSalePrice < product.price);
-                  const originalPrice = (product.discountPrice && product.discountPrice > product.price) ? product.discountPrice : product.price;
-                  const currentPrice = isHotSaleActive ? product.flashSalePrice! : product.price;
-                  const saveAmount = originalPrice - currentPrice;
-                  const discountPercent = originalPrice > currentPrice ? Math.round((saveAmount / originalPrice) * 100) : 0;
-                  const isOutOfStock = product.status === 'out_of_stock' || product.stock === 0;
+                (() => {
+                  const currentPage = parseInt(searchParams.get('page') || '1', 10);
+                  const itemsPerPage = 30;
+                  const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
+                  const validPage = Math.max(1, Math.min(currentPage, totalPages > 0 ? totalPages : 1));
+                  const paginatedProducts = filteredProducts.slice((validPage - 1) * itemsPerPage, validPage * itemsPerPage);
+                  
+                  return paginatedProducts.map((product) => {
+                    const isHotSaleActive = !!(product.isHotSale && product.flashSalePrice && product.flashSalePrice < product.price);
+                    const originalPrice = (product.discountPrice && product.discountPrice > product.price) ? product.discountPrice : product.price;
+                    const currentPrice = isHotSaleActive ? product.flashSalePrice! : product.price;
+                    const saveAmount = originalPrice - currentPrice;
+                    const discountPercent = originalPrice > currentPrice ? Math.round((saveAmount / originalPrice) * 100) : 0;
+                    const isOutOfStock = product.status === 'out_of_stock' || product.stock === 0;
 
-                  return (
+                    return (
                     <motion.div
                       initial={{ opacity: 0, y: 40 }}
                       whileInView={{ opacity: 1, y: 0 }}
@@ -502,8 +515,9 @@ export default function CategoryClient({
                         </div>
                       </div>
                     </motion.div>
-                  );
-                })
+                    );
+                  });
+                })()
               ) : (
                 <motion.div 
                   initial={{ opacity: 0, scale: 0.9 }}
@@ -518,6 +532,63 @@ export default function CategoryClient({
                 </motion.div>
               )}
             </div>
+
+            {/* Pagination Controls */}
+            {(() => {
+              const currentPage = parseInt(searchParams.get('page') || '1', 10);
+              const itemsPerPage = 30;
+              const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
+              const validPage = Math.max(1, Math.min(currentPage, totalPages > 0 ? totalPages : 1));
+              
+              if (totalPages > 1) {
+                return (
+                  <div className="mt-12 flex justify-center items-center gap-2 pb-8">
+                    <button
+                      disabled={validPage === 1}
+                      onClick={() => updateParam('page', [String(validPage - 1)])}
+                      className="w-10 h-10 rounded-xl bg-white border border-gray-200 flex items-center justify-center text-gray-500 hover:text-primary hover:border-primary transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
+                    >
+                      <ChevronLeft size={20} />
+                    </button>
+                    
+                    {Array.from({ length: totalPages }).map((_, idx) => {
+                      const pageNumber = idx + 1;
+                      if (
+                        pageNumber === 1 || 
+                        pageNumber === totalPages || 
+                        (pageNumber >= validPage - 1 && pageNumber <= validPage + 1)
+                      ) {
+                        return (
+                          <button
+                            key={pageNumber}
+                            onClick={() => updateParam('page', [String(pageNumber)])}
+                            className={`w-10 h-10 rounded-xl text-sm font-bold transition-all ${pageNumber === validPage ? 'bg-primary text-white shadow-md shadow-primary/20 border-primary' : 'bg-white border border-gray-200 text-gray-700 hover:text-primary hover:border-primary shadow-sm'}`}
+                          >
+                            {pageNumber}
+                          </button>
+                        );
+                      } else if (
+                        pageNumber === validPage - 2 || 
+                        pageNumber === validPage + 2
+                      ) {
+                        return <span key={pageNumber} className="text-gray-400 font-bold px-1">...</span>;
+                      }
+                      return null;
+                    })}
+
+                    <button
+                      disabled={validPage === totalPages}
+                      onClick={() => updateParam('page', [String(validPage + 1)])}
+                      className="w-10 h-10 rounded-xl bg-white border border-gray-200 flex items-center justify-center text-gray-500 hover:text-primary hover:border-primary transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
+                    >
+                      <ChevronRight size={20} />
+                    </button>
+                  </div>
+                );
+              }
+              return null;
+            })()}
+
           </div>
         </div>
       </div>

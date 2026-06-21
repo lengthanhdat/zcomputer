@@ -24,7 +24,7 @@ export const getAllNews = async (req: Request, res: Response): Promise<void> => 
 
     const total = await News.countDocuments(query);
     const articles = await News.find(query)
-      .sort({ createdAt: -1 })
+      .sort({ order: 1, createdAt: -1 })
       .skip((Number(page) - 1) * Number(limit))
       .limit(Number(limit))
       .populate('author', 'name email');
@@ -135,6 +135,33 @@ export const deleteNews = async (req: Request, res: Response): Promise<void> => 
       return;
     }
     res.json({ message: 'Đã xóa bài viết thành công' });
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// Admin: Cập nhật thứ tự bài viết
+export const reorderNews = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { items } = req.body; // items: { id: string, order: number }[]
+    if (!Array.isArray(items)) {
+      res.status(400).json({ message: 'Invalid data' });
+      return;
+    }
+    
+    // update bulk
+    const bulkOps = items.map((item: any) => ({
+      updateOne: {
+        filter: { _id: item.id },
+        update: { $set: { order: item.order } },
+      }
+    }));
+    
+    if (bulkOps.length > 0) {
+      await News.bulkWrite(bulkOps);
+    }
+    
+    res.json({ message: 'Đã cập nhật thứ tự thành công' });
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }
