@@ -269,6 +269,7 @@ export default function Header() {
               }
             }}
           >
+            <Image src="/logo_broken.png" alt="Z" width={80} height={80} priority className="h-14 w-14 sm:h-[68px] sm:w-[68px] object-contain group-hover:scale-105 transition-all duration-300 drop-shadow-md relative z-10" />
             <Image 
               src="/logo-full.png" 
               alt="ZCOMPUTER PC GAMING - LAPTOP - WORKSTATION" 
