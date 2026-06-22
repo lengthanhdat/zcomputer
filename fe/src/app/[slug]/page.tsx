@@ -246,7 +246,7 @@ export default async function DynamicRoutePage({ params }: { params: Promise<{ s
   // If neither product nor category, show 404
   return (
     <div className="container mx-auto px-4 py-32 text-center min-h-[60vh] flex flex-col items-center justify-center">
-      <Image src="/logo-full.jpg" alt="ZCOMPUTER" width={120} height={120} className="mb-6 opacity-50 grayscale" />
+      <Image src="/logo_broken.png" alt="ZCOMPUTER" width={120} height={120} className="mb-6 opacity-50 grayscale" />
       <h1 className="text-4xl font-black text-gray-800 mb-4 uppercase tracking-tight">Không tìm thấy nội dung</h1>
       <p className="text-gray-500 mb-8 max-w-md mx-auto">Sản phẩm hoặc danh mục bạn đang tìm kiếm không tồn tại, đã bị xóa hoặc thay đổi đường dẫn.</p>
       <Link href="/" className="bg-primary text-white font-bold px-8 py-3 rounded-full hover:bg-primary transition-colors shadow-lg shadow-primary">
@@ -621,7 +621,7 @@ async function ProductDetailView({ product }: { product: Product }) {
                           <div className="absolute -bottom-[1px] -right-[1px] w-5 h-5 border-b-2 border-r-2 border-primary/60 rounded-br-xl"></div>
                           
                           <div className="absolute bottom-2 right-2 flex items-center gap-1 opacity-50 mix-blend-multiply">
-                            <Image src="/logo-full.jpg" alt="ZCOMPUTER" width={20} height={20} className="w-4 h-4 object-contain" unoptimized />
+                            <Image src="/logo_broken.png" alt="ZCOMPUTER" width={20} height={20} className="w-4 h-4 object-contain" unoptimized />
                             <div className="flex items-baseline select-none tracking-tighter">
                               <span className="text-primary font-black text-[11px] drop-shadow-sm">Z</span>
                               <span className="text-slate-800 font-black text-[10px] uppercase drop-shadow-sm">COMPUTER</span>

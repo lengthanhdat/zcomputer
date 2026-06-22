@@ -14,7 +14,7 @@ export default function Home() {
     "@type": "Organization",
     "name": "ZCOMPUTER",
     "url": "https://zcomputer.vn",
-    "logo": "https://zcomputer.vn/logo-full.jpg",
+    "logo": "https://zcomputer.vn/logo_broken.png",
     "contactPoint": {
       "@type": "ContactPoint",
       "telephone": "+84-977-334-415",

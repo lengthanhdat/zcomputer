@@ -13,25 +13,25 @@ export default function manifest(): MetadataRoute.Manifest {
       {
         src: '/logo-full.jpg',
         sizes: '192x192',
-        type: 'image/jpeg',
+        type: 'image/png',
         purpose: 'any'
       },
       {
         src: '/logo-full.jpg',
         sizes: '512x512',
-        type: 'image/jpeg',
+        type: 'image/png',
         purpose: 'any'
       },
       {
         src: '/logo-full.jpg',
         sizes: '192x192',
-        type: 'image/jpeg',
+        type: 'image/png',
         purpose: 'maskable'
       },
       {
         src: '/logo-full.jpg',
         sizes: '512x512',
-        type: 'image/jpeg',
+        type: 'image/png',
         purpose: 'maskable'
       },
     ],
