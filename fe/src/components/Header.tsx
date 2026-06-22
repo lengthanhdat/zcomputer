@@ -118,68 +118,13 @@ export default function Header() {
     try { localStorage.removeItem('searchHistory'); } catch(e) {}
   };
 
-  return (
-    <>
-      <header className="bg-white/85 backdrop-blur-xl sticky top-0 z-50 shadow-[0_4px_30px_rgba(0,0,0,0.05)] border-b border-gray-200/50">
-        {/* Top Header Row */}
-        <div className="container mx-auto px-4 py-3 flex items-center justify-between gap-4">
-          {/* Mobile Hamburger Menu Icon */}
-          <button
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="lg:hidden p-2 text-gray-700 hover:text-primary transition-colors focus:outline-none"
-            aria-label="Toggle menu"
-          >
-            {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
 
-          <Link 
-            href="/" 
-            className="flex items-center gap-1.5 shrink-0 group relative"
-            onClick={(e) => {
-              if (window.location.pathname === "/") {
-                e.preventDefault();
-                window.scrollTo({ top: 0, behavior: "smooth" });
-              }
-            }}
-          >
-            <Image src="/logo_broken.png" alt="Z" width={80} height={80} priority className="h-14 w-14 sm:h-[68px] sm:w-[68px] object-contain group-hover:scale-105 transition-all duration-300 drop-shadow-md relative z-10" />
-            
-            {/* New Storefront-style Text Logo */}
-            <div className="flex items-center gap-0.5 group-hover:scale-[1.02] transition-transform duration-300 select-none relative z-10 font-serif">
-              <span className="text-[#cc0000] text-[40px] sm:text-[50px] md:text-[58px] font-bold leading-none">
-                Z
-              </span>
-              <div className="flex flex-col justify-center pt-1">
-                <span className="text-gray-900 text-[20px] sm:text-[24px] md:text-[28px] font-bold uppercase tracking-[0.02em] leading-none mb-0.5">
-                  COMPUTER
-                </span>
-                <span className={`${montserrat.className} text-[#cc0000] font-black text-[5.5px] sm:text-[7.5px] md:text-[8.5px] uppercase tracking-[0.02em] sm:tracking-[0.05em] leading-none`}>
-                  PC GAMING - LAPTOP - WORKSTATION
-                </span>
-              </div>
-            </div>
-          </Link>
+  const renderSuggestionsDropdown = () => {
+    if (!showSuggestions) return null;
+    if (!(searchQuery.trim().length >= 1 ? suggestions.length > 0 : defaultSuggestions.length > 0)) return null;
 
-          {/* Desktop Search Bar (Hidden on Mobile) */}
-          <div className="flex-1 w-full max-w-2xl lg:max-w-3xl hidden md:flex mx-6 xl:mx-12 relative">
-            <form onSubmit={handleSearch} className="relative w-full group/search z-50">
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                onFocus={() => setShowSuggestions(true)}
-                onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
-                placeholder="Bạn cần tìm linh kiện, PC hay Laptop..."
-                className="w-full border-2 border-primary/20 bg-white/60 backdrop-blur-md rounded-full py-2.5 px-5 pr-12 text-sm focus:outline-none focus:border-primary/60 focus:bg-white shadow-inner transition-all duration-300 text-gray-800 placeholder-gray-400 group-hover/search:shadow-[0_0_15px_var(--primary-ring)]"
-              />
-              <button type="submit" className="absolute right-0 top-0 h-full w-14 bg-primary rounded-r-full text-white flex items-center justify-center hover:brightness-110 transition-all duration-300" aria-label="Tìm kiếm">
-                <Search size={18} />
-              </button>
-            </form>
-
-            {/* Suggestions Dropdown */}
-            {showSuggestions && (searchQuery.trim().length >= 1 ? suggestions.length > 0 : defaultSuggestions.length > 0) && (
-              <div className="absolute top-[110%] left-0 right-0 bg-white rounded-xl shadow-2xl border border-gray-100 overflow-hidden z-50 animate-in fade-in zoom-in-95 duration-200 pb-2">
+    return (
+      <div className="absolute top-[110%] left-0 right-0 bg-white rounded-xl shadow-2xl border border-gray-100 overflow-hidden z-50 animate-in fade-in zoom-in-95 duration-200 pb-2">
                 
                 {/* When User has NOT typed anything => Show History & Trending */}
                 {searchQuery.trim().length < 1 ? (
@@ -297,7 +242,70 @@ export default function Header() {
                   </>
                 )}
               </div>
-            )}
+                );
+  };
+
+  return (
+    <>
+      <header className="bg-white/85 backdrop-blur-xl sticky top-0 z-50 shadow-[0_4px_30px_rgba(0,0,0,0.05)] border-b border-gray-200/50">
+        {/* Top Header Row */}
+        <div className="container mx-auto px-4 py-3 flex items-center justify-between gap-4">
+          {/* Mobile Hamburger Menu Icon */}
+          <button
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="lg:hidden p-2 text-gray-700 hover:text-primary transition-colors focus:outline-none"
+            aria-label="Toggle menu"
+          >
+            {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+
+          <Link 
+            href="/" 
+            className="flex items-center gap-1.5 shrink-0 group relative"
+            onClick={(e) => {
+              if (window.location.pathname === "/") {
+                e.preventDefault();
+                window.scrollTo({ top: 0, behavior: "smooth" });
+              }
+            }}
+          >
+            <Image src="/logo_broken.png" alt="Z" width={80} height={80} priority className="h-14 w-14 sm:h-[68px] sm:w-[68px] object-contain group-hover:scale-105 transition-all duration-300 drop-shadow-md relative z-10" />
+            
+            {/* New Storefront-style Text Logo */}
+            <div className="flex items-center gap-0.5 group-hover:scale-[1.02] transition-transform duration-300 select-none relative z-10 font-serif">
+              <span className="text-[#cc0000] text-[40px] sm:text-[50px] md:text-[58px] font-bold leading-none">
+                Z
+              </span>
+              <div className="flex flex-col justify-center pt-1">
+                <span className="text-gray-900 text-[20px] sm:text-[24px] md:text-[28px] font-bold uppercase tracking-[0.02em] leading-none mb-0.5">
+                  COMPUTER
+                </span>
+                <span className={`${montserrat.className} text-[#cc0000] font-black text-[5.5px] sm:text-[7.5px] md:text-[8.5px] uppercase tracking-[0.02em] sm:tracking-[0.05em] leading-none`}>
+                  PC GAMING - LAPTOP - WORKSTATION
+                </span>
+              </div>
+            </div>
+          </Link>
+
+          {/* Desktop Search Bar (Hidden on Mobile) */}
+          <div className="flex-1 w-full max-w-2xl lg:max-w-3xl hidden md:flex mx-6 xl:mx-12 relative">
+            <form onSubmit={handleSearch} className="relative w-full group/search z-50">
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                onFocus={() => setShowSuggestions(true)}
+                onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
+                placeholder="Bạn cần tìm linh kiện, PC hay Laptop..."
+                className="w-full border-2 border-primary/20 bg-white/60 backdrop-blur-md rounded-full py-2.5 px-5 pr-12 text-sm focus:outline-none focus:border-primary/60 focus:bg-white shadow-inner transition-all duration-300 text-gray-800 placeholder-gray-400 group-hover/search:shadow-[0_0_15px_var(--primary-ring)]"
+              />
+              <button type="submit" className="absolute right-0 top-0 h-full w-14 bg-primary rounded-r-full text-white flex items-center justify-center hover:brightness-110 transition-all duration-300" aria-label="Tìm kiếm">
+                <Search size={18} />
+              </button>
+            </form>
+
+            {/* Suggestions Dropdown */}
+            {renderSuggestionsDropdown()}
           </div>
 
           {/* Cart & Authentication */}
@@ -336,19 +344,22 @@ export default function Header() {
         <HeaderNav />
 
         {/* Mobile Search Bar (Only visible on small devices) */}
-        <div className="md:hidden px-4 pb-3">
-          <form onSubmit={handleSearch} className="relative w-full">
+        <div className="md:hidden px-4 pb-3 relative z-50">
+          <form onSubmit={handleSearch} className="relative w-full group/search">
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Tìm kiếm linh kiện, PC, Laptop..."
-              className="w-full border-2 border-primary rounded-full py-1.5 pl-4 pr-10 text-xs focus:outline-none"
+              onFocus={() => setShowSuggestions(true)}
+              onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
+              className="w-full border-2 border-primary/20 bg-white/60 backdrop-blur-md rounded-full py-1.5 pl-4 pr-10 text-xs focus:outline-none focus:bg-white focus:border-primary/60 transition-all duration-300 shadow-inner group-hover/search:shadow-[0_0_15px_var(--primary-ring)]"
             />
-            <button type="submit" className="absolute right-0 top-0 h-full w-10 bg-primary rounded-r-full text-white flex items-center justify-center" aria-label="Tìm kiếm">
+            <button type="submit" className="absolute right-0 top-0 h-full w-10 bg-primary rounded-r-full text-white flex items-center justify-center hover:brightness-110" aria-label="Tìm kiếm">
               <Search size={16} />
             </button>
           </form>
+          {renderSuggestionsDropdown()}
         </div>
       </header>
 
