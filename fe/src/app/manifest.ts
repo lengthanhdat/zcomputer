@@ -11,27 +11,27 @@ export default function manifest(): MetadataRoute.Manifest {
     theme_color: '#dc2626',
     icons: [
       {
-        src: '/logo_broken.png',
+        src: '/logo-full.jpg',
         sizes: '192x192',
-        type: 'image/png',
+        type: 'image/jpeg',
         purpose: 'any'
       },
       {
-        src: '/logo_broken.png',
+        src: '/logo-full.jpg',
         sizes: '512x512',
-        type: 'image/png',
+        type: 'image/jpeg',
         purpose: 'any'
       },
       {
-        src: '/logo_broken.png',
+        src: '/logo-full.jpg',
         sizes: '192x192',
-        type: 'image/png',
+        type: 'image/jpeg',
         purpose: 'maskable'
       },
       {
-        src: '/logo_broken.png',
+        src: '/logo-full.jpg',
         sizes: '512x512',
-        type: 'image/png',
+        type: 'image/jpeg',
         purpose: 'maskable'
       },
     ],

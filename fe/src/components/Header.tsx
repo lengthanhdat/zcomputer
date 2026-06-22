@@ -269,15 +269,22 @@ export default function Header() {
               }
             }}
           >
-            <Image src="/logo_broken.png" alt="Z" width={80} height={80} priority className="h-14 w-14 sm:h-[68px] sm:w-[68px] object-contain group-hover:scale-105 transition-all duration-300 drop-shadow-md relative z-10" />
-            <Image 
-              src="/logo-full.png" 
-              alt="ZCOMPUTER PC GAMING - LAPTOP - WORKSTATION" 
-              width={280} 
-              height={70} 
-              priority 
-              className="h-10 w-auto sm:h-12 md:h-14 object-contain group-hover:scale-[1.02] transition-all duration-300 relative z-10" 
-            />
+            <Image src="/logo-full.jpg" alt="Z" width={80} height={80} priority className="h-14 w-14 sm:h-[68px] sm:w-[68px] object-contain group-hover:scale-105 transition-all duration-300 drop-shadow-md relative z-10" />
+            
+            {/* New Storefront-style Text Logo */}
+            <div className="flex items-center gap-0.5 group-hover:scale-[1.02] transition-transform duration-300 select-none relative z-10 font-serif">
+              <span className="text-[#cc0000] text-[40px] sm:text-[50px] md:text-[58px] font-bold leading-none">
+                Z
+              </span>
+              <div className="flex flex-col justify-center pt-1">
+                <span className="text-gray-900 text-[20px] sm:text-[24px] md:text-[28px] font-bold uppercase tracking-[0.02em] leading-none mb-0.5">
+                  COMPUTER
+                </span>
+                <span className={`${montserrat.className} text-[#cc0000] font-black text-[5.5px] sm:text-[7.5px] md:text-[8.5px] uppercase tracking-[0.02em] sm:tracking-[0.05em] leading-none`}>
+                  PC GAMING - LAPTOP - WORKSTATION
+                </span>
+              </div>
+            </div>
           </Link>
 
           {/* Desktop Search Bar (Hidden on Mobile) */}
