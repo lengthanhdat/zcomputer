@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Zap, Timer, ShoppingCart, ArrowRight, Eye, Maximize, Cpu, Database, MonitorPlay, HardDrive, Monitor, Battery, Weight, MemoryStick, Gpu, Layers, Keyboard, Mouse, Link as LinkIcon } from "lucide-react";
 import { useState, useEffect } from "react";
+import DraggableSlider from "./DraggableSlider";
 
 export default function HotSaleSection({ 
   products 
@@ -66,65 +67,7 @@ export default function HotSaleSection({
       });
   }, []);
 
-  useEffect(() => {
-    const slider = document.getElementById('hotsale-slider');
-    if (!slider) return;
 
-    let isHovered = false;
-    let isDown = false;
-    let startX: number;
-    let scrollLeft: number;
-    let dragged = false;
-
-    const setHover = () => { if (!isDown) isHovered = true; };
-    const removeHover = () => { isHovered = false; isDown = false; slider.classList.remove('cursor-grabbing'); };
-    
-    const mouseDown = (e: MouseEvent) => {
-      isDown = true;
-      dragged = false;
-      slider.classList.add('cursor-grabbing');
-      startX = e.pageX - slider.offsetLeft;
-      scrollLeft = slider.scrollLeft;
-    };
-    
-    const mouseUp = () => {
-      isDown = false;
-      slider.classList.remove('cursor-grabbing');
-    };
-    
-    const mouseMove = (e: MouseEvent) => {
-      if (!isDown) return;
-      e.preventDefault();
-      const x = e.pageX - slider.offsetLeft;
-      const walk = (x - startX) * 1.5;
-      if (Math.abs(walk) > 5) dragged = true;
-      slider.scrollLeft = scrollLeft - walk;
-    };
-
-    // Ngăn chặn click nếu đang kéo (drag)
-    const preventClick = (e: MouseEvent) => {
-      if (dragged) {
-        e.preventDefault();
-        e.stopPropagation();
-      }
-    };
-    
-    slider.addEventListener('mouseenter', setHover);
-    slider.addEventListener('mouseleave', removeHover);
-    slider.addEventListener('mousedown', mouseDown);
-    slider.addEventListener('mouseup', mouseUp);
-    slider.addEventListener('mousemove', mouseMove);
-    slider.addEventListener('click', preventClick, true);
-
-    return () => {
-      slider.removeEventListener('mouseenter', setHover);
-      slider.removeEventListener('mouseleave', removeHover);
-      slider.removeEventListener('mousedown', mouseDown);
-      slider.removeEventListener('mouseup', mouseUp);
-      slider.removeEventListener('mousemove', mouseMove);
-      slider.removeEventListener('click', preventClick, true);
-    };
-  }, [displayProducts]);
 
   useEffect(() => {
     if (!endTime) return;
@@ -272,7 +215,7 @@ export default function HotSaleSection({
           {/* Right Slider - Glass Cards */}
           <div className="relative z-10 overflow-hidden w-full flex-1 py-6 xl:py-10 flex items-center">
             {activeProducts.length > 0 ? (
-              <div id="hotsale-slider" className="flex w-full overflow-x-auto px-6 pb-4 scrollbar-hide relative z-10">
+              <DraggableSlider id="hotsale-slider" className="flex w-full overflow-x-auto px-6 pb-4 scrollbar-hide relative z-10">
                 <div id="hotsale-slider-inner" className="flex gap-5 shrink-0">
                   {displayProducts.map((product, idx) => {
                     const isHotSaleActive = !!(product.isHotSale && product.flashSalePrice && product.flashSalePrice < product.price);
@@ -430,7 +373,7 @@ export default function HotSaleSection({
                 })}
                 </div>
 
-              </div>
+              </DraggableSlider>
             ) : (
               <div className="w-full text-center text-gray-500 py-10">
                 Chưa có sản phẩm flash sale trong danh mục này.

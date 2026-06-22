@@ -11,6 +11,7 @@ import VideoReviewSection from "@/components/VideoReviewSection";
 import BrandMarquee from "@/components/BrandMarquee";
 import type { ReactNode } from "react";
 import HotSaleSection from "./HotSaleSection";
+import DraggableSlider from "./DraggableSlider";
 import { fetchApi } from "@/lib/api";
 
 type Product = {
@@ -450,13 +451,13 @@ export default function HomeClient() {
                     >
                       <ChevronLeft size={24} />
                     </button>
-                    <div id={`slider-${cat._id}`} className="flex overflow-x-auto gap-3 pb-6 scroll-smooth snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+                    <DraggableSlider id={`slider-${cat._id}`} className="flex overflow-x-auto gap-3 pb-6 scroll-smooth snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
                       <div id={`slider-inner-${cat._id}`} className="flex gap-3 pr-3 flex-shrink-0 snap-start">
                         {catProducts.map((product) => (
                           <ProductCard key={product._id} product={product} />
                         ))}
                       </div>
-                    </div>
+                    </DraggableSlider>
 
                     <button 
                       onClick={(e) => {
