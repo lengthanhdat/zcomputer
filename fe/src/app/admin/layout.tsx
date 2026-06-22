@@ -87,7 +87,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
       {/* Sidebar */}
       <aside className={`fixed z-50 inset-y-0 left-0 w-64 bg-[#111111] text-white flex flex-col transform transition-transform duration-300 ease-in-out md:relative md:translate-x-0 ${isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"}`}>
-        <div className="p-6 flex items-center justify-between border-b border-gray-800">
+        <div className="p-4 md:p-6 flex items-center justify-between border-b border-gray-800">
           <div className="text-2xl font-black text-primary uppercase w-full text-center">
             ZCOMPUTER <span className="text-white text-sm block font-normal">Admin Panel</span>
           </div>

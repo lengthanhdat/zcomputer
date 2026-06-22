@@ -49,7 +49,7 @@ export default function AdminSubscribersPage() {
   };
 
   return (
-    <div className="p-6">
+    <div className="p-4 md:p-6">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold text-gray-800">Quản lý Đăng ký nhận tin</h1>
         <div className="bg-primary/10 text-primary px-4 py-2 rounded-lg font-bold text-sm border border-primary/10">
@@ -59,7 +59,7 @@ export default function AdminSubscribersPage() {
 
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse">
+          <table className="whitespace-nowrap min-w-max w-full text-left border-collapse">
             <thead>
               <tr className="bg-gray-50 border-b border-gray-100 text-gray-500 text-sm">
                 <th className="p-4 font-medium">STT</th>
@@ -71,14 +71,14 @@ export default function AdminSubscribersPage() {
             <tbody className="divide-y divide-gray-100">
               {loading ? (
                 <tr>
-                  <td colSpan={4} className="p-8 text-center text-gray-500">
+                  <td colSpan={4} className="p-4 md:p-8 text-center text-gray-500">
                     <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
                     Đang tải dữ liệu...
                   </td>
                 </tr>
               ) : subscribers.length === 0 ? (
                 <tr>
-                  <td colSpan={4} className="p-8 text-center text-gray-500">
+                  <td colSpan={4} className="p-4 md:p-8 text-center text-gray-500">
                     Chưa có khách hàng nào đăng ký nhận tin.
                   </td>
                 </tr>

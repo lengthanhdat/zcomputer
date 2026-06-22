@@ -804,7 +804,7 @@ export default function NewProductPage() {
 
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
           <div className="overflow-x-auto">
-            <table className="w-full text-sm text-left">
+            <table className="whitespace-nowrap min-w-max w-full text-sm text-left">
               <thead className="text-xs text-gray-500 uppercase bg-gray-50/80 border-b border-gray-100">
                 <tr>
                   <th className="px-4 py-3 font-semibold whitespace-nowrap">Tên Sản Phẩm</th>
@@ -937,7 +937,7 @@ export default function NewProductPage() {
         <div className="xl:col-span-2 space-y-8">
           
           {/* Card: Thông tin cơ bản */}
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8">
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 md:p-6 md:p-8">
             <div className="flex items-center gap-2 mb-6">
               <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center text-blue-600">
                 <FileText size={18} />
@@ -1027,7 +1027,7 @@ export default function NewProductPage() {
             </div>
           </div>
           {/* Card: Thông số kỹ thuật */}
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8">
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 md:p-6 md:p-8">
             <div className="flex items-center gap-2 mb-6">
               <div className="w-8 h-8 rounded-lg bg-indigo-50 flex items-center justify-center text-indigo-600">
                 <Cpu size={18} />
@@ -1107,7 +1107,7 @@ export default function NewProductPage() {
             </div>
           </div>
           {/* Card: Mô tả chi tiết */}
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8 mt-8">
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 md:p-6 md:p-8 mt-8">
             <div className="flex items-center gap-2 mb-6">
               <div className="w-8 h-8 rounded-lg bg-yellow-50 flex items-center justify-center text-yellow-600">
                 <FileText size={18} />
@@ -1142,7 +1142,7 @@ export default function NewProductPage() {
         <div className="space-y-8">
           
           {/* Card: Giá và Tồn kho */}
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 md:p-6">
             <h2 className="text-base font-bold text-gray-800 mb-5">Định giá & Tồn kho</h2>
             
             <div className="space-y-4">
@@ -1227,7 +1227,7 @@ export default function NewProductPage() {
           </div>
 
           {/* Card: Hình ảnh */}
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 md:p-6">
             <div className="flex items-center justify-between mb-5">
               <div className="flex items-center gap-2">
                 <div className="w-7 h-7 rounded-lg bg-orange-50 flex items-center justify-center text-orange-600">
@@ -1330,7 +1330,7 @@ export default function NewProductPage() {
           </div>
 
           {/* Card: Quà tặng */}
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 md:p-6">
             <div className="flex items-center justify-between mb-5">
               <div className="flex items-center gap-2">
                 <div className="w-7 h-7 rounded-lg bg-orange-50 flex items-center justify-center text-orange-600">
@@ -1376,7 +1376,7 @@ export default function NewProductPage() {
           </div>
 
           {/* Hành động */}
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 flex flex-col gap-3">
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 md:p-6 flex flex-col gap-3">
             <button 
               type="submit" 
               disabled={loading}
@@ -1412,7 +1412,7 @@ export default function NewProductPage() {
               </button>
             </div>
             
-            <div className="p-6">
+            <div className="p-4 md:p-6">
               <p className="text-sm text-gray-600 mb-4">
                 Dán bất kỳ nội dung nào (từ bài đăng Facebook, Zalo, diễn đàn...). Trí tuệ nhân tạo sẽ tự động đọc hiểu và bóc tách thành Tên máy, Hãng, Giá bán và Thông số kỹ thuật.
               </p>

@@ -119,7 +119,7 @@ export default function SettingsPage() {
 
       <div className="space-y-6 max-w-3xl">
         {/* ── Theme Color ── */}
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8">
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 md:p-6 md:p-8">
           <div className="flex items-center gap-2 mb-6 border-b border-gray-100 pb-4">
             <div className="w-8 h-8 rounded-lg bg-violet-50 flex items-center justify-center text-violet-500">
               <Palette size={18} />
@@ -139,7 +139,7 @@ export default function SettingsPage() {
                 Chọn một bộ màu bên dưới. Thay đổi sẽ được áp dụng ngay trên trang admin và có hiệu lực với người dùng sau khi họ tải lại trang.
               </p>
 
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 sm:grid-cols-3 gap-3 mb-6">
                 {themeKeys.map((key) => {
                   const preset = THEME_PRESETS[key];
                   const isSelected = selectedTheme === key;
@@ -240,7 +240,7 @@ export default function SettingsPage() {
         </div>
 
         {/* ── Flash Sale ── */}
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8">
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 md:p-6 md:p-8">
           <div className="flex items-center gap-2 mb-6 border-b border-gray-100 pb-4">
             <div className="w-8 h-8 rounded-lg bg-orange-50 flex items-center justify-center text-orange-500">
               <Zap size={18} className="fill-orange-500" />

@@ -94,7 +94,7 @@ export default function AdminFeedbacks() {
 
       <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="w-full text-sm text-left">
+          <table className="whitespace-nowrap min-w-max w-full text-sm text-left">
             <thead className="bg-gray-50 text-gray-600 font-bold border-b border-gray-200 uppercase text-xs">
               <tr>
                 <th className="px-6 py-4">Ngày gửi</th>
@@ -169,13 +169,13 @@ export default function AdminFeedbacks() {
             className="absolute inset-0 bg-black/40 backdrop-blur-sm"
             onClick={() => setSelectedFeedback(null)}
           ></div>
-          <div className="relative w-full max-w-2xl bg-white rounded-3xl shadow-2xl p-8 animate-in zoom-in-95 duration-200">
+          <div className="relative w-full max-w-2xl bg-white rounded-3xl shadow-2xl p-4 md:p-8 animate-in zoom-in-95 duration-200">
             <h3 className="text-xl font-bold text-gray-900 mb-6 flex items-center justify-between border-b pb-4">
               <span>Chi tiết phản hồi</span>
               {getStatusBadge(selectedFeedback.status)}
             </h3>
             
-            <div className="grid grid-cols-2 gap-6 mb-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
               <div>
                 <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Họ tên</p>
                 <p className="font-semibold text-gray-800">{selectedFeedback.name}</p>
@@ -194,7 +194,7 @@ export default function AdminFeedbacks() {
               </div>
             </div>
 
-            <div className="bg-gray-50 rounded-2xl p-6 mb-8 border border-gray-100">
+            <div className="bg-gray-50 rounded-2xl p-4 md:p-6 mb-8 border border-gray-100">
               <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3">Nội dung</p>
               <p className="text-gray-700 whitespace-pre-wrap leading-relaxed">{selectedFeedback.message}</p>
             </div>

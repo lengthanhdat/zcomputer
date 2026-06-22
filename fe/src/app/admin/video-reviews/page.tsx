@@ -149,7 +149,7 @@ export default function AdminVideoReviewsPage() {
 
   return (
     <div className="bg-white rounded-lg shadow-sm border border-gray-200 min-h-full">
-      <div className="p-6 border-b border-gray-200 flex justify-between items-center">
+      <div className="p-4 md:p-6 border-b border-gray-200 flex justify-between items-center">
         <div>
           <h1 className="text-2xl font-bold text-gray-800 mb-1">Quản lý Video Review</h1>
           <p className="text-sm text-gray-500">Quản lý các video TikTok/Shorts trên trang chủ.</p>
@@ -159,7 +159,7 @@ export default function AdminVideoReviewsPage() {
         </button>
       </div>
 
-      <div className="p-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      <div className="p-4 md:p-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {loading ? <p>Đang tải...</p> : reviews.map(review => (
           <div key={review._id} className="border rounded-lg overflow-hidden bg-white shadow-sm hover:shadow transition-shadow">
             <div className="aspect-[9/16] bg-gray-100 relative group">
@@ -198,7 +198,7 @@ export default function AdminVideoReviewsPage() {
 
       {showModal && (
         <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-lg max-w-md w-full p-6 max-h-[90vh] overflow-y-visible">
+          <div className="bg-white rounded-lg max-w-md w-full p-4 md:p-6 max-h-[90vh] overflow-y-visible">
             <h2 className="text-xl font-bold mb-4">{editingId ? "Sửa Video Review" : "Thêm Video Review"}</h2>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>

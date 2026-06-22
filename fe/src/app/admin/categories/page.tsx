@@ -200,7 +200,7 @@ export default function AdminCategoriesPage() {
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 min-h-full">
       {/* Category List */}
       <div className="md:col-span-2 bg-white rounded-lg shadow-sm border border-gray-200">
-        <div className="p-6 border-b border-gray-200 flex items-center justify-between">
+        <div className="p-4 md:p-6 border-b border-gray-200 flex items-center justify-between">
           <h1 className="text-xl font-bold text-gray-800">Danh mục sản phẩm</h1>
           <button
             onClick={startAdd}
@@ -209,9 +209,9 @@ export default function AdminCategoriesPage() {
             <Plus size={16} /> Thêm mới
           </button>
         </div>
-        <div className="p-6">
+        <div className="p-4 md:p-6">
           <div className="overflow-x-auto">
-            <table className="w-full text-left border-collapse">
+            <table className="whitespace-nowrap min-w-max w-full text-left border-collapse">
               <thead>
                 <tr className="bg-gray-50 text-gray-600 text-sm border-y border-gray-200">
                   <th className="py-3 px-4 font-semibold w-10"></th>
@@ -321,7 +321,7 @@ export default function AdminCategoriesPage() {
           )}
         </div>
 
-        <div className="p-6">
+        <div className="p-4 md:p-6">
           <form onSubmit={handleSubmit} className="space-y-4">
             {isEditMode && (
               <div className="text-xs text-gray-400 bg-gray-50 rounded-md px-3 py-2 font-mono border border-dashed border-gray-200">

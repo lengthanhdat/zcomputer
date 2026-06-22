@@ -125,14 +125,14 @@ export default function AdminUsersPage() {
 
   return (
     <div className="bg-white rounded-lg shadow-sm border border-gray-200 min-h-full">
-      <div className="p-6 border-b border-gray-200 flex justify-between items-center">
+      <div className="p-4 md:p-6 border-b border-gray-200 flex justify-between items-center">
         <div>
           <h1 className="text-2xl font-bold text-gray-800 mb-1">Quản lý Tài khoản</h1>
           <p className="text-sm text-gray-500">Xem danh sách, phân quyền và quản lý hệ thống.</p>
         </div>
       </div>
       
-      <div className="p-6">
+      <div className="p-4 md:p-6">
         <div className="flex gap-4 mb-6">
           <div className="relative flex-1 max-w-md">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
@@ -147,7 +147,7 @@ export default function AdminUsersPage() {
         </div>
 
         <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse">
+          <table className="whitespace-nowrap min-w-max w-full text-left border-collapse">
             <thead>
               <tr className="bg-gray-50 text-gray-600 text-sm border-y border-gray-200">
                 <th className="py-3 px-4 font-semibold">Tên người dùng</th>
@@ -240,7 +240,7 @@ export default function AdminUsersPage() {
               </button>
             </div>
             
-            <div className="p-6 overflow-y-auto max-h-[60vh]">
+            <div className="p-4 md:p-6 overflow-y-auto max-h-[60vh]">
               {/* Thông tin cơ bản */}
               <div className="flex items-center gap-4 mb-6 pb-6 border-b border-gray-100">
                 <div className="w-16 h-16 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-2xl font-black uppercase shrink-0">

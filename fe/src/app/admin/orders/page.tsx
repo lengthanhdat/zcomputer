@@ -107,7 +107,7 @@ export default function AdminOrdersPage() {
     <div className="space-y-6">
       {/* Header & Stats */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl p-6 text-white shadow-lg hover:shadow-xl transition-all hover:-translate-y-1">
+        <div className="bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl p-4 md:p-6 text-white shadow-lg hover:shadow-xl transition-all hover:-translate-y-1">
           <div className="flex justify-between items-start">
             <div>
               <p className="text-indigo-100 font-medium">Tổng doanh thu</p>
@@ -120,7 +120,7 @@ export default function AdminOrdersPage() {
           <p className="text-sm text-indigo-100 mt-4">Chỉ tính đơn đã giao thành công</p>
         </div>
 
-        <div className="bg-gradient-to-br from-blue-500 to-cyan-500 rounded-2xl p-6 text-white shadow-lg hover:shadow-xl transition-all hover:-translate-y-1">
+        <div className="bg-gradient-to-br from-blue-500 to-cyan-500 rounded-2xl p-4 md:p-6 text-white shadow-lg hover:shadow-xl transition-all hover:-translate-y-1">
           <div className="flex justify-between items-start">
             <div>
               <p className="text-blue-100 font-medium">Tổng đơn hàng</p>
@@ -133,7 +133,7 @@ export default function AdminOrdersPage() {
           <p className="text-sm text-blue-100 mt-4">Tất cả đơn hàng trên hệ thống</p>
         </div>
 
-        <div className="bg-gradient-to-br from-orange-400 to-primary rounded-2xl p-6 text-white shadow-lg hover:shadow-xl transition-all hover:-translate-y-1">
+        <div className="bg-gradient-to-br from-orange-400 to-primary rounded-2xl p-4 md:p-6 text-white shadow-lg hover:shadow-xl transition-all hover:-translate-y-1">
           <div className="flex justify-between items-start">
             <div>
               <p className="text-orange-100 font-medium">Chờ xác nhận</p>
@@ -181,7 +181,7 @@ export default function AdminOrdersPage() {
       {/* Orders Table */}
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse">
+          <table className="whitespace-nowrap min-w-max w-full text-left border-collapse">
             <thead>
               <tr className="bg-gray-50/50 text-gray-500 text-sm border-b border-gray-100">
                 <th className="py-4 px-6 font-semibold">Đơn Hàng</th>
@@ -298,7 +298,7 @@ export default function AdminOrdersPage() {
             </div>
 
             {/* Modal Body */}
-            <div className="p-6 overflow-y-auto custom-scrollbar flex-1 space-y-6">
+            <div className="p-4 md:p-6 overflow-y-auto custom-scrollbar flex-1 space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* Customer Info */}
                 <div className="bg-gray-50 rounded-xl p-5 border border-gray-100">
