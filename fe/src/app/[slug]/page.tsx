@@ -7,6 +7,7 @@ import ProductActions from "@/components/ProductActions";
 import ProductGallery from "@/components/ProductGallery";
 import ViewIncrementer from "@/components/ViewIncrementer";
 import LikeButton from "@/components/LikeButton";
+import CollapsibleDescription from "@/components/CollapsibleDescription";
 import { notFound } from "next/navigation";
 import "react-quill-new/dist/quill.snow.css"; // Import Quill CSS for proper rendering
 
@@ -532,21 +533,7 @@ async function ProductDetailView({ product }: { product: Product }) {
               Đặc điểm nổi bật
               <div className="absolute -bottom-3 left-0 w-1/2 h-1 bg-primary rounded-full"></div>
             </h2>
-            {cleanDescription ? (
-              <div className="prose prose-lg max-w-none text-gray-800 leading-relaxed text-justify prose-headings:text-gray-900 prose-a:text-primary hover:prose-a:brightness-110 prose-img:rounded-xl prose-img:shadow-md [&_img]:mx-auto [&_img]:max-w-full [&_img]:h-auto ql-snow">
-                {cleanDescription.includes('<p>') || cleanDescription.includes('<h2>') || cleanDescription.includes('<h3>') || cleanDescription.includes('<br>') || cleanDescription.includes('<img') ? (
-                  <div className="ql-editor p-0 min-w-full" dangerouslySetInnerHTML={{ __html: cleanDescription.replace(/&nbsp;/g, ' ') }} />
-                ) : (
-                  <div className="ql-editor p-0">
-                    {cleanDescription.replace(/&nbsp;/g, ' ').split('\n').map((line, idx) => (
-                      <p key={idx}>{line}</p>
-                    ))}
-                  </div>
-                )}
-              </div>
-            ) : (
-              <p className="text-gray-500 italic">Đang cập nhật thông tin sản phẩm...</p>
-            )}
+            <CollapsibleDescription content={cleanDescription} />
           </div>
 
           {/* Sidebar News */}
