@@ -56,6 +56,7 @@ export default function Header() {
   const [categories, setCategories] = useState<any[]>([]);
   const [expandedCatId, setExpandedCatId] = useState<string | null>(null);
   const [suggestions, setSuggestions] = useState<any[]>([]);
+  const [defaultSuggestions, setDefaultSuggestions] = useState<any[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const searchTimeoutRef = React.useRef<NodeJS.Timeout | null>(null);
   const router = useRouter();
@@ -65,14 +66,20 @@ export default function Header() {
       .then(r => r.ok ? r.json() : [])
       .then(data => setCategories(data))
       .catch(() => {});
+      
+    // Fetch default suggestions (most popular products)
+    fetchApi('/products?limit=5&sort=views', { requireAuth: false })
+      .then(r => r.ok ? r.json() : [])
+      .then(data => setDefaultSuggestions(data))
+      .catch(() => {});
   }, []);
 
   useEffect(() => {
-    if (searchQuery.trim().length >= 2) {
+    if (searchQuery.trim().length >= 1) {
       if (searchTimeoutRef.current) clearTimeout(searchTimeoutRef.current);
       
       searchTimeoutRef.current = setTimeout(() => {
-        fetchApi(`/products?search=${encodeURIComponent(searchQuery.trim())}&limit=5`, { requireAuth: false })
+        fetchApi(`/products?search=${encodeURIComponent(searchQuery.trim())}&limit=5&sort=views`, { requireAuth: false })
           .then(res => res.ok ? res.json() : [])
           .then(data => {
             setSuggestions(data);
@@ -137,13 +144,13 @@ export default function Header() {
           </Link>
 
           {/* Desktop Search Bar (Hidden on Mobile) */}
-          <div className="flex-1 max-w-xl hidden md:flex mx-6 relative">
+          <div className="flex-1 w-full max-w-2xl lg:max-w-3xl hidden md:flex mx-6 xl:mx-12 relative">
             <form onSubmit={handleSearch} className="relative w-full group/search z-50">
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                onFocus={() => { if (suggestions.length > 0) setShowSuggestions(true); }}
+                onFocus={() => setShowSuggestions(true)}
                 onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
                 placeholder="Bạn cần tìm linh kiện, PC hay Laptop..."
                 className="w-full border-2 border-primary/20 bg-white/60 backdrop-blur-md rounded-full py-2.5 px-5 pr-12 text-sm focus:outline-none focus:border-primary/60 focus:bg-white shadow-inner transition-all duration-300 text-gray-800 placeholder-gray-400 group-hover/search:shadow-[0_0_15px_var(--primary-ring)]"
@@ -154,19 +161,27 @@ export default function Header() {
             </form>
 
             {/* Suggestions Dropdown */}
-            {showSuggestions && suggestions.length > 0 && (
+            {showSuggestions && (searchQuery.trim().length >= 1 ? suggestions.length > 0 : defaultSuggestions.length > 0) && (
               <div className="absolute top-[110%] left-0 right-0 bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden z-50 animate-in fade-in zoom-in-95 duration-200">
+                <div className="px-4 py-2 bg-gray-50/50 border-b border-gray-100 flex items-center justify-between">
+                  <span className="text-xs font-bold text-gray-500 uppercase tracking-wider">
+                    {searchQuery.trim().length >= 1 ? "Kết quả tìm kiếm" : "Gợi ý cho bạn"}
+                  </span>
+                  {searchQuery.trim().length >= 1 && (
+                    <span className="text-[10px] text-gray-400 font-medium">Nhấn Enter để xem thêm</span>
+                  )}
+                </div>
                 <div className="py-2">
-                  {suggestions.map((item) => (
+                  {(searchQuery.trim().length >= 1 ? suggestions : defaultSuggestions).map((item) => (
                     <Link 
                       key={item._id} 
                       href={`/${item.slug}`} 
                       onClick={() => setShowSuggestions(false)}
-                      className="flex items-center gap-3 px-4 py-3 hover:bg-slate-50 transition-colors border-b border-gray-50 last:border-0"
+                      className="flex items-center gap-3 px-4 py-2.5 hover:bg-slate-50 transition-colors border-b border-gray-50 last:border-0 group/item"
                     >
-                      <div className="w-12 h-12 rounded-lg bg-gray-50 border border-gray-100 overflow-hidden shrink-0 p-1">
+                      <div className="w-12 h-12 rounded-lg bg-white border border-gray-100 overflow-hidden shrink-0 p-1 group-hover/item:border-primary/20 transition-colors">
                         {item.images?.[0] ? (
-                          <img src={item.images[0]} alt={item.name} className="w-full h-full object-cover rounded" />
+                          <img src={item.images[0]} alt={item.name} className="w-full h-full object-contain mix-blend-multiply" />
                         ) : (
                           <div className="w-full h-full flex items-center justify-center text-gray-400">
                             {item.name.toLowerCase().includes('laptop') ? <Laptop size={20} /> :
@@ -176,8 +191,8 @@ export default function Header() {
                         )}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <h4 className="text-sm font-bold text-gray-800 truncate">{item.name}</h4>
-                        <div className="flex items-center gap-2 mt-1">
+                        <h4 className="text-sm font-semibold text-gray-800 truncate group-hover/item:text-primary transition-colors">{item.name}</h4>
+                        <div className="flex items-center gap-2 mt-0.5">
                           <span className="text-[13px] font-black text-primary">{item.price ? item.price.toLocaleString('vi-VN') + 'đ' : 'Liên hệ'}</span>
                           {item.discountPrice > 0 && <span className="text-[10px] text-gray-400 line-through font-medium">{item.discountPrice.toLocaleString('vi-VN')}đ</span>}
                         </div>
@@ -185,11 +200,13 @@ export default function Header() {
                     </Link>
                   ))}
                 </div>
-                <div className="bg-slate-50 px-4 py-3 text-center border-t border-gray-100">
-                  <Link href={`/search?q=${encodeURIComponent(searchQuery)}`} onClick={() => setShowSuggestions(false)} className="text-xs font-bold text-primary hover:text-red-700 transition-colors flex items-center justify-center gap-1">
-                    Xem tất cả kết quả <ArrowRight size={12} />
-                  </Link>
-                </div>
+                {searchQuery.trim().length >= 1 && (
+                  <div className="bg-slate-50 px-4 py-3 text-center border-t border-gray-100 hover:bg-slate-100 transition-colors cursor-pointer" onClick={() => router.push(`/search?q=${encodeURIComponent(searchQuery)}`)}>
+                    <span className="text-xs font-bold text-primary flex items-center justify-center gap-1">
+                      Xem tất cả kết quả cho "{searchQuery}" <ArrowRight size={12} />
+                    </span>
+                  </div>
+                )}
               </div>
             )}
           </div>

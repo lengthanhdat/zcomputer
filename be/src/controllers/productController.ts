@@ -53,10 +53,15 @@ export const getProducts = async (req: Request, res: Response) => {
       }
     }
 
+    let sortOption: any = { createdAt: -1 };
+    if (req.query.sort === 'views') {
+      sortOption = { views: -1, createdAt: -1 };
+    }
+
     const products = await Product.find(filter)
       .populate('category_id', 'name slug')
       .select('-description')
-      .sort({ createdAt: -1 })
+      .sort(sortOption)
       .limit(limit)
       .lean();
     res.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
