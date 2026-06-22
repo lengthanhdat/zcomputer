@@ -269,48 +269,14 @@ export default function Header() {
               }
             }}
           >
-            <Image src="/logo_broken.png" alt="Z" width={80} height={80} priority className="h-14 w-14 sm:h-[68px] sm:w-[68px] object-contain group-hover:scale-105 transition-all duration-300 drop-shadow-md relative z-10" />
-            
-            {/* New Storefront-style Text Logo */}
-            <div className="flex items-stretch gap-1 group-hover:scale-[1.02] transition-transform duration-300 select-none relative z-10">
-              <span 
-                className="text-[#d31111]" 
-                style={{ 
-                  fontFamily: "'Times New Roman', Times, serif", 
-                  fontSize: "clamp(48px, 5.5vw, 68px)", 
-                  fontWeight: 900,
-                  lineHeight: "0.85",
-                  marginTop: "2px"
-                }}
-              >
-                Z
-              </span>
-              <div className="flex flex-col justify-between py-[4px] sm:py-[5px]">
-                <span 
-                  className="text-[#060d1f] uppercase"
-                  style={{ 
-                    fontFamily: "'Times New Roman', Times, serif", 
-                    fontSize: "clamp(26px, 3vw, 36px)", 
-                    fontWeight: 900,
-                    lineHeight: "0.9",
-                    letterSpacing: "0.03em"
-                  }}
-                >
-                  COMPUTER
-                </span>
-                <span 
-                  className="text-[#d31111] font-black uppercase whitespace-nowrap"
-                  style={{ 
-                    fontFamily: "system-ui, -apple-system, sans-serif", 
-                    fontSize: "clamp(6.5px, 0.75vw, 9px)", 
-                    letterSpacing: "0.075em",
-                    lineHeight: "1"
-                  }}
-                >
-                  PC GAMING - LAPTOP - WORKSTATION
-                </span>
-              </div>
-            </div>
+            <Image 
+              src="/logo-full.png" 
+              alt="ZCOMPUTER PC GAMING - LAPTOP - WORKSTATION" 
+              width={280} 
+              height={70} 
+              priority 
+              className="h-10 w-auto sm:h-12 md:h-14 object-contain group-hover:scale-[1.02] transition-all duration-300 relative z-10" 
+            />
           </Link>
 
           {/* Desktop Search Bar (Hidden on Mobile) */}

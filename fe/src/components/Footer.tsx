@@ -65,49 +65,8 @@ export default function Footer() {
           {/* Col 1: Logo & Info */}
           <div className="md:col-span-6 lg:col-span-3 pr-0 lg:pr-4">
              <Link href="/" className="flex flex-col items-start shrink-0 group mb-6">
-               <div className="flex items-center gap-1.5">
-                 <div className="bg-white p-1.5 rounded-xl shadow-[0_0_15px_rgba(255,255,255,0.2)] group-hover:shadow-[0_0_20px_rgba(220,38,38,0.4)] transition-shadow">
-                   <Image src="/logo_broken.png" alt="ZCOMPUTER" width={50} height={50} className="h-10 w-10 object-contain" />
-                 </div>
-                 <div className="flex items-stretch gap-1 group-hover:scale-[1.02] transition-transform duration-300 select-none relative z-10">
-                   <span 
-                     className="text-[#d31111] drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]" 
-                     style={{ 
-                       fontFamily: "'Times New Roman', Times, serif", 
-                       fontSize: "clamp(48px, 5.5vw, 68px)", 
-                       fontWeight: 900,
-                       lineHeight: "0.85",
-                       marginTop: "2px"
-                     }}
-                   >
-                     Z
-                   </span>
-                   <div className="flex flex-col justify-between py-[4px] sm:py-[5px]">
-                     <span 
-                       className="text-white uppercase drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]"
-                       style={{ 
-                         fontFamily: "'Times New Roman', Times, serif", 
-                         fontSize: "clamp(26px, 3vw, 36px)", 
-                         fontWeight: 900,
-                         lineHeight: "0.9",
-                         letterSpacing: "0.03em"
-                       }}
-                     >
-                       COMPUTER
-                     </span>
-                     <span 
-                       className="text-[#d31111] font-black uppercase whitespace-nowrap drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]"
-                       style={{ 
-                         fontFamily: "system-ui, -apple-system, sans-serif", 
-                         fontSize: "clamp(6.5px, 0.75vw, 9px)", 
-                         letterSpacing: "0.075em",
-                         lineHeight: "1"
-                       }}
-                     >
-                       PC GAMING - LAPTOP - WORKSTATION
-                     </span>
-                   </div>
-                 </div>
+               <div className="flex items-center gap-1.5 bg-white p-2 sm:p-3 rounded-xl shadow-[0_0_15px_rgba(255,255,255,0.2)] group-hover:shadow-[0_0_20px_rgba(220,38,38,0.4)] transition-shadow">
+                 <Image src="/logo-full.png" alt="ZCOMPUTER" width={240} height={60} className="h-10 sm:h-12 w-auto object-contain" />
                </div>
              </Link>
              
