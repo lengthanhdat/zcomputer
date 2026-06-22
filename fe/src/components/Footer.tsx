@@ -52,7 +52,7 @@ export default function Footer() {
                   <div className="text-sm font-bold text-white mb-3 flex items-center gap-2"><div className="w-2 h-2 rounded-full bg-primary animate-pulse"></div> Chi nhánh Bình Thạnh</div>
                   <div className="rounded-2xl overflow-hidden border border-white/10 group-hover/map:border-primary/50 transition-colors relative">
                     <div className="absolute inset-0 bg-primary opacity-0 group-hover/map:opacity-100 transition-opacity pointer-events-none z-10 mix-blend-overlay"></div>
-                    <iframe src="https://maps.google.com/maps?q=47/86B+Bùi+Đình+Tuý,+Phường+14,+Bình+Thạnh,+TP.+Hồ+Chí+Minh&t=&z=15&ie=UTF8&iwloc=&output=embed" width="100%" height="160" style={{ border: 0 }} allowFullScreen loading="lazy" referrerPolicy="no-referrer-when-downgrade" className="transition-all duration-500 group-hover/map:scale-105"></iframe>
+                    <iframe src="https://maps.google.com/maps?q=10.8083023,106.7086314+(Z+Computer+Showroom+2)&t=&z=16&ie=UTF8&output=embed" width="100%" height="160" style={{ border: 0 }} allowFullScreen loading="lazy" referrerPolicy="no-referrer-when-downgrade" className="transition-all duration-500 group-hover/map:scale-105"></iframe>
                   </div>
                </div>
             </div>
