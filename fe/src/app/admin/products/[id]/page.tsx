@@ -28,10 +28,6 @@ const ReactQuill = dynamic(
       const { default: ImageUploader } = await import("quill-image-uploader");
       Quill.register("modules/imageUploader", ImageUploader);
       
-      // @ts-ignore
-      const { default: htmlEditButton } = await import("quill-html-edit-button");
-      Quill.register("modules/htmlEditButton", htmlEditButton);
-      
       const Font = Quill.import('formats/font');
       Font.whitelist = ['sans-serif', 'arial', 'times-new-roman', 'tahoma', 'verdana', 'courier-new'];
       Quill.register(Font, true);
@@ -196,12 +192,6 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
   const modules = useMemo(() => ({
     blotFormatter: {},
     magicUrl: true,
-    table: true,
-    htmlEditButton: {
-      msg: "Chỉnh sửa HTML",
-      okText: "Lưu",
-      cancelText: "Hủy",
-    },
     imageUploader: {
       upload: (file: File) => {
         return new Promise((resolve, reject) => {
@@ -852,27 +842,12 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
             </div>
             
             <div className="bg-slate-50/50 p-3 mb-2 border border-slate-200/60 rounded-t-xl flex flex-wrap items-center justify-between gap-3">
-              <div className="flex gap-2">
-                <label className="cursor-pointer flex items-center gap-2 text-sm font-medium text-indigo-600 hover:text-indigo-700 hover:bg-indigo-50 border border-indigo-200 bg-white px-4 py-2 rounded-xl transition-all shadow-sm">
-                  <UploadCloud size={16} /> Thêm ảnh
-                  <input type="file" accept="image/*" className="hidden" onChange={handleInsertMedia} disabled={uploadingImage} />
-                </label>
-                <button
-                  type="button"
-                  onClick={() => {
-                    const editor = quillRef.current?.getEditor();
-                    if (editor) {
-                      const table = editor.getModule('table');
-                      if (table) table.insertTable(3, 3);
-                    }
-                  }}
-                  className="flex items-center gap-2 text-sm font-medium text-blue-600 hover:text-blue-700 hover:bg-blue-50 border border-blue-200 bg-white px-4 py-2 rounded-xl transition-all shadow-sm"
-                >
-                  Chèn Bảng (3x3)
-                </button>
-              </div>
+              <label className="cursor-pointer flex items-center gap-2 text-sm font-medium text-indigo-600 hover:text-indigo-700 hover:bg-indigo-50 border border-indigo-200 bg-white px-4 py-2 rounded-xl transition-all shadow-sm">
+                <UploadCloud size={16} /> Thêm ảnh vào nội dung
+                <input type="file" accept="image/*" className="hidden" onChange={handleInsertMedia} disabled={uploadingImage} />
+              </label>
               <span className="text-xs text-slate-400 max-w-[400px]">
-                💡 Sử dụng công cụ để chèn hình ảnh, chèn bảng, định dạng tiêu đề (H2, H3), in đậm... Có nút <b>&lt;&gt;</b> để sửa HTML.
+                💡 Sử dụng công cụ để chèn hình ảnh, định dạng tiêu đề (H2, H3), in đậm...
               </span>
             </div>
 
