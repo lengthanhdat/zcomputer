@@ -19,6 +19,105 @@ const MobileCategoryItem = ({ cat, categories, onNavigate }: { cat: any, categor
   const [isExpanded, setIsExpanded] = useState(false);
   const children = Array.isArray(categories) ? categories.filter(c => c && c.parent_id === cat._id) : [];
 
+  return (
+    <li className="border-b border-gray-100 pb-2">
+      <div className="flex items-center justify-between">
+        <Link href={`/${cat.slug || ''}`} onClick={onNavigate} className="block py-1 flex-1 hover:text-primary transition-colors uppercase text-gray-800">
+          {cat.name || 'Category'}
+        </Link>
+        {children.length > 0 && (
+          <button 
+            type="button"
+            onClick={() => setIsExpanded(!isExpanded)}
+            className="p-2 -mr-2 text-gray-400 hover:text-primary transition-colors focus:outline-none"
+          >
+            <ChevronDown size={16} className={`transition-transform duration-300 ${isExpanded ? 'rotate-180 text-primary' : ''}`} />
+          </button>
+        )}
+      </div>
+      {children.length > 0 && (
+        <div className={`grid transition-all duration-300 ease-out ${isExpanded ? 'grid-rows-[1fr] opacity-100 mt-2' : 'grid-rows-[0fr] opacity-0'}`}>
+          <div className="overflow-hidden">
+            <ul className="pl-4 border-l-2 border-primary/10 space-y-3 py-2 text-sm font-medium text-gray-600">
+              {children.map((child: any) => (
+                <MobileCategoryItem key={child._id || Math.random()} cat={child} categories={categories} onNavigate={onNavigate} />
+              ))}
+            </ul>
+          </div>
+        </div>
+      )}
+    </li>
+  );
+};
+
+export default function Header() {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [categories, setCategories] = useState<any[]>([]);
+  const [expandedCatId, setExpandedCatId] = useState<string | null>(null);
+  const [suggestions, setSuggestions] = useState<any[]>([]);
+  const [defaultSuggestions, setDefaultSuggestions] = useState<any[]>([]);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [searchHistory, setSearchHistory] = useState<string[]>([]);
+  const searchTimeoutRef = React.useRef<NodeJS.Timeout | null>(null);
+  const router = useRouter();
+
+  useEffect(() => {
+    try {
+      const history = localStorage.getItem('searchHistory');
+      if (history) setSearchHistory(JSON.parse(history));
+    } catch(e) {}
+    
+    fetchApi('/categories', { requireAuth: false })
+      .then(r => r.ok ? r.json() : [])
+      .then(data => setCategories(data))
+      .catch(() => {});
+      
+    // Fetch default suggestions (most popular products)
+    fetchApi('/products?limit=5&sort=views', { requireAuth: false })
+      .then(r => r.ok ? r.json() : [])
+      .then(data => setDefaultSuggestions(data))
+      .catch(() => {});
+  }, []);
+
+  useEffect(() => {
+    if (searchQuery.trim().length >= 1) {
+      if (searchTimeoutRef.current) clearTimeout(searchTimeoutRef.current);
+      
+      searchTimeoutRef.current = setTimeout(() => {
+        fetchApi(`/products?search=${encodeURIComponent(searchQuery.trim())}&limit=5&sort=views`, { requireAuth: false })
+          .then(res => res.ok ? res.json() : [])
+          .then(data => {
+            setSuggestions(data);
+            setShowSuggestions(true);
+          })
+          .catch(() => {});
+      }, 300);
+    } else {
+      setSuggestions([]);
+      setShowSuggestions(false);
+    }
+  }, [searchQuery]);
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      const q = searchQuery.trim();
+      const newHistory = [q, ...searchHistory.filter(item => item !== q)].slice(0, 5);
+      setSearchHistory(newHistory);
+      try { localStorage.setItem('searchHistory', JSON.stringify(newHistory)); } catch(e) {}
+      
+      router.push(`/search?q=${encodeURIComponent(q)}`);
+      setMobileMenuOpen(false);
+      setShowSuggestions(false);
+    }
+  };
+
+  const clearHistory = () => {
+    setSearchHistory([]);
+    try { localStorage.removeItem('searchHistory'); } catch(e) {}
+  };
+
 
   const renderSuggestionsDropdown = () => {
     if (!showSuggestions) return null;
@@ -143,107 +242,7 @@ const MobileCategoryItem = ({ cat, categories, onNavigate }: { cat: any, categor
                   </>
                 )}
               </div>
-            )
-    );
-  };
-
-  return (
-    <li className="border-b border-gray-100 pb-2">
-      <div className="flex items-center justify-between">
-        <Link href={`/${cat.slug || ''}`} onClick={onNavigate} className="block py-1 flex-1 hover:text-primary transition-colors uppercase text-gray-800">
-          {cat.name || 'Category'}
-        </Link>
-        {children.length > 0 && (
-          <button 
-            type="button"
-            onClick={() => setIsExpanded(!isExpanded)}
-            className="p-2 -mr-2 text-gray-400 hover:text-primary transition-colors focus:outline-none"
-          >
-            <ChevronDown size={16} className={`transition-transform duration-300 ${isExpanded ? 'rotate-180 text-primary' : ''}`} />
-          </button>
-        )}
-      </div>
-      {children.length > 0 && (
-        <div className={`grid transition-all duration-300 ease-out ${isExpanded ? 'grid-rows-[1fr] opacity-100 mt-2' : 'grid-rows-[0fr] opacity-0'}`}>
-          <div className="overflow-hidden">
-            <ul className="pl-4 border-l-2 border-primary/10 space-y-3 py-2 text-sm font-medium text-gray-600">
-              {children.map((child: any) => (
-                <MobileCategoryItem key={child._id || Math.random()} cat={child} categories={categories} onNavigate={onNavigate} />
-              ))}
-            </ul>
-          </div>
-        </div>
-      )}
-    </li>
-  );
-};
-
-export default function Header() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [categories, setCategories] = useState<any[]>([]);
-  const [expandedCatId, setExpandedCatId] = useState<string | null>(null);
-  const [suggestions, setSuggestions] = useState<any[]>([]);
-  const [defaultSuggestions, setDefaultSuggestions] = useState<any[]>([]);
-  const [showSuggestions, setShowSuggestions] = useState(false);
-  const [searchHistory, setSearchHistory] = useState<string[]>([]);
-  const searchTimeoutRef = React.useRef<NodeJS.Timeout | null>(null);
-  const router = useRouter();
-
-  useEffect(() => {
-    try {
-      const history = localStorage.getItem('searchHistory');
-      if (history) setSearchHistory(JSON.parse(history));
-    } catch(e) {}
-    
-    fetchApi('/categories', { requireAuth: false })
-      .then(r => r.ok ? r.json() : [])
-      .then(data => setCategories(data))
-      .catch(() => {});
-      
-    // Fetch default suggestions (most popular products)
-    fetchApi('/products?limit=5&sort=views', { requireAuth: false })
-      .then(r => r.ok ? r.json() : [])
-      .then(data => setDefaultSuggestions(data))
-      .catch(() => {});
-  }, []);
-
-  useEffect(() => {
-    if (searchQuery.trim().length >= 1) {
-      if (searchTimeoutRef.current) clearTimeout(searchTimeoutRef.current);
-      
-      searchTimeoutRef.current = setTimeout(() => {
-        fetchApi(`/products?search=${encodeURIComponent(searchQuery.trim())}&limit=5&sort=views`, { requireAuth: false })
-          .then(res => res.ok ? res.json() : [])
-          .then(data => {
-            setSuggestions(data);
-            setShowSuggestions(true);
-          })
-          .catch(() => {});
-      }, 300);
-    } else {
-      setSuggestions([]);
-      setShowSuggestions(false);
-    }
-  }, [searchQuery]);
-
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (searchQuery.trim()) {
-      const q = searchQuery.trim();
-      const newHistory = [q, ...searchHistory.filter(item => item !== q)].slice(0, 5);
-      setSearchHistory(newHistory);
-      try { localStorage.setItem('searchHistory', JSON.stringify(newHistory)); } catch(e) {}
-      
-      router.push(`/search?q=${encodeURIComponent(q)}`);
-      setMobileMenuOpen(false);
-      setShowSuggestions(false);
-    }
-  };
-
-  const clearHistory = () => {
-    setSearchHistory([]);
-    try { localStorage.removeItem('searchHistory'); } catch(e) {}
+                );
   };
 
   return (
@@ -345,19 +344,22 @@ export default function Header() {
         <HeaderNav />
 
         {/* Mobile Search Bar (Only visible on small devices) */}
-        <div className="md:hidden px-4 pb-3">
-          <form onSubmit={handleSearch} className="relative w-full">
+        <div className="md:hidden px-4 pb-3 relative z-50">
+          <form onSubmit={handleSearch} className="relative w-full group/search">
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Tìm kiếm linh kiện, PC, Laptop..."
-              className="w-full border-2 border-primary rounded-full py-1.5 pl-4 pr-10 text-xs focus:outline-none"
+              onFocus={() => setShowSuggestions(true)}
+              onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
+              className="w-full border-2 border-primary/20 bg-white/60 backdrop-blur-md rounded-full py-1.5 pl-4 pr-10 text-xs focus:outline-none focus:bg-white focus:border-primary/60 transition-all duration-300 shadow-inner group-hover/search:shadow-[0_0_15px_var(--primary-ring)]"
             />
-            <button type="submit" className="absolute right-0 top-0 h-full w-10 bg-primary rounded-r-full text-white flex items-center justify-center" aria-label="Tìm kiếm">
+            <button type="submit" className="absolute right-0 top-0 h-full w-10 bg-primary rounded-r-full text-white flex items-center justify-center hover:brightness-110" aria-label="Tìm kiếm">
               <Search size={16} />
             </button>
           </form>
+          {renderSuggestionsDropdown()}
         </div>
       </header>
 

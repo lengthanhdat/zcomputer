@@ -108,8 +108,8 @@ const VideoCard = ({ video }: { video: any }) => {
               href={`/${video.product_id.slug}`}
               className="flex flex-col items-center justify-center w-full py-2 bg-white/10 hover:bg-primary text-white border border-white/20 hover:border-primary rounded-xl backdrop-blur-md transition-all shadow-[0_8px_16px_rgba(0,0,0,0.4)] group/btn"
             >
-              <span className="font-bold text-[11px] uppercase opacity-80 group-hover/btn:opacity-100 mb-0.5">Sản phẩm trong video</span>
-              <span className="font-bold text-sm line-clamp-1 px-2 text-center flex items-center gap-1">
+              <span className="font-bold text-[9px] md:text-[11px] uppercase opacity-80 group-hover/btn:opacity-100 mb-0.5">Sản phẩm trong video</span>
+              <span className="font-bold text-[10px] md:text-sm line-clamp-1 px-1 md:px-2 text-center flex items-center justify-center gap-1">
                 {video.product_id.name} <ChevronRight size={14} />
               </span>
             </Link>
@@ -145,7 +145,7 @@ export default function VideoReviewSection({ videos }: VideoReviewProps) {
       {/* Videos Grid/Slider */}
       <div className="flex overflow-x-auto pb-6 snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] md:grid md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6 px-4 md:px-0 -mx-4 md:mx-0">
         {videos.map((video) => (
-          <div key={video._id} className="min-w-[260px] w-[75vw] sm:w-[45vw] md:w-auto md:min-w-0 shrink-0 snap-center md:snap-align-none">
+          <div key={video._id} className="min-w-[150px] w-[45vw] sm:w-[35vw] md:w-auto md:min-w-0 shrink-0 snap-center md:snap-align-none">
             <VideoCard video={video} />
           </div>
         ))}
