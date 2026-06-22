@@ -184,12 +184,6 @@ export default function Header() {
                 {/* When User has NOT typed anything => Show History & Trending */}
                 {searchQuery.trim().length < 1 ? (
                   <div className="p-3">
-                    {/* Banner (Optional, placeholder or using a real one if available) */}
-                    <div className="w-full h-16 sm:h-20 bg-gradient-to-r from-red-600 to-rose-500 rounded-lg mb-4 flex items-center justify-center overflow-hidden relative shadow-sm cursor-pointer">
-                       {/* You can replace this with an actual <Image src="/banner.jpg" /> later */}
-                       <div className="text-white font-black italic text-lg sm:text-2xl drop-shadow-md">DEAL KHỦNG PC & LAPTOP</div>
-                       <div className="absolute right-[-10%] top-[-50%] w-24 h-24 bg-white/20 rounded-full blur-xl"></div>
-                    </div>
 
                     {/* Search History */}
                     {searchHistory.length > 0 && (
