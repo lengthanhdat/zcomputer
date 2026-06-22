@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { Filter, Cpu, Monitor, Server, HardDrive, Maximize, ArrowRight, Eye, LayoutGrid, Check, ChevronDown, Heart, X, MemoryStick, Gpu, Battery, Layers, Zap, Keyboard, Mouse, Link as LinkIcon, ChevronLeft, ChevronRight } from "lucide-react";
+import { Filter, Cpu, Monitor, Server, HardDrive, Maximize, ArrowRight, Eye, LayoutGrid, Check, ChevronDown, Heart, X, MemoryStick, Gpu, Battery, Layers, Zap, Keyboard, Mouse, Link as LinkIcon, ChevronLeft, ChevronRight, Star, BadgePercent, ArrowUpNarrowWide, ArrowDownWideNarrow } from "lucide-react";
 import { useState, useMemo, useEffect } from "react";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { motion } from "framer-motion";
@@ -119,16 +119,16 @@ export default function CategoryClient({
     router.push(`${pathname}?${params.toString()}`);
   }
 
-  const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleSort = (value: string) => {
     const params = new URLSearchParams(searchParams.toString());
-    if (e.target.value !== 'default') {
-      params.set('sort', e.target.value);
+    if (value !== 'default') {
+      params.set('sort', value);
     } else {
       params.delete('sort');
     }
     params.delete('page');
     router.push(`${pathname}?${params.toString()}`);
-  }
+  };
 
   const filteredProducts = useMemo(() => {
     let filtered = [...initialProducts];
@@ -177,6 +177,14 @@ export default function CategoryClient({
       filtered.sort((a, b) => b.price - a.price);
     } else if (currentSort === 'newest') {
       filtered.reverse();
+    } else if (currentSort === 'discount') {
+      filtered.sort((a, b) => {
+        const getPercent = (p: Product) => p.discountPrice ? ((p.price - p.discountPrice) / p.price) : 0;
+        return getPercent(b) - getPercent(a);
+      });
+    } else {
+      // default / views
+      filtered.sort((a, b) => (b.views || 0) - (a.views || 0));
     }
 
     return filtered;
@@ -339,16 +347,32 @@ export default function CategoryClient({
                   <Filter size={16} /> Lọc
                 </button>
               </div>
-              <select 
-                className="border border-gray-200 rounded-xl px-5 py-2.5 text-sm outline-none focus:border-primary font-bold text-gray-700 bg-gray-50 hover:bg-gray-100 transition-colors cursor-pointer shadow-sm"
-                value={currentSort}
-                onChange={handleSortChange}
-              >
-                <option value="default">Sắp xếp: Mặc định</option>
-                <option value="price-asc">Giá: Tăng dần</option>
-                <option value="price-desc">Giá: Giảm dần</option>
-                <option value="newest">Mới nhất</option>
-              </select>
+              <div className="flex items-center gap-2 overflow-x-auto pb-2 sm:pb-0 hide-scrollbar w-full sm:w-auto">
+                <button 
+                  onClick={() => handleSort('default')}
+                  className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium transition-colors whitespace-nowrap ${currentSort === 'default' ? 'bg-blue-50 text-blue-600 border border-blue-400' : 'bg-gray-50 text-gray-700 border border-gray-200 hover:bg-gray-100'}`}
+                >
+                  <Star size={16} className={currentSort === 'default' ? 'fill-blue-100' : ''} /> Phổ biến
+                </button>
+                <button 
+                  onClick={() => handleSort('discount')}
+                  className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium transition-colors whitespace-nowrap ${currentSort === 'discount' ? 'bg-blue-50 text-blue-600 border border-blue-400' : 'bg-gray-50 text-gray-700 border border-gray-200 hover:bg-gray-100'}`}
+                >
+                  <BadgePercent size={16} /> Khuyến mãi HOT
+                </button>
+                <button 
+                  onClick={() => handleSort('price-asc')}
+                  className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium transition-colors whitespace-nowrap ${currentSort === 'price-asc' ? 'bg-blue-50 text-blue-600 border border-blue-400' : 'bg-gray-50 text-gray-700 border border-gray-200 hover:bg-gray-100'}`}
+                >
+                  <ArrowUpNarrowWide size={16} /> Giá Thấp - Cao
+                </button>
+                <button 
+                  onClick={() => handleSort('price-desc')}
+                  className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium transition-colors whitespace-nowrap ${currentSort === 'price-desc' ? 'bg-blue-50 text-blue-600 border border-blue-400' : 'bg-gray-50 text-gray-700 border border-gray-200 hover:bg-gray-100'}`}
+                >
+                  <ArrowDownWideNarrow size={16} /> Giá Cao - Thấp
+                </button>
+              </div>
             </motion.div>
 
             <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4">
