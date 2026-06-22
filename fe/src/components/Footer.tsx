@@ -65,9 +65,18 @@ export default function Footer() {
           {/* Col 1: Logo & Info */}
           <div className="md:col-span-6 lg:col-span-3 pr-0 lg:pr-4">
              <Link href="/" className="flex flex-col items-start shrink-0 group mb-6">
-               <div className="flex items-center gap-1.5 bg-white p-2 sm:p-3 rounded-xl shadow-[0_0_15px_rgba(255,255,255,0.2)] group-hover:shadow-[0_0_20px_rgba(220,38,38,0.4)] transition-shadow">
-                 <Image src="/logo-full.png" alt="ZCOMPUTER" width={240} height={60} className="h-8 sm:h-10 w-auto object-contain" />
-               </div>
+                <div className="flex items-center gap-1.5 bg-white p-2 sm:p-3 rounded-xl shadow-[0_0_15px_rgba(255,255,255,0.2)] group-hover:shadow-[0_0_20px_rgba(220,38,38,0.4)] transition-shadow">
+                  <Image src="/logo_broken.png" alt="Z" width={50} height={50} className="h-10 w-10 sm:h-12 sm:w-12 object-contain" />
+                  <div className="flex flex-col justify-center ml-1">
+                    <div className="font-serif font-black tracking-tight leading-none drop-shadow-sm flex items-baseline">
+                      <span className="text-primary text-[28px] sm:text-[34px] leading-none">Z</span>
+                      <span className="text-slate-900 text-[20px] sm:text-[26px] leading-none ml-[1px]">COMPUTER</span>
+                    </div>
+                    <span className="text-[6.5px] sm:text-[8px] font-extrabold tracking-[0.15em] text-primary mt-0.5 uppercase whitespace-nowrap">
+                      PC GAMING - LAPTOP - WORKSTATION
+                    </span>
+                  </div>
+                </div>
              </Link>
              
              <p className="text-[13px] text-white/70 leading-relaxed mb-6 font-medium text-justify">

@@ -269,14 +269,16 @@ export default function Header() {
               }
             }}
           >
-            <Image 
-              src="/logo-full.png" 
-              alt="ZCOMPUTER PC GAMING - LAPTOP - WORKSTATION" 
-              width={280} 
-              height={70} 
-              priority 
-              className="h-10 w-auto sm:h-12 md:h-14 object-contain group-hover:scale-[1.02] transition-all duration-300 relative z-10" 
-            />
+            <Image src="/logo_broken.png" alt="Z" width={80} height={80} priority className="h-12 w-12 sm:h-[60px] sm:w-[60px] object-contain group-hover:scale-105 transition-transform duration-300 drop-shadow-md relative z-10" />
+            <div className="flex flex-col justify-center ml-1 sm:ml-2">
+              <div className="font-serif font-black tracking-tight leading-none drop-shadow-sm flex items-baseline">
+                <span className="text-primary text-[32px] sm:text-[42px] leading-none">Z</span>
+                <span className="text-slate-900 text-[24px] sm:text-[32px] leading-none ml-[1px]">COMPUTER</span>
+              </div>
+              <span className="text-[7.5px] sm:text-[10px] font-extrabold tracking-[0.15em] text-primary mt-0.5 uppercase whitespace-nowrap">
+                PC GAMING - LAPTOP - WORKSTATION
+              </span>
+            </div>
           </Link>
 
           {/* Desktop Search Bar (Hidden on Mobile) */}
