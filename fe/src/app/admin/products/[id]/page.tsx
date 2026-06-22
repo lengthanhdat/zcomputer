@@ -548,6 +548,31 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
     }
   };
 
+  const handlePreview = () => {
+    const payload = {
+      _id: resolvedParams.id || "preview",
+      name: formData.name || "Tên sản phẩm chưa nhập",
+      description: formData.description,
+      brand: formData.brand || "ZCOMPUTER",
+      slug: "preview-slug",
+      sku: formData.sku || "PREVIEW-SKU",
+      price: Number(formData.price) || 0,
+      discountPrice: Number(formData.discountPrice) || 0,
+      stock: Number(formData.stock) || 0,
+      status: Number(formData.stock) > 0 ? "in_stock" : "out_of_stock",
+      images: formData.images,
+      gifts: formData.gifts.filter(g => g.trim() !== ""),
+      category_id: categories.find(c => c._id === formData.category_id) || { name: "Danh mục chưa chọn" },
+      condition: formData.condition,
+      isHotSale: formData.isHotSale,
+      flashSalePrice: Number(formData.flashSalePrice) || 0,
+      specs: formData.specs,
+      views: 0
+    };
+    localStorage.setItem("product_preview", JSON.stringify(payload));
+    window.open("/san-pham/preview", "_blank");
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.category_id) {
@@ -1083,6 +1108,13 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
               className="w-full bg-primary hover:bg-primary text-white px-6 py-3.5 rounded-xl font-bold shadow-lg shadow-primary transition-all hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
             >
               {loading ? "Đang xử lý..." : "Lưu thay đổi"}
+            </button>
+            <button 
+              type="button"
+              onClick={handlePreview}
+              className="w-full flex items-center justify-center bg-indigo-50 text-indigo-600 hover:bg-indigo-100 border border-indigo-100 px-6 py-3.5 rounded-xl font-bold transition-all"
+            >
+              Xem trước
             </button>
             <Link 
               href="/admin/products"
