@@ -19,6 +19,134 @@ const MobileCategoryItem = ({ cat, categories, onNavigate }: { cat: any, categor
   const [isExpanded, setIsExpanded] = useState(false);
   const children = Array.isArray(categories) ? categories.filter(c => c && c.parent_id === cat._id) : [];
 
+
+  const renderSuggestionsDropdown = () => {
+    if (!showSuggestions) return null;
+    if (!(searchQuery.trim().length >= 1 ? suggestions.length > 0 : defaultSuggestions.length > 0)) return null;
+
+    return (
+      <div className="absolute top-[110%] left-0 right-0 bg-white rounded-xl shadow-2xl border border-gray-100 overflow-hidden z-50 animate-in fade-in zoom-in-95 duration-200 pb-2">
+                
+                {/* When User has NOT typed anything => Show History & Trending */}
+                {searchQuery.trim().length < 1 ? (
+                  <div className="p-3">
+
+                    {/* Search History */}
+                    {searchHistory.length > 0 && (
+                      <div className="mb-5">
+                        <div className="flex items-center justify-between mb-2 px-1">
+                          <h4 className="text-[13px] font-bold text-gray-800 flex items-center gap-1.5">
+                            <Clock size={15} /> Lịch sử tìm kiếm
+                          </h4>
+                          <button type="button" onClick={clearHistory} className="text-[12px] text-gray-500 hover:text-red-500 transition-colors flex items-center gap-1">
+                            Xoá tất cả <Trash2 size={13} />
+                          </button>
+                        </div>
+                        <div className="flex flex-col gap-1">
+                          {searchHistory.map((item, idx) => (
+                            <div 
+                              key={idx} 
+                              className="flex items-center gap-2 px-2 py-1.5 hover:bg-slate-50 cursor-pointer rounded transition-colors text-sm text-gray-600"
+                              onMouseDown={(e) => {
+                                e.preventDefault(); // prevent blur
+                                setSearchQuery(item);
+                                router.push(`/search?q=${encodeURIComponent(item)}`);
+                                setShowSuggestions(false);
+                              }}
+                            >
+                              <Clock size={14} className="text-gray-400" />
+                              <span className="flex-1 truncate">{item}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Trending */}
+                    <div>
+                      <h4 className="text-[13px] font-bold text-gray-800 flex items-center gap-1.5 mb-3 px-1">
+                        <Flame size={15} className="text-orange-500 fill-orange-500/20" /> Xu hướng tìm kiếm
+                      </h4>
+                      <div className="grid grid-cols-2 gap-2">
+                        {defaultSuggestions.slice(0, 6).map((item) => (
+                          <Link 
+                            key={item._id} 
+                            href={`/${item.slug}`} 
+                            onClick={() => setShowSuggestions(false)}
+                            className="flex items-center gap-2 p-2 hover:bg-slate-50 border border-transparent hover:border-gray-100 rounded-lg transition-colors group/item"
+                          >
+                            <div className="w-10 h-10 rounded bg-white border border-gray-100 overflow-hidden shrink-0 p-0.5">
+                              {item.images?.[0] ? (
+                                <img src={item.images[0]} alt={item.name} className="w-full h-full object-contain mix-blend-multiply" />
+                              ) : (
+                                <div className="w-full h-full flex items-center justify-center text-gray-300">
+                                  <Laptop size={16} />
+                                </div>
+                              )}
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <h4 className="text-[13px] font-medium text-gray-700 truncate group-hover/item:text-primary transition-colors">{item.name}</h4>
+                            </div>
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  /* When User IS typing => Show Live Search Results */
+                  <>
+                    <div className="px-4 py-2 bg-gray-50/50 border-b border-gray-100 flex items-center justify-between">
+                      <span className="text-xs font-bold text-gray-500 uppercase tracking-wider">Kết quả tìm kiếm</span>
+                      <span className="text-[10px] text-gray-400 font-medium">Nhấn Enter để xem thêm</span>
+                    </div>
+                    <div className="py-2">
+                      {suggestions.map((item) => (
+                        <Link 
+                          key={item._id} 
+                          href={`/${item.slug}`} 
+                          onClick={() => setShowSuggestions(false)}
+                          className="flex items-center gap-3 px-4 py-2.5 hover:bg-slate-50 transition-colors border-b border-gray-50 last:border-0 group/item"
+                        >
+                          <div className="w-12 h-12 rounded-lg bg-white border border-gray-100 overflow-hidden shrink-0 p-1 group-hover/item:border-primary/20 transition-colors">
+                            {item.images?.[0] ? (
+                              <img src={item.images[0]} alt={item.name} className="w-full h-full object-contain mix-blend-multiply" />
+                            ) : (
+                              <div className="w-full h-full flex items-center justify-center text-gray-400">
+                                {item.name.toLowerCase().includes('laptop') ? <Laptop size={20} /> :
+                                 item.name.toLowerCase().includes('màn') ? <Monitor size={20} /> :
+                                 <Search size={16} />}
+                              </div>
+                            )}
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <h4 className="text-sm font-semibold text-gray-800 truncate group-hover/item:text-primary transition-colors">{item.name}</h4>
+                            <div className="flex items-center gap-2 mt-0.5">
+                              <span className="text-[13px] font-black text-primary">{item.price ? item.price.toLocaleString('vi-VN') + 'đ' : 'Liên hệ'}</span>
+                              {item.discountPrice > 0 && <span className="text-[10px] text-gray-400 line-through font-medium">{item.discountPrice.toLocaleString('vi-VN')}đ</span>}
+                            </div>
+                          </div>
+                        </Link>
+                      ))}
+                      {suggestions.length === 0 && (
+                        <div className="py-8 text-center text-gray-500 text-sm">
+                          Không tìm thấy sản phẩm nào phù hợp.
+                        </div>
+                      )}
+                    </div>
+                    {suggestions.length > 0 && (
+                      <div className="bg-slate-50 px-4 py-3 text-center border-t border-gray-100 hover:bg-slate-100 transition-colors cursor-pointer" onClick={() => { router.push(`/search?q=${encodeURIComponent(searchQuery)}`); setShowSuggestions(false); }}>
+                        <span className="text-xs font-bold text-primary flex items-center justify-center gap-1">
+                          Xem tất cả kết quả cho "{searchQuery}" <ArrowRight size={12} />
+                        </span>
+                      </div>
+                    )}
+                  </>
+                )}
+              </div>
+            )
+    );
+  };
+
   return (
     <li className="border-b border-gray-100 pb-2">
       <div className="flex items-center justify-between">
@@ -178,126 +306,7 @@ export default function Header() {
             </form>
 
             {/* Suggestions Dropdown */}
-            {showSuggestions && (searchQuery.trim().length >= 1 ? suggestions.length > 0 : defaultSuggestions.length > 0) && (
-              <div className="absolute top-[110%] left-0 right-0 bg-white rounded-xl shadow-2xl border border-gray-100 overflow-hidden z-50 animate-in fade-in zoom-in-95 duration-200 pb-2">
-                
-                {/* When User has NOT typed anything => Show History & Trending */}
-                {searchQuery.trim().length < 1 ? (
-                  <div className="p-3">
-
-                    {/* Search History */}
-                    {searchHistory.length > 0 && (
-                      <div className="mb-5">
-                        <div className="flex items-center justify-between mb-2 px-1">
-                          <h4 className="text-[13px] font-bold text-gray-800 flex items-center gap-1.5">
-                            <Clock size={15} /> Lịch sử tìm kiếm
-                          </h4>
-                          <button type="button" onClick={clearHistory} className="text-[12px] text-gray-500 hover:text-red-500 transition-colors flex items-center gap-1">
-                            Xoá tất cả <Trash2 size={13} />
-                          </button>
-                        </div>
-                        <div className="flex flex-col gap-1">
-                          {searchHistory.map((item, idx) => (
-                            <div 
-                              key={idx} 
-                              className="flex items-center gap-2 px-2 py-1.5 hover:bg-slate-50 cursor-pointer rounded transition-colors text-sm text-gray-600"
-                              onMouseDown={(e) => {
-                                e.preventDefault(); // prevent blur
-                                setSearchQuery(item);
-                                router.push(`/search?q=${encodeURIComponent(item)}`);
-                                setShowSuggestions(false);
-                              }}
-                            >
-                              <Clock size={14} className="text-gray-400" />
-                              <span className="flex-1 truncate">{item}</span>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-
-                    {/* Trending */}
-                    <div>
-                      <h4 className="text-[13px] font-bold text-gray-800 flex items-center gap-1.5 mb-3 px-1">
-                        <Flame size={15} className="text-orange-500 fill-orange-500/20" /> Xu hướng tìm kiếm
-                      </h4>
-                      <div className="grid grid-cols-2 gap-2">
-                        {defaultSuggestions.slice(0, 6).map((item) => (
-                          <Link 
-                            key={item._id} 
-                            href={`/${item.slug}`} 
-                            onClick={() => setShowSuggestions(false)}
-                            className="flex items-center gap-2 p-2 hover:bg-slate-50 border border-transparent hover:border-gray-100 rounded-lg transition-colors group/item"
-                          >
-                            <div className="w-10 h-10 rounded bg-white border border-gray-100 overflow-hidden shrink-0 p-0.5">
-                              {item.images?.[0] ? (
-                                <img src={item.images[0]} alt={item.name} className="w-full h-full object-contain mix-blend-multiply" />
-                              ) : (
-                                <div className="w-full h-full flex items-center justify-center text-gray-300">
-                                  <Laptop size={16} />
-                                </div>
-                              )}
-                            </div>
-                            <div className="flex-1 min-w-0">
-                              <h4 className="text-[13px] font-medium text-gray-700 truncate group-hover/item:text-primary transition-colors">{item.name}</h4>
-                            </div>
-                          </Link>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                ) : (
-                  /* When User IS typing => Show Live Search Results */
-                  <>
-                    <div className="px-4 py-2 bg-gray-50/50 border-b border-gray-100 flex items-center justify-between">
-                      <span className="text-xs font-bold text-gray-500 uppercase tracking-wider">Kết quả tìm kiếm</span>
-                      <span className="text-[10px] text-gray-400 font-medium">Nhấn Enter để xem thêm</span>
-                    </div>
-                    <div className="py-2">
-                      {suggestions.map((item) => (
-                        <Link 
-                          key={item._id} 
-                          href={`/${item.slug}`} 
-                          onClick={() => setShowSuggestions(false)}
-                          className="flex items-center gap-3 px-4 py-2.5 hover:bg-slate-50 transition-colors border-b border-gray-50 last:border-0 group/item"
-                        >
-                          <div className="w-12 h-12 rounded-lg bg-white border border-gray-100 overflow-hidden shrink-0 p-1 group-hover/item:border-primary/20 transition-colors">
-                            {item.images?.[0] ? (
-                              <img src={item.images[0]} alt={item.name} className="w-full h-full object-contain mix-blend-multiply" />
-                            ) : (
-                              <div className="w-full h-full flex items-center justify-center text-gray-400">
-                                {item.name.toLowerCase().includes('laptop') ? <Laptop size={20} /> :
-                                 item.name.toLowerCase().includes('màn') ? <Monitor size={20} /> :
-                                 <Search size={16} />}
-                              </div>
-                            )}
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <h4 className="text-sm font-semibold text-gray-800 truncate group-hover/item:text-primary transition-colors">{item.name}</h4>
-                            <div className="flex items-center gap-2 mt-0.5">
-                              <span className="text-[13px] font-black text-primary">{item.price ? item.price.toLocaleString('vi-VN') + 'đ' : 'Liên hệ'}</span>
-                              {item.discountPrice > 0 && <span className="text-[10px] text-gray-400 line-through font-medium">{item.discountPrice.toLocaleString('vi-VN')}đ</span>}
-                            </div>
-                          </div>
-                        </Link>
-                      ))}
-                      {suggestions.length === 0 && (
-                        <div className="py-8 text-center text-gray-500 text-sm">
-                          Không tìm thấy sản phẩm nào phù hợp.
-                        </div>
-                      )}
-                    </div>
-                    {suggestions.length > 0 && (
-                      <div className="bg-slate-50 px-4 py-3 text-center border-t border-gray-100 hover:bg-slate-100 transition-colors cursor-pointer" onClick={() => { router.push(`/search?q=${encodeURIComponent(searchQuery)}`); setShowSuggestions(false); }}>
-                        <span className="text-xs font-bold text-primary flex items-center justify-center gap-1">
-                          Xem tất cả kết quả cho "{searchQuery}" <ArrowRight size={12} />
-                        </span>
-                      </div>
-                    )}
-                  </>
-                )}
-              </div>
-            )}
+            {renderSuggestionsDropdown()}
           </div>
 
           {/* Cart & Authentication */}
