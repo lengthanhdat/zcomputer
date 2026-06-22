@@ -27,6 +27,10 @@ const ReactQuill = dynamic(
       // @ts-ignore
       const { default: ImageUploader } = await import("quill-image-uploader");
       Quill.register("modules/imageUploader", ImageUploader);
+
+      // @ts-ignore
+      const { default: htmlEditButton } = await import("quill-html-edit-button");
+      Quill.register("modules/htmlEditButton", htmlEditButton);
       
       const Font = Quill.import('formats/font');
       Font.whitelist = ['sans-serif', 'arial', 'times-new-roman', 'tahoma', 'verdana', 'courier-new'];
@@ -432,6 +436,12 @@ export default function EditNewsPage({ params }: { params: Promise<{ id: string 
   const modules = useMemo(() => ({
     blotFormatter: {},
     magicUrl: true,
+    table: true,
+    htmlEditButton: {
+      msg: "Chỉnh sửa HTML",
+      okText: "Lưu",
+      cancelText: "Hủy",
+    },
     imageUploader: {
       upload: (file: File) => {
         return new Promise((resolve, reject) => {
