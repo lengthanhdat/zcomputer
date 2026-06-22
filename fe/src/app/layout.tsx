@@ -26,6 +26,13 @@ async function fetchThemeStyle(): Promise<CSSProperties> {
   }
 }
 
+export const viewport: Viewport = {
+  themeColor: "#dc2626",
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+};
+
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_FRONTEND_URL || 'http://localhost:3000'),
   title: "ZCOMPUTER - PC Gaming, Laptop, Workstation",
