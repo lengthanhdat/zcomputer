@@ -270,7 +270,7 @@ export default function Header() {
             }}
           >
             <Image 
-              src="/logo-full.png" 
+              src="/logo-full.jpg" 
               alt="ZCOMPUTER PC GAMING - LAPTOP - WORKSTATION" 
               width={280} 
               height={70} 
