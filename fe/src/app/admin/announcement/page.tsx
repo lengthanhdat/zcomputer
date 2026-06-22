@@ -78,7 +78,7 @@ export default function AnnouncementPage() {
         </div>
       </div>
 
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8 max-w-3xl">
+      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 md:p-6 md:p-8 max-w-3xl">
         <div className="flex items-center gap-2 mb-6 border-b border-gray-100 pb-4">
           <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
             <BellRing size={18} className="fill-primary" />

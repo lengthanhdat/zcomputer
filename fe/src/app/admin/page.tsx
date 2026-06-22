@@ -48,7 +48,7 @@ export default function AdminDashboardPage() {
   return (
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
       {/* Header Area */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 bg-white p-8 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 relative overflow-hidden">
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 bg-white p-4 md:p-8 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 relative overflow-hidden">
         <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-blue-50 to-primary/10 rounded-full blur-3xl opacity-70 -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>
         <div className="relative z-10">
           <h1 className="text-3xl font-black text-gray-900 tracking-tight mb-2">Tổng quan hệ thống</h1>
@@ -64,7 +64,7 @@ export default function AdminDashboardPage() {
       {/* KPI Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {/* Doanh thu */}
-        <div className="bg-white p-6 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 hover:-translate-y-1 transition-transform duration-300 relative overflow-hidden group">
+        <div className="bg-white p-4 md:p-6 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 hover:-translate-y-1 transition-transform duration-300 relative overflow-hidden group">
           <div className="absolute top-0 right-0 w-24 h-24 bg-emerald-50 rounded-bl-full -mr-4 -mt-4 transition-transform group-hover:scale-110"></div>
           <div className="relative z-10">
             <div className="flex items-center justify-between mb-4">
@@ -81,7 +81,7 @@ export default function AdminDashboardPage() {
         </div>
 
         {/* Đơn hàng */}
-        <div className="bg-white p-6 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 hover:-translate-y-1 transition-transform duration-300 relative overflow-hidden group">
+        <div className="bg-white p-4 md:p-6 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 hover:-translate-y-1 transition-transform duration-300 relative overflow-hidden group">
           <div className="absolute top-0 right-0 w-24 h-24 bg-blue-50 rounded-bl-full -mr-4 -mt-4 transition-transform group-hover:scale-110"></div>
           <div className="relative z-10">
             <div className="flex items-center justify-between mb-4">
@@ -98,7 +98,7 @@ export default function AdminDashboardPage() {
         </div>
 
         {/* Sản phẩm */}
-        <div className="bg-white p-6 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 hover:-translate-y-1 transition-transform duration-300 relative overflow-hidden group">
+        <div className="bg-white p-4 md:p-6 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 hover:-translate-y-1 transition-transform duration-300 relative overflow-hidden group">
           <div className="absolute top-0 right-0 w-24 h-24 bg-orange-50 rounded-bl-full -mr-4 -mt-4 transition-transform group-hover:scale-110"></div>
           <div className="relative z-10">
             <div className="flex items-center justify-between mb-4">
@@ -115,7 +115,7 @@ export default function AdminDashboardPage() {
         </div>
 
         {/* Thành viên */}
-        <div className="bg-white p-6 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 hover:-translate-y-1 transition-transform duration-300 relative overflow-hidden group">
+        <div className="bg-white p-4 md:p-6 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 hover:-translate-y-1 transition-transform duration-300 relative overflow-hidden group">
           <div className="absolute top-0 right-0 w-24 h-24 bg-purple-50 rounded-bl-full -mr-4 -mt-4 transition-transform group-hover:scale-110"></div>
           <div className="relative z-10">
             <div className="flex items-center justify-between mb-4">
@@ -134,34 +134,34 @@ export default function AdminDashboardPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Quick Actions */}
-        <div className="lg:col-span-2 bg-white rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 p-8">
-           <div className="flex items-center justify-between mb-6">
+        <div className="lg:col-span-2 bg-white rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 p-4 md:p-8">
+           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 sm:gap-0 mb-6">
              <h3 className="text-xl font-bold text-gray-900">Bảng điều khiển nhanh</h3>
              <div className="w-10 h-1 bg-primary rounded-full"></div>
            </div>
            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-             <Link href="/admin/products/new" className="flex flex-col items-center justify-center p-6 bg-gray-50 border border-gray-100 rounded-2xl hover:bg-white hover:border-primary/20 hover:shadow-xl hover:shadow-primary transition-all group">
+             <Link href="/admin/products/new" className="flex flex-col items-center justify-center p-4 md:p-6 bg-gray-50 border border-gray-100 rounded-2xl hover:bg-white hover:border-primary/20 hover:shadow-xl hover:shadow-primary transition-all group">
                <div className="w-14 h-14 bg-white text-gray-600 rounded-full flex items-center justify-center mb-4 shadow-sm group-hover:bg-primary group-hover:text-white transition-all duration-300 group-hover:scale-110">
                  <Package size={28} />
                </div>
                <span className="font-bold text-sm text-gray-700 group-hover:text-primary">Thêm SP</span>
              </Link>
              
-             <Link href="/admin/categories" className="flex flex-col items-center justify-center p-6 bg-gray-50 border border-gray-100 rounded-2xl hover:bg-white hover:border-blue-200 hover:shadow-xl hover:shadow-blue-500/10 transition-all group">
+             <Link href="/admin/categories" className="flex flex-col items-center justify-center p-4 md:p-6 bg-gray-50 border border-gray-100 rounded-2xl hover:bg-white hover:border-blue-200 hover:shadow-xl hover:shadow-blue-500/10 transition-all group">
                <div className="w-14 h-14 bg-white text-gray-600 rounded-full flex items-center justify-center mb-4 shadow-sm group-hover:bg-blue-500 group-hover:text-white transition-all duration-300 group-hover:scale-110">
                  <FolderTree size={28} />
                </div>
                <span className="font-bold text-sm text-gray-700 group-hover:text-blue-600">Danh Mục</span>
              </Link>
              
-             <Link href="/admin/inventory" className="flex flex-col items-center justify-center p-6 bg-gray-50 border border-gray-100 rounded-2xl hover:bg-white hover:border-amber-200 hover:shadow-xl hover:shadow-amber-500/10 transition-all group">
+             <Link href="/admin/inventory" className="flex flex-col items-center justify-center p-4 md:p-6 bg-gray-50 border border-gray-100 rounded-2xl hover:bg-white hover:border-amber-200 hover:shadow-xl hover:shadow-amber-500/10 transition-all group">
                <div className="w-14 h-14 bg-white text-gray-600 rounded-full flex items-center justify-center mb-4 shadow-sm group-hover:bg-amber-500 group-hover:text-white transition-all duration-300 group-hover:scale-110">
                  <Warehouse size={28} />
                </div>
                <span className="font-bold text-sm text-gray-700 group-hover:text-amber-600">Kiểm Kho</span>
              </Link>
 
-             <Link href="/admin/orders" className="flex flex-col items-center justify-center p-6 bg-gray-50 border border-gray-100 rounded-2xl hover:bg-white hover:border-emerald-200 hover:shadow-xl hover:shadow-emerald-500/10 transition-all group">
+             <Link href="/admin/orders" className="flex flex-col items-center justify-center p-4 md:p-6 bg-gray-50 border border-gray-100 rounded-2xl hover:bg-white hover:border-emerald-200 hover:shadow-xl hover:shadow-emerald-500/10 transition-all group">
                <div className="w-14 h-14 bg-white text-gray-600 rounded-full flex items-center justify-center mb-4 shadow-sm group-hover:bg-emerald-500 group-hover:text-white transition-all duration-300 group-hover:scale-110">
                  <ClipboardList size={28} />
                </div>
@@ -171,7 +171,7 @@ export default function AdminDashboardPage() {
         </div>
 
         {/* Promo / Banner block */}
-        <div className="bg-gradient-to-br from-gray-900 to-black rounded-2xl shadow-xl shadow-gray-900/20 p-8 flex flex-col justify-between relative overflow-hidden text-white">
+        <div className="bg-gradient-to-br from-gray-900 to-black rounded-2xl shadow-xl shadow-gray-900/20 p-4 md:p-8 flex flex-col justify-between relative overflow-hidden text-white">
           <div className="absolute top-0 right-0 w-40 h-40 bg-primary rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
           <div className="relative z-10">
             <div className="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center backdrop-blur-md mb-6 border border-white/10">

@@ -240,14 +240,14 @@ export default function AdminInventoryPage() {
 
   return (
     <div className="space-y-6">
-      <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+      <div className="bg-white p-4 md:p-6 rounded-lg shadow-sm border border-gray-200">
         <h1 className="text-2xl font-bold text-gray-800 mb-1">Quản lý Kho hàng</h1>
         <p className="text-sm text-gray-500">Xem và thay đổi nhanh số lượng tồn kho, trạng thái của các sản phẩm.</p>
       </div>
 
       <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
         {/* Controls */}
-        <div className="p-6 border-b border-gray-200 flex flex-col md:flex-row gap-4 items-center justify-between">
+        <div className="p-4 md:p-6 border-b border-gray-200 flex flex-col md:flex-row gap-4 items-center justify-between">
           <div className="relative w-full md:w-96">
             <input
               type="text"
@@ -329,7 +329,7 @@ export default function AdminInventoryPage() {
 
         {/* Table */}
         <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse">
+          <table className="whitespace-nowrap min-w-max w-full text-left border-collapse">
             <thead>
               <tr className="bg-gray-50 border-b border-gray-200 text-gray-600 text-sm font-semibold">
                 <th className="py-4 px-6">Sản phẩm</th>

@@ -129,7 +129,7 @@ export default function AdminBannersPage() {
 
   return (
     <div className="bg-white rounded-lg shadow-sm border border-gray-200 min-h-full">
-      <div className="p-6 border-b border-gray-200 flex justify-between items-center">
+      <div className="p-4 md:p-6 border-b border-gray-200 flex justify-between items-center">
         <div>
           <h1 className="text-2xl font-bold text-gray-800 mb-1">Quản lý Banner</h1>
           <p className="text-sm text-gray-500">Thêm, sửa, xóa các banner quảng cáo trên trang chủ.</p>
@@ -139,7 +139,7 @@ export default function AdminBannersPage() {
         </button>
       </div>
 
-      <div className="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="p-4 md:p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {loading ? <p>Đang tải...</p> : banners.map(banner => (
           <div key={banner._id} className="border rounded-lg overflow-hidden bg-white shadow-sm hover:shadow transition-shadow">
             <div className="aspect-[21/9] bg-gray-100 relative">
@@ -174,7 +174,7 @@ export default function AdminBannersPage() {
 
       {showModal && (
         <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-lg max-w-md w-full p-6">
+          <div className="bg-white rounded-lg max-w-md w-full p-4 md:p-6">
             <h2 className="text-xl font-bold mb-4">{editingBannerId ? "Sửa Banner" : "Thêm Banner"}</h2>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>

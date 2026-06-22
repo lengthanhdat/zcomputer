@@ -119,10 +119,10 @@ export default function AdminJobsPage() {
     setIsModalOpen(true);
   };
 
-  if (isLoading) return <div className="p-8 text-center">Đang tải...</div>;
+  if (isLoading) return <div className="p-4 md:p-8 text-center">Đang tải...</div>;
 
   return (
-    <div className="p-6">
+    <div className="p-4 md:p-6">
       <div className="flex justify-between items-center mb-6">
         <div>
           <h1 className="text-2xl font-bold text-gray-800">Quản lý Tuyển dụng</h1>
@@ -137,7 +137,7 @@ export default function AdminJobsPage() {
       </div>
 
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-        <table className="w-full text-left">
+        <table className="whitespace-nowrap min-w-max w-full text-left">
           <thead className="bg-gray-50 border-b border-gray-100 text-gray-600 text-sm">
             <tr>
               <th className="p-4 font-semibold">Vị trí tuyển dụng</th>
@@ -150,7 +150,7 @@ export default function AdminJobsPage() {
           <tbody className="divide-y divide-gray-100">
             {jobs.length === 0 ? (
               <tr>
-                <td colSpan={5} className="p-8 text-center text-gray-500">Chưa có dữ liệu tuyển dụng</td>
+                <td colSpan={5} className="p-4 md:p-8 text-center text-gray-500">Chưa có dữ liệu tuyển dụng</td>
               </tr>
             ) : (
               jobs.map(job => (
@@ -199,7 +199,7 @@ export default function AdminJobsPage() {
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
           <div className="bg-white rounded-2xl w-full max-w-2xl max-h-[90vh] flex flex-col shadow-2xl">
-            <div className="flex items-center justify-between p-6 border-b border-gray-100">
+            <div className="flex items-center justify-between p-4 md:p-6 border-b border-gray-100">
               <h3 className="text-xl font-bold text-gray-800 flex items-center gap-2">
                 <Briefcase className="text-primary" />
                 {editingJob ? "Cập nhật vị trí" : "Thêm vị trí tuyển dụng"}
@@ -212,7 +212,7 @@ export default function AdminJobsPage() {
               </button>
             </div>
             
-            <div className="p-6 overflow-y-auto">
+            <div className="p-4 md:p-6 overflow-y-auto">
               <form id="jobForm" onSubmit={handleSubmit} className="space-y-5">
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-1">Chức danh / Vị trí *</label>
@@ -226,7 +226,7 @@ export default function AdminJobsPage() {
                   />
                 </div>
                 
-                <div className="grid grid-cols-2 gap-5">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                   <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-1">Phòng ban *</label>
                     <input 
@@ -297,7 +297,7 @@ export default function AdminJobsPage() {
               </form>
             </div>
             
-            <div className="p-6 border-t border-gray-100 flex justify-end gap-3 bg-gray-50 rounded-b-2xl">
+            <div className="p-4 md:p-6 border-t border-gray-100 flex justify-end gap-3 bg-gray-50 rounded-b-2xl">
               <button 
                 type="button"
                 onClick={() => setIsModalOpen(false)}

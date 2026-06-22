@@ -640,7 +640,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
         <div className="xl:col-span-2 space-y-8">
           
           {/* Card: Thông tin cơ bản */}
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8">
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 md:p-6 md:p-8">
             <div className="flex items-center gap-2 mb-6">
               <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center text-blue-600">
                 <FileText size={18} />
@@ -726,7 +726,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
             </div>
           </div>
           {/* Card: Thông số kỹ thuật */}
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8">
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 md:p-6 md:p-8">
             <div className="flex items-center gap-2 mb-6">
               <div className="w-8 h-8 rounded-lg bg-indigo-50 flex items-center justify-center text-indigo-600">
                 <Cpu size={18} />
@@ -808,7 +808,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
             </div>
           </div>
           {/* Card: Mô tả chi tiết */}
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8 mt-8">
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 md:p-6 md:p-8 mt-8">
             <div className="flex items-center gap-2 mb-6">
               <div className="w-8 h-8 rounded-lg bg-yellow-50 flex items-center justify-center text-yellow-600">
                 <FileText size={18} />
@@ -843,7 +843,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
         <div className="space-y-8">
           
           {/* Card: Giá và Tồn kho */}
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 md:p-6">
             <h2 className="text-base font-bold text-gray-800 mb-5">Định giá & Tồn kho</h2>
             
             <div className="space-y-4">
@@ -927,7 +927,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
           </div>
 
           {/* Card: Hình ảnh */}
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 md:p-6">
             <div className="flex items-center justify-between mb-5">
               <div className="flex items-center gap-2">
                 <div className="w-7 h-7 rounded-lg bg-orange-50 flex items-center justify-center text-orange-600">
@@ -1030,7 +1030,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
           </div>
 
           {/* Card: Quà tặng */}
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 md:p-6">
             <div className="flex items-center justify-between mb-5">
               <div className="flex items-center gap-2">
                 <div className="w-7 h-7 rounded-lg bg-orange-50 flex items-center justify-center text-orange-600">
@@ -1076,7 +1076,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
           </div>
 
           {/* Hành động */}
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 flex flex-col gap-3">
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 md:p-6 flex flex-col gap-3">
             <button 
               type="submit" 
               disabled={loading}

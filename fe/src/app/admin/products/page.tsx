@@ -172,7 +172,7 @@ export default function AdminProductsPage() {
 
   return (
     <div className="bg-white rounded-lg shadow-sm border border-gray-200 min-h-full">
-      <div className="p-6 border-b border-gray-200 flex justify-between items-center">
+      <div className="p-4 md:p-6 border-b border-gray-200 flex justify-between items-center">
         <div>
           <h1 className="text-2xl font-bold text-gray-800 mb-1">Quản lý sản phẩm</h1>
           <p className="text-sm text-gray-500">Xem, thêm, sửa, xóa danh sách sản phẩm trên hệ thống.</p>
@@ -192,7 +192,7 @@ export default function AdminProductsPage() {
         </div>
       </div>
       
-      <div className="p-6">
+      <div className="p-4 md:p-6">
         {/* Professional Filter Section */}
         <div className="bg-gray-50 border border-gray-200 rounded-xl p-5 mb-6">
           <div className="flex flex-col gap-4">
@@ -237,7 +237,7 @@ export default function AdminProductsPage() {
             </div>
             
             {/* Bottom row: Selects */}
-            <div className="grid grid-cols-2 lg:grid-cols-5 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
               <select 
                 className="bg-white border border-gray-300 rounded-lg px-3 py-2 outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors text-gray-700 text-sm h-[40px]"
                 value={categoryFilter}
@@ -298,7 +298,7 @@ export default function AdminProductsPage() {
 
         {/* Table */}
         <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse">
+          <table className="whitespace-nowrap min-w-max w-full text-left border-collapse">
             <thead>
               <tr className="bg-gray-50 text-gray-600 text-sm border-y border-gray-200">
                 <th className="py-3 px-4 w-12 text-center">

@@ -1,4 +1,8 @@
-"use client";
+const fs = require('fs');
+
+const headerAuthPath = 'c:/ZComputer/zcomputer/fe/src/components/HeaderAuth.tsx';
+
+const code = `"use client";
 
 import Link from "next/link";
 import { LogOut, User, Shield, Settings } from "lucide-react";
@@ -126,3 +130,14 @@ export default function HeaderAuth({ isMobile, onLinkClick }: HeaderAuthProps) {
     </div>
   );
 }
+`;
+
+fs.writeFileSync(headerAuthPath, code);
+
+// Now update Header.tsx to use isMobile and onLinkClick
+let headerContent = fs.readFileSync('c:/ZComputer/zcomputer/fe/src/components/Header.tsx', 'utf8');
+headerContent = headerContent.replace(
+  /<div onClick=\{\(\) => setMobileMenuOpen\(false\)\}>\s*<HeaderAuth \/>\s*<\/div>/g,
+  '<HeaderAuth isMobile={true} onLinkClick={() => setMobileMenuOpen(false)} />'
+);
+fs.writeFileSync('c:/ZComputer/zcomputer/fe/src/components/Header.tsx', headerContent);

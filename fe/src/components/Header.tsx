@@ -415,9 +415,7 @@ export default function Header() {
 
               <div className="sm:hidden border-t pt-5">
                 <h3 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">Tài khoản</h3>
-                <div onClick={() => setMobileMenuOpen(false)}>
-                  <HeaderAuth />
-                </div>
+                <HeaderAuth isMobile={true} onLinkClick={() => setMobileMenuOpen(false)} />
               </div>
             </div>
             <div className="p-4 shrink-0 text-xs text-gray-400 text-center border-t bg-white">

@@ -471,10 +471,10 @@ export default function EditNewsPage({ params }: { params: Promise<{ id: string 
     ],
   }), []);
 
-  if (loading) return <div className="p-8 text-center">Đang tải dữ liệu...</div>;
+  if (loading) return <div className="p-4 md:p-8 text-center">Đang tải dữ liệu...</div>;
 
   return (
-    <div className="min-h-screen bg-slate-50 font-sans p-6 relative overflow-hidden">
+    <div className="min-h-screen bg-slate-50 font-sans p-4 md:p-6 relative overflow-hidden">
       {/* Decorative blobs */}
       <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-blue-400/20 rounded-full blur-[100px] -translate-x-1/2 -translate-y-1/2 pointer-events-none"></div>
       <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-indigo-400/20 rounded-full blur-[100px] translate-x-1/2 translate-y-1/2 pointer-events-none"></div>
@@ -641,7 +641,7 @@ export default function EditNewsPage({ params }: { params: Promise<{ id: string 
                       KD: {kw.kd}
                     </span>
                   </div>
-                  <div className="grid grid-cols-2 gap-2 text-[11px] text-slate-500">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px] text-slate-500">
                     <div><span className="font-medium">Volume:</span> {kw.volume}</div>
                     <div><span className="font-medium">Intent:</span> {kw.intent}</div>
                     <div><span className="font-medium">CPC:</span> {kw.cpc}</div>
@@ -765,7 +765,7 @@ export default function EditNewsPage({ params }: { params: Promise<{ id: string 
               </button>
             </div>
             
-            <div className="p-6 overflow-y-auto flex-1 custom-scrollbar space-y-4 bg-white">
+            <div className="p-4 md:p-6 overflow-y-auto flex-1 custom-scrollbar space-y-4 bg-white">
               {altImages.length === 0 ? (
                 <div className="text-center text-slate-500 py-10 italic">Không có hình ảnh nào trong bài viết.</div>
               ) : (
@@ -853,7 +853,7 @@ export default function EditNewsPage({ params }: { params: Promise<{ id: string 
               <h3 className="font-bold text-lg text-slate-800">Cấu hình ảnh (SEO)</h3>
             </div>
             
-            <div className="p-6 bg-white space-y-6">
+            <div className="p-4 md:p-6 bg-white space-y-6">
               <div className="w-full h-48 rounded-xl overflow-hidden bg-slate-100 border border-slate-200 flex items-center justify-center">
                 <img src={insertImageModal.url} alt="Preview" className="max-w-full max-h-full object-contain" />
               </div>
