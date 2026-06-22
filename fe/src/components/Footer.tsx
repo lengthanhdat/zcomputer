@@ -65,24 +65,17 @@ export default function Footer() {
           {/* Col 1: Logo & Info */}
           <div className="md:col-span-6 lg:col-span-3 pr-0 lg:pr-4">
              <Link href="/" className="flex flex-col items-start shrink-0 group mb-6">
-               <div className="flex items-center gap-1.5">
-                 <div className="bg-white p-1.5 rounded-xl shadow-[0_0_15px_rgba(255,255,255,0.2)] group-hover:shadow-[0_0_20px_rgba(220,38,38,0.4)] transition-shadow">
-                   <Image src="/logo_broken.png" alt="ZCOMPUTER" width={50} height={50} className="h-10 w-10 object-contain" />
-                 </div>
-                 <div className="flex items-center gap-0.5 group-hover:scale-[1.02] transition-transform duration-300 select-none font-serif">
-                   <span className="text-[#cc0000] text-[58px] font-bold leading-none drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
-                     Z
-                   </span>
-                   <div className="flex flex-col justify-center pt-1">
-                     <span className="text-white text-[28px] font-bold uppercase tracking-[0.02em] leading-none drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)] mb-0.5">
-                       COMPUTER
-                     </span>
-                     <span className={`${montserrat.className} text-[#cc0000] font-black text-[8.5px] uppercase tracking-[0.05em] leading-none`}>
-                       PC GAMING - LAPTOP - WORKSTATION
-                     </span>
-                   </div>
-                 </div>
-               </div>
+                <div className="flex items-center gap-1.5 bg-white p-2 sm:p-3 rounded-xl shadow-[0_0_15px_rgba(255,255,255,0.2)] group-hover:shadow-[0_0_20px_rgba(220,38,38,0.4)] transition-shadow">
+                              <div className="flex items-center ml-1 sm:ml-1.5 font-serif tracking-tight drop-shadow-sm select-none">
+                                <span className="text-primary text-[44px] sm:text-[56px] font-black leading-none pb-[2px]">Z</span>
+                                <div className="flex flex-col justify-center ml-0.5 sm:ml-1 mt-[2px]">
+                                  <span className="text-[#0B1527] text-[22px] sm:text-[28px] font-black leading-[0.8] tracking-normal">COMPUTER</span>
+                                  <span className="text-[6.5px] sm:text-[8px] font-medium text-primary uppercase font-sans tracking-[0.1em] leading-none mt-1 w-full text-justify [text-align-last:justify] whitespace-nowrap">
+                                    PC GAMING - LAPTOP - WORKSTATION
+                                  </span>
+                                </div>
+                              </div>
+                </div>
              </Link>
              
              <p className="text-[13px] text-white/70 leading-relaxed mb-6 font-medium text-justify">

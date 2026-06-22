@@ -68,6 +68,17 @@ export default function MonitorTestPage() {
     };
   }, [handleKeyDown]);
 
+  useEffect(() => {
+    if (isFullscreen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isFullscreen]);
+
   if (isFullscreen) {
     const screen = TEST_SCREENS[currentIndex];
 
@@ -105,7 +116,7 @@ export default function MonitorTestPage() {
       containerStyle.backgroundColor = "white";
       containerStyle.color = "black";
       content = (
-        <div className="max-w-4xl px-8 text-justify flex flex-col gap-6 bg-white p-10 rounded shadow-2xl">
+        <div className="max-w-4xl px-4 sm:px-8 text-justify flex flex-col gap-4 sm:gap-6 bg-white p-6 sm:p-10 rounded shadow-2xl w-[90%] sm:w-auto max-h-[90vh] overflow-y-auto">
           <p style={{ fontSize: "10px" }}>Size 10px: The quick brown fox jumps over the lazy dog. Máy tính ZComputer chất lượng đỉnh cao.</p>
           <p style={{ fontSize: "12px" }}>Size 12px: The quick brown fox jumps over the lazy dog. Máy tính ZComputer chất lượng đỉnh cao.</p>
           <p style={{ fontSize: "14px", fontWeight: "bold" }}>Size 14px Bold: The quick brown fox jumps over the lazy dog.</p>
@@ -118,7 +129,7 @@ export default function MonitorTestPage() {
     return (
       <div style={containerStyle} onClick={handleNext}>
         {content}
-        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 bg-black/80 backdrop-blur-md text-white px-6 py-3 rounded-full text-sm font-bold opacity-70 pointer-events-none border border-white/10 shadow-xl tracking-wider">
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 bg-black/80 backdrop-blur-md text-white px-4 sm:px-6 py-2 sm:py-3 rounded-full text-xs sm:text-sm font-bold opacity-70 pointer-events-none border border-white/10 shadow-xl tracking-wider w-max max-w-[90vw] text-center">
           {currentIndex + 1} / {TEST_SCREENS.length} - {screen.name}
         </div>
       </div>

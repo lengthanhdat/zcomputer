@@ -393,13 +393,9 @@ export default function CategoryClient({
                     const isOutOfStock = product.status === 'out_of_stock' || product.stock === 0;
 
                     return (
-                    <motion.div
-                      initial={{ opacity: 0, y: 40 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true, margin: "-50px" }}
-                      transition={{ duration: 0.5, ease: "easeOut" }}
+                    <div
                       key={product._id}
-                      className={`bg-white rounded-2xl border border-gray-100 overflow-hidden group shadow-sm flex flex-col h-full relative transition-all duration-300 ${isOutOfStock ? 'opacity-80' : 'hover:shadow-[0_20px_40px_rgb(220,38,38,0.12)] hover:-translate-y-2'}`}
+                      className={`animate-in fade-in slide-in-from-bottom-4 duration-500 bg-white rounded-2xl border border-gray-100 overflow-hidden group shadow-sm flex flex-col h-full relative transition-all duration-300 ${isOutOfStock ? 'opacity-80' : 'hover:shadow-[0_20px_40px_rgb(220,38,38,0.12)] hover:-translate-y-2'}`}
                     >
                       <Link href={`/${product.slug}`} className="absolute inset-0 z-20"></Link>
                       <div className="relative aspect-[4/3] p-4 flex items-center justify-center bg-white overflow-hidden">
@@ -538,7 +534,7 @@ export default function CategoryClient({
                           <Eye size={14} /> {(product.views || 0).toLocaleString('vi-VN')} lượt xem
                         </div>
                       </div>
-                    </motion.div>
+                    </div>
                     );
                   });
                 })()
