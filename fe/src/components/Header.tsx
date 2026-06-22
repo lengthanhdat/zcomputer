@@ -270,14 +270,14 @@ export default function Header() {
             }}
           >
             <Image src="/logo_broken.png" alt="Z" width={80} height={80} priority className="h-12 w-12 sm:h-[60px] sm:w-[60px] object-contain group-hover:scale-105 transition-transform duration-300 drop-shadow-md relative z-10" />
-            <div className="flex flex-col justify-center ml-1 sm:ml-2">
-              <div className="font-serif font-black tracking-tight leading-none drop-shadow-sm flex items-baseline">
-                <span className="text-primary text-[32px] sm:text-[42px] leading-none">Z</span>
-                <span className="text-slate-900 text-[24px] sm:text-[32px] leading-none ml-[1px]">COMPUTER</span>
+            <div className="flex items-end ml-1 sm:ml-2 font-serif tracking-tight drop-shadow-sm select-none">
+              <span className="text-primary text-[42px] sm:text-[52px] font-black leading-[0.85] relative top-[1px] sm:top-[2px]">Z</span>
+              <div className="flex flex-col justify-end ml-0.5 sm:ml-1 mb-[2px]">
+                <span className="text-[#0B1527] text-[20px] sm:text-[25px] font-black leading-[0.9]">COMPUTER</span>
+                <span className="text-[6px] sm:text-[7.5px] font-black tracking-[0.18em] text-primary mt-[1px] sm:mt-[2px] uppercase whitespace-nowrap font-sans">
+                  PC GAMING - LAPTOP - WORKSTATION
+                </span>
               </div>
-              <span className="text-[7.5px] sm:text-[10px] font-extrabold tracking-[0.15em] text-primary mt-0.5 uppercase whitespace-nowrap">
-                PC GAMING - LAPTOP - WORKSTATION
-              </span>
             </div>
           </Link>
 

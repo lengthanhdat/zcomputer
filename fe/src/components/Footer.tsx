@@ -67,14 +67,14 @@ export default function Footer() {
              <Link href="/" className="flex flex-col items-start shrink-0 group mb-6">
                 <div className="flex items-center gap-1.5 bg-white p-2 sm:p-3 rounded-xl shadow-[0_0_15px_rgba(255,255,255,0.2)] group-hover:shadow-[0_0_20px_rgba(220,38,38,0.4)] transition-shadow">
                   <Image src="/logo_broken.png" alt="Z" width={50} height={50} className="h-10 w-10 sm:h-12 sm:w-12 object-contain" />
-                  <div className="flex flex-col justify-center ml-1">
-                    <div className="font-serif font-black tracking-tight leading-none drop-shadow-sm flex items-baseline">
-                      <span className="text-primary text-[28px] sm:text-[34px] leading-none">Z</span>
-                      <span className="text-slate-900 text-[20px] sm:text-[26px] leading-none ml-[1px]">COMPUTER</span>
+                  <div className="flex items-end ml-1 sm:ml-2 font-serif tracking-tight drop-shadow-sm select-none">
+                    <span className="text-primary text-[38px] sm:text-[46px] font-black leading-[0.85] relative top-[1px] sm:top-[2px]">Z</span>
+                    <div className="flex flex-col justify-end ml-0.5 sm:ml-1 mb-[2px]">
+                      <span className="text-[#0B1527] text-[18px] sm:text-[22px] font-black leading-[0.9]">COMPUTER</span>
+                      <span className="text-[5px] sm:text-[6.5px] font-black tracking-[0.18em] text-primary mt-[1px] sm:mt-[2px] uppercase whitespace-nowrap font-sans">
+                        PC GAMING - LAPTOP - WORKSTATION
+                      </span>
                     </div>
-                    <span className="text-[6.5px] sm:text-[8px] font-extrabold tracking-[0.15em] text-primary mt-0.5 uppercase whitespace-nowrap">
-                      PC GAMING - LAPTOP - WORKSTATION
-                    </span>
                   </div>
                 </div>
              </Link>
