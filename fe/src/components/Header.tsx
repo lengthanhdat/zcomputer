@@ -273,8 +273,8 @@ export default function Header() {
             <div className="flex items-center ml-1 sm:ml-1.5 font-serif tracking-tight drop-shadow-sm select-none">
               <span className="text-primary text-[44px] sm:text-[56px] font-black leading-none pb-[2px]">Z</span>
               <div className="flex flex-col justify-center ml-0.5 sm:ml-1 mt-[2px]">
-                <span className="text-[#0B1527] text-[22px] sm:text-[28px] font-black leading-[0.8]">COMPUTER</span>
-                <span className="text-[6.5px] sm:text-[8px] font-bold tracking-[0.16em] text-primary uppercase whitespace-nowrap font-sans leading-none mt-1">
+                <span className="text-[#0B1527] text-[22px] sm:text-[28px] font-black leading-[0.8] tracking-normal">COMPUTER</span>
+                <span className="text-[6.5px] sm:text-[8px] font-medium text-primary uppercase font-sans tracking-[0.1em] leading-none mt-1 w-full text-justify [text-align-last:justify] whitespace-nowrap">
                   PC GAMING - LAPTOP - WORKSTATION
                 </span>
               </div>
@@ -282,7 +282,7 @@ export default function Header() {
           </Link>
 
           {/* Desktop Search Bar (Hidden on Mobile) */}
-          <div className="flex-1 w-full max-w-2xl lg:max-w-3xl hidden md:flex mx-6 xl:mx-12 relative">
+          <div className="flex-1 w-full max-w-2xl lg:max-w-3xl hidden md:flex relative">
             <form onSubmit={handleSearch} className="relative w-full group/search z-50">
               <input
                 type="text"
@@ -303,9 +303,9 @@ export default function Header() {
           </div>
 
           {/* Cart & Authentication */}
-          <div className="flex items-center gap-3 sm:gap-5 shrink-0">
+          <div className="flex items-center gap-2 sm:gap-3 shrink-0">
             {/* Hotline & Showroom */}
-            <div className="hidden xl:flex items-center gap-6 mr-4 border-r pr-6 border-gray-200">
+            <div className="hidden xl:flex items-center gap-3 mr-2 border-r pr-3 border-gray-200">
               <div className="flex items-center gap-2 group cursor-pointer">
                 <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors duration-300">
                   <PhoneCall size={20} />
