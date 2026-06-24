@@ -368,80 +368,91 @@ export default function HomeClient() {
 
           return (
             <section key={cat._id} className="container mx-auto px-4 mb-16">
-              {/* Mobile Category Header */}
-              <div className="flex lg:hidden items-center justify-between mb-6 px-2">
-                <h3 className="text-2xl font-black text-gray-900 uppercase tracking-tight relative inline-block">
-                  {cat.name}
-                  <div className="absolute -bottom-2 left-0 w-1/2 h-1 bg-primary rounded-full"></div>
-                </h3>
-                <Link href={`/${cat.slug}`} className="text-primary text-sm font-bold flex items-center hover:underline">
-                  Xem tất cả <ChevronRight size={16} />
-                </Link>
-              </div>
-
-              <div className="flex flex-col lg:flex-row bg-white rounded-[2rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100/80 overflow-hidden">
-                {/* Vertical Category Banner */}
-                <div className="hidden lg:block w-1/4 xl:w-[280px] flex-shrink-0 relative group rounded-l-[2rem] overflow-hidden">
+              {/* Horizontal Category Banner */}
+              {cat.image && (
+                <Link href={`/${cat.slug}`} className="block w-full h-[120px] md:h-[200px] relative rounded-[2rem] overflow-hidden mb-6 group shadow-lg">
                   <Image 
-                    src={cat.image ? ((cat.image.startsWith('http') || cat.image.startsWith('data:') || cat.image.startsWith('/uploads')) ? cat.image : `${cat.image}`) : "https://images.unsplash.com/photo-1542393545-10f5cde2c810?w=1000&q=100"} 
+                    src={(cat.image.startsWith('http') || cat.image.startsWith('data:') || cat.image.startsWith('/uploads')) ? cat.image : `${cat.image}`} 
                     alt={cat.name} 
                     fill 
-                    sizes="(min-width: 1024px) 25vw, 100vw" 
-                    className="object-cover group-hover:scale-110 transition-transform duration-700" 
+                    sizes="100vw" 
+                    className="object-cover group-hover:scale-105 transition-transform duration-700" 
                     unoptimized 
                   />
-                  {/* Clean Dark Overlay for Text Readability */}
                   <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors duration-500"></div>
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent opacity-90"></div>
-                  
-                  {/* Glassmorphism content area */}
-                  <div className="absolute bottom-4 left-4 right-4 bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-6 transform translate-y-2 group-hover:translate-y-0 transition-all duration-500 shadow-[0_8px_32px_rgba(0,0,0,0.3)]">
-                    <h3 className="text-white font-black text-2xl uppercase leading-tight drop-shadow-md">{cat.name}</h3>
-                    <Link href={`/${cat.slug}`} className="inline-flex items-center gap-2 mt-4 text-xs font-bold text-white bg-white/20 hover:bg-white/30 backdrop-blur-sm border border-white/30 rounded-full px-4 py-2 transition-all">
-                      XEM TẤT CẢ <ChevronRight size={14} />
-                    </Link>
-                  </div>
-                </div>
+                </Link>
+              )}
 
-                {/* Slider Container */}
-                <div className="w-full lg:w-3/4 xl:w-[calc(100%-280px)] bg-transparent p-6 md:p-8 relative flex-1 flex flex-col">
-                  <div className="absolute -top-32 -right-32 w-64 h-64 bg-primary/10 rounded-full blur-3xl pointer-events-none"></div>
-                  <div className="absolute -bottom-32 -left-32 w-64 h-64 bg-blue-600/10 rounded-full blur-3xl pointer-events-none"></div>
+              {/* Main Content Container */}
+              <div className="flex flex-col bg-white rounded-[2rem] shadow-[0_8px_30px_var(--primary-ring)] border-[4px] border-primary/10 hover:border-primary/30 transition-colors duration-500 overflow-hidden relative p-6 md:p-8">
+                <div className="absolute -top-32 -right-32 w-64 h-64 bg-primary/10 rounded-full blur-3xl pointer-events-none"></div>
+                <div className="absolute -bottom-32 -left-32 w-64 h-64 bg-blue-600/10 rounded-full blur-3xl pointer-events-none"></div>
+                
+                {/* Header Row: Category Name & Filters */}
+                <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between mb-8 gap-4 relative z-10">
+                  <h3 className="text-2xl md:text-3xl font-black text-gray-900 uppercase tracking-tight relative inline-block">
+                    {cat.name}
+                    <div className="absolute -bottom-2 left-0 w-1/2 h-1 bg-primary rounded-full"></div>
+                  </h3>
                   
                   {/* Top Subcategories Bar */}
-                  {topSubCategories.length > 0 && (
-                    <div className="flex overflow-x-auto whitespace-nowrap items-center gap-2 md:gap-3 mb-6 relative z-10 bg-gradient-to-r from-primary/10 via-primary/5 to-transparent p-2.5 rounded-2xl border border-primary/10 scrollbar-hide [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-                      <div className="flex text-primary font-black text-[11px] uppercase tracking-widest px-3 border-r border-primary/20 mr-1 items-center gap-1.5 flex-shrink-0">
-                        <Zap size={14} className="text-orange-500 fill-orange-500" />
-                        Nổi bật
-                      </div>
-                      
-                      <button
-                        onClick={() => setActiveSubCats(prev => ({...prev, [cat._id]: "all"}))}
-                        className={`flex-shrink-0 px-4 py-1.5 backdrop-blur-md rounded-xl text-[12px] font-bold transition-all duration-300 shadow-[0_2px_10px_rgba(0,0,0,0.02)] hover:shadow-[0_5px_15px_var(--primary-ring)] border ${activeSubCatId === "all" ? "bg-primary text-white border-primary shadow-[0_5px_15px_var(--primary-ring)]" : "bg-white/60 text-gray-700 hover:bg-white hover:text-primary border-white/50 hover:border-primary/50"}`}
-                      >
-                        Tất cả
-                      </button>
-
-                      {topSubCategories.map(subCat => (
+                  {topSubCategories.length > 0 ? (
+                    <div className="flex items-center gap-3 w-full lg:w-auto flex-1 min-w-0 justify-end">
+                      <div className="relative flex-1 min-w-0 group/subcat flex items-center">
                         <button 
-                          key={subCat._id} 
-                          onClick={() => setActiveSubCats(prev => ({...prev, [cat._id]: subCat._id}))}
-                          className={`flex-shrink-0 px-4 py-1.5 backdrop-blur-md rounded-xl text-[12px] font-bold transition-all duration-300 shadow-[0_2px_10px_rgba(0,0,0,0.02)] hover:shadow-[0_5px_15px_var(--primary-ring)] border ${activeSubCatId === subCat._id ? "bg-primary text-white border-primary shadow-[0_5px_15px_var(--primary-ring)]" : "bg-white/60 text-gray-700 hover:bg-white hover:text-primary border-white/50 hover:border-primary/50"}`}
+                          onClick={() => { document.getElementById(`subcat-slider-${cat._id}`)?.scrollBy({ left: -200, behavior: 'smooth' }) }}
+                          className="absolute left-1 z-20 w-7 h-7 bg-white shadow-[0_2px_8px_rgba(0,0,0,0.15)] border border-gray-100 rounded-full flex items-center justify-center text-gray-600 hover:text-primary opacity-0 group-hover/subcat:opacity-100 transition-all pointer-events-none group-hover/subcat:pointer-events-auto"
                         >
-                          {subCat.name}
+                          <ChevronLeft size={16} />
                         </button>
-                      ))}
+
+                        <div id={`subcat-slider-${cat._id}`} className="flex overflow-x-auto whitespace-nowrap items-center gap-2 md:gap-3 bg-gradient-to-r from-primary/10 via-primary/5 to-transparent p-2.5 rounded-2xl border border-primary/10 scrollbar-hide [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] min-w-0 scroll-smooth w-full">
+                          <div className="flex text-primary font-black text-[11px] uppercase tracking-widest px-3 border-r border-primary/20 mr-1 items-center gap-1.5 flex-shrink-0">
+                            <Zap size={14} className="text-orange-500 fill-orange-500" />
+                            Nổi bật
+                          </div>
+                          
+                          <button
+                            onClick={() => setActiveSubCats(prev => ({...prev, [cat._id]: "all"}))}
+                            className={`flex-shrink-0 px-4 py-1.5 backdrop-blur-md rounded-xl text-[12px] font-bold transition-all duration-300 shadow-[0_2px_10px_rgba(0,0,0,0.02)] hover:shadow-[0_5px_15px_var(--primary-ring)] border ${activeSubCatId === "all" ? "bg-primary text-white border-primary shadow-[0_5px_15px_var(--primary-ring)]" : "bg-white/60 text-gray-700 hover:bg-white hover:text-primary border-white/50 hover:border-primary/50"}`}
+                          >
+                            Tất cả
+                          </button>
+
+                          {topSubCategories.map(subCat => (
+                            <button 
+                              key={subCat._id} 
+                              onClick={() => setActiveSubCats(prev => ({...prev, [cat._id]: subCat._id}))}
+                              className={`flex-shrink-0 px-4 py-1.5 backdrop-blur-md rounded-xl text-[12px] font-bold transition-all duration-300 shadow-[0_2px_10px_rgba(0,0,0,0.02)] hover:shadow-[0_5px_15px_var(--primary-ring)] border ${activeSubCatId === subCat._id ? "bg-primary text-white border-primary shadow-[0_5px_15px_var(--primary-ring)]" : "bg-white/60 text-gray-700 hover:bg-white hover:text-primary border-white/50 hover:border-primary/50"}`}
+                            >
+                              {subCat.name}
+                            </button>
+                          ))}
+                        </div>
+
+                        <div className="absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-white via-white/80 to-transparent z-10 pointer-events-none rounded-r-2xl"></div>
+                        <button 
+                          onClick={() => { document.getElementById(`subcat-slider-${cat._id}`)?.scrollBy({ left: 200, behavior: 'smooth' }) }}
+                          className="absolute right-1 z-20 w-7 h-7 bg-white shadow-[0_2px_8px_rgba(0,0,0,0.15)] border border-gray-100 rounded-full flex items-center justify-center text-gray-600 hover:text-primary opacity-0 group-hover/subcat:opacity-100 transition-all pointer-events-none group-hover/subcat:pointer-events-auto"
+                        >
+                          <ChevronRight size={16} />
+                        </button>
+                      </div>
                       <Link 
                         href={`/${cat.slug}`}
-                        className="ml-auto flex-shrink-0 text-[12px] font-bold text-primary hover:brightness-110 flex items-center gap-1 transition-all duration-300 hover:translate-x-1 px-2"
+                        className="flex-shrink-0 text-[13px] font-bold text-primary hover:brightness-110 flex items-center gap-1 transition-all duration-300 hover:translate-x-1"
                       >
                         Xem tất cả <ChevronRight size={14} />
                       </Link>
                     </div>
+                  ) : (
+                    <Link href={`/${cat.slug}`} className="text-primary text-sm font-bold flex items-center hover:underline lg:ml-auto">
+                      Xem tất cả <ChevronRight size={16} />
+                    </Link>
                   )}
+                </div>
 
-                  <div className="relative group/slider mt-auto">
+                <div className="relative group/slider mt-auto">
                     <button 
                       onClick={(e) => {
                         const slider = document.getElementById(`slider-${cat._id}`);
@@ -451,7 +462,7 @@ export default function HomeClient() {
                     >
                       <ChevronLeft size={24} />
                     </button>
-                    <DraggableSlider id={`slider-${cat._id}`} className="flex overflow-x-auto gap-3 pb-6 scroll-smooth snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+                    <DraggableSlider id={`slider-${cat._id}`} className="flex overflow-x-auto gap-3 pt-4 -mt-4 pb-6 scroll-smooth snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
                       <div id={`slider-inner-${cat._id}`} className="flex gap-3 pr-3 flex-shrink-0 snap-start">
                         {catProducts.map((product) => (
                           <ProductCard key={product._id} product={product} />
@@ -470,7 +481,6 @@ export default function HomeClient() {
                     </button>
                   </div>
                 </div>
-              </div>
             </section>
           );
         })
@@ -529,7 +539,7 @@ function ProductCard({ product }: { product: Product }) {
 
   return (
     <div
-      className={`flex-none w-[170px] md:w-[280px] bg-white rounded-2xl border border-gray-100 overflow-hidden group shadow-md flex flex-col relative transition-all duration-500 ${isOutOfStock ? 'opacity-80' : 'hover:shadow-[0_8px_30px_var(--primary-ring)] hover:border-primary/50 hover:-translate-y-2'}`}
+      className={`flex-none w-[170px] md:w-[280px] bg-white rounded-2xl border-2 border-primary/20 overflow-hidden group shadow-md flex flex-col relative transition-all duration-500 ${isOutOfStock ? 'opacity-80' : 'hover:shadow-[0_8px_30px_var(--primary-ring)] hover:border-primary hover:-translate-y-2'}`}
     >
       <Link href={`/${product.slug}`} className="absolute inset-0 z-20"></Link>
       <div className="relative aspect-[4/3] p-4 flex items-center justify-center bg-white overflow-hidden">
