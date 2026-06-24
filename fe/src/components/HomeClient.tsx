@@ -389,16 +389,25 @@ export default function HomeClient() {
                 <div className="absolute -bottom-32 -left-32 w-64 h-64 bg-blue-600/10 rounded-full blur-3xl pointer-events-none"></div>
                 
                 {/* Header Row: Category Name & Filters */}
-                <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between mb-8 gap-4 relative z-10">
-                  <h3 className="text-2xl md:text-3xl font-black text-gray-900 uppercase tracking-tight relative inline-block">
-                    {cat.name}
-                    <div className="absolute -bottom-2 left-0 w-1/2 h-1 bg-primary rounded-full"></div>
-                  </h3>
+                <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between mb-6 lg:mb-8 gap-4 lg:gap-6 relative z-10">
+                  <div className="flex items-center justify-between w-full lg:w-auto gap-4">
+                    <h3 className="text-[18px] sm:text-xl md:text-3xl font-black text-gray-900 uppercase tracking-tight relative inline-block line-clamp-2">
+                      {cat.name}
+                      <div className="absolute -bottom-2 left-0 w-1/2 h-1 bg-primary rounded-full"></div>
+                    </h3>
+                    {/* Xem tất cả on Mobile */}
+                    <Link 
+                      href={`/${cat.slug}`}
+                      className="lg:hidden flex-shrink-0 text-[12px] font-bold text-primary hover:brightness-110 flex items-center gap-1 bg-primary/5 px-3 py-1.5 rounded-full"
+                    >
+                      Xem tất cả <ChevronRight size={14} />
+                    </Link>
+                  </div>
                   
                   {/* Top Subcategories Bar */}
                   {topSubCategories.length > 0 ? (
-                    <div className="flex items-center gap-3 w-full lg:w-auto flex-1 min-w-0 justify-end">
-                      <div className="relative flex-1 min-w-0 group/subcat flex items-center">
+                    <div className="flex items-center gap-3 w-full lg:w-auto flex-1 min-w-0 lg:justify-end">
+                      <div className="relative w-full lg:w-auto lg:flex-1 min-w-0 group/subcat flex items-center">
                         <button 
                           onClick={() => { document.getElementById(`subcat-slider-${cat._id}`)?.scrollBy({ left: -200, behavior: 'smooth' }) }}
                           className="absolute left-1 z-20 w-7 h-7 bg-white shadow-[0_2px_8px_rgba(0,0,0,0.15)] border border-gray-100 rounded-full flex items-center justify-center text-gray-600 hover:text-primary opacity-0 group-hover/subcat:opacity-100 transition-all pointer-events-none group-hover/subcat:pointer-events-auto"
@@ -438,15 +447,16 @@ export default function HomeClient() {
                           <ChevronRight size={16} />
                         </button>
                       </div>
+                      {/* Xem tất cả on Desktop */}
                       <Link 
                         href={`/${cat.slug}`}
-                        className="flex-shrink-0 text-[13px] font-bold text-primary hover:brightness-110 flex items-center gap-1 transition-all duration-300 hover:translate-x-1"
+                        className="hidden lg:flex flex-shrink-0 text-[13px] font-bold text-primary hover:brightness-110 items-center gap-1 transition-all duration-300 hover:translate-x-1"
                       >
                         Xem tất cả <ChevronRight size={14} />
                       </Link>
                     </div>
                   ) : (
-                    <Link href={`/${cat.slug}`} className="text-primary text-sm font-bold flex items-center hover:underline lg:ml-auto">
+                    <Link href={`/${cat.slug}`} className="hidden lg:flex text-primary text-sm font-bold items-center hover:underline lg:ml-auto">
                       Xem tất cả <ChevronRight size={16} />
                     </Link>
                   )}
