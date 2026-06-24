@@ -65,15 +65,15 @@ const VideoCard = ({ video }: { video: any }) => {
       
       {/* Fake Channel Info */}
       <div className="absolute top-4 left-4 right-4 flex items-center gap-3 z-10 pointer-events-none">
-        <div className="relative">
+        <div className="relative shrink-0">
           <Image src="/logo_broken.png" alt="ZComputer" width={36} height={36} className="w-9 h-9 rounded-full object-contain bg-white shadow-lg border border-white/50" />
           <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-primary rounded-full border-2 border-black flex items-center justify-center">
             <div className="w-1 h-1 bg-white rounded-full"></div>
           </div>
         </div>
-        <div>
-          <h3 className="text-white font-bold text-[13px] leading-tight drop-shadow-md">ZComputer Short</h3>
-          <p className="text-white/80 text-[10px] font-medium drop-shadow-md">@zcomputer_official</p>
+        <div className="min-w-0 flex-1">
+          <h3 className="text-white font-bold text-[13px] leading-tight drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] truncate">ZComputer Short</h3>
+          <p className="text-white/90 text-[10px] font-medium drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] truncate">@zcomputer_official</p>
         </div>
       </div>
 

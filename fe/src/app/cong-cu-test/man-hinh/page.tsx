@@ -15,8 +15,184 @@ const TEST_SCREENS = [
   { id: "text", name: "Độ Nét Chữ (Sharpness)", type: "text" },
 ];
 
+const TouchGridTest = ({ onNext }: { onNext: () => void }) => {
+  const [started, setStarted] = React.useState(false);
+  const [touchedBoxes, setTouchedBoxes] = React.useState<Set<number>>(new Set());
+  const [gridConfig, setGridConfig] = React.useState({ rows: 0, cols: 0, boxSize: 50 });
+  const lastPoints = React.useRef<Map<number, {x: number, y: number}>>(new Map());
+
+  const isCompleted = gridConfig.rows > 0 && touchedBoxes.size === gridConfig.rows * gridConfig.cols;
+
+  React.useEffect(() => {
+    const updateGrid = () => {
+      // Kích thước ô vuông cố định 50px (chuẩn y như mẫu onlinemictest)
+      const boxSize = window.innerWidth < 768 ? 40 : 50;
+      const cols = Math.ceil(window.innerWidth / boxSize);
+      const rows = Math.ceil(window.innerHeight / boxSize);
+      setGridConfig({ rows, cols, boxSize });
+      setTouchedBoxes(new Set()); // Reset on resize
+    };
+    updateGrid();
+    window.addEventListener('resize', updateGrid);
+    return () => window.removeEventListener('resize', updateGrid);
+  }, []);
+
+  const handlePointerMove = (e: React.PointerEvent) => {
+    if (!started) return;
+    
+    // Đối với chuột, chỉ vẽ khi đang nhấn giữ chuột trái (buttons === 1)
+    // Đối với cảm ứng (touch), khi ngón tay chạm màn hình thì tự động là đang vuốt
+    if (e.pointerType === 'mouse' && e.buttons !== 1) return;
+
+    const x = e.clientX;
+    const y = e.clientY;
+    const pointerId = e.pointerId;
+    
+    setTouchedBoxes(prev => {
+      const next = new Set(prev);
+      let changed = false;
+
+      const updateBox = (px: number, py: number) => {
+        if (px < 0 || py < 0 || px >= window.innerWidth || py >= window.innerHeight) return;
+        const col = Math.floor(px / gridConfig.boxSize);
+        const row = Math.floor(py / gridConfig.boxSize);
+        const index = row * gridConfig.cols + col;
+        if (!next.has(index)) {
+          next.add(index);
+          changed = true;
+        }
+      };
+
+      updateBox(x, y);
+
+      // Interpolate for fast swiping so no boxes are skipped
+      const lastPoint = lastPoints.current.get(pointerId);
+      if (lastPoint) {
+        const dx = x - lastPoint.x;
+        const dy = y - lastPoint.y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        if (distance > gridConfig.boxSize / 3) {
+          const steps = Math.floor(distance / (gridConfig.boxSize / 3));
+          for (let i = 1; i < steps; i++) {
+            updateBox(lastPoint.x + dx * (i / steps), lastPoint.y + dy * (i / steps));
+          }
+        }
+      }
+      return changed ? next : prev;
+    });
+    
+    lastPoints.current.set(pointerId, { x, y });
+  };
+
+  const handlePointerDown = (e: React.PointerEvent) => {
+    if (!started) {
+      setStarted(true);
+      return;
+    }
+    // Set pointer capture so we keep getting events even if the finger slides slightly out of window
+    (e.target as HTMLElement).setPointerCapture(e.pointerId);
+    handlePointerMove(e);
+  };
+
+  const handlePointerUp = (e: React.PointerEvent) => {
+    lastPoints.current.delete(e.pointerId);
+    try {
+      (e.target as HTMLElement).releasePointerCapture(e.pointerId);
+    } catch(err) {}
+  };
+
+  return (
+    <div 
+      className="fixed inset-0 bg-[#0a0a0a] overflow-hidden select-none touch-none z-[9999]"
+      onPointerDown={handlePointerDown}
+      onPointerMove={handlePointerMove}
+      onPointerUp={handlePointerUp}
+      onPointerCancel={handlePointerUp}
+    >
+      {/* The Grid */}
+      <div className="absolute inset-0 flex flex-wrap content-start pointer-events-none" style={{ width: gridConfig.cols * gridConfig.boxSize }}>
+        {Array.from({ length: gridConfig.rows * gridConfig.cols }).map((_, i) => (
+          <div
+            key={i}
+            style={{
+              width: gridConfig.boxSize,
+              height: gridConfig.boxSize,
+            }}
+            className={`relative border border-white/10 transition-colors duration-75 ${
+              touchedBoxes.has(i) ? 'bg-primary shadow-[0_0_15px_rgba(239,68,68,0.3)_inset]' : 'bg-transparent'
+            }`}
+          >
+            {/* Dấu chấm ở các góc giao nhau (top-left) */}
+            <div className="absolute -top-[2px] -left-[2px] w-[4px] h-[4px] bg-white/40 rounded-full z-10 pointer-events-none"></div>
+          </div>
+        ))}
+      </div>
+
+      {/* Instructions Overlay */}
+      {!started && (
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none p-4 z-50">
+          <div className="text-white text-sm md:text-base lg:text-lg space-y-4 max-w-4xl bg-[#111]/90 p-8 rounded-xl backdrop-blur-md shadow-[0_0_50px_rgba(239,68,68,0.15)] border border-primary/20">
+            <p>1. Vuốt ngón tay qua từng ô vuông trên màn hình.</p>
+            <p>2. Ô vuông đổi <strong className="text-primary">màu đỏ</strong> là đã vượt qua bài test. Ô vuông nào vẫn hiển thị màu nền, dù bạn đã chạm vào nhiều lần, thì ô vuông đó có vấn đề.</p>
+            <p>3. Sau khi chạm vào tất cả các ô vuông, hãy nhấn vào nút camera (hoặc phím chụp màn hình) để lưu kết quả.</p>
+            <p>4. Hãy chạm vào bất kỳ chỗ nào để bắt đầu. Chúc may mắn nhé!</p>
+          </div>
+        </div>
+      )}
+
+      {/* Completion Overlay */}
+      {isCompleted && (
+        <div className="absolute inset-0 flex items-center justify-center bg-black/80 backdrop-blur-sm z-[10000] pointer-events-auto">
+          <div className="bg-[#111] border border-primary/50 shadow-[0_0_80px_rgba(239,68,68,0.3)] rounded-[2rem] p-10 md:p-14 flex flex-col items-center max-w-lg mx-4 text-center animate-in zoom-in duration-300">
+            <div className="w-24 h-24 bg-green-500/20 rounded-full flex items-center justify-center mb-6">
+              <CheckCircle2 size={48} className="text-green-500 drop-shadow-[0_0_15px_rgba(34,197,94,0.5)]" />
+            </div>
+            <h2 className="text-3xl md:text-4xl font-black text-white mb-4 uppercase tracking-tight">Tuyệt Vời!</h2>
+            <p className="text-gray-300 md:text-lg mb-10 leading-relaxed">
+              Màn hình cảm ứng của bạn hoạt động hoàn hảo, không phát hiện điểm liệt nào trên toàn bộ bề mặt.
+            </p>
+            <div className="flex flex-col sm:flex-row w-full gap-4">
+              <button 
+                onClick={(e) => { e.stopPropagation(); setTouchedBoxes(new Set()); }}
+                className="flex-1 bg-white/10 hover:bg-white/20 text-white px-6 py-4 rounded-xl font-bold transition-all border border-white/5"
+              >
+                Test Lại Lần Nữa
+              </button>
+              <button 
+                onClick={(e) => { e.stopPropagation(); onNext(); }}
+                className="flex-1 bg-primary hover:bg-primary/90 text-white px-6 py-4 rounded-xl font-bold shadow-[0_0_30px_rgba(239,68,68,0.4)] hover:-translate-y-1 transition-all uppercase tracking-wider"
+              >
+                Hoàn Tất & Thoát
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Controls */}
+      {started && !isCompleted && (
+        <>
+          <button 
+            onClick={(e) => { e.stopPropagation(); setTouchedBoxes(new Set()); }}
+            className="absolute bottom-6 left-6 bg-black/80 hover:bg-black text-white px-6 py-3 rounded-lg text-sm font-bold shadow-[0_0_20px_rgba(0,0,0,0.5)] transition-all border border-white/10 backdrop-blur-md z-50 pointer-events-auto"
+          >
+            Làm lại
+          </button>
+          <button 
+            onClick={(e) => { e.stopPropagation(); onNext(); }}
+            className="absolute bottom-6 right-6 bg-primary hover:bg-primary/90 text-white px-6 py-3 rounded-lg text-sm font-bold shadow-[0_0_20px_rgba(239,68,68,0.4)] transition-all border border-primary/50 backdrop-blur-md z-50 pointer-events-auto uppercase tracking-wider"
+          >
+            Thoát / Tiếp Tục
+          </button>
+        </>
+      )}
+    </div>
+  );
+};
+
 export default function MonitorTestPage() {
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [isTouchFullscreen, setIsTouchFullscreen] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [showInstructions, setShowInstructions] = useState(true);
 
@@ -33,6 +209,19 @@ export default function MonitorTestPage() {
         await document.exitFullscreen();
         setIsFullscreen(false);
       }
+    }
+  };
+
+  const toggleTouchFullscreen = async () => {
+    if (!document.fullscreenElement) {
+      try {
+        await document.documentElement.requestFullscreen();
+        setIsTouchFullscreen(true);
+      } catch (err) {
+        setIsTouchFullscreen(true);
+      }
+    } else {
+      setIsTouchFullscreen(true);
     }
   };
 
@@ -57,8 +246,12 @@ export default function MonitorTestPage() {
 
   useEffect(() => {
     const onFullscreenChange = () => {
-      setIsFullscreen(!!document.fullscreenElement);
-      if (!document.fullscreenElement) setShowInstructions(true);
+      const isFull = !!document.fullscreenElement;
+      if (!isFull) {
+        setIsFullscreen(false);
+        setIsTouchFullscreen(false);
+        setShowInstructions(true);
+      }
     };
     document.addEventListener("fullscreenchange", onFullscreenChange);
     window.addEventListener("keydown", handleKeyDown);
@@ -129,10 +322,21 @@ export default function MonitorTestPage() {
     return (
       <div style={containerStyle} onClick={handleNext}>
         {content}
-        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 bg-black/80 backdrop-blur-md text-white px-4 sm:px-6 py-2 sm:py-3 rounded-full text-xs sm:text-sm font-bold opacity-70 pointer-events-none border border-white/10 shadow-xl tracking-wider w-max max-w-[90vw] text-center">
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 bg-black/80 backdrop-blur-md text-white px-4 sm:px-6 py-2 sm:py-3 rounded-full text-xs sm:text-sm font-bold opacity-70 pointer-events-none border border-white/10 shadow-xl tracking-wider w-max max-w-[90vw] text-center z-[999]">
           {currentIndex + 1} / {TEST_SCREENS.length} - {screen.name}
         </div>
       </div>
+    );
+  }
+
+  if (isTouchFullscreen) {
+    return (
+      <TouchGridTest onNext={() => {
+        setIsTouchFullscreen(false);
+        if (document.fullscreenElement && document.exitFullscreen) {
+          document.exitFullscreen();
+        }
+      }} />
     );
   }
 
@@ -154,49 +358,77 @@ export default function MonitorTestPage() {
           </Link>
         </div>
 
-        <div className="relative group max-w-4xl mx-auto">
-          <div className="absolute inset-0 bg-gradient-to-r from-primary to-orange-600 rounded-[2.5rem] blur opacity-20 group-hover:opacity-40 transition-opacity duration-500"></div>
-          
-          <div className="bg-[#0a0a0a]/80 backdrop-blur-2xl border border-white/10 rounded-[2.5rem] p-8 md:p-14 text-center shadow-2xl relative overflow-hidden">
-            
-            <div className="flex flex-col items-center">
-              <div className="w-24 h-24 bg-primary/100/10 rounded-full flex items-center justify-center mb-6 shadow-[0_0_30px_rgba(239,68,68,0.2)] relative">
-                <div className="absolute inset-0 bg-primary/100/20 rounded-full animate-ping opacity-50"></div>
+        <div className="text-center mb-12">
+          <h1 className="text-4xl md:text-5xl font-black uppercase tracking-tight text-white">
+            Bộ Công Cụ Kiểm Tra
+          </h1>
+          <p className="text-gray-400 mt-4 max-w-xl mx-auto">
+            Test độ chuẩn của màn hình LCD và độ nhạy của màn hình cảm ứng một cách chuyên nghiệp.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
+          {/* Card 1: LCD Test */}
+          <div className="relative group">
+            <div className="absolute inset-0 bg-gradient-to-r from-primary to-orange-600 rounded-[2.5rem] blur opacity-20 group-hover:opacity-40 transition-opacity duration-500"></div>
+            <div className="bg-[#0a0a0a]/80 backdrop-blur-2xl border border-white/10 rounded-[2.5rem] p-8 md:p-10 text-center shadow-2xl relative overflow-hidden h-full flex flex-col items-center">
+              <div className="w-24 h-24 bg-primary/10 rounded-full flex items-center justify-center mb-6 relative">
                 <Monitor size={40} className="text-primary relative z-10" />
               </div>
-
-              <h1 className="text-4xl md:text-5xl font-black uppercase tracking-tight mb-4 text-white">
-                Kiểm tra Màn Hình
-              </h1>
-
-              <p className="text-gray-400 max-w-lg mx-auto mb-10 leading-relaxed px-4">
-                Công cụ giúp bạn phát hiện điểm ảnh chết (Dead Pixel), hở sáng viền, méo hình và độ nhòe chữ nhanh chóng.
+              <h2 className="text-3xl font-black uppercase tracking-tight mb-4 text-white">
+                Kiểm Tra Màn Hình (LCD)
+              </h2>
+              <p className="text-gray-400 mb-10 leading-relaxed max-w-sm">
+                Phát hiện điểm ảnh chết (Dead Pixel), hở sáng viền, méo hình và độ nhòe chữ nhanh chóng.
               </p>
-
+              
               <button 
                 onClick={toggleFullscreen}
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-3 bg-primary hover:bg-primary/100 text-white px-12 py-5 rounded-2xl font-black text-lg transition-all shadow-[0_0_30px_rgba(239,68,68,0.4)] hover:shadow-[0_0_50px_rgba(239,68,68,0.6)] hover:-translate-y-1 mb-12 uppercase tracking-widest"
+                className="mt-auto w-full inline-flex items-center justify-center gap-3 bg-primary hover:bg-primary/90 text-white px-8 py-4 rounded-xl font-black transition-all shadow-[0_0_30px_rgba(239,68,68,0.3)] hover:-translate-y-1 uppercase tracking-wider"
               >
-                <Expand size={24} /> Bắt Đầu Test
+                <Expand size={20} /> Bắt Đầu Test LCD
               </button>
-
-              <div className="bg-[#111] border border-white/5 rounded-2xl p-6 text-left w-full max-w-2xl mx-auto shadow-inner">
-                <h3 className="text-white font-bold mb-5 uppercase tracking-wider text-sm flex items-center gap-2">
-                  <CheckCircle2 size={18} className="text-primary" /> Hướng dẫn nhanh
-                </h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm text-gray-400">
-                  <div className="flex flex-col gap-4">
-                    <div className="flex gap-3"><div className="w-1.5 h-1.5 rounded-full bg-primary/100 mt-1.5 shrink-0"></div><p><strong className="text-gray-200">Lau sạch màn hình</strong> trước khi test để tránh nhầm bụi với điểm chết.</p></div>
-                    <div className="flex gap-3"><div className="w-1.5 h-1.5 rounded-full bg-primary/100 mt-1.5 shrink-0"></div><p><strong className="text-gray-200">Click chuột</strong> hoặc <strong className="text-gray-200">Phím mũi tên</strong> để đổi qua lại giữa các bài test màu.</p></div>
-                  </div>
-                  <div className="flex flex-col gap-4">
-                    <div className="flex gap-3"><div className="w-1.5 h-1.5 rounded-full bg-primary/100 mt-1.5 shrink-0"></div><p><strong className="text-gray-200">Tập trung nhìn kỹ</strong> các chấm đen trên nền màu sáng hoặc chấm sáng trên nền đen.</p></div>
-                    <div className="flex gap-3"><div className="w-1.5 h-1.5 rounded-full bg-primary/100 mt-1.5 shrink-0"></div><p><strong className="text-gray-200">Phím ESC</strong> để thoát chế độ Toàn màn hình bất kỳ lúc nào.</p></div>
-                  </div>
-                </div>
-              </div>
             </div>
+          </div>
 
+          {/* Card 2: Touch Test */}
+          <div className="relative group">
+            <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-[2.5rem] blur opacity-20 group-hover:opacity-40 transition-opacity duration-500"></div>
+            <div className="bg-[#0a0a0a]/80 backdrop-blur-2xl border border-white/10 rounded-[2.5rem] p-8 md:p-10 text-center shadow-2xl relative overflow-hidden h-full flex flex-col items-center">
+              <div className="w-24 h-24 bg-blue-500/10 rounded-full flex items-center justify-center mb-6 relative">
+                <MousePointerClick size={40} className="text-blue-500 relative z-10" />
+              </div>
+              <h2 className="text-3xl font-black uppercase tracking-tight mb-4 text-white">
+                Kiểm Tra Cảm Ứng (Touch)
+              </h2>
+              <p className="text-gray-400 mb-10 leading-relaxed max-w-sm">
+                Tìm ra điểm mù, điểm liệt cảm ứng trên toàn bộ bề mặt màn hình bằng bài test vuốt lưới ô vuông.
+              </p>
+              
+              <button 
+                onClick={toggleTouchFullscreen}
+                className="mt-auto w-full inline-flex items-center justify-center gap-3 bg-blue-600 hover:bg-blue-500 text-white px-8 py-4 rounded-xl font-black transition-all shadow-[0_0_30px_rgba(37,99,235,0.3)] hover:-translate-y-1 uppercase tracking-wider"
+              >
+                <Expand size={20} /> Bắt Đầu Test Cảm Ứng
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Instructions */}
+        <div className="mt-12 bg-[#111] border border-white/5 rounded-2xl p-6 md:p-8 text-left w-full max-w-4xl mx-auto shadow-inner">
+          <h3 className="text-white font-bold mb-6 uppercase tracking-wider text-base flex items-center gap-2">
+            <CheckCircle2 size={20} className="text-primary" /> Hướng dẫn chung
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-sm text-gray-400">
+            <div className="flex flex-col gap-5">
+              <div className="flex gap-3"><div className="w-1.5 h-1.5 rounded-full bg-primary/100 mt-1.5 shrink-0"></div><p><strong className="text-gray-200">Lau sạch màn hình</strong> trước khi test để tránh nhầm bụi với điểm chết.</p></div>
+              <div className="flex gap-3"><div className="w-1.5 h-1.5 rounded-full bg-primary/100 mt-1.5 shrink-0"></div><p><strong className="text-gray-200">Trong bài test LCD:</strong> Click chuột hoặc dùng Phím mũi tên để chuyển màu.</p></div>
+            </div>
+            <div className="flex flex-col gap-5">
+              <div className="flex gap-3"><div className="w-1.5 h-1.5 rounded-full bg-blue-500 mt-1.5 shrink-0"></div><p><strong className="text-gray-200">Trong bài test Cảm Ứng:</strong> Vuốt sao cho toàn bộ các ô vuông chuyển sang màu cam.</p></div>
+              <div className="flex gap-3"><div className="w-1.5 h-1.5 rounded-full bg-gray-500 mt-1.5 shrink-0"></div><p><strong className="text-gray-200">Phím ESC</strong> luôn là nút thần thánh để thoát chế độ test bất kỳ lúc nào.</p></div>
+            </div>
           </div>
         </div>
       </div>

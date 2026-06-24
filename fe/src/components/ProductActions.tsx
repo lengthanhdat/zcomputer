@@ -109,16 +109,6 @@ export default function ProductActions({ product }: ProductActionsProps) {
            <div className="text-[17px] font-black text-primary leading-none truncate">{product.price.toLocaleString("vi-VN")}đ</div>
         </div>
 
-        {/* Favorite Button (Replaces Add to Cart) */}
-        <button
-          onClick={() => toast.success("Đã thêm vào mục yêu thích!")}
-          disabled={isOutOfStock}
-          className="w-11 h-11 shrink-0 rounded-xl flex items-center justify-center bg-white/50 border border-white/60 shadow-sm backdrop-blur-md text-primary hover:bg-primary/5 active:scale-95 transition-all"
-          aria-label="Thêm vào ưa thích"
-        >
-          <Heart size={22} className="fill-primary text-primary" />
-        </button>
-
         {/* Buy Now Button */}
         <button
           onClick={handleBuyNow}

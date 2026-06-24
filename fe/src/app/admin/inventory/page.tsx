@@ -439,7 +439,7 @@ export default function AdminInventoryPage() {
                             </div>
                           </div>
                         </td>
-                        <td className="py-4 px-6">
+                        <td className="py-4 px-6 whitespace-nowrap">
                           <div className="flex items-center justify-center gap-2">
                             <button
                               onClick={() => handleStockChange(product._id, currentStock - 1)}
@@ -461,11 +461,11 @@ export default function AdminInventoryPage() {
                             </button>
                           </div>
                         </td>
-                        <td className="py-4 px-6 font-bold text-gray-800 text-sm">
+                        <td className="py-4 px-6 font-bold text-gray-800 text-sm whitespace-nowrap">
                           {product.price.toLocaleString("vi-VN")}đ
                         </td>
-                        <td className="py-4 px-6">{statusBadge}</td>
-                        <td className="py-4 px-6">
+                        <td className="py-4 px-6 whitespace-nowrap">{statusBadge}</td>
+                        <td className="py-4 px-6 whitespace-nowrap">
                           <div className="flex items-center justify-center gap-2">
                             <button
                               onClick={() => handleSoldProduct(product._id, currentStock)}

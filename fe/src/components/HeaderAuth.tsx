@@ -94,9 +94,9 @@ export default function HeaderAuth({ isMobile, onLinkClick }: HeaderAuthProps) {
         <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors">
           <User size={24} />
         </div>
-        <div className="hidden md:flex flex-col">
+        <div className="hidden md:flex flex-col max-w-[100px] lg:max-w-[140px] xl:max-w-[180px]">
           <span className="text-xs text-gray-500">Xin chào,</span>
-          <span className="text-sm font-bold text-gray-800">{user.name}</span>
+          <span className="text-sm font-bold text-gray-800 truncate" title={user.name}>{user.name}</span>
         </div>
       </div>
 
