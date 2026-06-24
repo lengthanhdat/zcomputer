@@ -8,7 +8,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   try {
     const res = await fetch(`${API_BASE}/api/products`);
     if (res.ok) {
-      products = await res.json();
+      const parsed = await res.json();
+      products = Array.isArray(parsed) ? parsed : (parsed.products || parsed.data || []);
     }
   } catch (error) {
     console.error("Failed to fetch products for sitemap", error);
@@ -25,7 +26,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   try {
     const res = await fetch(`${API_BASE}/api/news`);
     if (res.ok) {
-      news = await res.json();
+      const parsed = await res.json();
+      news = Array.isArray(parsed) ? parsed : (parsed.data || []);
     }
   } catch (error) {
     console.error("Failed to fetch news for sitemap", error);
