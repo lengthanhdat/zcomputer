@@ -61,6 +61,7 @@ export default function Header() {
   const [searchHistory, setSearchHistory] = useState<string[]>([]);
   const [policiesExpanded, setPoliciesExpanded] = useState(false);
   const [aboutExpanded, setAboutExpanded] = useState(false);
+  const [testToolsExpanded, setTestToolsExpanded] = useState(false);
   const searchTimeoutRef = React.useRef<NodeJS.Timeout | null>(null);
   const router = useRouter();
 
@@ -443,6 +444,30 @@ export default function Header() {
                   </li>
                   <li>
                     <Link href="/gioi-thieu-ban-be" onClick={() => setMobileMenuOpen(false)} className="block py-1 hover:text-primary transition-colors">Giới thiệu bạn bè</Link>
+                  </li>
+                  <li>
+                    <Link href="/tin-tuc" onClick={() => setMobileMenuOpen(false)} className="block py-1 hover:text-primary transition-colors text-primary">Tin tức công nghệ</Link>
+                  </li>
+                  <li className="border-t border-gray-100 pt-2 mt-2">
+                    <div className="flex items-center justify-between">
+                      <div className="block py-1 text-gray-800 flex-1">Công cụ Test</div>
+                      <button 
+                        type="button"
+                        onClick={() => setTestToolsExpanded(!testToolsExpanded)}
+                        className="p-2 -mr-2 text-gray-400 hover:text-primary transition-colors focus:outline-none"
+                      >
+                        <ChevronDown size={16} className={`transition-transform duration-300 ${testToolsExpanded ? 'rotate-180 text-primary' : ''}`} />
+                      </button>
+                    </div>
+                    <div className={`grid transition-all duration-300 ease-out ${testToolsExpanded ? 'grid-rows-[1fr] opacity-100 mt-2' : 'grid-rows-[0fr] opacity-0'}`}>
+                      <div className="overflow-hidden">
+                        <ul className="pl-4 border-l-2 border-primary/10 space-y-3 py-2 text-sm font-medium text-gray-600">
+                          <li><Link href="/cong-cu-test/ban-phim" onClick={() => setMobileMenuOpen(false)} className="block hover:text-primary transition-colors">Test Bàn Phím</Link></li>
+                          <li><Link href="/cong-cu-test/man-hinh" onClick={() => setMobileMenuOpen(false)} className="block hover:text-primary transition-colors">Test Màn Hình</Link></li>
+                          <li><Link href="/cong-cu-test/loa-micro-webcam" onClick={() => setMobileMenuOpen(false)} className="block hover:text-primary transition-colors">Test Loa, Micro, Webcam</Link></li>
+                        </ul>
+                      </div>
+                    </div>
                   </li>
                 </ul>
               </div>

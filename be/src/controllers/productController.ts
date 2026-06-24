@@ -4,6 +4,7 @@ import { Category } from '../models/Category';
 import slugify from 'slugify';
 import mongoose from 'mongoose';
 import { GoogleGenerativeAI } from '@google/generative-ai';
+import { logActivity } from '../utils/activityLogger';
 
 // Lấy danh sách sản phẩm
 export const getProducts = async (req: Request, res: Response) => {
@@ -109,6 +110,9 @@ export const createProduct = async (req: Request, res: Response) => {
     });
     
     const savedProduct = await newProduct.save();
+    
+    await logActivity(req, 'CREATE', 'Product', savedProduct._id.toString(), savedProduct, { name: savedProduct.name });
+    
     res.status(201).json(savedProduct);
   } catch (error) {
     res.status(500).json({ message: 'Lỗi khi tạo sản phẩm mới', error });
@@ -131,11 +135,14 @@ export const updateProduct = async (req: Request, res: Response) => {
       updateData.slug = slug;
     }
 
+    const oldProduct = await Product.findById(id);
     const updatedProduct = await Product.findByIdAndUpdate(id, updateData, { new: true });
     
     if (!updatedProduct) {
       return res.status(404).json({ message: 'Không tìm thấy sản phẩm để cập nhật' });
     }
+    
+    await logActivity(req, 'UPDATE', 'Product', updatedProduct._id.toString(), updatedProduct, { old: oldProduct, new: updateData });
     
     res.json(updatedProduct);
   } catch (error) {
@@ -152,6 +159,8 @@ export const deleteProduct = async (req: Request, res: Response) => {
     if (!deletedProduct) {
       return res.status(404).json({ message: 'Không tìm thấy sản phẩm để xóa' });
     }
+    
+    await logActivity(req, 'DELETE', 'Product', deletedProduct._id.toString(), deletedProduct, { name: deletedProduct.name });
     
     res.json({ message: 'Đã xóa sản phẩm thành công' });
   } catch (error) {

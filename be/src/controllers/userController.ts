@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { User } from '../models/User';
+import { logActivity } from '../utils/activityLogger';
 
 export const getUsers = async (req: Request, res: Response) => {
   try {
@@ -15,7 +16,13 @@ export const deleteUser = async (req: Request, res: Response) => {
     if (req.user?.userId === req.params.id) {
       return res.status(403).json({ message: 'Bạn không thể tự xóa chính mình' });
     }
+    const userToDelete = await User.findById(req.params.id);
     await User.findByIdAndDelete(req.params.id);
+    
+    if (userToDelete) {
+      await logActivity(req, 'DELETE', 'User', userToDelete._id.toString(), userToDelete, { email: userToDelete.email });
+    }
+
     res.json({ message: 'Đã xóa người dùng' });
   } catch (error) {
     res.status(500).json({ message: 'Lỗi server khi xóa người dùng' });
@@ -35,8 +42,11 @@ export const updateUserRole = async (req: Request, res: Response) => {
       updateData.permissions = permissions;
     }
 
+    const oldUser = await User.findById(req.params.id).select('-password');
     const user = await User.findByIdAndUpdate(req.params.id, updateData, { new: true }).select('-password');
     if (!user) return res.status(404).json({ message: 'Không tìm thấy user' });
+
+    await logActivity(req, 'UPDATE', 'User', user._id.toString(), user, { old: oldUser, new: updateData });
 
     res.json(user);
   } catch (error) {

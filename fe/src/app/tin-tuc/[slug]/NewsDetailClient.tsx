@@ -4,11 +4,13 @@ import { useState, useEffect } from "react";
 import { fetchApi } from "@/lib/api";
 import { Calendar, Eye, User, ArrowLeft, Share2, Link as LinkIcon, TrendingUp } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import dynamic from "next/dynamic";
 import "react-quill-new/dist/quill.snow.css";
 
 export default function NewsDetailClient({ slug, initialArticle }: { slug: string, initialArticle?: any }) {
+  const router = useRouter();
   const [article, setArticle] = useState<any>(initialArticle || null);
   const [recentNews, setRecentNews] = useState<any[]>([]);
   const [email, setEmail] = useState("");
@@ -130,7 +132,8 @@ export default function NewsDetailClient({ slug, initialArticle }: { slug: strin
         </div>
       )}
       {/* Hero Section */}
-      <div className={`relative h-[40vh] md:h-[50vh] lg:h-[60vh] w-full bg-black ${slug === "preview" ? 'mt-10' : ''}`}>
+      {/* Hero Section */}
+      <div className={`relative min-h-[50vh] md:min-h-[60vh] w-full bg-black pt-28 pb-12 md:pb-20 ${slug === "preview" ? 'mt-10' : ''}`}>
         <div className="absolute inset-0 z-0">
           <img 
             src={getImageUrl(article.thumbnail)} 
@@ -140,24 +143,28 @@ export default function NewsDetailClient({ slug, initialArticle }: { slug: strin
           <div className="absolute inset-0 bg-gradient-to-t from-[#f8f9fa] via-black/50 to-transparent"></div>
         </div>
         
-        <div className="container mx-auto px-4 h-full flex flex-col justify-end pb-12 md:pb-20 relative z-10">
-          <Link href="/tin-tuc" className="inline-flex items-center text-white/80 hover:text-white mb-6 font-medium text-sm transition-colors w-max">
-            <ArrowLeft size={16} className="mr-2" /> Trở về danh sách
-          </Link>
+        <div className="container mx-auto px-4 h-full flex flex-col justify-end relative z-10">
+          <button 
+            onClick={() => router.back()} 
+            className="inline-flex items-center gap-1.5 text-white/90 hover:text-white mb-6 font-medium text-sm transition-all w-max bg-white/10 hover:bg-white/20 px-3 py-1.5 rounded-lg backdrop-blur-sm border border-white/20 shadow-lg active:scale-95"
+          >
+            <ArrowLeft size={16} />
+            <span>Trở về</span>
+          </button>
           
           <div className="inline-flex mb-4">
-            <span className="bg-primary text-white font-bold text-xs uppercase px-3 py-1.5 rounded shadow-lg">
+            <span className="bg-primary text-white font-bold text-[10px] md:text-xs uppercase px-3 py-1.5 rounded shadow-lg">
               {article.category}
             </span>
           </div>
           
-          <h1 className="text-3xl md:text-5xl lg:text-6xl font-black text-white leading-tight mb-6 max-w-4xl drop-shadow-md">
+          <h1 className="text-2xl md:text-4xl lg:text-5xl font-black text-white leading-tight mb-4 md:mb-6 max-w-4xl drop-shadow-md">
             {article.title}
           </h1>
           
-          <div className="flex flex-wrap items-center gap-6 text-gray-300 text-sm font-medium">
-            <div className="flex items-center gap-2">
-              <User size={16} /> {article.authorName || article.author?.name || "ZComputer"}
+          <div className="flex flex-wrap items-center gap-4 md:gap-6 text-gray-300 text-xs md:text-sm font-medium">
+            <div className="flex items-center gap-1.5 md:gap-2">
+              <User size={14} className="md:w-4 md:h-4" /> {article.authorName || article.author?.name || "ZComputer"}
             </div>
             <div className="flex items-center gap-2">
               <Calendar size={16} /> {formatDate(article.createdAt)}
