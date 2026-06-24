@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 import { Search, Save, AlertTriangle, CheckCircle, XCircle, Plus, Minus, Edit, Trash2, Loader2, ShoppingBag } from "lucide-react";
 import toast from "react-hot-toast";
@@ -29,6 +29,24 @@ export default function AdminInventoryPage() {
   const [editedStocks, setEditedStocks] = useState<Record<string, number>>({});
   const [savingId, setSavingId] = useState<string | null>(null);
   const [isSavingAll, setIsSavingAll] = useState(false);
+  const [tableWidth, setTableWidth] = useState(1200);
+
+  const topScrollRef = useRef<HTMLDivElement>(null);
+  const tableScrollRef = useRef<HTMLDivElement>(null);
+
+  const handleTopScroll = (e: any) => {
+    if (tableScrollRef.current) tableScrollRef.current.scrollLeft = e.target.scrollLeft;
+  };
+  const handleTableScroll = (e: any) => {
+    if (topScrollRef.current) topScrollRef.current.scrollLeft = e.target.scrollLeft;
+  };
+
+  useEffect(() => {
+    // Keep top scrollbar width in sync with actual table width
+    if (tableScrollRef.current && tableScrollRef.current.children[0]) {
+      setTableWidth(tableScrollRef.current.children[0].scrollWidth);
+    }
+  }, [products, stockFilter, categoryFilter, searchQuery, loading]);
 
   const fetchProducts = async () => {
     try {
@@ -327,16 +345,30 @@ export default function AdminInventoryPage() {
           </div>
         </div>
 
+        {/* Top Scrollbar */}
+        <div 
+          ref={topScrollRef} 
+          onScroll={handleTopScroll} 
+          className="overflow-x-auto border-b border-gray-100 scrollbar-thin" 
+          style={{ height: '14px' }}
+        >
+          <div style={{ width: tableWidth, height: '1px' }}></div>
+        </div>
+
         {/* Table */}
-        <div className="overflow-x-auto">
+        <div 
+          ref={tableScrollRef}
+          onScroll={handleTableScroll}
+          className="overflow-auto max-h-[calc(100vh-220px)] relative"
+        >
           <table className="whitespace-nowrap min-w-max w-full text-left border-collapse">
-            <thead>
-              <tr className="bg-gray-50 border-b border-gray-200 text-gray-600 text-sm font-semibold">
-                <th className="py-4 px-6">Sản phẩm</th>
-                <th className="py-4 px-6 text-center w-48">Số lượng tồn</th>
-                <th className="py-4 px-6">Đơn giá</th>
-                <th className="py-4 px-6">Trạng thái</th>
-                <th className="py-4 px-6 text-center w-48">Thao tác</th>
+            <thead className="sticky top-0 z-20">
+              <tr className="bg-gray-50 border-b border-gray-200 text-gray-600 text-sm font-semibold shadow-sm">
+                <th className="py-4 px-6 bg-gray-50 sticky left-0 z-30 shadow-[1px_0_0_#e5e7eb]">Sản phẩm</th>
+                <th className="py-4 px-6 text-center w-48 bg-gray-50">Số lượng tồn</th>
+                <th className="py-4 px-6 bg-gray-50">Đơn giá</th>
+                <th className="py-4 px-6 bg-gray-50">Trạng thái</th>
+                <th className="py-4 px-6 text-center w-48 bg-gray-50">Thao tác</th>
               </tr>
             </thead>
             {loading ? (
@@ -358,8 +390,8 @@ export default function AdminInventoryPage() {
             ) : (
               Object.entries(groupedProducts).map(([categoryName, prods]) => (
                 <tbody key={categoryName} className="divide-y divide-gray-100">
-                  <tr className="bg-gray-100/80 border-t-2 border-gray-200">
-                    <td colSpan={5} className="py-2.5 px-6 font-bold text-gray-700 uppercase text-xs tracking-widest">{categoryName} ({prods.length})</td>
+                  <tr className="border-t-2 border-gray-200">
+                    <td colSpan={5} className="py-2.5 px-6 font-bold text-gray-800 uppercase text-xs tracking-widest sticky left-0 bg-gray-200 z-10">{categoryName} ({prods.length})</td>
                   </tr>
                   {prods.map((product) => {
                     const currentStock = editedStocks[product._id] ?? product.stock;
@@ -385,9 +417,9 @@ export default function AdminInventoryPage() {
                     }
 
                     return (
-                      <tr key={product._id} className="hover:bg-gray-50 transition-colors">
-                        <td className="py-4 px-6">
-                          <div className="flex items-center gap-3">
+                      <tr key={product._id} className="hover:bg-gray-50 transition-colors group">
+                        <td className="py-4 px-6 sticky left-0 bg-white group-hover:bg-gray-50 transition-colors z-10 shadow-[1px_0_0_#e5e7eb] max-w-[280px] md:max-w-[350px] whitespace-normal">
+                          <div className="flex items-start gap-3">
                             <div className="w-12 h-12 rounded bg-gray-50 border p-1 shrink-0 flex items-center justify-center">
                               {product.images?.[0] ? (
                                 <img
@@ -399,8 +431,8 @@ export default function AdminInventoryPage() {
                                 <span className="text-gray-300 text-[10px]">No Image</span>
                               )}
                             </div>
-                            <div>
-                              <div className="font-bold text-gray-800 text-sm line-clamp-2 leading-relaxed">
+                            <div className="flex-1 min-w-0">
+                              <div className="font-bold text-gray-800 text-sm line-clamp-2 leading-relaxed" title={product.name}>
                                 {product.name}
                               </div>
                               <div className="text-xs text-gray-400 mt-0.5">Hãng: {product.brand}</div>

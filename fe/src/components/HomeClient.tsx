@@ -335,6 +335,55 @@ export default function HomeClient() {
       {/* Video Review Section */}
       <VideoReviewSection videos={videoReviews} />
 
+      {/* Featured Products Section */}
+      {products && products.filter(p => p.isFeatured).length > 0 && (
+        <section className="container mx-auto px-4 mb-20 mt-12 relative">
+          <div className="absolute inset-0 bg-gradient-to-b from-yellow-500/10 to-transparent -z-10 rounded-[3rem] blur-3xl"></div>
+          
+          <div className="flex flex-col bg-gradient-to-br from-yellow-100 via-orange-50 to-amber-100 rounded-[2rem] shadow-[0_12px_40px_rgba(234,179,8,0.3)] border-[4px] border-yellow-400/80 hover:border-orange-400 transition-colors duration-500 overflow-hidden relative p-6 md:p-8">
+            <div className="absolute -top-32 -right-32 w-96 h-96 bg-yellow-400/40 rounded-full blur-[80px] pointer-events-none"></div>
+            <div className="absolute -bottom-32 -left-32 w-96 h-96 bg-orange-500/30 rounded-full blur-[80px] pointer-events-none"></div>
+            
+            <div className="flex flex-col items-center justify-center mb-10 gap-4 relative z-10 w-full text-center">
+              <h3 className="text-3xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-orange-600 via-red-500 to-orange-600 uppercase tracking-tight relative inline-block drop-shadow-md py-2 leading-tight">
+                SẢN PHẨM NỔI BẬT
+                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-3/4 h-1.5 bg-gradient-to-r from-orange-400 to-red-500 rounded-full shadow-[0_0_15px_rgba(239,68,68,0.6)]"></div>
+              </h3>
+            </div>
+            
+            <div className="relative group/slider mt-auto">
+              <button 
+                onClick={(e) => {
+                  const slider = document.getElementById('slider-featured');
+                  if (slider) slider.scrollBy({ left: -340, behavior: 'smooth' });
+                }}
+                className="absolute -left-5 top-1/2 -translate-y-1/2 w-12 h-12 bg-white border border-yellow-200 rounded-full shadow-lg flex items-center justify-center text-yellow-600 hover:text-orange-500 hover:scale-110 z-40 opacity-0 group-hover/slider:opacity-100 transition-all focus:outline-none"
+              >
+                <ChevronLeft size={24} />
+              </button>
+
+              <DraggableSlider id="slider-featured" className="flex overflow-x-auto gap-3 pt-4 -mt-4 pb-6 scroll-smooth snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+                <div id="slider-inner-featured" className="flex gap-3 pr-3 flex-shrink-0 snap-start">
+                  {products.filter(p => p.isFeatured).map((product) => (
+                    <ProductCard key={`featured-${product._id}`} product={product} />
+                  ))}
+                </div>
+              </DraggableSlider>
+
+              <button 
+                onClick={(e) => {
+                  const slider = document.getElementById('slider-featured');
+                  if (slider) slider.scrollBy({ left: 340, behavior: 'smooth' });
+                }}
+                className="absolute -right-5 top-1/2 -translate-y-1/2 w-12 h-12 bg-white border border-yellow-200 rounded-full shadow-lg flex items-center justify-center text-yellow-600 hover:text-orange-500 hover:scale-110 z-40 opacity-0 group-hover/slider:opacity-100 transition-all focus:outline-none"
+              >
+                <ChevronRight size={24} />
+              </button>
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* Products by Categories */}
       {categories === null || products === null ? (
         <section className="container mx-auto px-4 mb-20"><ProductSkeleton /></section>

@@ -262,6 +262,7 @@ export default function NewProductPage() {
     category_id: "",
     condition: "Đã qua sử dụng (Đẹp 99%)",
     isHotSale: false,
+    isFeatured: false,
     specs: {} as Record<string, string>
   });
 
@@ -542,6 +543,7 @@ export default function NewProductPage() {
               category_id: matchedCategory,
               condition: data.condition || formData.condition,
               isHotSale: false,
+              isFeatured: false,
               specs: mappedSpecs
             };
           });
@@ -688,6 +690,7 @@ export default function NewProductPage() {
       category_id: categories.find(c => c._id === formData.category_id) || { name: "Danh mục chưa chọn" },
       condition: formData.condition,
       isHotSale: formData.isHotSale,
+      isFeatured: formData.isFeatured,
       flashSalePrice: Number(formData.flashSalePrice) || 0,
       specs: formData.specs,
       views: 0
@@ -718,6 +721,7 @@ export default function NewProductPage() {
         category_id: formData.category_id,
         condition: formData.condition,
         isHotSale: formData.isHotSale,
+        isFeatured: formData.isFeatured,
         flashSalePrice: Number(formData.flashSalePrice) || 0,
         specs: formData.specs
       };
@@ -1229,6 +1233,19 @@ export default function NewProductPage() {
                     />
                   </div>
                   <span className="text-sm font-bold text-gray-700">Hiển thị trong HOT SALE</span>
+                </label>
+
+                <label className="flex items-center gap-3 cursor-pointer mt-4">
+                  <div className="relative flex items-center">
+                    <input 
+                      type="checkbox" 
+                      name="isFeatured"
+                      checked={formData.isFeatured}
+                      onChange={(e) => setFormData({...formData, isFeatured: e.target.checked})}
+                      className="w-5 h-5 border-2 border-gray-300 rounded text-purple-600 focus:ring-purple-500 cursor-pointer accent-purple-600 transition-all"
+                    />
+                  </div>
+                  <span className="text-sm font-bold text-gray-700">Sản phẩm nổi bật</span>
                 </label>
               </div>
 
