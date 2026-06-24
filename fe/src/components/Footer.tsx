@@ -110,8 +110,8 @@ export default function Footer() {
               DANH MỤC CŨ/ LIKE NEW
             </h4>
             <ul className="space-y-3 text-[13px] text-white/60 font-medium">
-              <li><Link href="/search?q=Laptop" className="hover:text-primary transition-colors">Laptop Cũ</Link></li>
               <li><Link href="/search?q=PC" className="hover:text-primary transition-colors">PC Cũ</Link></li>
+              <li><Link href="/search?q=Laptop" className="hover:text-primary transition-colors">Laptop Cũ</Link></li>
               <li><Link href="/search?q=Màn+Hình" className="hover:text-primary transition-colors">Màn Hình Cũ</Link></li>
               <li><Link href="/search?q=Linh+Kiện" className="hover:text-primary transition-colors">Linh Kiện Cũ</Link></li>
             </ul>
@@ -125,11 +125,11 @@ export default function Footer() {
               CHÍNH SÁCH TỔNG HỢP
             </h4>
             <ul className="space-y-3 text-[13px] text-white/60 font-medium">
-              <li><Link href="/chinh-sach-bao-mat" className="hover:text-primary transition-colors">Chính sách bảo mật</Link></li>
-              <li><Link href="/chinh-sach-van-chuyen" className="hover:text-primary transition-colors">Chính sách vận chuyển</Link></li>
-              <li><Link href="/chinh-sach-bao-hanh" className="hover:text-primary transition-colors">Chính sách bảo hành</Link></li>
               <li><Link href="/chinh-sach-doi-tra" className="hover:text-primary transition-colors">Chính sách đổi trả</Link></li>
+              <li><Link href="/chinh-sach-bao-mat" className="hover:text-primary transition-colors">Chính sách bảo mật</Link></li>
+              <li><Link href="/chinh-sach-bao-hanh" className="hover:text-primary transition-colors">Chính sách bảo hành</Link></li>
               <li><Link href="/chinh-sach-thanh-toan" className="hover:text-primary transition-colors">Chính sách thanh toán</Link></li>
+              <li><Link href="/chinh-sach-van-chuyen" className="hover:text-primary transition-colors">Chính sách vận chuyển</Link></li>
             </ul>
           </div>
 
@@ -139,11 +139,11 @@ export default function Footer() {
               VỀ ZCOMPUTER
             </h4>
             <ul className="space-y-3 text-[13px] text-white/60 font-medium">
-              <li><Link href="/ve-chung-toi" className="hover:text-primary transition-colors">Giới Thiệu Về ZCOMPUTER</Link></li>
               <li><Link href="/lien-he" className="hover:text-primary transition-colors">Liên Hệ</Link></li>
+              <li><Link href="/tin-tuc" className="hover:text-primary transition-colors">Tin Tức</Link></li>
               <li><Link href="/tuyen-dung" className="hover:text-primary transition-colors">Tuyển Dụng</Link></li>
               <li><Link href="/he-thong-cua-hang" className="hover:text-primary transition-colors">Hệ Thống Cửa Hàng</Link></li>
-              <li><Link href="/tin-tuc" className="hover:text-primary transition-colors">Tin Tức</Link></li>
+              <li><Link href="/ve-chung-toi" className="hover:text-primary transition-colors">Giới Thiệu Về ZCOMPUTER</Link></li>
             </ul>
           </div>
 

@@ -102,6 +102,7 @@ import videoReviewRoutes from './routes/videoReviewRoutes';
 import jobRoutes from './routes/jobRoutes';
 import feedbackRoutes from './routes/feedbackRoutes';
 import newsRoutes from './routes/newsRoutes';
+import logRoutes from './routes/logRoutes';
 
 app.use('/api/users', userRoutes);
 app.use('/api/orders', orderRoutes);
@@ -116,6 +117,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/jobs', jobRoutes);
 app.use('/api/feedbacks', feedbackRoutes);
 app.use('/api/news', newsRoutes);
+app.use('/api/logs', logRoutes);
 
 import { Subscriber } from './models/Subscriber';
 

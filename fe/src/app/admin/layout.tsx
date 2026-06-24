@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { Package, LayoutDashboard, Settings, LogOut, Users, Warehouse, ClipboardList, Menu, X, Tags, MessageCircle, BellRing, Play, Briefcase, Newspaper } from "lucide-react";
+import { Package, LayoutDashboard, Settings, LogOut, Users, Warehouse, ClipboardList, Menu, X, Tags, MessageCircle, BellRing, Play, Briefcase, Newspaper, Activity } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useAuthStore } from "@/store/useAuthStore";
 import toast from "react-hot-toast";
@@ -22,6 +22,7 @@ const menuItems = [
   { href: "/admin/jobs", label: "Tuyển dụng", icon: Briefcase, allowedRoles: ['admin', 'staff'] },
   { href: "/admin/announcement", label: "Thông báo", icon: BellRing, allowedRoles: ['admin', 'staff'] },
   { href: "/admin/settings", label: "Cài đặt chung", icon: Settings, allowedRoles: ['admin', 'staff'] },
+  { href: "/admin/logs", label: "Nhật ký hoạt động", icon: Activity, allowedRoles: ['admin'] },
 ];
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {

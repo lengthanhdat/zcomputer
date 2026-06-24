@@ -109,6 +109,7 @@ export default function HomeClient() {
   const [videoReviews, setVideoReviews] = useState<any[]>(cachedVideoReviews || []);
   const [showAllCategories, setShowAllCategories] = useState(false);
   const [activeSubCats, setActiveSubCats] = useState<Record<string, string>>({});
+  const [featuredCategory, setFeaturedCategory] = useState<string>('all');
 
   useEffect(() => {
     const controller = new AbortController();
@@ -337,39 +338,73 @@ export default function HomeClient() {
       <VideoReviewSection videos={videoReviews} />
 
       {/* Featured Products Section */}
-      {products && products.filter(p => p.isFeatured).length > 0 && (
-        <section className="container mx-auto px-4 mb-20 mt-12 relative">
-          <div className="absolute inset-0 bg-gradient-to-b from-yellow-500/10 to-transparent -z-10 rounded-[3rem] blur-3xl"></div>
-          
-          <div className="flex flex-col bg-gradient-to-br from-yellow-100 via-orange-50 to-amber-100 rounded-[2rem] shadow-[0_12px_40px_rgba(234,179,8,0.3)] border-[4px] border-yellow-400/80 hover:border-orange-400 transition-colors duration-500 overflow-hidden relative p-6 md:p-8">
-            <div className="absolute -top-32 -right-32 w-96 h-96 bg-yellow-400/40 rounded-full blur-[80px] pointer-events-none"></div>
-            <div className="absolute -bottom-32 -left-32 w-96 h-96 bg-orange-500/30 rounded-full blur-[80px] pointer-events-none"></div>
-            
-            <div className="flex flex-col items-center justify-center mb-10 gap-4 relative z-10 w-full text-center">
-              <h3 className="text-3xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-orange-600 via-red-500 to-orange-600 uppercase tracking-tight relative inline-block drop-shadow-md py-2 leading-tight">
-                SẢN PHẨM NỔI BẬT
-                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-3/4 h-1.5 bg-gradient-to-r from-orange-400 to-red-500 rounded-full shadow-[0_0_15px_rgba(239,68,68,0.6)]"></div>
-              </h3>
-            </div>
-            
-            <div className="relative group/slider mt-auto">
-              <button 
-                onClick={(e) => {
-                  const slider = document.getElementById('slider-featured');
-                  if (slider) slider.scrollBy({ left: -340, behavior: 'smooth' });
-                }}
-                className="absolute -left-5 top-1/2 -translate-y-1/2 w-12 h-12 bg-white border border-yellow-200 rounded-full shadow-lg flex items-center justify-center text-yellow-600 hover:text-orange-500 hover:scale-110 z-40 opacity-0 group-hover/slider:opacity-100 transition-all focus:outline-none"
-              >
-                <ChevronLeft size={24} />
-              </button>
+      {products && products.filter(p => p.isFeatured).length > 0 && (() => {
+        const featuredProducts = products.filter(p => p.isFeatured);
+        const featuredCatsMap = new Map();
+        featuredProducts.forEach(p => {
+          if (p.category_id && typeof p.category_id === 'object' && p.category_id._id) {
+            featuredCatsMap.set(p.category_id._id, p.category_id.name);
+          }
+        });
+        const featuredCats = Array.from(featuredCatsMap.entries()).map(([id, name]) => ({ id, name }));
+        
+        const filteredFeatured = featuredCategory === 'all' 
+          ? featuredProducts 
+          : featuredProducts.filter(p => p.category_id && typeof p.category_id === 'object' && p.category_id._id === featuredCategory);
 
-              <DraggableSlider id="slider-featured" className="flex overflow-x-auto gap-3 pt-4 -mt-4 pb-6 scroll-smooth snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-                <div id="slider-inner-featured" className="flex gap-3 pr-3 flex-shrink-0 snap-start">
-                  {products.filter(p => p.isFeatured).map((product) => (
-                    <ProductCard key={`featured-${product._id}`} product={product} />
+        return (
+          <section className="container mx-auto px-4 mb-20 mt-12 relative">
+            <div className="absolute inset-0 bg-gradient-to-b from-yellow-500/10 to-transparent -z-10 rounded-[3rem] blur-3xl"></div>
+            
+            <div className="flex flex-col bg-gradient-to-br from-yellow-100 via-orange-50 to-amber-100 rounded-[2rem] shadow-[0_12px_40px_rgba(234,179,8,0.3)] border-[4px] border-yellow-400/80 hover:border-orange-400 transition-colors duration-500 overflow-hidden relative p-6 md:p-8">
+              <div className="absolute -top-32 -right-32 w-96 h-96 bg-yellow-400/40 rounded-full blur-[80px] pointer-events-none"></div>
+              <div className="absolute -bottom-32 -left-32 w-96 h-96 bg-orange-500/30 rounded-full blur-[80px] pointer-events-none"></div>
+              
+              <div className="flex flex-col items-center justify-center mb-6 gap-4 relative z-10 w-full text-center">
+                <h3 className="text-3xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-orange-600 via-red-500 to-orange-600 uppercase tracking-tight relative inline-block drop-shadow-md py-2 leading-tight">
+                  SẢN PHẨM NỔI BẬT
+                  <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-3/4 h-1.5 bg-gradient-to-r from-orange-400 to-red-500 rounded-full shadow-[0_0_15px_rgba(239,68,68,0.6)]"></div>
+                </h3>
+              </div>
+
+              {featuredCats.length > 1 && (
+                <div className="flex flex-wrap items-center justify-center gap-2 mb-8 relative z-10">
+                  <button 
+                    onClick={() => setFeaturedCategory('all')}
+                    className={`px-5 py-2 rounded-full font-bold text-sm transition-all duration-300 ${featuredCategory === 'all' ? 'bg-orange-500 text-white shadow-lg shadow-orange-500/40 scale-105' : 'bg-white/80 text-orange-900 hover:bg-white border border-orange-200'}`}
+                  >
+                    Tất cả
+                  </button>
+                  {featuredCats.map(cat => (
+                    <button 
+                      key={cat.id}
+                      onClick={() => setFeaturedCategory(cat.id)}
+                      className={`px-5 py-2 rounded-full font-bold text-sm transition-all duration-300 ${featuredCategory === cat.id ? 'bg-orange-500 text-white shadow-lg shadow-orange-500/40 scale-105' : 'bg-white/80 text-orange-900 hover:bg-white border border-orange-200'}`}
+                    >
+                      {cat.name}
+                    </button>
                   ))}
                 </div>
-              </DraggableSlider>
+              )}
+              
+              <div className="relative group/slider mt-auto">
+                <button 
+                  onClick={(e) => {
+                    const slider = document.getElementById('slider-featured');
+                    if (slider) slider.scrollBy({ left: -340, behavior: 'smooth' });
+                  }}
+                  className="absolute -left-5 top-1/2 -translate-y-1/2 w-12 h-12 bg-white border border-yellow-200 rounded-full shadow-lg flex items-center justify-center text-yellow-600 hover:text-orange-500 hover:scale-110 z-40 opacity-0 group-hover/slider:opacity-100 transition-all focus:outline-none"
+                >
+                  <ChevronLeft size={24} />
+                </button>
+
+                <DraggableSlider id="slider-featured" className="flex overflow-x-auto gap-3 pt-4 -mt-4 pb-6 scroll-smooth snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+                  <div id="slider-inner-featured" className="flex gap-3 pr-3 flex-shrink-0 snap-start">
+                    {filteredFeatured.map((product) => (
+                      <ProductCard key={`featured-${product._id}`} product={product} />
+                    ))}
+                  </div>
+                </DraggableSlider>
 
               <button 
                 onClick={(e) => {
@@ -383,7 +418,8 @@ export default function HomeClient() {
             </div>
           </div>
         </section>
-      )}
+        );
+      })()}
 
       {/* Products by Categories */}
       {categories === null || products === null ? (
@@ -457,16 +493,16 @@ export default function HomeClient() {
                   {/* Top Subcategories Bar */}
                   {topSubCategories.length > 0 ? (
                     <div className="flex items-center gap-3 w-full lg:w-auto flex-1 min-w-0 lg:justify-end">
-                      <div className="relative w-full lg:w-auto lg:flex-1 min-w-0 group/subcat flex items-center">
+                      <div className="relative w-full lg:w-auto lg:flex-1 min-w-0 flex items-center bg-gradient-to-r from-primary/10 via-primary/5 to-transparent rounded-2xl border border-primary/10 p-1 group/subcat">
                         <button 
                           onClick={() => { document.getElementById(`subcat-slider-${cat._id}`)?.scrollBy({ left: -200, behavior: 'smooth' }) }}
-                          className="absolute left-1 z-20 w-7 h-7 bg-white shadow-[0_2px_8px_rgba(0,0,0,0.15)] border border-gray-100 rounded-full flex items-center justify-center text-gray-600 hover:text-primary opacity-0 group-hover/subcat:opacity-100 transition-all pointer-events-none group-hover/subcat:pointer-events-auto"
+                          className="flex-shrink-0 z-20 w-7 h-7 bg-white shadow-[0_2px_8px_rgba(0,0,0,0.1)] border border-gray-100 rounded-full flex items-center justify-center text-gray-600 hover:text-primary transition-all ml-1 hover:scale-105 active:scale-95 opacity-0 group-hover/subcat:opacity-100 pointer-events-none group-hover/subcat:pointer-events-auto"
                         >
                           <ChevronLeft size={16} />
                         </button>
 
-                        <div id={`subcat-slider-${cat._id}`} className="flex overflow-x-auto whitespace-nowrap items-center gap-2 md:gap-3 bg-gradient-to-r from-primary/10 via-primary/5 to-transparent p-2.5 rounded-2xl border border-primary/10 scrollbar-hide [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] min-w-0 scroll-smooth w-full">
-                          <div className="flex text-primary font-black text-[11px] uppercase tracking-widest px-3 border-r border-primary/20 mr-1 items-center gap-1.5 flex-shrink-0">
+                        <div id={`subcat-slider-${cat._id}`} className="flex overflow-x-auto whitespace-nowrap items-center gap-2 md:gap-3 px-2 py-1.5 scrollbar-hide [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] min-w-0 scroll-smooth w-full">
+                          <div className="flex text-primary font-black text-[11px] uppercase tracking-widest pr-3 border-r border-primary/20 mr-1 items-center gap-1.5 flex-shrink-0">
                             <Zap size={14} className="text-orange-500 fill-orange-500" />
                             Nổi bật
                           </div>
@@ -489,10 +525,9 @@ export default function HomeClient() {
                           ))}
                         </div>
 
-                        <div className="absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-white via-white/80 to-transparent z-10 pointer-events-none rounded-r-2xl"></div>
                         <button 
                           onClick={() => { document.getElementById(`subcat-slider-${cat._id}`)?.scrollBy({ left: 200, behavior: 'smooth' }) }}
-                          className="absolute right-1 z-20 w-7 h-7 bg-white shadow-[0_2px_8px_rgba(0,0,0,0.15)] border border-gray-100 rounded-full flex items-center justify-center text-gray-600 hover:text-primary opacity-0 group-hover/subcat:opacity-100 transition-all pointer-events-none group-hover/subcat:pointer-events-auto"
+                          className="flex-shrink-0 z-20 w-7 h-7 bg-white shadow-[0_2px_8px_rgba(0,0,0,0.1)] border border-gray-100 rounded-full flex items-center justify-center text-gray-600 hover:text-primary transition-all mr-1 hover:scale-105 active:scale-95 opacity-0 group-hover/subcat:opacity-100 pointer-events-none group-hover/subcat:pointer-events-auto"
                         >
                           <ChevronRight size={16} />
                         </button>

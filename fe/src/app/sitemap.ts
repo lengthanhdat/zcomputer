@@ -21,6 +21,23 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.8,
   }));
 
+  let news = [];
+  try {
+    const res = await fetch(`${API_BASE}/api/news`);
+    if (res.ok) {
+      news = await res.json();
+    }
+  } catch (error) {
+    console.error("Failed to fetch news for sitemap", error);
+  }
+
+  const newsUrls = news.map((article: any) => ({
+    url: `${siteUrl}/tin-tuc/${article.slug}`,
+    lastModified: article.updatedAt ? new Date(article.updatedAt) : new Date(),
+    changeFrequency: 'weekly' as const,
+    priority: 0.7,
+  }));
+
   const staticUrls = [
     {
       url: siteUrl,
@@ -48,5 +65,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
   ];
 
-  return [...staticUrls, ...productUrls];
+  return [...staticUrls, ...productUrls, ...newsUrls];
 }
