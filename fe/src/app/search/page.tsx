@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Filter, Search, Eye, Cpu, Monitor, Server, HardDrive, Maximize, ArrowRight, MemoryStick, Gpu, Battery, Layers, Zap, Keyboard, Mouse, Link as LinkIcon } from "lucide-react";
+import BackButton from "@/components/BackButton";
 import LikeButton from "@/components/LikeButton";
 
 import { Metadata } from "next";
@@ -95,6 +96,9 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
 
   return (
     <div className="bg-[#f8f9fa] min-h-screen pb-20 pt-8">
+      <div className="container mx-auto px-4">
+        <BackButton className="mb-4" />
+      </div>
       <div className="container mx-auto px-4 flex flex-col md:flex-row gap-8">
         <div className="w-full md:w-1/4">
           {/* Tiêu đề ngắn gọn */}

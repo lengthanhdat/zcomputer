@@ -7,6 +7,7 @@ import { useState, useMemo, useEffect } from "react";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { motion } from "framer-motion";
 import LikeButton from "./LikeButton";
+import BackButton from "./BackButton";
 
 type Product = {
   _id: string;
@@ -216,7 +217,8 @@ export default function CategoryClient({
   return (
     <div className="bg-gray-50 min-h-screen py-8">
       <div className="container mx-auto px-4">
-        <div className="text-sm text-gray-500 mb-4 flex gap-2">
+        <div className="text-sm text-gray-500 mb-4 flex gap-2 items-center">
+          <BackButton className="mr-3" />
           <Link href="/" className="hover:text-primary transition-colors">Trang chủ</Link>
           <span>/</span>
           <span className="text-gray-800 font-semibold uppercase">{categoryName}</span>
@@ -247,12 +249,26 @@ export default function CategoryClient({
             </div>
           )}
         </div>
-        <div className="flex flex-col lg:flex-row gap-8">
+        <div className="flex flex-col lg:flex-row gap-8 relative">
+          {/* Overlay for mobile filter */}
+          {showMobileFilter && (
+            <div 
+              className="fixed inset-0 bg-black/60 z-[60] lg:hidden backdrop-blur-sm transition-opacity"
+              onClick={() => setShowMobileFilter(false)}
+            />
+          )}
+
           <motion.aside 
             initial={{ opacity: 0, x: -30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.3 }}
-            className={`lg:w-72 bg-white p-6 rounded-2xl border border-gray-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] shrink-0 lg:sticky lg:top-24 lg:max-h-[calc(100vh-6rem)] lg:overflow-y-auto custom-scrollbar ${showMobileFilter ? 'fixed inset-0 z-50 m-0 rounded-none w-full overflow-y-auto' : 'hidden lg:block w-full'}`}
+            className={`
+              lg:w-72 bg-white p-6 rounded-2xl border border-gray-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] shrink-0 
+              lg:sticky lg:top-24 lg:max-h-[calc(100vh-6rem)] lg:overflow-y-auto custom-scrollbar 
+              ${showMobileFilter 
+                ? 'fixed inset-y-0 right-0 w-[85vw] sm:w-96 z-[70] m-0 rounded-l-2xl rounded-r-none overflow-y-auto shadow-2xl animate-in slide-in-from-right duration-300' 
+                : 'hidden lg:block w-full'}
+            `}
           >
             <div className="flex items-center justify-between font-black text-lg pb-4 border-b border-gray-100 text-gray-900 uppercase">
               <div className="flex items-center gap-3">
@@ -373,6 +389,15 @@ export default function CategoryClient({
                 </button>
               </div>
               </div>
+            </div>
+
+            <div className="lg:hidden sticky -bottom-6 -mx-6 -mb-6 p-4 bg-white border-t border-gray-100 shadow-[0_-10px_20px_rgba(0,0,0,0.05)] mt-8 z-10">
+              <button 
+                onClick={() => setShowMobileFilter(false)}
+                className="w-full bg-primary text-white text-[14px] font-black py-3.5 rounded-xl shadow-lg shadow-primary/30 transition-transform active:scale-[0.98] uppercase tracking-wider flex items-center justify-center gap-2"
+              >
+                Xem <span className="bg-white/20 px-2 py-0.5 rounded-md text-xs">{filteredProducts.length}</span> sản phẩm
+              </button>
             </div>
           </motion.aside>
 

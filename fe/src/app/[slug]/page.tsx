@@ -8,6 +8,7 @@ import ProductGallery from "@/components/ProductGallery";
 import ViewIncrementer from "@/components/ViewIncrementer";
 import LikeButton from "@/components/LikeButton";
 import CollapsibleDescription from "@/components/CollapsibleDescription";
+import BackButton from "@/components/BackButton";
 import { notFound } from "next/navigation";
 import "react-quill-new/dist/quill.snow.css"; // Import Quill CSS for proper rendering
 
@@ -328,6 +329,7 @@ async function ProductDetailView({ product }: { product: Product }) {
       {/* Breadcrumb */}
       <div className="bg-white border-b border-gray-200 py-3">
         <div className="container mx-auto px-4 text-sm text-gray-500 flex gap-2 items-center overflow-x-auto hide-scrollbar whitespace-nowrap">
+          <BackButton className="mr-3" />
           <Link href="/" className="shrink-0 hover:text-primary transition-colors">Trang chủ</Link>
           <span className="shrink-0">/</span>
           <Link href={`/${product.category_id?.slug || "all"}`} className="shrink-0 hover:text-primary transition-colors uppercase">
