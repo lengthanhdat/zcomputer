@@ -16,6 +16,7 @@ export interface IProduct extends Document {
   condition: string;
   isHotSale?: boolean;
   flashSalePrice?: number;
+  isFeatured?: boolean;
   views: number;
 }
 
@@ -36,6 +37,7 @@ const ProductSchema = new Schema<IProduct>(
     condition: { type: String, default: 'Đã qua sử dụng (Đẹp 99%)' },
     isHotSale: { type: Boolean, default: false },
     flashSalePrice: { type: Number },
+    isFeatured: { type: Boolean, default: false },
     views: { type: Number, default: 0 },
   },
   { timestamps: true }

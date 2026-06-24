@@ -19,20 +19,21 @@ export default function HeaderNav() {
   }, []);
 
   return (
-    <div className="hidden lg:block bg-[#0b0f19]/80 backdrop-blur-2xl text-white relative z-40 border-t border-white/5 shadow-[0_4px_30px_rgba(0,0,0,0.1)]">
+    <div className="hidden md:block bg-[#0b0f19]/80 backdrop-blur-2xl text-white relative z-40 border-t border-white/5 shadow-[0_4px_30px_rgba(0,0,0,0.1)]">
       <div className="container mx-auto px-4 relative flex items-center">
         
         {/* VERTICAL CATEGORY MENU DROPDOWN */}
         <div 
-          className="relative mr-8"
+          className="relative hidden md:block mr-4 md:mr-8 shrink-0"
           onMouseEnter={() => setShowCategoryMenu(true)}
           onMouseLeave={() => setShowCategoryMenu(false)}
+          onClick={() => setShowCategoryMenu(!showCategoryMenu)}
         >
-          <div className="bg-primary text-white flex items-center gap-2 px-5 py-4 cursor-pointer hover:brightness-110 transition-all duration-300 relative overflow-hidden group">
+          <div className="bg-primary text-white flex items-center gap-1.5 md:gap-2 px-3 py-3 md:px-5 md:py-4 cursor-pointer hover:brightness-110 transition-all duration-300 relative overflow-hidden group">
             <div className="absolute inset-0 bg-white/20 translate-y-[-100%] group-hover:translate-y-[100%] transition-transform duration-500 pointer-events-none"></div>
-            <Menu size={20} className="relative z-10" />
-            <span className="font-bold tracking-wider uppercase relative z-10 text-shadow-sm">MENU</span>
-            <ChevronDown size={16} className={`transition-transform duration-300 ml-2 relative z-10 ${showCategoryMenu ? 'rotate-180' : ''}`} />
+            <Menu size={18} className="relative z-10 md:w-5 md:h-5" />
+            <span className="font-bold tracking-wider uppercase relative z-10 text-shadow-sm text-[11px] md:text-base">MENU</span>
+            <ChevronDown size={14} className={`transition-transform duration-300 ml-1 md:ml-2 relative z-10 md:w-4 md:h-4 ${showCategoryMenu ? 'rotate-180' : ''}`} />
           </div>
 
           {/* Dropdown Container */}
@@ -43,11 +44,11 @@ export default function HeaderNav() {
           )}
         </div>
 
-        <ul suppressHydrationWarning className="flex flex-wrap items-center gap-x-3 gap-y-0 lg:gap-x-4 xl:gap-x-8 text-[10.5px] lg:text-[11px] xl:text-[13px] font-bold tracking-wide flex-1">
+        <ul suppressHydrationWarning className="flex items-center flex-wrap justify-center md:justify-start gap-x-4 md:gap-x-5 lg:gap-x-6 xl:gap-x-8 gap-y-1 py-1 md:py-0 text-[11px] lg:text-[11px] xl:text-[13px] font-bold tracking-wide flex-1">
           
           {/* SẢN PHẨM Link */}
-          <li>
-            <Link href="/all" className="flex items-center gap-1 py-4 hover:text-primary hover:drop-shadow-[0_0_8px_var(--primary-ring)] transition-all duration-300">
+          <li className="shrink-0">
+            <Link href="/all" className="flex items-center gap-1 py-2 md:py-4 hover:text-primary hover:drop-shadow-[0_0_8px_var(--primary-ring)] transition-all duration-300">
               <span className="uppercase relative inline-block">
                 Tất Cả Sản Phẩm
                 {/* Badge */}
@@ -60,27 +61,50 @@ export default function HeaderNav() {
             </Link>
           </li>
 
+          {/* CHÍNH SÁCH TỔNG HỢP Link */}
+          <li className="relative group shrink-0">
+            <div className="py-2 md:py-4 block hover:text-primary transition-colors uppercase flex items-center gap-1 cursor-pointer">
+              Chính Sách Tổng Hợp <ChevronDown size={14} className="text-gray-400 group-hover:rotate-180 group-hover:text-primary transition-all duration-300" />
+            </div>
+            
+            <div className="absolute top-full left-0 w-60 bg-white/95 backdrop-blur-xl text-gray-800 shadow-[0_20px_40px_rgba(0,0,0,0.1)] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform origin-top -translate-y-2 group-hover:translate-y-0 border-t-2 border-primary rounded-b-xl overflow-hidden z-50">
+              <ul className="py-2">
+                {[
+                  { title: 'Chính sách bảo hành', link: '/chinh-sach-bao-hanh' },
+                  { title: 'Chính sách bảo mật', link: '/chinh-sach-bao-mat' },
+                  { title: 'Chính sách vận chuyển', link: '/chinh-sach-van-chuyen' },
+                  { title: 'Chính sách đổi trả', link: '/chinh-sach-doi-tra' },
+                  { title: 'Chính sách thanh toán', link: '/chinh-sach-thanh-toan' },
+                ].map((item, idx) => (
+                  <li key={idx}>
+                    <Link href={item.link} className="block px-5 py-3 hover:bg-primary/5 hover:text-primary hover:pl-6 transition-all duration-300 text-[13px] font-bold border-b border-gray-100 last:border-0 uppercase">
+                      {item.title}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </li>
 
-
-          <li>
-            <Link href="/thu-mua-cu" className="py-4 block hover:text-primary transition-colors uppercase">
+          <li className="shrink-0">
+            <Link href="/thu-mua-cu" className="py-2 md:py-4 block hover:text-primary transition-colors uppercase">
               Thu cũ đổi mới
             </Link>
           </li>
-          <li>
-            <Link href="/gioi-thieu-ban-be" className="py-4 block hover:text-primary transition-colors uppercase">
+          <li className="shrink-0">
+            <Link href="/gioi-thieu-ban-be" className="py-2 md:py-4 block hover:text-primary transition-colors uppercase">
               Giới thiệu bạn bè
             </Link>
           </li>
-          <li>
-            <Link href="/tin-tuc" className="py-4 block hover:text-primary transition-colors uppercase">
+          <li className="shrink-0">
+            <Link href="/tin-tuc" className="py-2 md:py-4 block hover:text-primary transition-colors uppercase">
               Tin tức
             </Link>
           </li>
-          <li className="relative group">
-            <Link href="/cong-cu-test" className="py-4 block hover:text-primary transition-colors uppercase flex items-center gap-1 cursor-pointer">
+          <li className="hidden md:block relative group shrink-0">
+            <div className="py-2 md:py-4 block hover:text-primary transition-colors uppercase flex items-center gap-1 cursor-pointer">
               Công cụ Test <ChevronDown size={14} className="text-gray-400 group-hover:rotate-180 group-hover:text-primary transition-all duration-300" />
-            </Link>
+            </div>
             
             <div className="absolute top-full left-0 w-60 bg-white/95 backdrop-blur-xl text-gray-800 shadow-[0_20px_40px_rgba(0,0,0,0.1)] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform origin-top -translate-y-2 group-hover:translate-y-0 border-t-2 border-primary rounded-b-xl overflow-hidden z-50">
               <ul className="py-2">
@@ -108,11 +132,7 @@ export default function HeaderNav() {
               <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.469h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.469h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
             </svg>
           </a>
-          <a href="https://www.youtube.com/" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-[#FF0000] transition-all duration-300 hover:-translate-y-1 hover:scale-110 drop-shadow-md" title="YouTube">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" stroke="none">
-              <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
-            </svg>
-          </a>
+
           <a href="https://vt.tiktok.com/ZSQxHwj4q/" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-all duration-300 hover:-translate-y-1 hover:scale-110 drop-shadow-md" title="TikTok">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="none">
               <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1.04-.1z"/>

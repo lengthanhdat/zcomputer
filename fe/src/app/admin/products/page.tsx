@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Edit, Trash2, Plus, Search, ImageOff } from "lucide-react";
 import Link from "next/link";
 import { fetchApi } from "@/lib/api";
@@ -13,6 +13,7 @@ interface Product {
   brand: string;
   isHotSale?: boolean;
   flashSalePrice?: number;
+  isFeatured?: boolean;
   category_id?: { _id: string; name: string };
   createdAt?: string;
   images?: string[];
@@ -30,6 +31,23 @@ export default function AdminProductsPage() {
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const [tableWidth, setTableWidth] = useState(1200);
+
+  const topScrollRef = useRef<HTMLDivElement>(null);
+  const tableScrollRef = useRef<HTMLDivElement>(null);
+
+  const handleTopScroll = (e: any) => {
+    if (tableScrollRef.current) tableScrollRef.current.scrollLeft = e.target.scrollLeft;
+  };
+  const handleTableScroll = (e: any) => {
+    if (topScrollRef.current) topScrollRef.current.scrollLeft = e.target.scrollLeft;
+  };
+
+  useEffect(() => {
+    if (tableScrollRef.current && tableScrollRef.current.children[0]) {
+      setTableWidth(tableScrollRef.current.children[0].scrollWidth);
+    }
+  }, [products, searchTerm, brandFilter, stockFilter, categoryFilter, hotSaleFilter, sortFilter, loading]);
 
   const fetchProducts = async () => {
     try {
@@ -115,6 +133,25 @@ export default function AdminProductsPage() {
     } catch (error) {
       console.error(error);
       setProducts(products.map(p => p._id === id ? { ...p, isHotSale: currentStatus } : p));
+    }
+  };
+
+  const toggleFeatured = async (id: string, currentStatus: boolean) => {
+    // Optimistic UI update
+    setProducts(products.map(p => p._id === id ? { ...p, isFeatured: !currentStatus } : p));
+    
+    try {
+      const res = await fetchApi(`/products/${id}`, {
+        method: 'PUT',
+        body: JSON.stringify({ isFeatured: !currentStatus })
+      });
+      if (!res.ok) {
+        setProducts(products.map(p => p._id === id ? { ...p, isFeatured: currentStatus } : p));
+        alert("Lỗi khi cập nhật trạng thái Nổi bật");
+      }
+    } catch (error) {
+      console.error(error);
+      setProducts(products.map(p => p._id === id ? { ...p, isFeatured: currentStatus } : p));
     }
   };
 
@@ -296,12 +333,26 @@ export default function AdminProductsPage() {
           </div>
         </div>
 
+        {/* Top Scrollbar */}
+        <div 
+          ref={topScrollRef} 
+          onScroll={handleTopScroll} 
+          className="overflow-x-auto border-b border-gray-100 scrollbar-thin" 
+          style={{ height: '14px' }}
+        >
+          <div style={{ width: tableWidth, height: '1px' }}></div>
+        </div>
+
         {/* Table */}
-        <div className="overflow-x-auto">
+        <div 
+          ref={tableScrollRef}
+          onScroll={handleTableScroll}
+          className="overflow-auto max-h-[calc(100vh-220px)] relative"
+        >
           <table className="whitespace-nowrap min-w-max w-full text-left border-collapse">
-            <thead>
-              <tr className="bg-gray-50 text-gray-600 text-sm border-y border-gray-200">
-                <th className="py-3 px-4 w-12 text-center">
+            <thead className="sticky top-0 z-20">
+              <tr className="bg-gray-50 text-gray-600 text-sm shadow-sm border-b border-gray-200">
+                <th className="py-3 px-4 w-12 text-center bg-gray-50">
                   <input 
                     type="checkbox" 
                     onChange={(e) => handleSelectAll(e)}
@@ -309,23 +360,24 @@ export default function AdminProductsPage() {
                     className="w-4 h-4 text-primary rounded border-gray-300 focus:ring-primary cursor-pointer"
                   />
                 </th>
-                <th className="py-3 px-4 font-semibold">Tên sản phẩm</th>
-                <th className="py-3 px-4 font-semibold">Thương hiệu</th>
-                <th className="py-3 px-4 font-semibold">Giá bán</th>
-                <th className="py-3 px-4 font-semibold">Tồn kho</th>
-                <th className="py-3 px-4 font-semibold text-center">Hot Sale</th>
-                <th className="py-3 px-4 font-semibold text-right">Thao tác</th>
+                <th className="py-3 px-4 font-semibold bg-gray-50">Tên sản phẩm</th>
+                <th className="py-3 px-4 font-semibold bg-gray-50">Thương hiệu</th>
+                <th className="py-3 px-4 font-semibold bg-gray-50">Giá bán</th>
+                <th className="py-3 px-4 font-semibold bg-gray-50">Tồn kho</th>
+                <th className="py-3 px-4 font-semibold text-center bg-gray-50">Hot Sale</th>
+                <th className="py-3 px-4 font-semibold text-center bg-gray-50">Nổi bật</th>
+                <th className="py-3 px-4 font-semibold text-right bg-gray-50">Thao tác</th>
               </tr>
             </thead>
             {loading ? (
-              <tbody><tr><td colSpan={7} className="py-8 text-center text-gray-500">Đang tải dữ liệu...</td></tr></tbody>
+              <tbody><tr><td colSpan={8} className="py-8 text-center text-gray-500">Đang tải dữ liệu...</td></tr></tbody>
             ) : filteredProducts.length === 0 ? (
-              <tbody><tr><td colSpan={7} className="py-8 text-center text-gray-500">Không tìm thấy sản phẩm nào phù hợp.</td></tr></tbody>
+              <tbody><tr><td colSpan={8} className="py-8 text-center text-gray-500">Không tìm thấy sản phẩm nào phù hợp.</td></tr></tbody>
             ) : (
               Object.entries(groupedProducts).map(([categoryName, prods]) => (
                 <tbody key={categoryName} className="divide-y divide-gray-100">
-                  <tr className="bg-gray-100/80 border-t-2 border-gray-200">
-                    <td colSpan={7} className="py-2.5 px-4 font-bold text-gray-700 uppercase text-xs tracking-widest">{categoryName} ({prods.length})</td>
+                  <tr className="border-t-2 border-gray-200">
+                    <td colSpan={8} className="py-2.5 px-4 font-bold text-gray-800 uppercase text-xs tracking-widest sticky left-0 bg-gray-200 z-10">{categoryName} ({prods.length})</td>
                   </tr>
                   {prods.map((product) => (
                     <tr key={product._id} className="hover:bg-gray-50 transition-colors">
@@ -337,11 +389,11 @@ export default function AdminProductsPage() {
                           className="w-4 h-4 text-primary rounded border-gray-300 focus:ring-primary cursor-pointer"
                         />
                       </td>
-                      <td className="py-3 px-4 text-sm font-medium text-gray-900">
-                        <div className="flex items-center gap-2">
-                          <span className="truncate max-w-[200px] xl:max-w-[300px]" title={product.name}>{product.name}</span>
+                      <td className="py-3 px-4 text-sm font-medium text-gray-900 whitespace-normal max-w-[280px] md:max-w-[350px]">
+                        <div className="flex items-start gap-2">
+                          <span className="line-clamp-2 leading-relaxed flex-1" title={product.name}>{product.name}</span>
                           {(!product.images || product.images.length === 0) && (
-                            <span className="shrink-0 flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-bold bg-primary/10 text-primary border border-primary/20 cursor-help" title="Sản phẩm này chưa có hình đại diện">
+                            <span className="shrink-0 flex items-center gap-1 px-1.5 py-0.5 mt-0.5 rounded text-[10px] font-bold bg-primary/10 text-primary border border-primary/20 cursor-help" title="Sản phẩm này chưa có hình đại diện">
                               <ImageOff size={12} /> Thiếu ảnh
                             </span>
                           )}
@@ -373,6 +425,14 @@ export default function AdminProductsPage() {
                             />
                           )}
                         </div>
+                      </td>
+                      <td className="py-3 px-4 text-center">
+                        <input 
+                          type="checkbox"
+                          checked={!!product.isFeatured}
+                          onChange={() => toggleFeatured(product._id, !!product.isFeatured)}
+                          className="w-4 h-4 text-purple-600 rounded border-gray-300 focus:ring-purple-500 cursor-pointer accent-purple-600"
+                        />
                       </td>
                       <td className="py-3 px-4 text-right">
                         <div className="flex justify-end gap-2">

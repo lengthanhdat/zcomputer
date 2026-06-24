@@ -65,15 +65,15 @@ const VideoCard = ({ video }: { video: any }) => {
       
       {/* Fake Channel Info */}
       <div className="absolute top-4 left-4 right-4 flex items-center gap-3 z-10 pointer-events-none">
-        <div className="relative">
+        <div className="relative shrink-0">
           <Image src="/logo_broken.png" alt="ZComputer" width={36} height={36} className="w-9 h-9 rounded-full object-contain bg-white shadow-lg border border-white/50" />
           <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-primary rounded-full border-2 border-black flex items-center justify-center">
             <div className="w-1 h-1 bg-white rounded-full"></div>
           </div>
         </div>
-        <div>
-          <h3 className="text-white font-bold text-[13px] leading-tight drop-shadow-md">ZComputer Short</h3>
-          <p className="text-white/80 text-[10px] font-medium drop-shadow-md">@zcomputer_official</p>
+        <div className="min-w-0 flex-1">
+          <h3 className="text-white font-bold text-[13px] leading-tight drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] truncate">ZComputer Short</h3>
+          <p className="text-white/90 text-[10px] font-medium drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] truncate">@zcomputer_official</p>
         </div>
       </div>
 
@@ -133,22 +133,31 @@ export default function VideoReviewSection({ videos }: VideoReviewProps) {
   if (!videos || videos.length === 0) return null;
   return (
     <section className="container mx-auto px-4 mb-24 mt-12">
-      {/* Header */}
-      <div className="flex flex-col items-center justify-center mb-10">
-        <h2 className="text-3xl md:text-4xl font-black uppercase text-gray-900 tracking-tight flex items-center gap-3">
-          <Play fill="currentColor" className="text-primary" size={32} />
-          <span>REVIEW <span className="text-primary">SẢN PHẨM</span></span>
-        </h2>
-        <p className="text-gray-500 mt-2 font-medium">Trải nghiệm thực tế - Đánh giá chân thực</p>
-      </div>
+      <div className="bg-white rounded-[2rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100/80 overflow-hidden relative p-6 md:p-10">
+        {/* Decorative elements */}
+        <div className="absolute -top-32 -right-32 w-64 h-64 bg-primary/10 rounded-full blur-3xl pointer-events-none"></div>
+        <div className="absolute -bottom-32 -left-32 w-64 h-64 bg-blue-600/10 rounded-full blur-3xl pointer-events-none"></div>
 
-      {/* Videos Grid/Slider */}
-      <div className="flex overflow-x-auto pb-6 snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] md:grid md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6 px-4 md:px-0 -mx-4 md:mx-0">
-        {videos.map((video) => (
-          <div key={video._id} className="min-w-[150px] w-[45vw] sm:w-[35vw] md:w-auto md:min-w-0 shrink-0 snap-center md:snap-align-none">
-            <VideoCard video={video} />
+        <div className="relative z-10">
+          {/* Header */}
+          <div className="flex flex-col items-center justify-center mb-10">
+            <h2 className="text-2xl md:text-3xl font-black uppercase text-gray-900 tracking-tight flex items-center gap-3">
+              <Play fill="currentColor" className="text-primary" size={28} />
+              <span>REVIEW <span className="text-primary">SẢN PHẨM</span></span>
+            </h2>
+            <div className="w-24 h-1 bg-primary rounded-full mt-3"></div>
+            <p className="text-gray-500 mt-3 font-medium text-sm md:text-base">Trải nghiệm thực tế - Đánh giá chân thực</p>
           </div>
-        ))}
+
+          {/* Videos Grid/Slider */}
+          <div className="flex overflow-x-auto pb-4 snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] md:grid md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6">
+            {videos.map((video) => (
+              <div key={video._id} className="min-w-[200px] w-[60vw] sm:w-[40vw] md:w-auto md:min-w-0 shrink-0 snap-center md:snap-align-none">
+                <VideoCard video={video} />
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     </section>
   );

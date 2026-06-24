@@ -13,9 +13,9 @@ export default function AboutUsPage() {
       <section className="bg-gray-900 pt-32 md:pt-40">
         <div className="container mx-auto px-4 relative z-20 text-center">
           <div className="max-w-4xl mx-auto">
-            <h1 className="text-3xl md:text-5xl lg:text-6xl font-black text-white uppercase tracking-tight mb-4 drop-shadow-lg leading-tight">
-              Hệ thống cung cấp PC & Laptop <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-primary inline-block pb-1 pt-2 drop-shadow-none">Uy tín hàng đầu TP.HCM</span>
+            <h1 className="text-3xl md:text-5xl lg:text-6xl font-black text-white uppercase tracking-tight mb-4 drop-shadow-lg leading-tight md:leading-[1.15] flex flex-col items-center">
+              <span className="text-center">Hệ thống cung cấp <span className="inline-block">PC & Laptop</span></span>
+              <span className="text-primary text-center mt-2 drop-shadow-md">UY TÍN HÀNG ĐẦU TP.HCM</span>
             </h1>
             <p className="text-gray-300 text-base md:text-lg mb-8 font-medium">Chất lượng thực - Giá trị thực. Đồng hành cùng bạn trên mọi nẻo đường công nghệ.</p>
             <div className="flex flex-wrap justify-center gap-4 mb-12 md:mb-20">

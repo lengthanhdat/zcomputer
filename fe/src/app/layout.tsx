@@ -92,7 +92,7 @@ export default async function RootLayout({
         <PublicChrome>
           <Header />
         </PublicChrome>
-        <main className="flex-1 w-full">{children}</main>
+        <main className="flex-1 w-full overflow-x-hidden">{children}</main>
         <PublicChrome>
           <Footer />
           <FloatingContact />

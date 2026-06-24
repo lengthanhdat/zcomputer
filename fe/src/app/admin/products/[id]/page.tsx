@@ -252,6 +252,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
     category_id: "",
     condition: "Đã qua sử dụng (Đẹp 99%)",
     isHotSale: false,
+    isFeatured: false,
     flashSalePrice: "",
     specs: { CPU: "", RAM: "", Storage: "", VGA: "", Screen: "" } as Record<string, string>
   });
@@ -304,6 +305,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
               category_id: product.category_id?._id || product.category_id || "",
               condition: product.condition || "Đã qua sử dụng (Đẹp 99%)",
               isHotSale: product.isHotSale || false,
+              isFeatured: product.isFeatured || false,
               flashSalePrice: product.flashSalePrice?.toString() || "",
               specs: {
                 CPU: product.specs?.CPU || product.specs?.cpu || "",
@@ -565,7 +567,8 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
       category_id: categories.find(c => c._id === formData.category_id) || { name: "Danh mục chưa chọn" },
       condition: formData.condition,
       isHotSale: formData.isHotSale,
-      flashSalePrice: Number(formData.flashSalePrice) || 0,
+      isFeatured: formData.isFeatured,
+      flashSalePrice: formData.isHotSale && formData.flashSalePrice ? parseInt(formData.flashSalePrice) : undefined,
       specs: formData.specs,
       views: 0
     };
@@ -595,7 +598,8 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
         category_id: formData.category_id,
         condition: formData.condition,
         isHotSale: formData.isHotSale,
-        flashSalePrice: Number(formData.flashSalePrice) || 0,
+        isFeatured: formData.isFeatured,
+        flashSalePrice: formData.isHotSale && formData.flashSalePrice ? parseInt(formData.flashSalePrice) : undefined,
         specs: formData.specs
       };
 
@@ -930,6 +934,19 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
                     />
                   </div>
                   <span className="text-sm font-bold text-gray-700">Hiển thị trong HOT SALE</span>
+                </label>
+
+                <label className="flex items-center gap-3 cursor-pointer mt-4">
+                  <div className="relative flex items-center">
+                    <input 
+                      type="checkbox" 
+                      name="isFeatured"
+                      checked={formData.isFeatured}
+                      onChange={(e) => setFormData({...formData, isFeatured: e.target.checked})}
+                      className="w-5 h-5 border-2 border-gray-300 rounded text-purple-600 focus:ring-purple-500 cursor-pointer accent-purple-600 transition-all"
+                    />
+                  </div>
+                  <span className="text-sm font-bold text-gray-700">Sản phẩm nổi bật</span>
                 </label>
               </div>
 

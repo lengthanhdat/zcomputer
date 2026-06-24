@@ -67,9 +67,6 @@ export default function NewsClient() {
         </div>
 
         <div className="container mx-auto px-4 relative z-10 text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/100/10 border border-primary/50 text-primary font-bold text-sm mb-6 uppercase tracking-widest">
-            <Zap size={16} className="text-yellow-400" /> Cập nhật 24/7
-          </div>
           <h1 className="text-4xl md:text-6xl font-black text-white uppercase tracking-tight mb-4 drop-shadow-lg">
             Tin Tức <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-primary">Công Nghệ</span>
           </h1>

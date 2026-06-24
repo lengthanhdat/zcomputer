@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useCartStore } from "@/store/useCartStore";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
+import BackButton from "@/components/BackButton";
 
 export default function CheckoutPage() {
   const { items, getTotalPrice, clearCart } = useCartStore();
@@ -65,18 +66,24 @@ export default function CheckoutPage() {
 
   if (items.length === 0) {
     return (
-      <div className="container mx-auto px-4 py-20 text-center min-h-[50vh] flex flex-col justify-center items-center">
-        <h2 className="text-2xl font-bold mb-4">Giỏ hàng trống</h2>
-        <p className="text-gray-500 mb-8">Bạn chưa chọn sản phẩm nào để thanh toán.</p>
-        <button onClick={() => router.push('/')} className="bg-primary text-white px-6 py-2 rounded-md font-semibold hover:bg-primary/90">
-          Tiếp tục mua sắm
-        </button>
+      <div className="container mx-auto px-4 pt-8 pb-20 min-h-[50vh] flex flex-col">
+        <div className="w-full">
+          <BackButton className="mb-4" />
+        </div>
+        <div className="flex-1 flex flex-col justify-center items-center text-center">
+          <h2 className="text-2xl font-bold mb-4">Giỏ hàng trống</h2>
+          <p className="text-gray-500 mb-8">Bạn chưa chọn sản phẩm nào để thanh toán.</p>
+          <button onClick={() => router.push('/')} className="bg-primary text-white px-6 py-2 rounded-md font-semibold hover:bg-primary/90">
+            Tiếp tục mua sắm
+          </button>
+        </div>
       </div>
     );
   }
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-6xl">
+      <BackButton className="mb-4" />
       <h1 className="text-3xl font-black uppercase text-gray-800 mb-8">Thanh toán đơn hàng</h1>
       
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">

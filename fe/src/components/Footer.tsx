@@ -65,14 +65,20 @@ export default function Footer() {
           {/* Col 1: Logo & Info */}
           <div className="md:col-span-6 lg:col-span-3 pr-0 lg:pr-4">
              <Link href="/" className="flex flex-col items-start shrink-0 group mb-6">
-                <div className="flex items-center gap-1.5 bg-white p-2 sm:p-3 rounded-xl shadow-[0_0_15px_rgba(255,255,255,0.2)] group-hover:shadow-[0_0_20px_rgba(220,38,38,0.4)] transition-shadow">
-                              <div className="flex items-center ml-1 sm:ml-1.5 font-serif tracking-tight drop-shadow-sm select-none">
+                <div className="flex items-center gap-0.5 transition-opacity duration-300 hover:opacity-90">
+                              <Image src="/logo_broken.png" alt="Z" width={80} height={80} priority className="h-12 w-12 sm:h-[60px] sm:w-[60px] object-contain group-hover:scale-105 transition-transform duration-300 drop-shadow-md relative z-10" />
+                              <div className="flex items-center font-serif tracking-tight drop-shadow-sm select-none">
                                 <span className="text-primary text-[44px] sm:text-[56px] font-black leading-none pb-[2px]">Z</span>
                                 <div className="flex flex-col justify-center ml-0.5 sm:ml-1 mt-[2px]">
-                                  <span className="text-[#0B1527] text-[22px] sm:text-[28px] font-black leading-[0.8] tracking-normal">COMPUTER</span>
-                                  <span className="text-[6.5px] sm:text-[8px] font-medium text-primary uppercase font-sans tracking-[0.1em] leading-none mt-1 w-full text-justify [text-align-last:justify] whitespace-nowrap">
-                                    PC GAMING - LAPTOP - WORKSTATION
-                                  </span>
+                                  <span className="text-white text-[22px] sm:text-[28px] font-black leading-[0.8] tracking-normal drop-shadow-md">COMPUTER</span>
+                                  <div className="flex justify-between items-center w-full mt-[2px]">
+                                    <span className="text-[6.5px] sm:text-[8.5px] font-black text-primary uppercase tracking-tight">PC</span>
+                                    <span className="text-[6.5px] sm:text-[8.5px] font-black text-primary uppercase tracking-tight">GAMING</span>
+                                    <span className="text-[6.5px] sm:text-[8.5px] font-black text-primary tracking-tight">-</span>
+                                    <span className="text-[6.5px] sm:text-[8.5px] font-black text-primary uppercase tracking-tight">LAPTOP</span>
+                                    <span className="text-[6.5px] sm:text-[8.5px] font-black text-primary tracking-tight">-</span>
+                                    <span className="text-[6.5px] sm:text-[8.5px] font-black text-primary uppercase tracking-tight">WORKSTATION</span>
+                                  </div>
                                 </div>
                               </div>
                 </div>
@@ -83,13 +89,17 @@ export default function Footer() {
              </p>
              
              <div>
-               <p className="font-bold uppercase text-[12px] tracking-widest text-white/80 mb-3">THEO DÕI ZCOMPUTER TẠI</p>
-               <div className="flex gap-2">
-                 <a href="https://www.facebook.com/pcgamingthuduc" target="_blank" rel="noreferrer" className="w-8 h-8 rounded-full bg-[#3b5998] flex items-center justify-center text-white hover:-translate-y-1 hover:shadow-[0_5px_15px_rgba(59,89,152,0.4)] transition-all duration-300"><FaFacebookF size={14} /></a>
-                 <a href="https://zalo.me/0977334415" target="_blank" rel="noreferrer" className="w-8 h-8 rounded-full bg-[#0068FF] flex items-center justify-center text-white hover:-translate-y-1 hover:shadow-[0_5px_15px_rgba(0,104,255,0.4)] transition-all duration-300">
-                   <span className="text-[11px] font-black tracking-wide mt-0.5">Zalo</span>
+               <p className="font-bold uppercase text-[12px] tracking-widest text-white/80 mb-4">THEO DÕI ZCOMPUTER TẠI</p>
+               <div className="flex gap-3">
+                 <a href="https://www.facebook.com/pcgamingthuduc" target="_blank" rel="noreferrer" className="w-10 h-10 rounded-full bg-gradient-to-br from-[#1877F2] to-[#0A5BC4] flex items-center justify-center text-white hover:-translate-y-1.5 hover:shadow-[0_8px_20px_rgba(24,119,242,0.4)] transition-all duration-300 border border-white/10 group">
+                   <FaFacebookF size={18} className="group-hover:scale-110 transition-transform" />
                  </a>
-                 <a href="https://vt.tiktok.com/ZSQxHwj4q/" target="_blank" rel="noreferrer" className="w-8 h-8 rounded-full bg-black border border-white/20 flex items-center justify-center text-white hover:-translate-y-1 hover:shadow-[0_5px_15px_rgba(0,0,0,0.4)] transition-all duration-300"><FaTiktok size={14} /></a>
+                 <a href="https://zalo.me/0977334415" target="_blank" rel="noreferrer" className="w-10 h-10 rounded-full bg-gradient-to-br from-[#0068FF] to-[#0054D6] flex items-center justify-center text-white hover:-translate-y-1.5 hover:shadow-[0_8px_20px_rgba(0,104,255,0.4)] transition-all duration-300 border border-white/10 group">
+                   <span className="text-[14px] font-bold font-sans tracking-tight group-hover:scale-110 transition-transform leading-none mt-0">Zalo</span>
+                 </a>
+                 <a href="https://vt.tiktok.com/ZSQxHwj4q/" target="_blank" rel="noreferrer" className="w-10 h-10 rounded-full bg-gradient-to-br from-[#252525] to-[#000000] flex items-center justify-center text-white hover:-translate-y-1.5 hover:shadow-[0_8px_20px_rgba(255,255,255,0.15)] transition-all duration-300 border border-white/20 group">
+                   <FaTiktok size={18} className="group-hover:scale-110 transition-transform" />
+                 </a>
                </div>
              </div>
           </div>

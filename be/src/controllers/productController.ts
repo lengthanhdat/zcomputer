@@ -53,6 +53,10 @@ export const getProducts = async (req: Request, res: Response) => {
       }
     }
 
+    if (req.query.isFeatured === 'true') {
+      filter.isFeatured = true;
+    }
+
     let sortOption: any = { createdAt: -1 };
     if (req.query.sort === 'views') {
       sortOption = { views: -1, createdAt: -1 };

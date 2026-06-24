@@ -360,8 +360,12 @@ export default function AdminCategoriesPage() {
               />
             </div>
             <div className="space-y-1.5">
-              <label className="text-sm font-semibold text-gray-700">Ảnh Banner Danh Mục</label>
-              <div className="flex flex-col gap-2">
+              <div className="flex items-center justify-between">
+                <label className="text-sm font-semibold text-gray-700">Ảnh Banner Danh Mục</label>
+                <span className="text-[11px] text-gray-500 bg-gray-100 px-2 py-0.5 rounded border border-gray-200">Khuyên dùng: 1200x200px (6:1)</span>
+              </div>
+              <p className="text-xs text-gray-500 italic mt-0.5">Mẹo: Nên thiết kế chữ và sản phẩm nằm ở chính giữa để không bị cắt xén khi xem trên điện thoại.</p>
+              <div className="flex flex-col gap-2 mt-1">
                 <input type="file" accept="image/*" onChange={handleImageUpload} className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" />
                 <div className="flex items-center gap-3 mt-1">
                   {image && (

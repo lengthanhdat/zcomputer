@@ -7,6 +7,7 @@ import { useState, useMemo, useEffect } from "react";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { motion } from "framer-motion";
 import LikeButton from "./LikeButton";
+import BackButton from "./BackButton";
 
 type Product = {
   _id: string;
@@ -190,20 +191,84 @@ export default function CategoryClient({
     return filtered;
   }, [initialProducts, currentBrands, currentPrices, currentSort, currentMinPrice, currentMaxPrice, isDiscount, isHotSale]);
 
+  const activeFilters: { label: string, onRemove: () => void }[] = [];
+  if (isDiscount) activeFilters.push({ label: 'Đang giảm giá', onRemove: () => updateParam('isDiscount', []) });
+  if (isHotSale) activeFilters.push({ label: 'Hot Sale', onRemove: () => updateParam('isHotSale', []) });
+  currentBrands.forEach(b => activeFilters.push({ label: `Hãng: ${b}`, onRemove: () => toggleBrand(b) }));
+  currentPrices.forEach(p => {
+    const range = priceRanges.find(r => r.id === p);
+    if (range) activeFilters.push({ label: `Giá: ${range.label}`, onRemove: () => togglePrice(p) });
+  });
+  if (currentMinPrice || currentMaxPrice) {
+    const minText = currentMinPrice ? `${Number(currentMinPrice).toLocaleString('vi-VN')}đ` : '0đ';
+    const maxText = currentMaxPrice ? `${Number(currentMaxPrice).toLocaleString('vi-VN')}đ` : 'Max';
+    activeFilters.push({ 
+      label: `Giá: ${minText} - ${maxText}`, 
+      onRemove: () => {
+         const params = new URLSearchParams(searchParams.toString());
+         params.delete('minPrice');
+         params.delete('maxPrice');
+         params.delete('page');
+         router.push(`${pathname}?${params.toString()}`);
+      }
+    });
+  }
+
   return (
     <div className="bg-gray-50 min-h-screen py-8">
       <div className="container mx-auto px-4">
-        <div className="text-sm text-gray-500 mb-6 flex gap-2">
+        <div className="text-sm text-gray-500 mb-4 flex gap-2 items-center">
+          <BackButton className="mr-3" />
           <Link href="/" className="hover:text-primary transition-colors">Trang chủ</Link>
           <span>/</span>
           <span className="text-gray-800 font-semibold uppercase">{categoryName}</span>
         </div>
-        <div className="flex flex-col lg:flex-row gap-8">
+        
+        <div className="mb-6 lg:mb-8">
+          <h1 className="text-2xl sm:text-3xl font-black text-gray-900 flex items-end gap-3 tracking-tight">
+            <span className="uppercase">{categoryName}</span>
+            <span className="text-[16px] sm:text-lg font-medium text-gray-500 mb-0.5">({filteredProducts.length} sản phẩm)</span>
+          </h1>
+          
+          {activeFilters.length > 0 && (
+            <div className="flex flex-wrap items-center gap-2 mt-4">
+              {activeFilters.map((filter, index) => (
+                <div key={index} className="flex items-center gap-1.5 bg-white text-gray-700 px-3 py-1.5 rounded-lg text-[13px] font-medium border border-gray-200 shadow-sm animate-in fade-in duration-200">
+                  {filter.label}
+                  <button onClick={filter.onRemove} className="hover:bg-gray-100 hover:text-red-500 rounded-md p-1 ml-1 transition-colors">
+                    <X size={14} />
+                  </button>
+                </div>
+              ))}
+              <button 
+                onClick={() => router.push(pathname)}
+                className="text-[13px] text-gray-500 hover:text-red-500 font-medium underline px-2 transition-colors whitespace-nowrap"
+              >
+                Xóa tất cả
+              </button>
+            </div>
+          )}
+        </div>
+        <div className="flex flex-col lg:flex-row gap-8 relative">
+          {/* Overlay for mobile filter */}
+          {showMobileFilter && (
+            <div 
+              className="fixed inset-0 bg-black/60 z-[60] lg:hidden backdrop-blur-sm transition-opacity"
+              onClick={() => setShowMobileFilter(false)}
+            />
+          )}
+
           <motion.aside 
             initial={{ opacity: 0, x: -30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.3 }}
-            className={`lg:w-72 bg-white p-6 rounded-2xl border border-gray-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] shrink-0 lg:sticky lg:top-24 lg:max-h-[calc(100vh-6rem)] lg:overflow-y-auto custom-scrollbar ${showMobileFilter ? 'fixed inset-0 z-50 m-0 rounded-none w-full overflow-y-auto' : 'hidden lg:block w-full'}`}
+            className={`
+              lg:w-72 bg-white p-6 rounded-2xl border border-gray-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] shrink-0 
+              lg:sticky lg:top-24 lg:max-h-[calc(100vh-6rem)] lg:overflow-y-auto custom-scrollbar 
+              ${showMobileFilter 
+                ? 'fixed inset-y-0 right-0 w-[85vw] sm:w-96 z-[70] m-0 rounded-l-2xl rounded-r-none overflow-y-auto shadow-2xl animate-in slide-in-from-right duration-300' 
+                : 'hidden lg:block w-full'}
+            `}
           >
             <div className="flex items-center justify-between font-black text-lg pb-4 border-b border-gray-100 text-gray-900 uppercase">
               <div className="flex items-center gap-3">
@@ -325,6 +390,15 @@ export default function CategoryClient({
               </div>
               </div>
             </div>
+
+            <div className="lg:hidden sticky -bottom-6 -mx-6 -mb-6 p-4 bg-white border-t border-gray-100 shadow-[0_-10px_20px_rgba(0,0,0,0.05)] mt-8 z-10">
+              <button 
+                onClick={() => setShowMobileFilter(false)}
+                className="w-full bg-primary text-white text-[14px] font-black py-3.5 rounded-xl shadow-lg shadow-primary/30 transition-transform active:scale-[0.98] uppercase tracking-wider flex items-center justify-center gap-2"
+              >
+                Xem <span className="bg-white/20 px-2 py-0.5 rounded-md text-xs">{filteredProducts.length}</span> sản phẩm
+              </button>
+            </div>
           </motion.aside>
 
           <div className="flex-1">
@@ -337,8 +411,8 @@ export default function CategoryClient({
               <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-primary to-purple-500"></div>
               
               <div className="flex items-center justify-between w-full sm:w-auto">
-                <div className="text-gray-600 font-medium ml-2">
-                  <span className="text-gray-900 font-black">{filteredProducts.length}</span> sản phẩm 
+                <div className="text-gray-600 font-medium ml-2 hidden sm:block">
+                  Sắp xếp theo:
                 </div>
                 <button 
                   className="lg:hidden flex items-center gap-2 bg-gray-100 px-3 py-1.5 rounded-lg text-sm font-bold text-gray-700"

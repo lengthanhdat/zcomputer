@@ -4,6 +4,7 @@ import { useCartStore } from "@/store/useCartStore";
 import Link from "next/link";
 import { Trash2, ArrowRight, ShoppingBag, Phone, MessageCircle, X, Package } from "lucide-react";
 import { useState } from "react";
+import BackButton from "@/components/BackButton";
 
 export default function CartPage() {
   const { items, removeItem, updateQuantity, getTotalPrice } = useCartStore();
@@ -11,21 +12,27 @@ export default function CartPage() {
 
   if (items.length === 0) {
     return (
-      <div className="container mx-auto px-4 py-24 text-center min-h-[60vh] flex flex-col justify-center items-center">
-        <div className="w-24 h-24 bg-gray-100 text-gray-400 rounded-full flex items-center justify-center mb-6">
-          <ShoppingBag size={48} />
+      <div className="container mx-auto px-4 pt-8 pb-24 min-h-[60vh] flex flex-col">
+        <div className="w-full">
+          <BackButton className="mb-4" />
         </div>
-        <h2 className="text-2xl font-bold mb-3 text-gray-800">Danh sách sản phẩm đang trống</h2>
-        <p className="text-gray-500 mb-8">Hãy tìm thêm những sản phẩm công nghệ bạn yêu thích nhé.</p>
-        <Link href="/" className="bg-primary text-white px-8 py-3 rounded-md font-bold hover:bg-primary/90 transition-colors">
-          TIẾP TỤC MUA SẮM
-        </Link>
+        <div className="flex-1 flex flex-col justify-center items-center text-center">
+          <div className="w-24 h-24 bg-gray-100 text-gray-400 rounded-full flex items-center justify-center mb-6">
+            <ShoppingBag size={48} />
+          </div>
+          <h2 className="text-2xl font-bold mb-3 text-gray-800">Danh sách sản phẩm đang trống</h2>
+          <p className="text-gray-500 mb-8">Hãy tìm thêm những sản phẩm công nghệ bạn yêu thích nhé.</p>
+          <Link href="/" className="bg-primary text-white px-8 py-3 rounded-md font-bold hover:bg-primary/90 transition-colors">
+            TIẾP TỤC MUA SẮM
+          </Link>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="container mx-auto px-4 pt-12 pb-32 lg:pb-12 max-w-6xl">
+    <div className="container mx-auto px-4 pt-8 pb-32 lg:pb-12 max-w-6xl">
+      <BackButton className="mb-4" />
       <h1 className="text-3xl font-black uppercase text-gray-800 mb-8">Sản phẩm quan tâm</h1>
       
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">

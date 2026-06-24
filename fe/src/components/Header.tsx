@@ -59,6 +59,8 @@ export default function Header() {
   const [defaultSuggestions, setDefaultSuggestions] = useState<any[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [searchHistory, setSearchHistory] = useState<string[]>([]);
+  const [policiesExpanded, setPoliciesExpanded] = useState(false);
+  const [aboutExpanded, setAboutExpanded] = useState(false);
   const searchTimeoutRef = React.useRef<NodeJS.Timeout | null>(null);
   const router = useRouter();
 
@@ -261,7 +263,7 @@ export default function Header() {
 
           <Link 
             href="/" 
-            className="flex items-center gap-1.5 shrink-0 group relative"
+            className="flex items-center gap-0.5 shrink-0 group relative"
             onClick={(e) => {
               if (window.location.pathname === "/") {
                 e.preventDefault();
@@ -270,19 +272,24 @@ export default function Header() {
             }}
           >
             <Image src="/logo_broken.png" alt="Z" width={80} height={80} priority className="h-12 w-12 sm:h-[60px] sm:w-[60px] object-contain group-hover:scale-105 transition-transform duration-300 drop-shadow-md relative z-10" />
-            <div className="flex items-center ml-1 sm:ml-1.5 font-serif tracking-tight drop-shadow-sm select-none">
+            <div className="flex items-center font-serif tracking-tight drop-shadow-sm select-none">
               <span className="text-primary text-[44px] sm:text-[56px] font-black leading-none pb-[2px]">Z</span>
               <div className="flex flex-col justify-center ml-0.5 sm:ml-1 mt-[2px]">
                 <span className="text-[#0B1527] text-[22px] sm:text-[28px] font-black leading-[0.8] tracking-normal">COMPUTER</span>
-                <span className="text-[6.5px] sm:text-[8px] font-medium text-primary uppercase font-sans tracking-[0.1em] leading-none mt-1 w-full text-justify [text-align-last:justify] whitespace-nowrap">
-                  PC GAMING - LAPTOP - WORKSTATION
-                </span>
+                <div className="flex justify-between items-center w-full mt-[2px]">
+                  <span className="text-[6.5px] sm:text-[8.5px] font-black text-primary uppercase tracking-tight">PC</span>
+                  <span className="text-[6.5px] sm:text-[8.5px] font-black text-primary uppercase tracking-tight">GAMING</span>
+                  <span className="text-[6.5px] sm:text-[8.5px] font-black text-primary tracking-tight">-</span>
+                  <span className="text-[6.5px] sm:text-[8.5px] font-black text-primary uppercase tracking-tight">LAPTOP</span>
+                  <span className="text-[6.5px] sm:text-[8.5px] font-black text-primary tracking-tight">-</span>
+                  <span className="text-[6.5px] sm:text-[8.5px] font-black text-primary uppercase tracking-tight">WORKSTATION</span>
+                </div>
               </div>
             </div>
           </Link>
 
           {/* Desktop Search Bar (Hidden on Mobile) */}
-          <div className="flex-1 w-full max-w-2xl lg:max-w-3xl hidden md:flex relative">
+          <div className="flex-1 w-full min-w-[200px] max-w-2xl lg:max-w-3xl hidden md:flex relative mx-2 lg:mx-6">
             <form onSubmit={handleSearch} className="relative w-full group/search z-50">
               <input
                 type="text"
@@ -291,7 +298,7 @@ export default function Header() {
                 onFocus={() => setShowSuggestions(true)}
                 onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
                 placeholder="Bạn cần tìm linh kiện, PC hay Laptop..."
-                className="w-full border-2 border-primary/20 bg-white/60 backdrop-blur-md rounded-full py-2.5 px-5 pr-12 text-sm focus:outline-none focus:border-primary/60 focus:bg-white shadow-inner transition-all duration-300 text-gray-800 placeholder-gray-400 group-hover/search:shadow-[0_0_15px_var(--primary-ring)]"
+                className="w-full border-2 border-primary/20 bg-white/60 backdrop-blur-md rounded-full py-2.5 pl-5 pr-16 text-sm focus:outline-none focus:border-primary/60 focus:bg-white shadow-inner transition-all duration-300 text-gray-800 placeholder-gray-400 group-hover/search:shadow-[0_0_15px_var(--primary-ring)]"
               />
               <button type="submit" className="absolute right-0 top-0 h-full w-14 bg-primary rounded-r-full text-white flex items-center justify-center hover:brightness-110 transition-all duration-300" aria-label="Tìm kiếm">
                 <Search size={18} />
@@ -334,11 +341,8 @@ export default function Header() {
           </div>
         </div>
 
-        {/* Main Navigation Bar (Mega Menu) */}
-        <HeaderNav />
-
         {/* Mobile Search Bar (Only visible on small devices) */}
-        <div className="md:hidden px-4 pb-3 relative z-50">
+        <div className="md:hidden px-4 pb-3 relative z-30">
           <form onSubmit={handleSearch} className="relative w-full group/search">
             <input
               type="text"
@@ -355,6 +359,9 @@ export default function Header() {
           </form>
           {renderSuggestionsDropdown()}
         </div>
+
+        {/* Main Navigation Bar (Mega Menu) */}
+        <HeaderNav />
       </header>
 
       {/* Mobile Drawer Overlay */}
@@ -387,16 +394,49 @@ export default function Header() {
                   <li>
                     <Link href="/all" onClick={() => setMobileMenuOpen(false)} className="block py-1 hover:text-primary transition-colors">Tất cả sản phẩm</Link>
                   </li>
-                  <li>
-                    <Link href="/chinh-sach-bao-hanh" onClick={() => setMobileMenuOpen(false)} className="block py-1 hover:text-primary transition-colors">Chính sách bảo hành</Link>
+                  <li className="border-b border-gray-100 pb-2">
+                    <div className="flex items-center justify-between">
+                      <div className="block py-1 text-gray-800 flex-1">Chính sách tổng hợp</div>
+                      <button 
+                        type="button"
+                        onClick={() => setPoliciesExpanded(!policiesExpanded)}
+                        className="p-2 -mr-2 text-gray-400 hover:text-primary transition-colors focus:outline-none"
+                      >
+                        <ChevronDown size={16} className={`transition-transform duration-300 ${policiesExpanded ? 'rotate-180 text-primary' : ''}`} />
+                      </button>
+                    </div>
+                    <div className={`grid transition-all duration-300 ease-out ${policiesExpanded ? 'grid-rows-[1fr] opacity-100 mt-2' : 'grid-rows-[0fr] opacity-0'}`}>
+                      <div className="overflow-hidden">
+                        <ul className="pl-4 border-l-2 border-primary/10 space-y-3 py-2 text-sm font-medium text-gray-600">
+                          <li><Link href="/chinh-sach-bao-hanh" onClick={() => setMobileMenuOpen(false)} className="block hover:text-primary transition-colors">Chính sách bảo hành</Link></li>
+                          <li><Link href="/chinh-sach-bao-mat" onClick={() => setMobileMenuOpen(false)} className="block hover:text-primary transition-colors">Chính sách bảo mật</Link></li>
+                          <li><Link href="/chinh-sach-van-chuyen" onClick={() => setMobileMenuOpen(false)} className="block hover:text-primary transition-colors">Chính sách vận chuyển</Link></li>
+                          <li><Link href="/chinh-sach-doi-tra" onClick={() => setMobileMenuOpen(false)} className="block hover:text-primary transition-colors">Chính sách đổi trả</Link></li>
+                          <li><Link href="/chinh-sach-thanh-toan" onClick={() => setMobileMenuOpen(false)} className="block hover:text-primary transition-colors">Chính sách thanh toán</Link></li>
+                        </ul>
+                      </div>
+                    </div>
                   </li>
-                  <li>
-                    <Link href="/ve-chung-toi" onClick={() => setMobileMenuOpen(false)} className="block py-1 hover:text-primary transition-colors">Về ZComputer</Link>
-                    <ul className="pl-4 mt-2 space-y-3 font-medium text-gray-600">
-                      <li><Link href="/ve-chung-toi" onClick={() => setMobileMenuOpen(false)} className="block hover:text-primary transition-colors">Giới thiệu về ZCOMPUTER</Link></li>
-                      <li><Link href="/lien-he" onClick={() => setMobileMenuOpen(false)} className="block hover:text-primary transition-colors">Liên hệ</Link></li>
-                      <li><Link href="/tuyen-dung" onClick={() => setMobileMenuOpen(false)} className="block hover:text-primary transition-colors">Tuyển dụng</Link></li>
-                    </ul>
+                  <li className="border-b border-gray-100 pb-2">
+                    <div className="flex items-center justify-between">
+                      <div className="block py-1 text-gray-800 flex-1">Về ZComputer</div>
+                      <button 
+                        type="button"
+                        onClick={() => setAboutExpanded(!aboutExpanded)}
+                        className="p-2 -mr-2 text-gray-400 hover:text-primary transition-colors focus:outline-none"
+                      >
+                        <ChevronDown size={16} className={`transition-transform duration-300 ${aboutExpanded ? 'rotate-180 text-primary' : ''}`} />
+                      </button>
+                    </div>
+                    <div className={`grid transition-all duration-300 ease-out ${aboutExpanded ? 'grid-rows-[1fr] opacity-100 mt-2' : 'grid-rows-[0fr] opacity-0'}`}>
+                      <div className="overflow-hidden">
+                        <ul className="pl-4 border-l-2 border-primary/10 space-y-3 py-2 text-sm font-medium text-gray-600">
+                          <li><Link href="/ve-chung-toi" onClick={() => setMobileMenuOpen(false)} className="block hover:text-primary transition-colors">Giới thiệu về ZCOMPUTER</Link></li>
+                          <li><Link href="/lien-he" onClick={() => setMobileMenuOpen(false)} className="block hover:text-primary transition-colors">Liên hệ</Link></li>
+                          <li><Link href="/tuyen-dung" onClick={() => setMobileMenuOpen(false)} className="block hover:text-primary transition-colors">Tuyển dụng</Link></li>
+                        </ul>
+                      </div>
+                    </div>
                   </li>
                   <li>
                     <Link href="/thu-mua-cu" onClick={() => setMobileMenuOpen(false)} className="block py-1 hover:text-primary transition-colors">Thu cũ đổi mới</Link>
