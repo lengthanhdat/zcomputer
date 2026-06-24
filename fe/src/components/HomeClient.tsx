@@ -26,6 +26,7 @@ type Product = {
   condition?: string;
   isHotSale?: boolean;
   flashSalePrice?: number;
+  isFeatured?: boolean;
   category_id?: {
     _id: string;
     name: string;
@@ -433,16 +434,16 @@ export default function HomeClient() {
               )}
 
               {/* Main Content Container */}
-              <div className="flex flex-col bg-white rounded-[2rem] shadow-[0_8px_30px_var(--primary-ring)] border-[4px] border-primary/10 hover:border-primary/30 transition-colors duration-500 overflow-hidden relative p-6 md:p-8">
-                <div className="absolute -top-32 -right-32 w-64 h-64 bg-primary/10 rounded-full blur-3xl pointer-events-none"></div>
-                <div className="absolute -bottom-32 -left-32 w-64 h-64 bg-blue-600/10 rounded-full blur-3xl pointer-events-none"></div>
+              <div className="flex flex-col bg-white rounded-[2rem] shadow-[0_8px_30px_var(--primary-ring)] border-[4px] border-primary/60 hover:border-primary transition-colors duration-500 overflow-hidden relative p-6 md:p-8">
+                <div className="absolute -top-32 -right-32 w-64 h-64 bg-primary/20 rounded-full blur-3xl pointer-events-none"></div>
+                <div className="absolute -bottom-32 -left-32 w-64 h-64 bg-blue-600/20 rounded-full blur-3xl pointer-events-none"></div>
                 
                 {/* Header Row: Category Name & Filters */}
                 <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between mb-6 lg:mb-8 gap-4 lg:gap-6 relative z-10">
                   <div className="flex items-center justify-between w-full lg:w-auto gap-4">
-                    <h3 className="text-[18px] sm:text-xl md:text-3xl font-black text-gray-900 uppercase tracking-tight relative inline-block line-clamp-2">
-                      {cat.name}
-                      <div className="absolute -bottom-2 left-0 w-1/2 h-1 bg-primary rounded-full"></div>
+                    <h3 className="text-[18px] sm:text-xl md:text-3xl font-black text-gray-900 uppercase tracking-tight relative inline-block drop-shadow-sm">
+                      <div className="line-clamp-2">{cat.name}</div>
+                      <div className="absolute -bottom-4 left-0 w-3/4 h-[4px] bg-primary rounded-full shadow-[0_0_4px_var(--primary)]"></div>
                     </h3>
                     {/* Xem tất cả on Mobile */}
                     <Link 
