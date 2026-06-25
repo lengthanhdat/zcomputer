@@ -247,3 +247,9 @@ body {
     scrollbar-width: none;
   }
 }
+
+@media (max-width: 639px) {
+  body.has-mobile-buy-bar #compare-bar {
+    bottom: calc(68px + env(safe-area-inset-bottom)) !important;
+  }
+}

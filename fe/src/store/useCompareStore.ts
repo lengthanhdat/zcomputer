@@ -15,6 +15,8 @@ export interface CompareItem {
 
 interface CompareStore {
   items: CompareItem[];
+  isMobileBuyBarVisible: boolean;
+  setMobileBuyBarVisible: (visible: boolean) => void;
   addItem: (item: CompareItem) => void;
   removeItem: (id: string) => void;
   clearCompare: () => void;
@@ -24,6 +26,8 @@ export const useCompareStore = create<CompareStore>()(
   persist(
     (set, get) => ({
       items: [],
+      isMobileBuyBarVisible: false,
+      setMobileBuyBarVisible: (visible) => set({ isMobileBuyBarVisible: visible }),
       addItem: (item) => {
         const items = get().items;
         if (items.find((i) => i._id === item._id)) {

@@ -1,7 +1,7 @@
 "use client";
 
 import { useCartStore } from "@/store/useCartStore";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Heart, MessageCircle, ShoppingCart, CreditCard, Phone, X, Scale } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useCompareStore } from "@/store/useCompareStore";
@@ -25,7 +25,12 @@ export default function ProductActions({ product }: ProductActionsProps) {
   const [showContactModal, setShowContactModal] = useState(false);
   const addItem = useCartStore((state) => state.addItem);
   const addCompare = useCompareStore((state) => state.addItem);
-  const router = useRouter();
+  const setMobileBuyBarVisible = useCompareStore((state) => state.setMobileBuyBarVisible);
+
+  useEffect(() => {
+    setMobileBuyBarVisible(true);
+    return () => setMobileBuyBarVisible(false);
+  }, [setMobileBuyBarVisible]);
 
   const handleAddToCart = () => {
     if (product.stock <= 0) {
@@ -63,17 +68,17 @@ export default function ProductActions({ product }: ProductActionsProps) {
         </div>
       )}
 
-      {/* Desktop Buttons */}
-      <div className="hidden sm:flex flex-col gap-4">
+      {/* Desktop & Mobile Actions */}
+      <div className="flex flex-col gap-3 sm:gap-4 mb-6 sm:mb-0">
         <button
           onClick={handleBuyNow}
           disabled={isOutOfStock}
-          className="w-full bg-primary text-white hover:brightness-110 py-4 rounded-lg font-bold text-lg uppercase transition-all shadow-lg shadow-[var(--primary-ring)] flex flex-center items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+          className="hidden sm:flex w-full bg-primary text-white hover:brightness-110 py-4 rounded-lg font-bold text-lg uppercase transition-all shadow-lg shadow-[var(--primary-ring)] items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
         >
           <CreditCard size={20} />
           Mua ngay
         </button>
-        <div className="flex gap-4">
+        <div className="flex gap-3 sm:gap-4">
           <button
             onClick={() => {
               addCompare({
@@ -86,23 +91,23 @@ export default function ProductActions({ product }: ProductActionsProps) {
                 slug: product.slug || product._id
               });
             }}
-            className="flex-1 border-2 border-primary text-primary hover:bg-primary/5 py-3 rounded-lg font-bold uppercase transition-all flex items-center justify-center gap-2 cursor-pointer"
+            className="flex-1 border-2 border-primary text-primary hover:bg-primary/5 py-2.5 sm:py-3 rounded-lg font-bold uppercase transition-all flex items-center justify-center gap-1.5 sm:gap-2 cursor-pointer text-sm sm:text-base"
           >
-            <Scale size={20} />
+            <Scale size={18} className="sm:w-5 sm:h-5" />
             So sánh
           </button>
           <button
             onClick={() => toast.success("Đã thêm vào mục ưa thích!")}
-            className="flex-1 border-2 border-primary text-primary hover:bg-primary/5 py-3 rounded-lg font-bold uppercase transition-all flex items-center justify-center gap-2 cursor-pointer"
+            className="flex-1 border-2 border-primary text-primary hover:bg-primary/5 py-2.5 sm:py-3 rounded-lg font-bold uppercase transition-all flex items-center justify-center gap-1.5 sm:gap-2 cursor-pointer text-sm sm:text-base"
           >
-            <Heart size={20} />
+            <Heart size={18} className="sm:w-5 sm:h-5" />
             Ưa thích
           </button>
         </div>
       </div>
 
       {/* Mobile Sticky Bottom Bar (Liquid Glass Design) */}
-      <div className="sm:hidden fixed bottom-0 left-0 right-0 bg-white/70 backdrop-blur-xl border-t border-white/40 p-3 pb-safe flex items-center gap-3 z-50 shadow-[0_-8px_30px_rgba(0,0,0,0.12)]">
+      <div className="sm:hidden fixed bottom-0 left-0 right-0 bg-white/70 backdrop-blur-xl border-t border-white/40 p-3 pb-safe flex items-center gap-3 z-[110] shadow-[0_-8px_30px_rgba(0,0,0,0.12)]">
         
         {/* Price Section */}
         <div className="flex-1 flex flex-col justify-center min-w-0">

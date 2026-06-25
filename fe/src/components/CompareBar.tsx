@@ -8,7 +8,7 @@ import { useState } from "react";
 import CompareSearchModal from "./CompareSearchModal";
 
 export default function CompareBar() {
-  const { items, removeItem, clearCompare } = useCompareStore();
+  const { items, removeItem, clearCompare, isMobileBuyBarVisible } = useCompareStore();
   const [isExpanded, setIsExpanded] = useState(true);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
 
@@ -16,7 +16,21 @@ export default function CompareBar() {
 
   return (
     <>
-    <div className={`fixed bottom-0 left-0 right-0 z-[100] transition-transform duration-300 ${isExpanded ? 'translate-y-0' : 'translate-y-[calc(100%-48px)] sm:translate-y-[calc(100%-56px)]'}`}>
+      <style>{`
+        @media (max-width: 639px) {
+          .compare-mobile-offset {
+            bottom: calc(68px + env(safe-area-inset-bottom)) !important;
+          }
+        }
+        @media (min-width: 640px) {
+          .compare-mobile-offset {
+            bottom: 0px !important;
+          }
+        }
+      `}</style>
+      <div 
+        className={`fixed left-0 right-0 z-[100] transition-all duration-300 ${isExpanded ? 'translate-y-0' : 'translate-y-[calc(100%-48px)] sm:translate-y-[calc(100%-56px)]'} ${isMobileBuyBarVisible ? 'compare-mobile-offset' : 'bottom-0'}`}
+      >
         <div className="bg-white/80 backdrop-blur-xl border-t border-white shadow-[0_-20px_40px_-15px_rgba(0,0,0,0.1)] rounded-t-3xl max-w-6xl mx-auto flex flex-col ring-1 ring-black/5">
         
         {/* Header Toggle */}

@@ -49,7 +49,7 @@ export default function CompareClient() {
       image: product.images?.[0] || product.image,
       quantity: 1
     });
-    toast.success('Đã thêm vào giỏ hàng!');
+    toast.success('Đã thêm vào mục ưa thích!');
   };
 
   return (
@@ -78,7 +78,7 @@ export default function CompareClient() {
           <table className="w-full min-w-[500px] sm:min-w-[800px] text-left border-collapse">
             <thead>
               <tr>
-                <th className="w-24 sm:w-48 bg-gray-50/95 backdrop-blur-sm p-3 sm:p-6 border-b border-r border-gray-100 text-gray-500 font-bold uppercase text-[10px] sm:text-sm sticky left-0 z-30 shadow-[4px_0_15px_-5px_rgba(0,0,0,0.05)]">
+                <th className="hidden sm:table-cell w-24 sm:w-48 bg-gray-50/95 backdrop-blur-sm p-3 sm:p-6 border-b border-r border-gray-100 text-gray-500 font-bold uppercase text-[10px] sm:text-sm sticky left-0 z-30 shadow-[4px_0_15px_-5px_rgba(0,0,0,0.05)]">
                   Sản phẩm
                 </th>
                 {items.map((item) => (
@@ -95,18 +95,18 @@ export default function CompareClient() {
                           <Image src={item.images?.[0] || item.image || ''} alt={item.name} fill className="object-contain p-1 sm:p-2" unoptimized />
                         ) : null}
                       </div>
-                      <Link href={`/${item.slug}`} className="text-[13px] sm:text-[15px] font-bold text-gray-800 line-clamp-2 hover:text-primary transition-colors mb-2">
+                      <Link href={`/${item.slug}`} className="text-[13px] sm:text-[15px] font-bold text-gray-800 line-clamp-2 hover:text-primary transition-colors mb-2 min-h-[38px] sm:min-h-[45px]">
                         {item.name}
                       </Link>
                       
-                      <div className="mt-auto pt-2">
+                      <div className="pt-2 min-h-[44px] sm:min-h-[56px] flex flex-col justify-end">
                         {(item.discountPrice ?? 0) > item.price ? (
                           <div className="flex flex-col">
-                            <span className="text-xs sm:text-sm text-gray-400 line-through">{item.discountPrice?.toLocaleString("vi-VN")}đ</span>
-                            <span className="text-base sm:text-xl font-black text-primary">{item.price.toLocaleString("vi-VN")}đ</span>
+                            <span className="text-xs sm:text-sm text-gray-400 line-through leading-none mb-0.5">{item.discountPrice?.toLocaleString("vi-VN")}đ</span>
+                            <span className="text-base sm:text-xl font-black text-primary leading-none">{item.price.toLocaleString("vi-VN")}đ</span>
                           </div>
                         ) : (
-                          <span className="text-base sm:text-xl font-black text-primary">{item.price.toLocaleString("vi-VN")}đ</span>
+                          <span className="text-base sm:text-xl font-black text-primary leading-none">{item.price.toLocaleString("vi-VN")}đ</span>
                         )}
                       </div>
 
@@ -135,34 +135,22 @@ export default function CompareClient() {
               </tr>
             </thead>
             <tbody>
-              {/* Tình trạng hàng */}
-              <tr>
-                <td className="bg-gray-50/95 backdrop-blur-sm p-3 sm:p-4 border-b border-r border-gray-100 font-bold text-gray-700 text-[11px] sm:text-sm sticky left-0 z-10 shadow-[4px_0_15px_-5px_rgba(0,0,0,0.05)]">
-                  Tình trạng
-                </td>
-                {items.map((item) => (
-                  <td key={item._id} className="p-3 sm:p-4 border-b border-gray-100">
-                    <div className="flex items-center gap-1.5 text-green-600 font-semibold text-xs sm:text-sm">
-                      <CheckCircle2 size={14} className="sm:w-4 sm:h-4 shrink-0" /> <span className="truncate">Hàng chính hãng</span>
-                    </div>
-                  </td>
-                ))}
-                {[...Array(3 - items.length)].map((_, i) => <td key={`empty-row-1-${i}`} className="p-3 sm:p-4 border-b border-gray-100 bg-gray-50/50"></td>)}
-              </tr>
+
 
               {/* Specs Rows */}
               {allSpecKeys.map((specKey) => {
                 return (
                   <tr key={specKey} className="hover:bg-blue-50/30 transition-colors group">
-                    <td className="bg-gray-50/95 backdrop-blur-sm p-3 sm:p-4 border-b border-r border-gray-100 font-bold text-gray-700 text-[11px] sm:text-sm sticky left-0 z-10 shadow-[4px_0_15px_-5px_rgba(0,0,0,0.05)] group-hover:bg-blue-50/95 transition-colors">
+                    <td className="hidden sm:table-cell bg-gray-50/95 backdrop-blur-sm p-3 sm:p-4 border-b border-r border-gray-100 font-bold text-gray-700 text-[11px] sm:text-sm sticky left-0 z-10 shadow-[4px_0_15px_-5px_rgba(0,0,0,0.05)] group-hover:bg-blue-50/95 transition-colors">
                       {specKey}
                     </td>
                     {items.map((item) => {
                       const val = item.specs ? item.specs[specKey] : null;
                       
                       return (
-                        <td key={item._id} className="p-3 sm:p-4 border-b border-gray-100 text-xs sm:text-sm text-gray-600 leading-relaxed">
-                          {val || '-'}
+                        <td key={item._id} className="p-3 sm:p-4 border-b border-gray-100 text-xs sm:text-sm text-gray-700 leading-relaxed align-top">
+                          <span className="block sm:hidden font-bold text-gray-400 text-[10px] uppercase mb-1 tracking-wider">{specKey}</span>
+                          <div className="mt-0.5">{val || '-'}</div>
                         </td>
                       );
                     })}
