@@ -214,7 +214,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
                       className={`bg-white rounded-2xl border border-gray-100 overflow-hidden group shadow-sm flex flex-col h-full relative transition-all duration-300 ${isOutOfStock ? 'opacity-80' : 'hover:shadow-[0_20px_40px_rgb(220,38,38,0.12)] hover:-translate-y-2'}`}
                     >
                       <Link href={`/${product.slug}`} className="absolute inset-0 z-20"></Link>
-                      <div className="relative aspect-[4/3] p-4 flex items-center justify-center bg-white overflow-hidden">
+                      <div className="relative aspect-[4/3] flex items-center justify-center bg-white overflow-hidden">
 
                         {isOutOfStock && (
                           <div className="absolute inset-0 bg-white/60 z-30 flex items-center justify-center backdrop-blur-[1px]">
@@ -224,16 +224,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
                           </div>
                         )}
 
-                        {product.images?.[0] && (
-                          <Image
-                            src={product.images[0]}
-                            alt={product.name}
-                            fill
-                            sizes="(min-width: 1024px) 25vw, (min-width: 768px) 50vw, 100vw"
-                            className="object-contain p-6 mix-blend-multiply group-hover:scale-105 group-hover:-translate-y-1 transition-all duration-500 relative z-10"
-                            unoptimized
-                          />
-                        )}
+                        {product.images?.[0] && (<div className="absolute inset-2 rounded-[14px] overflow-hidden z-10"><Image src={product.images[0]} alt={product.name} fill sizes="(min-width: 1024px) 25vw, (min-width: 768px) 50vw, 100vw" className="object-cover group-hover:scale-110 group-hover:-translate-y-2 transition-all duration-500" unoptimized /></div>)}
                         
                         {/* ZCOMPUTER Overlay Frame */}
                         <div className="absolute inset-0 pointer-events-none z-[15] p-2 opacity-80">

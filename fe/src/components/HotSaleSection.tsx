@@ -6,6 +6,7 @@ import { Zap, Timer, ShoppingCart, ArrowRight, Eye, Maximize, Cpu, Database, Mon
 import { useState, useEffect } from "react";
 import DraggableSlider from "./DraggableSlider";
 import LikeButton from "./LikeButton";
+import CompareButton from "./CompareButton";
 
 export default function HotSaleSection({ 
   products 
@@ -233,7 +234,7 @@ export default function HotSaleSection({
                       className={`flex-none w-[180px] sm:w-[220px] md:w-[280px] bg-white rounded-2xl border border-gray-100 overflow-hidden group hover:shadow-[0_20px_40px_var(--primary-ring)] hover:border-primary/50 hover:-translate-y-2 transition-all duration-500 flex flex-col relative ${isOutOfStock ? 'opacity-80' : ''}`}
                     >
       <Link href={`/${product.slug}`} className="absolute inset-0 z-20"></Link>
-      <div className="relative aspect-[4/3] p-4 flex items-center justify-center bg-white overflow-hidden">
+      <div className="relative aspect-[4/3] flex items-center justify-center bg-white overflow-hidden">
 
         {isOutOfStock && (
           <div className="absolute inset-0 bg-white/60 z-30 flex items-center justify-center backdrop-blur-[1px]">
@@ -243,16 +244,7 @@ export default function HotSaleSection({
           </div>
         )}
 
-        {product.images?.[0] && (
-          <Image
-            src={product.images[0]}
-            alt={product.name}
-            fill
-            sizes="(min-width: 1024px) 25vw, (min-width: 768px) 50vw, 100vw"
-            className="object-contain p-8 mix-blend-multiply group-hover:scale-110 group-hover:-translate-y-2 transition-all duration-500 relative z-10"
-            unoptimized
-          />
-        )}
+        {product.images?.[0] && (<div className="absolute inset-2 rounded-[14px] overflow-hidden z-10"><Image src={product.images[0]} alt={product.name} fill sizes="(min-width: 1024px) 25vw, (min-width: 768px) 50vw, 100vw" className="object-cover group-hover:scale-110 group-hover:-translate-y-2 transition-all duration-500" unoptimized /></div>)}
         
         {/* ZCOMPUTER Overlay Frame */}
         <div className="absolute inset-0 pointer-events-none z-[15] p-2 opacity-80">
@@ -306,7 +298,10 @@ export default function HotSaleSection({
       <div className="p-3 md:p-5 flex flex-col flex-1 bg-white">
         <div className="flex items-center justify-between mb-2">
           <div className="text-[10px] md:text-[12px] font-extrabold text-gray-400 uppercase tracking-wider">{product.brand || "KHÁC"}</div>
-          <LikeButton product={product} />
+          <div className="flex items-center gap-1">
+            <CompareButton product={product} />
+            <LikeButton product={product} />
+          </div>
         </div>
         <Link href={`/${product.slug}`} className="hover:text-primary transition-colors mb-2 md:mb-4 z-30 relative">
           <h3 className="text-gray-800 text-[13px] md:text-[15px] font-medium leading-snug line-clamp-2 group-hover:text-primary transition-colors duration-300">{product.name}</h3>

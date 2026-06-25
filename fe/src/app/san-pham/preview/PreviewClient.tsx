@@ -271,6 +271,8 @@ export default function ProductPreviewClient({ product }: { product: any }) {
                     discountPrice: product.discountPrice,
                     image: product.images?.[0] || "",
                     stock: product.stock || 0,
+                    specs: product.specs,
+                    slug: product.slug,
                   }}
                 />
               </div>
@@ -305,7 +307,7 @@ export default function ProductPreviewClient({ product }: { product: any }) {
                         <img 
                           src={article.thumbnail ? (article.thumbnail.startsWith('http') || article.thumbnail.startsWith('data:') ? article.thumbnail : `${API_BASE}${article.thumbnail}`) : 'https://via.placeholder.com/800x450?text=No+Image'} 
                           alt={article.title} 
-                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                          className="w-full h-full object-cover p-2 rounded-xl group-hover:scale-110 transition-transform duration-300"
                         />
                       </div>
                       <div className="flex-1">
@@ -345,7 +347,7 @@ export default function ProductPreviewClient({ product }: { product: any }) {
                     className={`snap-start shrink-0 w-[170px] md:w-[280px] bg-white rounded-2xl border border-gray-100 overflow-hidden group shadow-md flex flex-col relative transition-all duration-500 ${isOutOfStock ? 'opacity-80' : 'hover:shadow-[0_8px_30px_var(--primary-ring)] hover:border-primary/50 hover:-translate-y-2'}`}
                   >
                     <Link href={`/${p.slug}`} className="absolute inset-0 z-20"></Link>
-                    <div className="relative aspect-[4/3] p-4 flex items-center justify-center bg-white overflow-hidden">
+                    <div className="relative aspect-[4/3] flex items-center justify-center bg-white overflow-hidden">
 
                       {isOutOfStock && (
                         <div className="absolute inset-0 bg-white/60 z-30 flex items-center justify-center backdrop-blur-[1px]">
@@ -361,7 +363,7 @@ export default function ProductPreviewClient({ product }: { product: any }) {
                           alt={p.name}
                           fill
                           sizes="(min-width: 1024px) 25vw, (min-width: 768px) 50vw, 100vw"
-                          className="object-contain p-8 mix-blend-multiply group-hover:scale-110 group-hover:-translate-y-2 transition-all duration-500 relative z-10"
+                          className="object-cover p-2 rounded-xl group-hover:scale-110 group-hover:-translate-y-2 transition-all duration-500 relative z-10"
                           unoptimized
                         />
                       )}

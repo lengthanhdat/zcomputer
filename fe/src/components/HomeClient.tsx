@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, Laptop, ShieldCheck, Truck, Zap, ChevronLeft, ChevronRight, Monitor, Cpu, Server, Mouse, Keyboard, Headphones, HardDrive, Maximize, Heart, Eye, type LucideIcon, MemoryStick, Gpu, Battery, Layers, Link as LinkIcon } from "lucide-react";
 import LikeButton from "./LikeButton";
+import CompareButton from "./CompareButton";
 import BannerSlider from "@/components/BannerSlider";
 import CategoryMenu from "@/components/CategoryMenu";
 import VideoReviewSection from "@/components/VideoReviewSection";
@@ -462,7 +463,7 @@ export default function HomeClient() {
                     alt={cat.name} 
                     fill 
                     sizes="100vw" 
-                    className="object-cover group-hover:scale-105 transition-transform duration-700" 
+                    className="object-cover p-2 rounded-xl group-hover:scale-105 transition-transform duration-700" 
                     unoptimized 
                   />
                   <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors duration-500"></div>
@@ -606,7 +607,7 @@ export default function HomeClient() {
                 <img 
                   src={`/images/customers/customer-${i + 1}.jpg`} 
                   alt={`ZComputer Customer ${i + 1}`}
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                  className="w-full h-full object-cover p-2 rounded-xl group-hover:scale-110 transition-transform duration-500"
                   onError={(e) => {
                     e.currentTarget.src = `https://placehold.co/400x300/222222/666666?text=Customer+${i + 1}`;
                   }}
@@ -637,7 +638,7 @@ function ProductCard({ product }: { product: Product }) {
       className={`flex-none w-[170px] md:w-[280px] bg-white rounded-2xl border-2 border-primary/20 overflow-hidden group shadow-md flex flex-col relative transition-all duration-500 ${isOutOfStock ? 'opacity-80' : 'hover:shadow-[0_8px_30px_var(--primary-ring)] hover:border-primary hover:-translate-y-2'}`}
     >
       <Link href={`/${product.slug}`} className="absolute inset-0 z-20"></Link>
-      <div className="relative aspect-[4/3] p-4 flex items-center justify-center bg-white overflow-hidden">
+      <div className="relative aspect-[4/3] flex items-center justify-center bg-white overflow-hidden">
 
         {isOutOfStock && (
           <div className="absolute inset-0 bg-white/60 z-30 flex items-center justify-center backdrop-blur-[1px]">
@@ -647,16 +648,7 @@ function ProductCard({ product }: { product: Product }) {
           </div>
         )}
 
-        {product.images?.[0] && (
-          <Image
-            src={product.images[0]}
-            alt={product.name}
-            fill
-            sizes="(min-width: 1024px) 25vw, (min-width: 768px) 50vw, 100vw"
-            className="object-contain p-8 mix-blend-multiply group-hover:scale-110 group-hover:-translate-y-2 transition-all duration-500 relative z-10"
-            unoptimized
-          />
-        )}
+        {product.images?.[0] && (<div className="absolute inset-2 rounded-[14px] overflow-hidden z-10"><Image src={product.images[0]} alt={product.name} fill sizes="(min-width: 1024px) 25vw, (min-width: 768px) 50vw, 100vw" className="object-cover group-hover:scale-110 group-hover:-translate-y-2 transition-all duration-500" unoptimized /></div>)}
         
         {/* ZCOMPUTER Overlay Frame */}
         <div className="absolute inset-0 pointer-events-none z-[15] p-2 opacity-80">
@@ -710,7 +702,10 @@ function ProductCard({ product }: { product: Product }) {
       <div className="p-3 md:p-5 flex flex-col flex-1 bg-white">
         <div className="flex items-center justify-between mb-2">
           <div className="text-[10px] md:text-[12px] font-extrabold text-gray-400 uppercase tracking-wider">{product.brand || "KHÁC"}</div>
-          <LikeButton product={product} />
+          <div className="flex items-center gap-1">
+            <CompareButton product={product} />
+            <LikeButton product={product} />
+          </div>
         </div>
         <Link href={`/${product.slug}`} className="hover:text-primary transition-colors mb-2 md:mb-4 z-30 relative">
           <h3 className="text-gray-800 text-[13px] md:text-[15px] font-medium leading-snug line-clamp-2 group-hover:text-primary transition-colors duration-300">{product.name}</h3>

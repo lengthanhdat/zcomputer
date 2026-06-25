@@ -4,8 +4,22 @@ import { useState } from "react";
 import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
+import Lightbox from "yet-another-react-lightbox";
+import "yet-another-react-lightbox/styles.css";
+
+import Fullscreen from "yet-another-react-lightbox/plugins/fullscreen";
+import Slideshow from "yet-another-react-lightbox/plugins/slideshow";
+import Thumbnails from "yet-another-react-lightbox/plugins/thumbnails";
+import Zoom from "yet-another-react-lightbox/plugins/zoom";
+import Counter from "yet-another-react-lightbox/plugins/counter";
+import Download from "yet-another-react-lightbox/plugins/download";
+
+import "yet-another-react-lightbox/plugins/thumbnails.css";
+import "yet-another-react-lightbox/plugins/counter.css";
 export default function ProductGallery({ images, altText }: { images: string[], altText: string }) {
   const [activeIndex, setActiveIndex] = useState(0);
+  const [zoomStyle, setZoomStyle] = useState({ transformOrigin: "50% 50%", transform: "scale(1)" });
+  const [openLightbox, setOpenLightbox] = useState(false);
 
   if (!images || images.length === 0) {
     return (
@@ -15,10 +29,29 @@ export default function ProductGallery({ images, altText }: { images: string[], 
     );
   }
 
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const { left, top, width, height } = e.currentTarget.getBoundingClientRect();
+    const x = ((e.clientX - left) / width) * 100;
+    const y = ((e.clientY - top) / height) * 100;
+    setZoomStyle({
+      transformOrigin: `${x}% ${y}%`,
+      transform: "scale(2.5)",
+    });
+  };
+
+  const handleMouseLeave = () => {
+    setZoomStyle({ transformOrigin: "50% 50%", transform: "scale(1)" });
+  };
+
   return (
     <div className="flex flex-col gap-4">
       {/* Main Image Container */}
-      <div className="w-full aspect-[4/3] relative bg-[#f8f9fa] rounded-2xl border border-gray-200 overflow-hidden group flex items-center justify-center">
+      <div 
+        className="w-full aspect-[4/3] relative bg-[#f8f9fa] rounded-2xl border border-gray-200 overflow-hidden group flex items-center justify-center cursor-zoom-in"
+        onMouseMove={handleMouseMove}
+        onMouseLeave={handleMouseLeave}
+        onClick={() => setOpenLightbox(true)}
+      >
         
         {/* Subtle Tech Background (Dot Matrix) */}
         <div className="absolute inset-0 opacity-[0.03] bg-[radial-gradient(#000_1px,transparent_1px)] [background-size:20px_20px] pointer-events-none"></div>
@@ -30,7 +63,8 @@ export default function ProductGallery({ images, altText }: { images: string[], 
           fill 
           priority 
           sizes="(min-width: 768px) 50vw, 100vw" 
-          className="object-contain mix-blend-multiply group-hover:scale-105 transition-transform duration-500 cursor-zoom-in p-6 sm:p-12 z-10" 
+          className="object-cover transition-transform duration-200 z-10 pointer-events-none" 
+          style={zoomStyle}
           unoptimized 
         />
 
@@ -91,13 +125,23 @@ export default function ProductGallery({ images, altText }: { images: string[], 
                 src={img} 
                 alt={`${altText} thumbnail ${idx + 1}`} 
                 fill 
-                className="object-contain mix-blend-multiply p-2" 
+                className="object-cover" 
                 unoptimized 
               />
             </button>
           ))}
         </div>
       )}
+
+      {/* Lightbox Viewer */}
+      <Lightbox
+        open={openLightbox}
+        close={() => setOpenLightbox(false)}
+        index={activeIndex}
+        slides={images.map((src) => ({ src }))}
+        plugins={[Fullscreen, Slideshow, Thumbnails, Zoom, Counter, Download]}
+        on={{ view: ({ index }) => setActiveIndex(index) }}
+      />
     </div>
   );
 }

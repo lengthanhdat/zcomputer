@@ -2,8 +2,9 @@
 
 import { useCartStore } from "@/store/useCartStore";
 import { useState } from "react";
-import { Heart, MessageCircle, ShoppingCart, CreditCard, Phone, X } from "lucide-react";
+import { Heart, MessageCircle, ShoppingCart, CreditCard, Phone, X, Scale } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useCompareStore } from "@/store/useCompareStore";
 import toast from "react-hot-toast";
 
 type ProductActionsProps = {
@@ -14,6 +15,8 @@ type ProductActionsProps = {
     discountPrice?: number;
     image: string;
     stock: number;
+    specs?: any;
+    slug?: string;
   };
 };
 
@@ -21,6 +24,7 @@ export default function ProductActions({ product }: ProductActionsProps) {
   const [qty, setQty] = useState(1);
   const [showContactModal, setShowContactModal] = useState(false);
   const addItem = useCartStore((state) => state.addItem);
+  const addCompare = useCompareStore((state) => state.addItem);
   const router = useRouter();
 
   const handleAddToCart = () => {
@@ -51,51 +55,50 @@ export default function ProductActions({ product }: ProductActionsProps) {
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="flex items-center gap-3 flex-wrap">
-        <span className="font-semibold text-gray-700 whitespace-nowrap">Số lượng:</span>
-        <div className="flex items-center border rounded-md bg-white overflow-hidden shadow-sm shrink-0">
-          <button
-            onClick={() => setQty((q) => Math.max(1, q - 1))}
-            disabled={isOutOfStock}
-            className="w-10 h-10 flex items-center justify-center text-gray-600 hover:bg-gray-100 font-bold disabled:opacity-50"
-          >
-            -
-          </button>
-          <span className="w-12 text-center font-semibold text-gray-800">{isOutOfStock ? 0 : qty}</span>
-          <button
-            onClick={() => setQty((q) => Math.min(product.stock, q + 1))}
-            disabled={isOutOfStock}
-            className="w-10 h-10 flex items-center justify-center text-gray-600 hover:bg-gray-100 font-bold disabled:opacity-50"
-          >
-            +
-          </button>
-        </div>
-        {isOutOfStock && (
-          <span className="text-sm text-primary whitespace-nowrap font-medium">
-            (Hết hàng)
+      {isOutOfStock && (
+        <div className="flex items-center gap-3">
+          <span className="text-sm text-primary font-medium">
+            (Sản phẩm hiện đang tạm hết hàng)
           </span>
-        )}
-      </div>
+        </div>
+      )}
 
       {/* Desktop Buttons */}
-      <div className="hidden sm:flex gap-4">
-        <button
-          onClick={() => toast.success("Đã thêm vào mục ưa thích!")}
-          disabled={isOutOfStock}
-          className="flex-1 border-2 border-primary text-primary hover:bg-primary/5 py-4 rounded-lg font-bold text-lg uppercase transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
-        >
-          <Heart size={20} />
-          Ưa thích
-        </button>
-
+      <div className="hidden sm:flex flex-col gap-4">
         <button
           onClick={handleBuyNow}
           disabled={isOutOfStock}
-          className="flex-1 bg-primary text-white hover:brightness-110 py-4 rounded-lg font-bold text-lg uppercase transition-all shadow-lg shadow-[var(--primary-ring)] flex flex-center items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+          className="w-full bg-primary text-white hover:brightness-110 py-4 rounded-lg font-bold text-lg uppercase transition-all shadow-lg shadow-[var(--primary-ring)] flex flex-center items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
         >
           <CreditCard size={20} />
           Mua ngay
         </button>
+        <div className="flex gap-4">
+          <button
+            onClick={() => {
+              addCompare({
+                _id: product._id,
+                name: product.name,
+                price: product.price,
+                discountPrice: product.discountPrice,
+                image: product.image,
+                specs: product.specs,
+                slug: product.slug || product._id
+              });
+            }}
+            className="flex-1 border-2 border-primary text-primary hover:bg-primary/5 py-3 rounded-lg font-bold uppercase transition-all flex items-center justify-center gap-2 cursor-pointer"
+          >
+            <Scale size={20} />
+            So sánh
+          </button>
+          <button
+            onClick={() => toast.success("Đã thêm vào mục ưa thích!")}
+            className="flex-1 border-2 border-primary text-primary hover:bg-primary/5 py-3 rounded-lg font-bold uppercase transition-all flex items-center justify-center gap-2 cursor-pointer"
+          >
+            <Heart size={20} />
+            Ưa thích
+          </button>
+        </div>
       </div>
 
       {/* Mobile Sticky Bottom Bar (Liquid Glass Design) */}

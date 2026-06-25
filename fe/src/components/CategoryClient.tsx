@@ -7,6 +7,7 @@ import { useState, useMemo, useEffect } from "react";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { motion } from "framer-motion";
 import LikeButton from "./LikeButton";
+import CompareButton from "./CompareButton";
 import BackButton from "./BackButton";
 
 type Product = {
@@ -472,7 +473,7 @@ export default function CategoryClient({
                       className={`animate-in fade-in slide-in-from-bottom-4 duration-500 bg-white rounded-2xl border border-gray-100 overflow-hidden group shadow-sm flex flex-col h-full relative transition-all duration-300 ${isOutOfStock ? 'opacity-80' : 'hover:shadow-[0_20px_40px_rgb(220,38,38,0.12)] hover:-translate-y-2'}`}
                     >
                       <Link href={`/${product.slug}`} className="absolute inset-0 z-20"></Link>
-                      <div className="relative aspect-[4/3] p-4 flex items-center justify-center bg-white overflow-hidden">
+                      <div className="relative aspect-[4/3] flex items-center justify-center bg-white overflow-hidden">
 
                         {isOutOfStock && (
                           <div className="absolute inset-0 bg-white/60 z-30 flex items-center justify-center backdrop-blur-[1px]">
@@ -482,16 +483,7 @@ export default function CategoryClient({
                           </div>
                         )}
 
-                        {product.images?.[0] && (
-                          <Image
-                            src={product.images[0]}
-                            alt={product.name}
-                            fill
-                            sizes="(min-width: 1024px) 25vw, (min-width: 768px) 50vw, 100vw"
-                            className="object-contain p-6 mix-blend-multiply group-hover:scale-105 group-hover:-translate-y-1 transition-all duration-500 relative z-10"
-                            unoptimized
-                          />
-                        )}
+                        {product.images?.[0] && (<div className="absolute inset-2 rounded-[14px] overflow-hidden z-10"><Image src={product.images[0]} alt={product.name} fill sizes="(min-width: 1024px) 25vw, (min-width: 768px) 50vw, 100vw" className="object-cover group-hover:scale-110 group-hover:-translate-y-2 transition-all duration-500" unoptimized /></div>)}
                         
                         {/* ZCOMPUTER Overlay Frame */}
                         <div className="absolute inset-0 pointer-events-none z-[15] p-2 opacity-80">
@@ -545,7 +537,10 @@ export default function CategoryClient({
                       <div className="p-4 flex flex-col flex-1 bg-white border-t border-gray-50/50">
                         <div className="flex items-center justify-between mb-2">
                           <div className="text-[11px] font-bold text-gray-500 uppercase">{product.brand || "KHÁC"}</div>
-                          <LikeButton product={product} />
+                          <div className="flex items-center gap-1">
+                            <CompareButton product={product} />
+                            <LikeButton product={product} />
+                          </div>
                         </div>
                         <Link href={`/${product.slug}`} className="hover:text-primary transition-colors mb-3 z-30 relative">
                           <h3 className="text-gray-700 text-[13px] font-medium leading-relaxed line-clamp-2">{product.name}</h3>

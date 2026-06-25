@@ -7,6 +7,7 @@ import Footer from "@/components/Footer";
 import FloatingContact from "@/components/FloatingContact";
 import PublicChrome from "@/components/PublicChrome";
 import PopupAnnouncement from "@/components/PopupAnnouncement";
+import CompareBar from "@/components/CompareBar";
 import { Toaster } from "react-hot-toast";
 import { getThemePreset, buildThemeStyle } from "@/lib/theme";
 
@@ -97,6 +98,7 @@ export default async function RootLayout({
           <Footer />
           <FloatingContact />
           <PopupAnnouncement />
+          <CompareBar />
         </PublicChrome>
         <Toaster position="top-right" />
       </body>
