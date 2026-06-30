@@ -1,4 +1,5 @@
 "use client";
+import Image from "next/image";
 
 import { useCartStore } from "@/store/useCartStore";
 import { useState, useEffect } from "react";
@@ -6,6 +7,9 @@ import { Heart, MessageCircle, ShoppingCart, CreditCard, Phone, X, Scale } from 
 import { useRouter } from "next/navigation";
 import { useCompareStore } from "@/store/useCompareStore";
 import toast from "react-hot-toast";
+import { FaCcVisa, FaCcMastercard, FaMoneyBillWave, FaExchangeAlt } from 'react-icons/fa';
+import { BsBank2 } from 'react-icons/bs';
+import InstallmentModal from "./InstallmentModal";
 
 type ProductActionsProps = {
   product: {
@@ -14,6 +18,7 @@ type ProductActionsProps = {
     price: number;
     discountPrice?: number;
     image: string;
+
     stock: number;
     specs?: any;
     slug?: string;
@@ -23,6 +28,7 @@ type ProductActionsProps = {
 export default function ProductActions({ product }: ProductActionsProps) {
   const [qty, setQty] = useState(1);
   const [showContactModal, setShowContactModal] = useState(false);
+  const [installmentBank, setInstallmentBank] = useState<'HD_SAISON' | 'MIRAE_ASSET' | null>(null);
   const addItem = useCartStore((state) => state.addItem);
   const addCompare = useCompareStore((state) => state.addItem);
   const setMobileBuyBarVisible = useCompareStore((state) => state.setMobileBuyBarVisible);
@@ -59,6 +65,7 @@ export default function ProductActions({ product }: ProductActionsProps) {
   const isOutOfStock = product.stock <= 0;
 
   return (
+    <>
     <div className="flex flex-col gap-6">
       {isOutOfStock && (
         <div className="flex items-center gap-3">
@@ -102,6 +109,96 @@ export default function ProductActions({ product }: ProductActionsProps) {
           >
             <Heart size={18} className="sm:w-5 sm:h-5" />
             Ưa thích
+          </button>
+        </div>
+      </div>
+
+      {/* Payment Methods Section */}
+      <div className="mt-6 pt-6 border-t border-gray-100">
+        <h4 className="font-bold uppercase mb-4 text-[14px] text-gray-800 tracking-wider">
+          HỖ TRỢ THANH TOÁN
+        </h4>
+        <div className="grid grid-cols-4 gap-2">
+          {/* VISA */}
+          <div className="bg-white border border-gray-100 rounded flex items-center justify-center py-2 px-1 shadow-sm h-[38px] hover:shadow-md transition-all">
+            <span className="text-[#1434CB] font-black italic text-[17px] tracking-tighter">VISA</span>
+          </div>
+          {/* Mastercard */}
+          <div className="bg-white border border-gray-100 rounded flex flex-col items-center justify-center py-1 px-1 shadow-sm relative overflow-hidden h-[38px] hover:shadow-md transition-all">
+            <div className="flex -space-x-1.5 mt-0.5">
+              <div className="w-3.5 h-3.5 rounded-full bg-[#EB001B] opacity-90 mix-blend-multiply"></div>
+              <div className="w-3.5 h-3.5 rounded-full bg-[#F79E1B] opacity-90 mix-blend-multiply"></div>
+            </div>
+            <span className="text-[6px] font-bold mt-0.5 text-black">mastercard</span>
+          </div>
+          {/* JCB */}
+          <div className="bg-white border border-gray-100 rounded flex flex-col items-center justify-center shadow-sm h-[38px] hover:shadow-md transition-all">
+            <div className="flex items-center gap-[1px]">
+              <div className="bg-[#003883] text-white font-bold text-[8px] w-3 h-4 flex items-center justify-center rounded-sm rounded-tr-none rounded-br-none pt-0.5">J</div>
+              <div className="bg-[#C11030] text-white font-bold text-[8px] w-3 h-4 flex items-center justify-center pt-0.5">C</div>
+              <div className="bg-[#007F3E] text-white font-bold text-[8px] w-3 h-4 flex items-center justify-center rounded-sm rounded-tl-none rounded-bl-none pt-0.5">B</div>
+            </div>
+          </div>
+          {/* AMEX */}
+          <div className="bg-white border border-gray-100 rounded flex items-center justify-center p-1 shadow-sm h-[38px] hover:shadow-md transition-all">
+            <div className="bg-[#006FCF] text-white font-bold text-[7px] text-center w-full h-full rounded-sm flex items-center justify-center leading-none">
+              AM<br/>EX
+            </div>
+          </div>
+          {/* VNPAY */}
+          <div className="bg-white border border-gray-100 rounded flex items-center justify-center p-1 shadow-sm h-[38px] hover:shadow-md transition-all">
+            <span className="font-bold text-[10px] tracking-tighter"><span className="text-[#ED1C24]">VNPAY</span><sup className="text-[5px] font-black text-[#005BAB] ml-[1px]">QR</sup></span>
+          </div>
+          {/* ZaloPay */}
+          <div className="bg-white border border-gray-100 rounded flex items-center justify-center p-1 shadow-sm h-[38px] hover:shadow-md transition-all">
+            <span className="font-bold text-[10px] tracking-tight"><span className="text-[#0052CC]">Zalo</span><span className="text-[#00B14F]">pay</span></span>
+          </div>
+          {/* Napas */}
+          <div className="bg-white border border-gray-100 rounded flex items-center justify-center p-1 shadow-sm h-[38px] hover:shadow-md transition-all">
+            <span className="text-[#002776] font-black italic text-[11px] tracking-tighter flex items-center">napas<span className="text-[#4E9C2D] text-[7px] ml-[1px]">★</span></span>
+          </div>
+          {/* Kredivo */}
+          <div className="bg-white border border-gray-100 rounded flex items-center justify-center p-1 shadow-sm h-[38px] hover:shadow-md transition-all">
+            <span className="font-bold text-[10px] tracking-tight flex items-center">
+              <span className="text-[#F16522] mr-[1px] text-[13px]">K</span><span className="text-[#0072B5]">redivo</span>
+            </span>
+          </div>
+        </div>
+      </div>
+
+      {/* Installment Methods Section */}
+      <div className="mt-6 pt-6 border-t border-gray-100">
+        <h4 className="font-bold uppercase mb-4 text-[14px] text-gray-800 tracking-wider">
+          HỖ TRỢ TRẢ GÓP
+        </h4>
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          {/* HD Saison */}
+          <button 
+            onClick={() => setInstallmentBank('HD_SAISON')}
+            className="group relative bg-white border border-blue-200 rounded-lg flex flex-col items-center justify-center shadow-sm h-[56px] hover:border-blue-500 hover:shadow-md hover:-translate-y-[2px] active:scale-[0.98] transition-all overflow-hidden p-1.5 cursor-pointer"
+          >
+            <Image src="/HD_SAISON_logo.jpg" alt="HD SAISON" width={100} height={36} className="h-[24px] w-auto object-contain transition-transform group-hover:scale-105" unoptimized />
+            <span className="text-[10px] text-blue-600 font-semibold mt-1 flex items-center gap-1 opacity-80 group-hover:opacity-100">
+              Xem thủ tục
+              <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </span>
+            <div className="absolute inset-0 bg-blue-500/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+          </button>
+          {/* Mirae Asset */}
+          <button 
+            onClick={() => setInstallmentBank('MIRAE_ASSET')}
+            className="group relative bg-white border border-blue-200 rounded-lg flex flex-col items-center justify-center shadow-sm h-[56px] hover:border-blue-500 hover:shadow-md hover:-translate-y-[2px] active:scale-[0.98] transition-all overflow-hidden p-1.5 cursor-pointer"
+          >
+            <Image src="/Mirae_Asset_Logo.jpg" alt="Mirae Asset" width={100} height={36} className="h-[24px] w-auto object-contain transition-transform group-hover:scale-105" unoptimized />
+            <span className="text-[10px] text-blue-600 font-semibold mt-1 flex items-center gap-1 opacity-80 group-hover:opacity-100">
+              Xem thủ tục
+              <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </span>
+            <div className="absolute inset-0 bg-blue-500/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
           </button>
         </div>
       </div>
@@ -213,5 +310,11 @@ export default function ProductActions({ product }: ProductActionsProps) {
         </div>
       )}
     </div>
+    <InstallmentModal 
+      isOpen={installmentBank !== null} 
+      onClose={() => setInstallmentBank(null)} 
+      bank={installmentBank}
+    />
+    </>
   );
 }

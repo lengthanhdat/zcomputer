@@ -84,7 +84,7 @@ const getIcon = (name: string) => {
   return Package;
 };
 
-const CategoryItem = ({ category, categories, depth = 0 }: { category: Category, categories: Category[], depth?: number }) => {
+const CategoryItem = ({ category, categories, depth = 0, itemIndex = 0 }: { category: Category, categories: Category[], depth?: number, itemIndex?: number }) => {
   const [isHovered, setIsHovered] = useState(false);
   const subCategories = Array.isArray(categories) ? categories.filter(c => c && c.parent_id === category._id) : [];
   const hasSub = subCategories.length > 0;
@@ -110,43 +110,60 @@ const CategoryItem = ({ category, categories, depth = 0 }: { category: Category,
               </Link>
             </div>
 
-            {/* Flyout Submenu */}
+            {/* Mega Flyout Submenu */}
             {hasSub && isHovered && (
-              <div className="absolute top-[-10px] left-[calc(100%-4px)] w-[280px] bg-white/95 backdrop-blur-2xl shadow-[0_20px_40px_rgba(0,0,0,0.15)] border border-gray-200/50 py-3 z-40 rounded-xl animate-in fade-in slide-in-from-left-2 duration-200 min-h-[calc(100%+20px)]">
-                {subCategories.map(sub => (
-                  <CategoryItem key={sub._id} category={sub} categories={categories} depth={depth + 1} />
-                ))}
+              <div 
+                className="absolute left-[calc(100%+4px)] min-w-[850px] min-h-[400px] bg-white shadow-[0_4px_20px_rgba(0,0,0,0.1)] border border-gray-100 z-50 rounded-xl animate-in fade-in slide-in-from-left-2 duration-200 p-8 flex items-start gap-8"
+                style={{
+                   // Dynamic offset to align the top of the menu with the top of the main container, not the hovered item
+                   top: `calc(-12px - ${itemIndex * 44}px)` 
+                }}
+              >
+                <div className="flex flex-wrap gap-x-8 gap-y-12 w-full items-start">
+                  {subCategories.map(sub => {
+                    const subSubCategories = categories.filter(c => c && c.parent_id === sub._id);
+                    return (
+                      <div key={sub._id} className="flex flex-col min-w-[200px] max-w-[250px] flex-1">
+                        <Link href={`/${sub.slug}`} className="font-bold text-gray-800 mb-4 hover:text-primary transition-colors text-[16px] flex items-center gap-2">
+                          {sub.name} {sub.name.toUpperCase().includes('HOT') && <Zap size={14} className="text-red-500 fill-red-500" />}
+                        </Link>
+                        {subSubCategories.length > 0 ? (
+                          <div className="flex flex-wrap gap-2">
+                            {subSubCategories.map((item, idx) => {
+                              const isHot = item.name.toUpperCase().includes('HOT') || idx === 0;
+                              const isNew = item.name.toUpperCase().includes('MỚI') || idx === 1;
+                              return (
+                                <Link
+                                  key={item._id}
+                                  href={`/${item.slug}`}
+                                  className="relative px-3 py-1.5 border border-gray-200 rounded-md text-[13px] text-gray-700 hover:border-primary hover:text-primary transition-all bg-white hover:shadow-sm"
+                                >
+                                  {isHot && !item.name.toUpperCase().includes('HOT') && (
+                                    <span className="absolute -top-2.5 right-0 bg-red-500 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-sm">Hot</span>
+                                  )}
+                                  {isNew && !item.name.toUpperCase().includes('MỚI') && !isHot && (
+                                    <span className="absolute -top-2.5 right-0 bg-orange-500 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-sm">Mới</span>
+                                  )}
+                                  {item.name}
+                                </Link>
+                              );
+                            })}
+                          </div>
+                        ) : (
+                          <span className="text-[13px] text-gray-500 hover:text-primary cursor-pointer transition-colors">Xem tất cả {sub.name.toLowerCase()}</span>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
             )}
           </div>
     );
   }
 
-  // Depth > 0
-  return (
-    <div 
-      className="group/sub relative"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-    >
-      <Link
-        href={`/${category.slug}`}
-        className="flex items-center justify-between px-6 py-2.5 text-sm font-medium text-gray-700 hover:text-primary hover:bg-primary/5 hover:pl-8 transition-all duration-300"
-      >
-        <span>{category.name}</span>
-        {hasSub && <ChevronRight size={14} className="text-gray-400 group-hover/sub:text-primary" />}
-      </Link>
-
-      {/* Nested Flyout Submenu */}
-      {hasSub && isHovered && (
-        <div className="absolute top-[-10px] left-[calc(100%-4px)] w-[280px] bg-white/95 backdrop-blur-2xl shadow-[0_20px_40px_rgba(0,0,0,0.15)] border border-gray-200/50 py-3 z-50 rounded-xl animate-in fade-in slide-in-from-left-2 duration-200 min-h-[calc(100%+20px)]">
-          {subCategories.map(sub => (
-            <CategoryItem key={sub._id} category={sub} categories={categories} depth={depth + 1} />
-          ))}
-        </div>
-      )}
-    </div>
-  );
+  // Depth > 0 (Should not be reached if we render all inside the mega menu)
+  return null;
 };
 
 export default function CategoryMenu({ categories }: { categories: Category[] }) {
@@ -154,8 +171,8 @@ export default function CategoryMenu({ categories }: { categories: Category[] })
 
   return (
     <div className="relative bg-white/95 backdrop-blur-2xl shadow-[0_20px_40px_rgba(0,0,0,0.15)] border-l border-r border-b border-gray-200/50 py-3 w-full z-30 flex flex-col rounded-b-xl">
-      {mainCategories.map(cat => (
-        <CategoryItem key={cat._id} category={cat} categories={categories} depth={0} />
+      {mainCategories.map((cat, index) => (
+        <CategoryItem key={cat._id} category={cat} categories={categories} depth={0} itemIndex={index} />
       ))}
     </div>
   );

@@ -3,6 +3,8 @@
 import { MessageCircle, PhoneCall, ChevronUp, X, Headset, MessageSquare } from "lucide-react";
 import { useState, useEffect } from "react";
 import FeedbackModal from "./FeedbackModal";
+import { SiZalo } from "react-icons/si";
+import { FaFacebookF } from "react-icons/fa";
 
 export default function FloatingContact() {
   const [showScrollTop, setShowScrollTop] = useState(false);
@@ -48,77 +50,92 @@ export default function FloatingContact() {
 
         {/* Contact Menu */}
         <div className="flex flex-col items-center gap-3">
-          {/* Expanded Buttons */}
+          {/* All Contact Buttons */}
           <div 
-            className={`flex flex-col gap-3 transition-all duration-500 origin-bottom ${
+            className={`flex flex-col gap-3 transition-all duration-300 origin-bottom md:opacity-100 md:max-h-[500px] md:scale-100 md:pointer-events-auto ${
               isOpen ? 'opacity-100 max-h-[300px] scale-100 pointer-events-auto' : 'opacity-0 max-h-0 scale-50 pointer-events-none'
             }`}
           >
             {/* Feedback / Góp ý */}
-            <button
-              onClick={() => {
-                setIsFeedbackOpen(true);
-                setIsOpen(false);
-              }}
-              className="w-11 h-11 md:w-14 md:h-14 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-full flex items-center justify-center shadow-[0_0_15px_rgba(79,70,229,0.4)] hover:scale-110 transition-all group relative"
-            >
-              <MessageSquare className="w-5 h-5 md:w-6 md:h-6 group-hover:animate-bounce" />
-              <span className="absolute right-full mr-3 bg-indigo-600 text-white px-3 py-1 rounded font-bold text-sm whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none hidden md:block">
-                Góp ý
-              </span>
-            </button>
+            <div className="relative group">
+              <div className="absolute inset-0 bg-indigo-500 rounded-full animate-ping opacity-50" style={{ animationDuration: '2s' }}></div>
+              <div className="absolute -inset-2 bg-indigo-500/20 rounded-full animate-pulse"></div>
+              <button
+                onClick={() => setIsFeedbackOpen(true)}
+                className="relative w-11 h-11 md:w-14 md:h-14 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-all z-10"
+              >
+                <MessageSquare className="w-5 h-5 md:w-6 md:h-6 group-hover:animate-bounce" />
+                <span className="absolute right-full mr-3 bg-indigo-600 text-white px-3 py-1 rounded font-bold text-sm whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none hidden md:block">
+                  Góp ý
+                </span>
+              </button>
+            </div>
 
             {/* Phone */}
-            <a
-              href="tel:0977334415"
-              className="w-11 h-11 md:w-14 md:h-14 bg-primary text-white rounded-full flex items-center justify-center shadow-[0_0_15px_var(--primary-ring)] hover:brightness-110 hover:scale-110 transition-all group relative"
-            >
-              <PhoneCall className="w-5 h-5 md:w-6 md:h-6" />
-              <span className="absolute right-full mr-3 bg-primary text-white px-3 py-1 rounded font-bold text-sm whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none hidden md:block">
-                0977 334 415
-              </span>
-            </a>
+            <div className="relative group">
+              <div className="absolute inset-0 bg-red-500 rounded-full animate-ping opacity-50" style={{ animationDuration: '2s', animationDelay: '0.2s' }}></div>
+              <div className="absolute -inset-2 bg-red-500/20 rounded-full animate-pulse"></div>
+              <a
+                href="tel:0977334415"
+                className="relative w-11 h-11 md:w-14 md:h-14 bg-red-600 text-white rounded-full flex items-center justify-center shadow-lg hover:brightness-110 hover:scale-110 transition-all z-10"
+              >
+                <PhoneCall className="w-5 h-5 md:w-6 md:h-6" />
+                <span className="absolute right-full mr-3 bg-red-600 text-white px-3 py-1 rounded font-bold text-sm whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none hidden md:block">
+                  0977 334 415
+                </span>
+              </a>
+            </div>
 
             {/* Zalo */}
-            <a
-              href="https://zalo.me/0977334415"
-              target="_blank"
-              rel="noreferrer"
-              className="w-11 h-11 md:w-14 md:h-14 bg-blue-500 text-white rounded-full flex items-center justify-center shadow-[0_0_15px_rgba(59,130,246,0.4)] hover:bg-blue-600 hover:scale-110 transition-all relative group"
-            >
-              <span className="font-bold text-[13px] md:text-xl">Zalo</span>
-              <span className="absolute right-full mr-3 bg-blue-500 text-white px-3 py-1 rounded font-bold text-sm whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none hidden md:block">
-                Chat Zalo ngay
-              </span>
-            </a>
+            <div className="relative group">
+              <div className="absolute inset-0 bg-blue-400 rounded-full animate-ping opacity-50" style={{ animationDuration: '2s', animationDelay: '0.4s' }}></div>
+              <div className="absolute -inset-2 bg-blue-400/20 rounded-full animate-pulse"></div>
+              <a
+                href="https://zalo.me/0977334415"
+                target="_blank"
+                rel="noreferrer"
+                className="relative w-11 h-11 md:w-14 md:h-14 bg-[#0068FF] text-white rounded-full flex items-center justify-center shadow-lg hover:brightness-110 hover:scale-110 transition-all z-10"
+              >
+                <SiZalo className="w-6 h-6 md:w-8 md:h-8" />
+                <span className="absolute right-full mr-3 bg-[#0068FF] text-white px-3 py-1 rounded font-bold text-sm whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none hidden md:block">
+                  Chat Zalo ngay
+                </span>
+              </a>
+            </div>
 
-            {/* Messenger */}
-            <a
-              href="https://m.me/pcgamingthuduc"
-              target="_blank"
-              rel="noreferrer"
-              className="w-11 h-11 md:w-14 md:h-14 bg-blue-600 text-white rounded-full flex items-center justify-center shadow-[0_0_15px_rgba(37,99,235,0.4)] hover:bg-blue-700 hover:scale-110 transition-all relative group"
-            >
-              <MessageCircle className="w-5 h-5 md:w-6 md:h-6" />
-              <span className="absolute right-full mr-3 bg-blue-600 text-white px-3 py-1 rounded font-bold text-sm whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none hidden md:block">
-                Chat Facebook
-              </span>
-            </a>
+            {/* Facebook */}
+            <div className="relative group">
+              <div className="absolute inset-0 bg-blue-500 rounded-full animate-ping opacity-50" style={{ animationDuration: '2s', animationDelay: '0.6s' }}></div>
+              <div className="absolute -inset-2 bg-blue-500/20 rounded-full animate-pulse"></div>
+              <a
+                href="https://www.facebook.com/pcgamingthuduc"
+                target="_blank"
+                rel="noreferrer"
+                className="relative w-11 h-11 md:w-14 md:h-14 bg-[#1877F2] text-white rounded-full flex items-center justify-center shadow-lg hover:brightness-110 hover:scale-110 transition-all z-10"
+              >
+                <FaFacebookF className="w-5 h-5 md:w-7 md:h-7" />
+                <span className="absolute right-full mr-3 bg-[#1877F2] text-white px-3 py-1 rounded font-bold text-sm whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none hidden md:block">
+                  Chat Facebook
+                </span>
+              </a>
+            </div>
           </div>
 
-          {/* Main Toggle Button */}
-          <button
-            onClick={() => setIsOpen(!isOpen)}
-            className={`w-11 h-11 md:w-14 md:h-14 bg-primary text-white rounded-full flex items-center justify-center shadow-[0_0_15px_var(--primary-ring)] hover:brightness-110 hover:scale-110 transition-all relative z-50 ${isOpen ? '' : 'animate-bounce'}`}
-            style={{ animationDuration: '2s' }}
-          >
-            {isOpen ? <X className="w-5 h-5 md:w-6 md:h-6" /> : <Headset className="w-5 h-5 md:w-6 md:h-6" />}
+          {/* Main Toggle Button (Mobile Only) */}
+          <div className="relative md:hidden mt-2">
             {!isOpen && (
-               <span className="absolute right-full mr-3 bg-primary text-white px-3 py-1 rounded font-bold text-sm whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none hidden md:block">
-                 Liên hệ hỗ trợ
-               </span>
+              <>
+                <div className="absolute inset-0 bg-primary rounded-full animate-ping opacity-50" style={{ animationDuration: '2s' }}></div>
+                <div className="absolute -inset-2 bg-primary/20 rounded-full animate-pulse"></div>
+              </>
             )}
-          </button>
+            <button
+              onClick={() => setIsOpen(!isOpen)}
+              className="w-11 h-11 bg-primary text-white rounded-full flex items-center justify-center shadow-[0_0_15px_var(--primary-ring)] transition-all relative z-50"
+            >
+              {isOpen ? <X className="w-5 h-5" /> : <Headset className="w-5 h-5" />}
+            </button>
+          </div>
         </div>
       </div>
       

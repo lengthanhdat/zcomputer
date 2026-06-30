@@ -1,14 +1,15 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Playfair_Display, Montserrat } from "next/font/google";
-import { FaFacebookF, FaInstagram, FaTiktok, FaYoutube, FaMapMarkerAlt, FaPhoneAlt, FaEnvelope, FaChevronRight } from "react-icons/fa";
+import { FaFacebookF, FaInstagram, FaTiktok, FaYoutube, FaMapMarkerAlt, FaPhoneAlt, FaEnvelope, FaChevronRight, FaCcVisa, FaCcMastercard, FaMoneyBillWave, FaExchangeAlt } from "react-icons/fa";
+import { BsBank2 } from "react-icons/bs";
 
 const montserrat = Montserrat({ subsets: ["latin", "vietnamese"], weight: ["700", "900"] });
 const playfair = Playfair_Display({ subsets: ["latin", "vietnamese"], weight: ["700", "900"] });
 
 export default function Footer() {
   return (
-    <footer className="relative bg-[#0b0f19] text-white/80 font-sans mt-0 border-t border-white/10 overflow-hidden pb-24 sm:pb-0">
+    <footer className="relative bg-[#0b0f19] text-white/80 font-sans mt-0 border-t border-white/10 overflow-hidden">
       {/* Ambient Glowing Backgrounds */}
       <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-primary/10 rounded-full blur-[120px] pointer-events-none"></div>
       <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-blue-600/10 rounded-full blur-[100px] pointer-events-none"></div>
@@ -90,16 +91,36 @@ export default function Footer() {
              
              <div>
                <p className="font-bold uppercase text-[12px] tracking-widest text-white/80 mb-4">THEO DÕI ZCOMPUTER TẠI</p>
-               <div className="flex gap-3">
-                 <a href="https://www.facebook.com/pcgamingthuduc" target="_blank" rel="noreferrer" className="w-10 h-10 rounded-full bg-gradient-to-br from-[#1877F2] to-[#0A5BC4] flex items-center justify-center text-white hover:-translate-y-1.5 hover:shadow-[0_8px_20px_rgba(24,119,242,0.4)] transition-all duration-300 border border-white/10 group">
-                   <FaFacebookF size={18} className="group-hover:scale-110 transition-transform" />
-                 </a>
+               <div className="flex gap-3 mb-5">
                  <a href="https://zalo.me/0977334415" target="_blank" rel="noreferrer" className="w-10 h-10 rounded-full bg-gradient-to-br from-[#0068FF] to-[#0054D6] flex items-center justify-center text-white hover:-translate-y-1.5 hover:shadow-[0_8px_20px_rgba(0,104,255,0.4)] transition-all duration-300 border border-white/10 group">
                    <span className="text-[14px] font-bold font-sans tracking-tight group-hover:scale-110 transition-transform leading-none mt-0">Zalo</span>
                  </a>
                  <a href="https://vt.tiktok.com/ZSQxHwj4q/" target="_blank" rel="noreferrer" className="w-10 h-10 rounded-full bg-gradient-to-br from-[#252525] to-[#000000] flex items-center justify-center text-white hover:-translate-y-1.5 hover:shadow-[0_8px_20px_rgba(255,255,255,0.15)] transition-all duration-300 border border-white/20 group">
                    <FaTiktok size={18} className="group-hover:scale-110 transition-transform" />
                  </a>
+               </div>
+
+               {/* Custom Facebook Fanpage Widget (Tránh bị cắt chữ như iframe mặc định) */}
+               <div className="rounded-lg overflow-hidden bg-white max-w-[340px] shadow-lg border border-white/10 font-sans">
+                 <div className="p-2.5 flex gap-2.5">
+                   <a href="https://www.facebook.com/pcgamingthuduc" target="_blank" rel="noreferrer" className="shrink-0 mt-0.5">
+                     <div className="w-[50px] h-[50px] border border-gray-300 flex items-center justify-center bg-white p-0.5 shadow-sm">
+                       <Image src="/logo_broken.png" alt="Z Computer" width={46} height={46} className="w-full h-full object-contain" unoptimized />
+                     </div>
+                   </a>
+                   <div className="flex flex-col justify-start">
+                     <a href="https://www.facebook.com/pcgamingthuduc" target="_blank" rel="noreferrer" className="text-[#385898] font-semibold text-[14px] leading-tight hover:underline">
+                       Z Computer : Gaming.Nox.Office - All for your PC
+                     </a>
+                     <p className="text-[#606770] text-[12px] mt-1">3.185 người theo dõi</p>
+                   </div>
+                 </div>
+                 <div className="bg-[#f5f6f7] border-t border-[#e9ebee] p-2 flex items-center">
+                   <a href="https://www.facebook.com/pcgamingthuduc" target="_blank" rel="noreferrer" className="flex items-center gap-1.5 bg-[#f5f6f7] border border-[#ccd0d5] hover:bg-[#ebedf0] text-[#4b4f56] font-semibold text-[12px] px-2 py-1 rounded-[3px] transition-colors">
+                     <FaFacebookF size={14} className="text-[#385898]" />
+                     Theo dõi Trang
+                   </a>
+                 </div>
                </div>
              </div>
           </div>
@@ -147,26 +168,107 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Col 5: CÔNG TY TNHH */}
-          <div className="md:col-span-8 lg:col-span-3 lg:pl-4">
-            <h4 className="font-black uppercase mb-5 text-[14px] text-white tracking-wider">
-              CÔNG TY TNHH TM DV ZCOM
-            </h4>
-            <div className="text-[13px] text-white/60 space-y-2 leading-relaxed font-medium mb-6">
-              <p>Mã số GPKD: 0317130199 - Được cấp phép bởi Sở KH và ĐT Thành phố Hồ Chí Minh.</p>
-              <p className="pt-2">Cung cấp linh kiện máy tính chính hãng</p>
-              <p>Máy tính chơi Game - Máy Tính Đồ Họa - Máy Tính Văn Phòng</p>
+          {/* Col 5: CÔNG TY TNHH & THANH TOÁN */}
+          <div className="md:col-span-8 lg:col-span-3 lg:pl-4 flex flex-col justify-between">
+            <div>
+              <h4 className="font-black uppercase mb-5 text-[14px] text-white tracking-wider">
+                CÔNG TY TNHH TM DV ZCOM
+              </h4>
+              <div className="text-[13px] text-white/60 space-y-2 leading-relaxed font-medium mb-6">
+                <p>Mã số GPKD: 0317130199 - Được cấp phép bởi Sở KH và ĐT Thành phố Hồ Chí Minh.</p>
+                <p className="pt-2">Cung cấp linh kiện máy tính chính hãng</p>
+                <p>Máy tính chơi Game - Máy Tính Đồ Họa - Máy Tính Văn Phòng</p>
+              </div>
             </div>
-            
+
+            <div className="mt-4">
+              <h4 className="font-bold uppercase mb-4 text-[14px] text-white tracking-widest">
+                HỖ TRỢ THANH TOÁN
+              </h4>
+              <div className="grid grid-cols-4 gap-2">
+                {/* VISA */}
+                <div className="bg-white rounded flex items-center justify-center py-2 px-1 shadow-sm h-[38px]">
+                  <span className="text-[#1434CB] font-black italic text-[17px] tracking-tighter">VISA</span>
+                </div>
+                {/* Mastercard */}
+                <div className="bg-white rounded flex flex-col items-center justify-center py-1 px-1 shadow-sm relative overflow-hidden h-[38px]">
+                  <div className="flex -space-x-1.5 mt-0.5">
+                    <div className="w-3.5 h-3.5 rounded-full bg-[#EB001B] opacity-90 mix-blend-multiply"></div>
+                    <div className="w-3.5 h-3.5 rounded-full bg-[#F79E1B] opacity-90 mix-blend-multiply"></div>
+                  </div>
+                  <span className="text-[6px] font-bold mt-0.5 text-black">mastercard</span>
+                </div>
+                {/* JCB */}
+                <div className="bg-white rounded flex flex-col items-center justify-center shadow-sm h-[38px]">
+                  <div className="flex items-center gap-[1px]">
+                    <div className="bg-[#003883] text-white font-bold text-[8px] w-3 h-4 flex items-center justify-center rounded-sm rounded-tr-none rounded-br-none pt-0.5">J</div>
+                    <div className="bg-[#C11030] text-white font-bold text-[8px] w-3 h-4 flex items-center justify-center pt-0.5">C</div>
+                    <div className="bg-[#007F3E] text-white font-bold text-[8px] w-3 h-4 flex items-center justify-center rounded-sm rounded-tl-none rounded-bl-none pt-0.5">B</div>
+                  </div>
+                </div>
+                {/* AMEX */}
+                <div className="bg-white rounded flex items-center justify-center p-1 shadow-sm h-[38px]">
+                  <div className="bg-[#006FCF] text-white font-bold text-[7px] text-center w-full h-full rounded-sm flex items-center justify-center leading-none">
+                    AM<br/>EX
+                  </div>
+                </div>
+                {/* VNPAY */}
+                <div className="bg-white rounded flex items-center justify-center p-1 shadow-sm h-[38px]">
+                  <span className="font-bold text-[10px] tracking-tighter"><span className="text-[#ED1C24]">VNPAY</span><sup className="text-[5px] font-black text-[#005BAB] ml-[1px]">QR</sup></span>
+                </div>
+                {/* ZaloPay */}
+                <div className="bg-white rounded flex items-center justify-center p-1 shadow-sm h-[38px]">
+                  <span className="font-bold text-[10px] tracking-tight"><span className="text-[#0052CC]">Zalo</span><span className="text-[#00B14F]">pay</span></span>
+                </div>
+                {/* Napas */}
+                <div className="bg-white rounded flex items-center justify-center p-1 shadow-sm h-[38px]">
+                  <span className="text-[#002776] font-black italic text-[11px] tracking-tighter flex items-center">napas<span className="text-[#4E9C2D] text-[7px] ml-[1px]">★</span></span>
+                </div>
+                {/* Kredivo */}
+                <div className="bg-white rounded flex items-center justify-center p-1 shadow-sm h-[38px]">
+                  <span className="font-bold text-[10px] tracking-tight flex items-center">
+                    <span className="text-[#F16522] mr-[1px] text-[13px]">K</span><span className="text-[#0072B5]">redivo</span>
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-4">
+              <h4 className="font-bold uppercase mb-4 text-[14px] text-white tracking-widest">
+                HỖ TRỢ TRẢ GÓP
+              </h4>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                {/* HD Saison */}
+                <div className="bg-white border border-gray-100 rounded flex items-center justify-center shadow-sm h-[38px] hover:shadow-md transition-all overflow-hidden p-1">
+                  <Image src="/HD_SAISON_logo.jpg" alt="HD SAISON" width={100} height={36} className="w-full h-full object-contain" unoptimized />
+                </div>
+                {/* Mirae Asset */}
+                <div className="bg-white border border-gray-100 rounded flex items-center justify-center p-1 shadow-sm h-[38px] hover:shadow-md transition-all overflow-hidden">
+                  <Image src="/Mirae_Asset_Logo.jpg" alt="Mirae Asset" width={100} height={36} className="w-full h-full object-contain" unoptimized />
+                </div>
+              </div>
+            </div>
           </div>
 
         </div>
       </div>
 
       {/* Bottom Bar */}
-      <div className="relative border-t border-white/10 bg-black/50 backdrop-blur-lg py-5 z-10">
-        <div className="container mx-auto px-4 text-center text-[13px] font-medium text-white/40 tracking-wide">
-           © 2026 <strong className="text-white/60">ZCOMPUTER</strong>.
+      <div className="relative border-t border-white/10 bg-black/80 backdrop-blur-lg py-8 z-10">
+        <div className="container mx-auto px-4 flex flex-col items-center text-center">
+          <h5 className="text-white font-bold text-[13px] mb-3 uppercase tracking-wider">CÔNG TY TNHH THƯƠNG MẠI DỊCH VỤ ZCOM</h5>
+          <div className="text-[12px] text-white/50 space-y-2 font-medium max-w-3xl">
+            <p><strong className="text-white/70">Mã số GPKD:</strong> 0317130199 - Cấp bởi Sở Kế Hoạch và Đầu Tư TP. Hồ Chí Minh.</p>
+            <p><strong className="text-white/70">Địa chỉ Trụ Sở:</strong> 23 Đường số 1, Khu phố 61, Phường Linh Xuân, TP. Thủ Đức, TP.HCM.</p>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-0 mt-1">
+              <span><strong className="text-white/70">Email:</strong> truong.zvncomputer@gmail.com</span>
+              <span className="hidden sm:inline mx-2 opacity-30">|</span>
+              <span><strong className="text-white/70">Hotline:</strong> 0977 334 415</span>
+            </div>
+          </div>
+          <div className="text-[12px] font-medium text-white/30 tracking-wide mt-6 pt-5 border-t border-white/5 w-full max-w-2xl">
+             © 2026 <strong className="text-white/50">ZCOMPUTER</strong>. All rights reserved.
+          </div>
         </div>
       </div>
     </footer>

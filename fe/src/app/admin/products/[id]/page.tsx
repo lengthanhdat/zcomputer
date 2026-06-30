@@ -250,6 +250,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
     images: [] as string[],
     gifts: [] as string[],
     category_id: "",
+    categories: [] as string[],
     condition: "Đã qua sử dụng (Đẹp 99%)",
     isHotSale: false,
     isFeatured: false,
@@ -303,6 +304,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
               images: product.images || [],
               gifts: product.gifts || [],
               category_id: product.category_id?._id || product.category_id || "",
+              categories: (product.categories || []).map((c: any) => c._id || c),
               condition: product.condition || "Đã qua sử dụng (Đẹp 99%)",
               isHotSale: product.isHotSale || false,
               isFeatured: product.isFeatured || false,
@@ -596,6 +598,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
         images: formData.images,
         gifts: formData.gifts.filter(g => g.trim() !== ""),
         category_id: formData.category_id,
+        categories: formData.categories,
         condition: formData.condition,
         isHotSale: formData.isHotSale,
         isFeatured: formData.isFeatured,
@@ -709,7 +712,54 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
                     categories={categories}
                     selectedId={formData.category_id}
                     onChange={(id: string) => setFormData({ ...formData, category_id: id })}
-                    placeholder={categories.length === 0 ? "Đang tải danh mục..." : "Chọn danh mục"}
+                    placeholder={categories.length === 0 ? "Đang tải danh mục..." : "Chọn danh mục chính"}
+                  />
+                </div>
+                {formData.categories.map((catId, index) => (
+                  <div key={index}>
+                    <label className="block text-sm font-bold text-gray-700 mb-2 flex justify-between">
+                      <span>Danh mục phụ {index + 1}</span>
+                      <button 
+                        type="button" 
+                        onClick={() => {
+                          const newCats = [...formData.categories];
+                          newCats.splice(index, 1);
+                          setFormData({ ...formData, categories: newCats });
+                        }}
+                        className="text-red-500 text-xs font-normal hover:underline"
+                      >
+                        Xóa
+                      </button>
+                    </label>
+                    <CategoryPickerModal
+                      categories={categories}
+                      selectedId={catId}
+                      onChange={(id: string) => {
+                        const newCats = [...formData.categories];
+                        if (id) newCats[index] = id;
+                        else newCats.splice(index, 1);
+                        setFormData({ ...formData, categories: newCats });
+                      }}
+                      excludeId={formData.category_id}
+                      placeholder={`Chọn danh mục phụ ${index + 1}`}
+                    />
+                  </div>
+                ))}
+
+                <div>
+                  <label className="block text-sm font-bold text-gray-700 mb-2">
+                    Danh mục phụ {formData.categories.length + 1}
+                  </label>
+                  <CategoryPickerModal
+                    categories={categories}
+                    selectedId={null}
+                    onChange={(id: string) => {
+                      if (id && !formData.categories.includes(id)) {
+                        setFormData({ ...formData, categories: [...formData.categories, id] });
+                      }
+                    }}
+                    excludeId={formData.category_id}
+                    placeholder="+ Thêm danh mục phụ..."
                   />
                 </div>
                 <div>

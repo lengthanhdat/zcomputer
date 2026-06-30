@@ -48,7 +48,13 @@ export const getProducts = async (req: Request, res: Response) => {
         const childCategories = await Category.find({ parent_id: category._id });
         const categoryIds = [category._id, ...childCategories.map(c => c._id)];
         
-        filter.category_id = { $in: categoryIds };
+        filter.$and = filter.$and || [];
+        filter.$and.push({
+          $or: [
+            { category_id: { $in: categoryIds } },
+            { categories: { $in: categoryIds } }
+          ]
+        });
       } else {
         return res.json([]);
       }
@@ -95,7 +101,7 @@ export const getProductBySlug = async (req: Request, res: Response) => {
 // Tạo sản phẩm mới
 export const createProduct = async (req: Request, res: Response) => {
   try {
-    const { name, category_id, brand, price, discountPrice, stock, sku, specs, images, gifts, description, condition, isHotSale, flashSalePrice } = req.body;
+    const { name, category_id, categories, brand, price, discountPrice, stock, sku, specs, images, gifts, description, condition, isHotSale, flashSalePrice } = req.body;
     
     // Tạo slug từ name
     let slug = slugify(name, { lower: true, strict: true, locale: 'vi' });
@@ -106,7 +112,7 @@ export const createProduct = async (req: Request, res: Response) => {
     }
 
     const newProduct = new Product({
-      name, slug, category_id, brand, price, discountPrice, stock, sku, specs, images, gifts, description, condition, isHotSale, flashSalePrice
+      name, slug, category_id, categories: categories || [], brand, price, discountPrice, stock, sku, specs, images, gifts, description, condition, isHotSale, flashSalePrice
     });
     
     const savedProduct = await newProduct.save();
