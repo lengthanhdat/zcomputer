@@ -65,43 +65,46 @@ export default function Footer() {
           
           {/* Col 1: Logo & Info */}
           <div className="md:col-span-6 lg:col-span-3 pr-0 lg:pr-4">
-             <Link href="/" className="flex flex-col items-start shrink-0 group mb-6">
-                <div className="flex items-center gap-0.5 transition-opacity duration-300 hover:opacity-90">
-                              <Image src="/logo_broken.png" alt="Z" width={80} height={80} priority className="h-12 w-12 sm:h-[60px] sm:w-[60px] object-contain group-hover:scale-105 transition-transform duration-300 drop-shadow-md relative z-10" />
-                              <div className="flex items-center font-serif tracking-tight drop-shadow-sm select-none">
-                                <span className="text-primary text-[44px] sm:text-[56px] font-black leading-none pb-[2px]">Z</span>
+             <Link href="/" className="block group mb-6 w-full relative">
+                <style>{`
+                  .logo-z-text { font-size: 38px; }
+                  .logo-comp-text { font-size: 18px; }
+                  .logo-sub-text { font-size: 5.5px; }
+                  @media (min-width: 640px) {
+                    .logo-z-text { font-size: 46px; }
+                    .logo-comp-text { font-size: 22px; }
+                    .logo-sub-text { font-size: 6px; }
+                  }
+                `}</style>
+                <div className="bg-white rounded-xl p-2 sm:p-2.5 shadow-[0_0_20px_rgba(255,255,255,0.1)] flex items-center justify-center sm:justify-start gap-1.5 sm:gap-2 transition-transform duration-300 hover:scale-105 w-full">
+                              <div className="flex items-center justify-center shrink-0">
+                                <Image src="/logo_broken.png" alt="Z" width={100} height={100} priority className="h-10 w-10 sm:h-12 sm:w-12 object-contain relative z-10" />
+                              </div>
+                              <div className="flex items-center font-serif tracking-tight select-none">
+                                <span className="text-primary logo-z-text font-black leading-none pb-[2px]">Z</span>
                                 <div className="flex flex-col justify-center ml-0.5 sm:ml-1 mt-[2px]">
-                                  <span className="text-white text-[22px] sm:text-[28px] font-black leading-[0.8] tracking-normal drop-shadow-md">COMPUTER</span>
+                                  <span className="text-gray-900 logo-comp-text font-black leading-[0.8] tracking-normal">COMPUTER</span>
                                   <div className="flex justify-between items-center w-full mt-[2px]">
-                                    <span className="text-[6.5px] sm:text-[8.5px] font-black text-primary uppercase tracking-tight">PC</span>
-                                    <span className="text-[6.5px] sm:text-[8.5px] font-black text-primary uppercase tracking-tight">GAMING</span>
-                                    <span className="text-[6.5px] sm:text-[8.5px] font-black text-primary tracking-tight">-</span>
-                                    <span className="text-[6.5px] sm:text-[8.5px] font-black text-primary uppercase tracking-tight">LAPTOP</span>
-                                    <span className="text-[6.5px] sm:text-[8.5px] font-black text-primary tracking-tight">-</span>
-                                    <span className="text-[6.5px] sm:text-[8.5px] font-black text-primary uppercase tracking-tight">WORKSTATION</span>
+                                    <span className="logo-sub-text font-black text-primary uppercase tracking-tight">PC</span>
+                                    <span className="logo-sub-text font-black text-primary uppercase tracking-tight">GAMING</span>
+                                    <span className="logo-sub-text font-black text-primary tracking-tight">-</span>
+                                    <span className="logo-sub-text font-black text-primary uppercase tracking-tight">LAPTOP</span>
+                                    <span className="logo-sub-text font-black text-primary tracking-tight">-</span>
+                                    <span className="logo-sub-text font-black text-primary uppercase tracking-tight">WORKSTATION</span>
                                   </div>
                                 </div>
                               </div>
                 </div>
              </Link>
              
-             <p className="text-[13px] text-white/70 leading-relaxed mb-6 font-medium text-justify">
+             <p className="text-[13px] text-white/70 leading-relaxed mb-6 font-medium text-justify max-w-[340px]">
                ZCOMPUTER - Hệ thống chuyên cung cấp PC, Laptop Cũ / Like New uy tín, chất lượng cao với mức giá tốt nhất tại khu vực TP.HCM.
              </p>
              
              <div>
                <p className="font-bold uppercase text-[12px] tracking-widest text-white/80 mb-4">THEO DÕI ZCOMPUTER TẠI</p>
-               <div className="flex gap-3 mb-5">
-                 <a href="https://zalo.me/0977334415" target="_blank" rel="noreferrer" className="w-10 h-10 rounded-full bg-gradient-to-br from-[#0068FF] to-[#0054D6] flex items-center justify-center text-white hover:-translate-y-1.5 hover:shadow-[0_8px_20px_rgba(0,104,255,0.4)] transition-all duration-300 border border-white/10 group">
-                   <span className="text-[14px] font-bold font-sans tracking-tight group-hover:scale-110 transition-transform leading-none mt-0">Zalo</span>
-                 </a>
-                 <a href="https://vt.tiktok.com/ZSQxHwj4q/" target="_blank" rel="noreferrer" className="w-10 h-10 rounded-full bg-gradient-to-br from-[#252525] to-[#000000] flex items-center justify-center text-white hover:-translate-y-1.5 hover:shadow-[0_8px_20px_rgba(255,255,255,0.15)] transition-all duration-300 border border-white/20 group">
-                   <FaTiktok size={18} className="group-hover:scale-110 transition-transform" />
-                 </a>
-               </div>
-
                {/* Custom Facebook Fanpage Widget (Tránh bị cắt chữ như iframe mặc định) */}
-               <div className="rounded-lg overflow-hidden bg-white max-w-[340px] shadow-lg border border-white/10 font-sans">
+               <div className="rounded-lg overflow-hidden bg-white max-w-[340px] shadow-lg border border-white/10 font-sans mt-3">
                  <div className="p-2.5 flex gap-2.5">
                    <a href="https://www.facebook.com/pcgamingthuduc" target="_blank" rel="noreferrer" className="shrink-0 mt-0.5">
                      <div className="w-[50px] h-[50px] border border-gray-300 flex items-center justify-center bg-white p-0.5 shadow-sm">

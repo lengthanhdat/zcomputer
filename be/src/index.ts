@@ -74,6 +74,9 @@ app.get('/', (req, res) => {
   res.send('ZCOMPUTER API IS RUNNING');
 });
 
+import os from 'os';
+import fs from 'fs/promises';
+
 app.get('/api/stats', async (req, res) => {
   try {
     const products = await Product.countDocuments();
@@ -87,7 +90,35 @@ app.get('/api/stats', async (req, res) => {
     ]);
     const revenue = revenueResult[0]?.total || 0;
 
-    res.json({ products, categories, users, orders, revenue });
+    // System Stats
+    const totalMem = os.totalmem();
+    const freeMem = os.freemem();
+    const cpuUsage = os.loadavg()[0]; 
+    const cpus = os.cpus();
+    
+    let diskTotal = 0;
+    let diskFree = 0;
+    try {
+      const diskPath = process.platform === 'win32' ? 'C:/' : '/';
+      const stat = await fs.statfs(diskPath);
+      diskTotal = stat.blocks * stat.bsize;
+      diskFree = stat.bavail * stat.bsize;
+    } catch(e) {
+      console.error('Disk stat error', e);
+    }
+
+    const systemStats = {
+      cpuCount: cpus.length,
+      cpuModel: cpus[0]?.model,
+      cpuUsage: cpuUsage,
+      totalMem,
+      freeMem,
+      diskTotal,
+      diskFree,
+      uptime: os.uptime(),
+    };
+
+    res.json({ products, categories, users, orders, revenue, systemStats });
   } catch (error) {
     res.status(500).json({ error: 'Failed to fetch stats' });
   }

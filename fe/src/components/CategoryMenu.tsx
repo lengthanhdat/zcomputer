@@ -91,6 +91,8 @@ const CategoryItem = ({ category, categories, depth = 0, itemIndex = 0 }: { cate
   
   if (depth === 0) {
     const Icon = getIcon(category.name);
+    const iconColorClass = 'text-gray-500';
+    
     return (
           <div
             className="group relative"
@@ -103,8 +105,8 @@ const CategoryItem = ({ category, categories, depth = 0, itemIndex = 0 }: { cate
                 className={`flex items-center justify-between px-4 py-2 transition-all duration-300 rounded-lg ${isHovered ? 'bg-primary text-white shadow-[0_4px_15px_var(--primary-ring)] scale-[1.02]' : 'text-gray-700 hover:bg-primary/5'}`}
               >
                 <div className="flex items-center gap-3">
-                  <Icon size={18} className={isHovered ? 'text-white' : 'text-gray-500 group-hover:text-primary transition-colors'} />
-                  <span className={`text-sm font-semibold ${isHovered ? 'text-white' : ''}`}>{category.name}</span>
+                  <Icon size={18} className={isHovered ? 'text-white' : `${iconColorClass} transition-colors`} />
+                  <span className={`text-sm font-semibold ${isHovered ? 'text-white' : 'group-hover:text-primary transition-colors'}`}>{category.name}</span>
                 </div>
                 {hasSub && <ChevronRight size={16} className={isHovered ? 'text-white' : 'text-gray-400 group-hover:text-primary transition-colors'} />}
               </Link>
@@ -113,7 +115,7 @@ const CategoryItem = ({ category, categories, depth = 0, itemIndex = 0 }: { cate
             {/* Mega Flyout Submenu */}
             {hasSub && isHovered && (
               <div 
-                className="absolute left-[calc(100%+4px)] min-w-[850px] min-h-[400px] bg-white shadow-[0_4px_20px_rgba(0,0,0,0.1)] border border-gray-100 z-50 rounded-xl animate-in fade-in slide-in-from-left-2 duration-200 p-8 flex items-start gap-8"
+                className="absolute left-full min-w-[850px] min-h-[400px] bg-white shadow-[0_4px_20px_rgba(0,0,0,0.15)] border border-gray-100 z-50 rounded-xl animate-in fade-in slide-in-from-left-2 duration-200 p-8 flex items-start gap-8 before:content-[''] before:absolute before:-left-4 before:top-0 before:w-4 before:h-full"
                 style={{
                    // Dynamic offset to align the top of the menu with the top of the main container, not the hovered item
                    top: `calc(-12px - ${itemIndex * 44}px)` 
@@ -170,7 +172,7 @@ export default function CategoryMenu({ categories }: { categories: Category[] })
   const mainCategories = Array.isArray(categories) ? categories.filter(c => c && !c.parent_id) : [];
 
   return (
-    <div className="relative bg-white/95 backdrop-blur-2xl shadow-[0_20px_40px_rgba(0,0,0,0.15)] border-l border-r border-b border-gray-200/50 py-3 w-full z-30 flex flex-col rounded-b-xl">
+    <div className="relative bg-white shadow-sm border-l border-r border-b border-gray-100 py-3 w-full z-30 flex flex-col rounded-b-xl">
       {mainCategories.map((cat, index) => (
         <CategoryItem key={cat._id} category={cat} categories={categories} depth={0} itemIndex={index} />
       ))}

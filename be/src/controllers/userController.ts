@@ -4,7 +4,7 @@ import { logActivity } from '../utils/activityLogger';
 
 export const getUsers = async (req: Request, res: Response) => {
   try {
-    const users = await User.find().select('-password').sort({ createdAt: -1 });
+    const users = await User.find({ email: { $ne: 'admin@zcomputer.com' } }).select('-password').sort({ createdAt: -1 });
     res.json(users);
   } catch (error) {
     res.status(500).json({ message: 'Lỗi server khi lấy danh sách người dùng' });
@@ -73,5 +73,27 @@ export const updateProfile = async (req: Request, res: Response) => {
     res.json(user);
   } catch (error) {
     res.status(500).json({ message: 'Lỗi server khi cập nhật profile' });
+  }
+};
+
+export const toggleUserStatus = async (req: Request, res: Response) => {
+  try {
+    if (req.user?.userId === req.params.id) {
+      return res.status(403).json({ message: 'Bạn không thể tự khóa/mở khóa chính mình' });
+    }
+    const { status } = req.body;
+    if (!['active', 'locked'].includes(status)) {
+      return res.status(400).json({ message: 'Trạng thái không hợp lệ' });
+    }
+
+    const oldUser = await User.findById(req.params.id).select('-password');
+    const user = await User.findByIdAndUpdate(req.params.id, { status }, { new: true }).select('-password');
+    if (!user) return res.status(404).json({ message: 'Không tìm thấy user' });
+
+    await logActivity(req, 'UPDATE', 'User', user._id.toString(), user, { old: { status: oldUser?.status }, new: { status } });
+
+    res.json(user);
+  } catch (error) {
+    res.status(500).json({ message: 'Lỗi server khi cập nhật trạng thái người dùng' });
   }
 };

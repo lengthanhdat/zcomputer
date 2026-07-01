@@ -18,7 +18,9 @@ export const ROLE_PERMISSIONS: Record<string, string[]> = {
   customer: []
 };
 
-export const authenticate = (req: Request, res: Response, next: NextFunction) => {
+import { User } from '../models/User';
+
+export const authenticate = async (req: Request, res: Response, next: NextFunction) => {
   const authHeader = req.headers.authorization;
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
     return res.status(401).json({ message: 'Không tìm thấy token hoặc token không hợp lệ' });
@@ -26,7 +28,14 @@ export const authenticate = (req: Request, res: Response, next: NextFunction) =>
 
   const token = authHeader.split(' ')[1];
   try {
-    const decoded = jwt.verify(token, JWT_SECRET);
+    const decoded = jwt.verify(token, JWT_SECRET) as any;
+    
+    // Check if user is locked
+    const user = await User.findById(decoded.userId).select('status');
+    if (user && user.status === 'locked') {
+      return res.status(403).json({ message: 'Tài khoản của bạn đã bị khóa' });
+    }
+
     req.user = decoded;
     next();
   } catch (error) {

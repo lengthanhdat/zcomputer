@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { ChevronDown, Menu, Phone } from "lucide-react";
 import Image from "next/image";
 import CategoryMenu from "./CategoryMenu";
@@ -10,6 +11,8 @@ import { fetchApi } from "@/lib/api";
 export default function HeaderNav() {
   const [showCategoryMenu, setShowCategoryMenu] = useState(false);
   const [categories, setCategories] = useState<any[]>([]);
+  const pathname = usePathname();
+  const isHomePage = pathname === '/';
 
   useEffect(() => {
     fetchApi('/categories', { requireAuth: false })
@@ -25,9 +28,9 @@ export default function HeaderNav() {
         {/* VERTICAL CATEGORY MENU DROPDOWN */}
         <div 
           className="relative hidden md:block mr-4 md:mr-8 shrink-0"
-          onMouseEnter={() => setShowCategoryMenu(true)}
-          onMouseLeave={() => setShowCategoryMenu(false)}
-          onClick={() => setShowCategoryMenu(!showCategoryMenu)}
+          onMouseEnter={() => !isHomePage && setShowCategoryMenu(true)}
+          onMouseLeave={() => !isHomePage && setShowCategoryMenu(false)}
+          onClick={() => !isHomePage && setShowCategoryMenu(!showCategoryMenu)}
         >
           <div className="bg-primary text-white flex items-center gap-1.5 md:gap-2 px-3 py-3 md:px-5 md:py-4 cursor-pointer hover:brightness-110 transition-all duration-300 relative overflow-hidden group">
             <div className="absolute inset-0 bg-white/20 translate-y-[-100%] group-hover:translate-y-[100%] transition-transform duration-500 pointer-events-none"></div>
@@ -37,7 +40,7 @@ export default function HeaderNav() {
           </div>
 
           {/* Dropdown Container */}
-          {showCategoryMenu && categories.length > 0 && (
+          {!isHomePage && showCategoryMenu && categories.length > 0 && (
             <div className="absolute top-full left-0 w-[260px] z-50">
               <CategoryMenu categories={categories} />
             </div>

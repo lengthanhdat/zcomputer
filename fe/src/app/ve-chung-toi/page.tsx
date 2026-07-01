@@ -134,9 +134,6 @@ export default function AboutUsPage() {
                 <MapPin className="text-primary shrink-0 mt-1" size={20} />
                 <span>23 Đường số 1, Khu phố 61, Phường Linh Xuân (Phường Linh Tây cũ), TP.Thủ Đức, TP.Hồ Chí Minh</span>
               </p>
-              <div className="mt-6 pt-6 border-t border-gray-100 flex justify-between items-center">
-                <a href="https://maps.google.com" target="_blank" rel="noreferrer" className="text-primary font-bold text-sm hover:underline">Xem bản đồ &rarr;</a>
-              </div>
             </div>
 
             <div className="border border-gray-100 rounded-2xl p-8 shadow-sm hover:shadow-xl hover:border-primary/10 transition-all duration-300 group relative overflow-hidden">
@@ -149,9 +146,6 @@ export default function AboutUsPage() {
                 <MapPin className="text-primary shrink-0 mt-1" size={20} />
                 <span>47/86B Bùi Đình Tuý, Phường 14, Quận Bình Thạnh, TP.Hồ Chí Minh</span>
               </p>
-              <div className="mt-6 pt-6 border-t border-gray-100 flex justify-between items-center">
-                <a href="https://maps.google.com" target="_blank" rel="noreferrer" className="text-primary font-bold text-sm hover:underline">Xem bản đồ &rarr;</a>
-              </div>
             </div>
           </div>
         </div>

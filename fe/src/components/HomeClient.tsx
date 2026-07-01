@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, Laptop, ShieldCheck, Truck, Zap, ChevronLeft, ChevronRight, Monitor, Cpu, Server, Mouse, Keyboard, Headphones, HardDrive, Maximize, Heart, Eye, type LucideIcon, MemoryStick, Gpu, Battery, Layers, Link as LinkIcon } from "lucide-react";
+import { ArrowRight, Laptop, ShieldCheck, Truck, Zap, ChevronLeft, ChevronRight, Monitor, Cpu, Server, Mouse, Keyboard, Headphones, HardDrive, Maximize, Heart, Eye, type LucideIcon, MemoryStick, Gpu, Battery, Layers, Link as LinkIcon, RotateCcw, CreditCard, Tag } from "lucide-react";
 import LikeButton from "./LikeButton";
 import CompareButton from "./CompareButton";
 import BannerSlider from "@/components/BannerSlider";
@@ -223,28 +223,67 @@ export default function HomeClient() {
     <div className="bg-[#f8f9fa] min-h-screen text-gray-900 selection:bg-primary selection:text-white">
       <h1 suppressHydrationWarning className="sr-only">ZCOMPUTER - PC Gaming, Laptop, Workstation</h1>
       {/* Banner */}
-      <section className="container mx-auto px-2 md:px-4 pt-4 pb-6 md:pt-8 md:pb-12">
-        {banners === null ? (
+      <section className="container mx-auto px-2 md:px-4 pt-0 pb-6 md:pb-12">
+        {banners === null || categories === null ? (
           <BannerSkeleton />
         ) : (
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-2 md:gap-4">
-            {/* Main Slider (2/3 width on PC) */}
-            <div className="lg:col-span-2 w-full">
-              <BannerSlider banners={banners.filter(b => b.position !== 'sub')} apiBase={API_BASE} />
+          <div className="flex flex-col lg:flex-row gap-2 md:gap-4 items-stretch relative">
+            {/* Category Menu (Hidden on mobile/tablet, shows on desktop left) */}
+            <div className="hidden lg:block w-[260px] shrink-0 relative z-10">
+              <CategoryMenu categories={categories} />
             </div>
 
-            {/* Sub Banners (1/3 width on PC, 2 rows) */}
-            {banners.filter(b => b.position === 'sub').length > 0 && (
-              <div className="grid grid-cols-2 lg:grid-cols-1 lg:grid-rows-2 gap-2 md:gap-4 mt-2 lg:mt-0">
-                {banners.filter(b => b.position === 'sub').slice(0, 2).map((banner) => (
-                  <Link key={banner._id} href={banner.link || "#"} className="block relative w-full h-full aspect-[16/9] lg:aspect-auto rounded-xl md:rounded-2xl overflow-hidden group shadow-sm hover:shadow-xl lg:hover:-translate-y-1 transition-all duration-300">
-                    <img src={(banner.image || "").startsWith('http') || (banner.image || "").startsWith('data:') || (banner.image || "").startsWith('/uploads') ? banner.image : `${API_BASE}${banner.image}`} alt={banner.title} className="absolute inset-0 w-full h-full object-fill group-hover:scale-105 transition-transform duration-500" />
-                  </Link>
-                ))}
+            {/* Main Slider */}
+            <div className="flex-1 w-full min-w-0 relative h-[180px] sm:h-[250px] md:h-[320px] lg:h-auto">
+              <div className="lg:absolute lg:inset-0 h-full w-full">
+                <BannerSlider banners={banners.filter(b => b.position !== 'sub')} apiBase={API_BASE} />
               </div>
-            )}
+            </div>
           </div>
         )}
+
+        {/* Features Bar */}
+        <div className="mt-4 bg-white rounded-2xl p-4 shadow-sm border border-gray-100 flex items-center justify-between overflow-x-auto overflow-y-hidden whitespace-nowrap gap-6 hide-scrollbar">
+          <div className="flex items-center gap-3 min-w-max px-2">
+            <Truck size={24} className="text-[#6c5ce7]" />
+            <div>
+              <p className="font-bold text-gray-800 text-sm">Miễn phí vận chuyển</p>
+              <p className="text-xs text-gray-500">Đơn từ 499k</p>
+            </div>
+          </div>
+          <div className="w-px h-8 bg-gray-100 hidden md:block"></div>
+          <div className="flex items-center gap-3 min-w-max px-2">
+            <RotateCcw size={24} className="text-[#e1b12c]" />
+            <div>
+              <p className="font-bold text-gray-800 text-sm">Đổi trả dễ dàng</p>
+              <p className="text-xs text-gray-500">Trong 7 ngày</p>
+            </div>
+          </div>
+          <div className="w-px h-8 bg-gray-100 hidden md:block"></div>
+          <div className="flex items-center gap-3 min-w-max px-2">
+            <CreditCard size={24} className="text-[#6c5ce7]" />
+            <div>
+              <p className="font-bold text-gray-800 text-sm">Thanh toán an toàn</p>
+              <p className="text-xs text-gray-500">Nhiều hình thức</p>
+            </div>
+          </div>
+          <div className="w-px h-8 bg-gray-100 hidden md:block"></div>
+          <div className="flex items-center gap-3 min-w-max px-2">
+            <Tag size={24} className="text-[#e1b12c]" />
+            <div>
+              <p className="font-bold text-gray-800 text-sm">Sản phẩm chính hãng</p>
+              <p className="text-xs text-gray-500">Cam kết 100%</p>
+            </div>
+          </div>
+          <div className="w-px h-8 bg-gray-100 hidden md:block"></div>
+          <div className="flex items-center gap-3 min-w-max px-2">
+            <Headphones size={24} className="text-[#6c5ce7]" />
+            <div>
+              <p className="font-bold text-gray-800 text-sm">Hỗ trợ 24/7</p>
+              <p className="text-xs text-gray-500">0977.334.415</p>
+            </div>
+          </div>
+        </div>
       </section>
 
       {/* Brand Marquee */}
@@ -344,15 +383,31 @@ export default function HomeClient() {
         const featuredCatsMap = new Map();
         featuredProducts.forEach(p => {
           if (p.category_id && typeof p.category_id === 'object' && p.category_id._id) {
-            featuredCatsMap.set(p.category_id._id, p.category_id.name);
+            const catId = p.category_id._id;
+            const cat = (categories || []).find(c => c._id === catId);
+            if (cat && cat.parent_id) {
+              const parent = (categories || []).find(c => c._id === cat.parent_id);
+              if (parent) {
+                featuredCatsMap.set(parent._id, parent.name);
+              } else {
+                featuredCatsMap.set(catId, p.category_id.name);
+              }
+            } else {
+              featuredCatsMap.set(catId, p.category_id.name);
+            }
           }
         });
         const featuredCats = Array.from(featuredCatsMap.entries()).map(([id, name]) => ({ id, name }));
         
         const filteredFeatured = featuredCategory === 'all' 
           ? featuredProducts 
-          : featuredProducts.filter(p => p.category_id && typeof p.category_id === 'object' && p.category_id._id === featuredCategory);
-
+          : featuredProducts.filter(p => {
+              if (!p.category_id || typeof p.category_id !== 'object' || !p.category_id._id) return false;
+              const catId = p.category_id._id;
+              if (catId === featuredCategory) return true;
+              const cat = (categories || []).find(c => c._id === catId);
+              return cat && cat.parent_id === featuredCategory;
+            });
         return (
           <section className="container mx-auto px-4 mb-20 mt-12 relative">
             <div className="absolute inset-0 bg-gradient-to-b from-yellow-500/10 to-transparent -z-10 rounded-[3rem] blur-3xl"></div>

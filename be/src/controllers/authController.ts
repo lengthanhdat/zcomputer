@@ -56,6 +56,10 @@ export const login = async (req: Request, res: Response) => {
       return res.status(400).json({ message: 'Email hoặc mật khẩu không đúng' });
     }
 
+    if (user.status === 'locked') {
+      return res.status(403).json({ message: 'Tài khoản của bạn đã bị khóa. Vui lòng liên hệ quản trị viên.' });
+    }
+
     const role = user.role;
     const permissions = ROLE_PERMISSIONS[role] || [];
 
@@ -102,6 +106,10 @@ export const refreshToken = async (req: Request, res: Response) => {
 
     if (!user) {
       return res.status(403).json({ message: 'User không tồn tại' });
+    }
+
+    if (user.status === 'locked') {
+      return res.status(403).json({ message: 'Tài khoản của bạn đã bị khóa.' });
     }
 
     const role = user.role;
@@ -152,6 +160,10 @@ export const googleLogin = async (req: Request, res: Response) => {
         role: 'customer' // Mặc định role là customer
       });
       user = await newUser.save();
+    }
+
+    if (user.status === 'locked') {
+      return res.status(403).json({ message: 'Tài khoản của bạn đã bị khóa. Vui lòng liên hệ quản trị viên.' });
     }
 
     const role = user.role;

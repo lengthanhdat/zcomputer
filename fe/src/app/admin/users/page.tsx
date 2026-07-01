@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Search, Trash2, Eye, X, Shield, Check } from "lucide-react";
+import { Search, Trash2, Eye, X, Shield, Check, Lock, Unlock } from "lucide-react";
 import toast from "react-hot-toast";
 import { fetchApi } from "@/lib/api";
 import { useAuthStore } from "@/store/useAuthStore";
@@ -15,6 +15,7 @@ interface User {
   phone?: string;
   createdAt: string;
   permissions?: string[];
+  status?: string;
 }
 
 const AVAILABLE_PERMS = [
@@ -107,6 +108,29 @@ export default function AdminUsersPage() {
     }
   };
 
+  const toggleUserStatus = async (id: string, currentStatus: string = 'active') => {
+    const newStatus = currentStatus === 'locked' ? 'active' : 'locked';
+    const actionText = newStatus === 'locked' ? 'khóa' : 'mở khóa';
+    
+    if (!confirm(`Bạn có chắc muốn ${actionText} tài khoản này?`)) return;
+    
+    try {
+      const res = await fetchApi(`/users/${id}/status`, {
+        method: 'PUT',
+        body: JSON.stringify({ status: newStatus })
+      });
+      if (res.ok) {
+        setUsers(users.map(u => u._id === id ? { ...u, status: newStatus } : u));
+        toast.success(`Đã ${actionText} tài khoản`);
+      } else {
+        const err = await res.json();
+        toast.error(err.message || "Thao tác thất bại");
+      }
+    } catch (error) {
+      toast.error("Lỗi kết nối");
+    }
+  };
+
   const togglePerm = (permId: string) => {
     setEditPerms(prev => 
       prev.includes(permId) ? prev.filter(p => p !== permId) : [...prev, permId]
@@ -168,8 +192,10 @@ export default function AdminUsersPage() {
 
                   return (
                     <tr key={user._id} className="hover:bg-gray-50 transition-colors">
-                      <td className="py-3 px-4 text-sm font-medium text-gray-900">
-                        {user.name} {isMe && <span className="text-xs ml-2 bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full">Bạn</span>}
+                      <td className="py-3 px-4 text-sm font-medium text-gray-900 flex items-center gap-2">
+                        {user.name} 
+                        {isMe && <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full">Bạn</span>}
+                        {user.status === 'locked' && <span className="text-xs bg-red-100 text-red-700 px-2 py-0.5 rounded-full flex items-center gap-1"><Lock size={12}/> Đã khóa</span>}
                       </td>
                       <td className="py-3 px-4 text-sm text-gray-600">{user.email}</td>
                       <td className="py-3 px-4 text-sm text-gray-600">
@@ -203,6 +229,13 @@ export default function AdminUsersPage() {
                       </td>
                       <td className="py-3 px-4 text-right">
                         <div className="flex justify-end gap-2">
+                          <button 
+                            onClick={() => toggleUserStatus(user._id, user.status)}
+                            disabled={isMe}
+                            className={`p-1.5 rounded transition-colors ${isMe ? 'text-gray-300 cursor-not-allowed' : user.status === 'locked' ? 'text-green-600 hover:bg-green-50' : 'text-orange-500 hover:bg-orange-50'}`} 
+                            title={isMe ? 'Không thể khóa bản thân' : user.status === 'locked' ? 'Mở khóa tài khoản' : 'Khóa tài khoản'}>
+                            {user.status === 'locked' ? <Unlock size={16} /> : <Lock size={16} />}
+                          </button>
                           <button 
                             onClick={() => openUserModal(user)}
                             className="p-1.5 text-blue-600 hover:bg-blue-50 rounded transition-colors" 
@@ -249,7 +282,7 @@ export default function AdminUsersPage() {
                 <div>
                   <h4 className="font-bold text-lg text-gray-900">{selectedUser.name}</h4>
                   <p className="text-gray-500 text-sm">{selectedUser.email}</p>
-                  <div className="mt-1">
+                  <div className="mt-1 flex flex-wrap gap-2">
                     <span className={`text-xs px-2 py-0.5 rounded-full font-semibold ${
                       selectedUser.role === 'admin' ? 'bg-primary/10 text-primary' :
                       selectedUser.role === 'staff' ? 'bg-blue-100 text-blue-700' :
@@ -257,6 +290,11 @@ export default function AdminUsersPage() {
                     }`}>
                       {selectedUser.role === 'admin' ? 'Admin Toàn Quyền' : selectedUser.role === 'staff' ? 'Nhân viên' : 'Khách hàng'}
                     </span>
+                    {selectedUser.status === 'locked' && (
+                      <span className="text-xs bg-red-100 text-red-700 px-2 py-0.5 rounded-full font-semibold flex items-center gap-1">
+                        <Lock size={12}/> Đã khóa
+                      </span>
+                    )}
                   </div>
                 </div>
               </div>

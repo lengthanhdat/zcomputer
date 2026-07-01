@@ -1,6 +1,6 @@
 "use client";
 
-import { Package, FolderTree, Users, ArrowRight, DollarSign, ClipboardList, Warehouse } from "lucide-react";
+import { Package, FolderTree, Users, ArrowRight, DollarSign, ClipboardList, Warehouse, Server, Cpu, HardDrive } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
@@ -11,6 +11,7 @@ export default function AdminDashboardPage() {
     users: 0,
     orders: 0,
     revenue: 0,
+    systemStats: null as any,
   });
   const [loading, setLoading] = useState(true);
 
@@ -26,6 +27,7 @@ export default function AdminDashboardPage() {
             users: data.users || 0,
             orders: data.orders || 0,
             revenue: data.revenue || 0,
+            systemStats: data.systemStats || null,
           });
         }
       } catch (error) {
@@ -131,6 +133,88 @@ export default function AdminDashboardPage() {
           </div>
         </div>
       </div>
+
+      {stats.systemStats && (
+        <div className="bg-white p-4 md:p-8 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100">
+          <div className="flex items-center gap-3 mb-6">
+            <div className="w-10 h-10 rounded-xl bg-gray-900 text-white flex items-center justify-center shadow-lg shadow-gray-900/20">
+              <Server size={20} />
+            </div>
+            <div>
+              <h3 className="text-xl font-bold text-gray-900 leading-tight">Tài nguyên Máy chủ (VPS)</h3>
+              <p className="text-sm text-gray-500">Giám sát hệ thống thời gian thực</p>
+            </div>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {/* CPU */}
+            <div className="p-5 rounded-xl border border-gray-100 bg-gray-50/50 flex flex-col justify-center">
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center gap-2 text-gray-700 font-semibold">
+                  <Cpu size={18} className="text-blue-500" /> CPU Usage
+                </div>
+                <span className="text-xs font-bold px-2 py-1 bg-blue-100 text-blue-700 rounded-md">
+                  {stats.systemStats.cpuCount} Cores
+                </span>
+              </div>
+              <div className="text-2xl font-black text-gray-900 mb-1">
+                {(stats.systemStats.cpuUsage * 100).toFixed(1)}%
+              </div>
+              <p className="text-xs text-gray-500 truncate" title={stats.systemStats.cpuModel}>{stats.systemStats.cpuModel}</p>
+            </div>
+
+            {/* RAM */}
+            <div className="p-5 rounded-xl border border-gray-100 bg-gray-50/50 flex flex-col justify-center">
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center gap-2 text-gray-700 font-semibold">
+                  <Server size={18} className="text-emerald-500" /> Bộ nhớ RAM
+                </div>
+                <span className="text-xs font-bold px-2 py-1 bg-emerald-100 text-emerald-700 rounded-md">
+                  {((1 - stats.systemStats.freeMem / stats.systemStats.totalMem) * 100).toFixed(1)}% Used
+                </span>
+              </div>
+              <div className="text-2xl font-black text-gray-900 mb-1">
+                {((stats.systemStats.totalMem - stats.systemStats.freeMem) / (1024 ** 3)).toFixed(2)} GB
+              </div>
+              <p className="text-xs text-gray-500">
+                / {(stats.systemStats.totalMem / (1024 ** 3)).toFixed(2)} GB Tổng
+              </p>
+              <div className="w-full bg-gray-200 h-1.5 rounded-full mt-3 overflow-hidden">
+                <div 
+                  className="bg-emerald-500 h-1.5 rounded-full" 
+                  style={{ width: `${(1 - stats.systemStats.freeMem / stats.systemStats.totalMem) * 100}%` }}
+                ></div>
+              </div>
+            </div>
+
+            {/* Disk */}
+            {stats.systemStats.diskTotal > 0 && (
+              <div className="p-5 rounded-xl border border-gray-100 bg-gray-50/50 flex flex-col justify-center">
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center gap-2 text-gray-700 font-semibold">
+                    <HardDrive size={18} className="text-purple-500" /> Ổ cứng (Disk)
+                  </div>
+                  <span className="text-xs font-bold px-2 py-1 bg-purple-100 text-purple-700 rounded-md">
+                    {((1 - stats.systemStats.diskFree / stats.systemStats.diskTotal) * 100).toFixed(1)}% Used
+                  </span>
+                </div>
+                <div className="text-2xl font-black text-gray-900 mb-1">
+                  {((stats.systemStats.diskTotal - stats.systemStats.diskFree) / (1024 ** 3)).toFixed(2)} GB
+                </div>
+                <p className="text-xs text-gray-500">
+                  / {(stats.systemStats.diskTotal / (1024 ** 3)).toFixed(2)} GB Tổng
+                </p>
+                <div className="w-full bg-gray-200 h-1.5 rounded-full mt-3 overflow-hidden">
+                  <div 
+                    className="bg-purple-500 h-1.5 rounded-full" 
+                    style={{ width: `${(1 - stats.systemStats.diskFree / stats.systemStats.diskTotal) * 100}%` }}
+                  ></div>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Quick Actions */}

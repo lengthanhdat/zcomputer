@@ -189,19 +189,6 @@ export default function ContactPage() {
             </div>
           </div>
         </div>
-
-        {/* Bản đồ */}
-        <div className="mt-12 bg-white rounded-2xl shadow-lg border border-gray-100 p-2 overflow-hidden h-[400px]">
-          <iframe 
-            src="https://maps.google.com/maps?q=Z+Computer-+Pc+Gaming-Laptop-Workstation&t=&z=16&ie=UTF8&iwloc=&output=embed" 
-            width="100%" 
-            height="100%" 
-            style={{ border: 0, borderRadius: '12px' }} 
-            allowFullScreen={true} 
-            loading="lazy"
-            referrerPolicy="no-referrer-when-downgrade"
-          ></iframe>
-        </div>
       </div>
     </div>
   );

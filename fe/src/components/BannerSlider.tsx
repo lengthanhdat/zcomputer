@@ -33,7 +33,7 @@ export default function BannerSlider({ banners, apiBase }: BannerSliderProps) {
   }
 
   return (
-    <div className="relative w-full rounded-2xl overflow-hidden shadow-sm hover:shadow-2xl transition-shadow duration-500 group">
+    <div className="relative w-full h-full rounded-2xl overflow-hidden shadow-sm hover:shadow-2xl transition-shadow duration-500 group">
       <Swiper
         modules={[Autoplay, Pagination, Navigation, EffectFade]}
         effect="fade"
@@ -55,7 +55,7 @@ export default function BannerSlider({ banners, apiBase }: BannerSliderProps) {
           pauseOnMouseEnter: true, // Dừng khi di chuột vào
         }}
         loop={length > 1}
-        className="w-full"
+        className="w-full h-full"
       >
         {banners.map((banner) => {
           const imageUrl = banner.image
@@ -65,20 +65,18 @@ export default function BannerSlider({ banners, apiBase }: BannerSliderProps) {
             : null;
 
           return (
-            <SwiperSlide key={banner._id} className="relative w-full overflow-hidden flex items-center justify-center bg-[#111]">
-              <Link href={banner.link || "/"} className="block relative w-full group/slide">
+            <SwiperSlide key={banner._id} className="relative w-full h-full overflow-hidden flex items-center justify-center bg-[#111]">
+              <Link href={banner.link || "/"} className="block relative w-full h-full group/slide">
                 {imageUrl ? (
                   <img
                     src={imageUrl}
                     alt={banner.title || "Banner"}
-                    className="w-full h-auto object-contain transition-transform duration-[15000ms] group-hover/slide:scale-105"
+                    className="w-full h-full object-cover transition-transform duration-[15000ms] group-hover/slide:scale-105"
                     draggable={false}
                   />
                 ) : (
-                  <div className="w-full aspect-[21/9] bg-gradient-to-br from-[#1a1a1a] via-[#3a0d0d] to-[#111111]" />
+                  <div className="w-full h-full bg-gradient-to-br from-[#1a1a1a] via-[#3a0d0d] to-[#111111]" />
                 )}
-
-
               </Link>
             </SwiperSlide>
           );

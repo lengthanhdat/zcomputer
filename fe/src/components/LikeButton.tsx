@@ -48,7 +48,7 @@ export default function LikeButton({ product }: { product: ProductProps }) {
   if (!mounted) {
     return (
       <button 
-        className="relative z-30 focus:outline-none ml-auto"
+        className="relative z-20 focus:outline-none ml-auto"
         aria-label="Thêm vào ưa thích"
       >
         <Heart 
@@ -61,8 +61,8 @@ export default function LikeButton({ product }: { product: ProductProps }) {
 
   return (
     <button 
-      className="relative z-30 focus:outline-none ml-auto"
       onClick={handleClick}
+      className="relative z-20 focus:outline-none ml-auto group/like"
       aria-label={isLiked ? "Xóa khỏi ưa thích" : "Thêm vào ưa thích"}
     >
       <Heart 

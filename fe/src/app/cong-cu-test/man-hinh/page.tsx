@@ -34,7 +34,11 @@ const TouchGridTest = ({ onNext }: { onNext: () => void }) => {
     };
     updateGrid();
     window.addEventListener('resize', updateGrid);
-    return () => window.removeEventListener('resize', updateGrid);
+    document.body.style.overflow = "hidden";
+    return () => {
+      window.removeEventListener('resize', updateGrid);
+      document.body.style.overflow = "";
+    };
   }, []);
 
   const handlePointerMove = (e: React.PointerEvent) => {
@@ -169,23 +173,6 @@ const TouchGridTest = ({ onNext }: { onNext: () => void }) => {
         </div>
       )}
 
-      {/* Controls */}
-      {started && !isCompleted && (
-        <>
-          <button 
-            onClick={(e) => { e.stopPropagation(); setTouchedBoxes(new Set()); }}
-            className="absolute bottom-6 left-6 bg-black/80 hover:bg-black text-white px-6 py-3 rounded-lg text-sm font-bold shadow-[0_0_20px_rgba(0,0,0,0.5)] transition-all border border-white/10 backdrop-blur-md z-50 pointer-events-auto"
-          >
-            Làm lại
-          </button>
-          <button 
-            onClick={(e) => { e.stopPropagation(); onNext(); }}
-            className="absolute bottom-6 right-6 bg-primary hover:bg-primary/90 text-white px-6 py-3 rounded-lg text-sm font-bold shadow-[0_0_20px_rgba(239,68,68,0.4)] transition-all border border-primary/50 backdrop-blur-md z-50 pointer-events-auto uppercase tracking-wider"
-          >
-            Thoát / Tiếp Tục
-          </button>
-        </>
-      )}
     </div>
   );
 };
@@ -246,18 +233,26 @@ export default function MonitorTestPage() {
 
   useEffect(() => {
     const onFullscreenChange = () => {
-      const isFull = !!document.fullscreenElement;
+      const isFull = !!(document.fullscreenElement || (document as any).webkitFullscreenElement || (document as any).mozFullScreenElement || (document as any).msFullscreenElement);
       if (!isFull) {
         setIsFullscreen(false);
         setIsTouchFullscreen(false);
         setShowInstructions(true);
+        document.body.style.overflow = ""; // ensure it's cleared immediately
       }
     };
     document.addEventListener("fullscreenchange", onFullscreenChange);
+    document.addEventListener("webkitfullscreenchange", onFullscreenChange);
+    document.addEventListener("mozfullscreenchange", onFullscreenChange);
+    document.addEventListener("MSFullscreenChange", onFullscreenChange);
     window.addEventListener("keydown", handleKeyDown);
     return () => {
       document.removeEventListener("fullscreenchange", onFullscreenChange);
+      document.removeEventListener("webkitfullscreenchange", onFullscreenChange);
+      document.removeEventListener("mozfullscreenchange", onFullscreenChange);
+      document.removeEventListener("MSFullscreenChange", onFullscreenChange);
       window.removeEventListener("keydown", handleKeyDown);
+      document.body.style.overflow = "";
     };
   }, [handleKeyDown]);
 
@@ -322,9 +317,6 @@ export default function MonitorTestPage() {
     return (
       <div style={containerStyle} onClick={handleNext}>
         {content}
-        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 bg-black/80 backdrop-blur-md text-white px-4 sm:px-6 py-2 sm:py-3 rounded-full text-xs sm:text-sm font-bold opacity-70 pointer-events-none border border-white/10 shadow-xl tracking-wider w-max max-w-[90vw] text-center z-[999]">
-          {currentIndex + 1} / {TEST_SCREENS.length} - {screen.name}
-        </div>
       </div>
     );
   }

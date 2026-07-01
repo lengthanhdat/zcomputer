@@ -48,7 +48,7 @@ export default function CompareButton({ product }: { product: ProductProps }) {
   if (!mounted) {
     return (
       <button 
-        className="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 hover:text-primary transition-colors cursor-pointer z-40"
+        className="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 hover:text-primary transition-colors cursor-pointer z-20"
         aria-label="So sánh"
       >
         <Scale size={16} />
@@ -59,7 +59,7 @@ export default function CompareButton({ product }: { product: ProductProps }) {
   return (
     <button 
       onClick={handleClick}
-      className={`w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 cursor-pointer z-40 relative group/compare ${
+      className={`w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 cursor-pointer z-20 relative group/compare ${
         isCompared ? 'bg-primary/10 text-primary' : 'bg-gray-50 text-gray-400 hover:text-primary hover:bg-primary/5'
       }`}
       aria-label="So sánh"
